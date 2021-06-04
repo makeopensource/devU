@@ -1,0 +1,15 @@
+@import 'variables';
+
+.toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.label {
+  margin-left: 5px;
+}
+
+.labelLeft {
+  margin-right: 5px;
+}

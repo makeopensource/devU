@@ -1,0 +1,50 @@
+@import 'variables';
+
+:global {
+  // Libraries
+  // Import css libraries here as needed
+  @import '~react-toggle/style';
+
+  html,
+  body,
+  #main {
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  body {
+    font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-size-adjust: 100%;
+
+    background-color: var(--background);
+    color: var(--text-color);;
+
+    --background: white;
+    --text-color: black;
+
+    --primary: #0984e3;
+    --primary-darker: #054272;
+    --secondary:#797D7D;
+    --secondary-darker:#3d3f3f;
+  }
+
+  body.dark-mode {
+    --background: #2d3436;
+    --text-color: white;
+
+    --primary: #266781;
+    --primary-darker: #133441;
+    --secondary:#3d3f3f;
+    --secondary-darker:#1f2020;
+
+    background-color: var(--background);
+    color: var(--text-color);
+  }
+
+  *:focus {
+    outline-color: #38c172;
+  }
+}

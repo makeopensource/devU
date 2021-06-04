@@ -1,0 +1,44 @@
+// These vars are defined and pulled from global.scss
+// scss by definition cannot be dynamic and therefor the dynamic vars need to
+// be controlled via css
+$background: var(--background);
+$text-color: var(--text-color);
+
+$primary: var(--primary);
+$primary-darker: var(--primary-darker);
+
+$secondary: var(--secondary);
+$secondary-darker: var(--secondary-darker);
+
+// These variables WILL NOT update with dark vs light theme
+$grey-lightest: #dfe6e9;
+$grey-lighter: #b2bec3;
+$grey: #636e72;
+
+$blue-lighter: #74b9ff;
+$blue: #0984e3;
+
+$red-lighter: #ff7675;
+$red: #d63031;
+
+$purple-lighter: #a29bfe;
+$purple: #6c5ce7;
+
+$green-lighter: #55efc4;
+$green: #00b894;
+
+$yellow-lighter: #ffeaa7;
+$yellow: #fdcb6e;
+
+$border-radius: 5px;
+
+$box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+
+$font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
