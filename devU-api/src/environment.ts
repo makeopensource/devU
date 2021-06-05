@@ -4,5 +4,5 @@ export default {
   dbUsername: process.env.DB_USERNAME || 'typescript_user',
   dbPassword: process.env.DB_PASSWORD || 'password',
   database: process.env.DATABASE || 'typescript_api',
-  logDB: process.env.LOG_DB !== undefined,
+  logDB: process.env.LOG_DB !== undefined, // logs all sql commands for gut/fact checking endpoints
 }
