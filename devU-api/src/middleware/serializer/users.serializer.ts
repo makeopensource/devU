@@ -7,11 +7,11 @@ import { Unknown } from '../../utils/apiResponse.utils'
 
 export default function (req: Request, res: Response, next: NextFunction) {
   // No data applied at the controller level
-  if (!req.user && !req.users) return res.status(400).send(Unknown)
+  if (!req.user && !req.users) return res.status(400).json(Unknown)
 
   const response = req.user ? serialize(req.user) : req.users.map(serialize)
 
-  res.status(req.statusCode).send(response)
+  res.status(req.statusCode).json(response)
 }
 
 function serialize(user: User): UserType {

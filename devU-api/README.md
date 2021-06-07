@@ -121,6 +121,36 @@ Let's take this from the top
 
 The database models live outside of this control flow as they don't deal with any buisness logic. However services will use them to access the database. You can largely think of the the models as a 1:1 map to database tables.
 
+### Testing
+
+We're using [jest](https://jestjs.io/docs/getting-started) as our testing framework of choice. To run the entire test suite, use:
+
+```
+npm test
+```
+
+Keep in mind that when testing, jest is looking for `*.test.ts` files, so be sure to include the `.test` portion in those filenames.
+
+If durring development, you want to only run a single test file (via command line), you can do so by adding a string to the end of the test command. That string will be used as a regex against the filename(s). So as an example, if we wanted to run all of the controller tests, you could do so by:
+
+```
+npm test "controller"
+```
+
+Alternatively, if you're wanting to _just_ run the user.controller tests, you can do so via
+
+```
+npm test "users.controller"
+```
+
+And lastly, if you want to narrow it down to running less than a single test file (even down to a single test), you can do so via the `-t` argument. (Small pro tip, when running an `npm script` you can pass it extra command line arguments by passing a `--` first, that's what's happening here)
+
+```
+npm test -- -t "some test description or name"
+```
+
+I wouldn't reccomend digging that far down as the of tests should be more human readable, and therefor not super great to grab via a regex; but if you really wish to do so, you can.
+
 ### Common TypeORM Commands (Database/ Schema Stuff)
 
 If the schema needs to be updated, you can do so by updating the models and running

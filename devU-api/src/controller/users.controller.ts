@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import UserService from '../services/user.service'
 
-import { NotFound, Updated } from '../utils/apiResponse.utils'
+import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
@@ -38,7 +38,7 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
     next()
   } catch (err) {
-    res.status(400).json({ error: err })
+    res.status(400).json(new GenericResponse(err.message))
   }
 }
 
