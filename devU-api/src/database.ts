@@ -16,9 +16,9 @@ const typeORMConfiguration: ConnectionOptions = {
   migrations: [`${__dirname}/migration/**/*.{ts,js}`],
   subscribers: [`${__dirname}/migration/**/*.{ts,js}`],
   cli: {
-    entitiesDir: `${__dirname}/model`,
-    migrationsDir: `${__dirname}/migration`,
-    subscribersDir: `${__dirname}/subscriber`,
+    entitiesDir: `./src/model`,
+    migrationsDir: `./src/migration`,
+    subscribersDir: `./src/subscriber`,
   },
 }
 
