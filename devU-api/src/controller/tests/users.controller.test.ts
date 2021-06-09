@@ -105,7 +105,7 @@ describe('UserController', () => {
         await controller.post(req, res, next)
       })
 
-      test('Resturns expected user', () => expect(req.user).toEqual(expectedResult))
+      test('Returns expected user', () => expect(req.user).toEqual(expectedResult))
       test('Status code is 201', () => expect(req.statusCode).toEqual(201))
       test('Next called empty', () => expect(next).toBeCalledWith())
     })

@@ -34,7 +34,7 @@ describe('User Serializer', () => {
     beforeEach(() => serializer(req, res, next))
 
     test('400 without user or users', () => expect(res.status).toBeCalledWith(400))
-    test('Unknown request meessage without user or users', () => expect(res.json).toBeCalledWith(Unknown))
+    test('Unknown request message without user or users', () => expect(res.json).toBeCalledWith(Unknown))
     test('Next is not called', () => expect(next).toBeCalledTimes(0))
   })
 

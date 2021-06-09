@@ -33,14 +33,14 @@ describe('Global Error Handler', () => {
       expect(res.json).toBeCalledWith(Unimplemented)
     })
 
-    test('Responds with Unkown - 400 with no error message', () => {
+    test('Responds with Unknown - 400 with no error message', () => {
       globalErrorHandler(new Error(), req, res, next)
 
       expect(res.status).toBeCalledWith(400)
       expect(res.json).toBeCalledWith(Unknown)
     })
 
-    test('Response with GeneriRepsonse - 400 with "other" errors', () => {
+    test('Response with GenericRepsonse - 400 with "other" errors', () => {
       globalErrorHandler(new Error(expectedErrorMessage), req, res, next)
 
       expect(res.status).toBeCalledWith(400)
