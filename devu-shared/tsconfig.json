@@ -1,17 +1,27 @@
 {
   "compilerOptions": {
-    "lib": ["es5", "es6"],
+    "lib": [
+      "es5",
+      "es6"
+    ],
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "./build",
+    "inlineSourceMap": false,
+    "outDir": "",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "typeRoots": ["@types", "./node_modules/@types"],
+    "typeRoots": [
+      "@types",
+      "./node_modules/@types"
+    ],
     "resolveJsonModule": true,
     "declaration": true
-  }
+  },
+  "exclude": [
+    "jest.config.ts"
+  ]
 }
