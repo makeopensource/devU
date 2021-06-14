@@ -1,7 +1,8 @@
 import { getRepository } from 'typeorm'
 
+import { User as UserType } from 'devu-shared-modules'
+
 import User from '../model/users.model'
-import UserType from '../shared/types/user.type'
 
 const connect = () => getRepository(User)
 

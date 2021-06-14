@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 
+import { User as UserType } from 'devu-shared-modules'
+
 import User from '../../model/users.model'
-import UserType from '../../shared/types/user.type'
 
 import { Unknown } from '../../utils/apiResponse.utils'
 

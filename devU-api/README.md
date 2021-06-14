@@ -121,6 +121,32 @@ Let's take this from the top
 
 The database models live outside of this control flow as they don't deal with any buisness logic. However services will use them to access the database. You can largely think of the the models as a 1:1 map to database tables.
 
+### Shared Modules
+
+This project uses shared modules between it and it's client. What this means is that there exists code that operates in both this project and it's client. That project is being imported here as `devu-shared-modules`.
+
+The project can be found [here](https://github.com/UBAutograding/devu-shared).
+
+When developing if you need to update the modules, you can do so by updating the branch or SHA on the package url in the `package.json`. As an example, if you wanted to use shared modules from the `auth` branch, you could change the dependancy line in the `package.json` to:
+
+```
+"devu-shared-modules": "github:UBAutograding/devu-shared#auth",
+```
+
+then rerun
+
+```
+npm install
+```
+
+to install the updated package
+
+If you were to make changes to the your shared branch and push it to the remote, you can update what version you local files are looking at via
+
+```
+npm update devu-shared-modules
+```
+
 ### Testing
 
 We're using [jest](https://jestjs.io/docs/getting-started) as our testing framework of choice. To run the entire test suite, use:

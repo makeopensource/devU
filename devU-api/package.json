@@ -39,6 +39,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "devu-shared-modules": "github:UBAutograding/devu-shared#master",
     "express": "^4.17.1",
     "express-validator": "^6.11.1",
     "helmet": "^4.6.0",
