@@ -1,0 +1,93 @@
+@import 'variables';
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.button {
+  border: none;
+  z-index: 1;
+
+  &:hover:enabled {
+    cursor: pointer;
+    background-color: $secondary;
+    transition: background-color 150ms linear;
+  }
+}
+
+.trigger {
+  @extend .button;
+
+  background-color: $primary;
+  color: $text-color;
+
+  height: 50px;
+}
+
+.name {
+  cursor: pointer;
+}
+
+.userIcon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.caret {
+  margin-left: 5px;
+}
+
+.menu {
+  width: 100%;
+
+  position: absolute;
+  top: 50px;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: $box-shadow;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: opacity 0.2s ease-in-out;
+}
+
+.menu > hr {
+  width: 100%;
+  margin: 0;
+}
+
+.open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.option {
+  @extend .button;
+  background-color: $background;
+  color: $text-color;
+
+  height: 50px;
+  text-align: left;
+}
+
+@media (max-width: $mobile) {
+  .name {
+    display: none;
+  }
+
+  .menu {
+    width: 120px !important;
+    right: -20px;
+  }
+}
+
+@media (min-width: $mobile) {
+  .userIcon {
+    display: none;
+  }
+}

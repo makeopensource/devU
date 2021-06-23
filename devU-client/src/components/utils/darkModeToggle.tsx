@@ -4,6 +4,8 @@ import FaIconButton from 'components/shared/inputs/faIconButton'
 
 import { isDarkMode, setDarkMode, setLightMode } from 'utils/theme.utils'
 
+import styles from './darkModeToggle.scss'
+
 const DarkModeToggle = () => {
   // Must use state to manage this toggle
   // Without a state change nothing rerenders (and therefor no colors change)
@@ -18,7 +20,7 @@ const DarkModeToggle = () => {
     setDarkModeState(!darkMode)
   }
 
-  return <FaIconButton onClick={handleChange} icon={darkMode ? 'sun' : 'moon'} />
+  return <FaIconButton onClick={handleChange} icon={darkMode ? 'sun' : 'moon'} className={styles.toggle} />
 }
 
 export default DarkModeToggle

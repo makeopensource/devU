@@ -109,8 +109,8 @@ const AuthProvider = ({}) => {
 
   useEffect(fetchProviders, [])
 
-  if (loading) <LoadingOverlay />
-  if (error) <div>error</div>
+  if (loading) return <LoadingOverlay />
+  if (error) return <div>error</div>
 
   // This is built out as it's own router (aka an unauthenticated router)
   // We may want to one day pull the provider stuff out from an unauthenticated router

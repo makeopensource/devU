@@ -29,6 +29,8 @@
     --primary-darker: #054272;
     --secondary: #797d7d;
     --secondary-darker: #3d3f3f;
+
+    transition: background-color 150ms linear;
   }
 
   body.dark-mode {

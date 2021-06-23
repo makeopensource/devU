@@ -42,6 +42,8 @@ export const IconLibrary = {
   'external-link': FaIcons.faExternalLinkAlt,
   sun: FaIcons.faSun,
   moon: FaIcons.faMoon,
+  'caret-down': FaIcons.faCaretDown,
+  'user-circle': FaIcons.faUserCircle,
 }
 
 export const RegularIconLibrary = {
