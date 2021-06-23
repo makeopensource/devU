@@ -25,6 +25,7 @@
     "resolveJsonModule": true
   },
   "exclude": [
-    "src/**/*.test.ts"
+    "src/**/*.test.ts",
+    "jest.config.ts"
   ]
 }
