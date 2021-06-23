@@ -12,6 +12,12 @@
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
 
       "args": ["src/index.ts"],
+      "env": {},
+
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
 
       "cwd": "${workspaceRoot}",
       "internalConsoleOptions": "openOnSessionStart",

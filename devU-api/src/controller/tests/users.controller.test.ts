@@ -1,19 +1,25 @@
 import { UpdateResult } from 'typeorm'
 
+import { User } from 'devu-shared-modules'
+
 import controller from '../users.controller'
 
-import User from '../../model/users.model'
+import UserModel from '../../model/users.model'
 
 import UserService from '../../services/user.service'
+
+import { serialize } from '../../utils/serializer/users.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 // Testing Globals
-let req
-let res
-let next
+let req: any
+let res: any
+let next: any
 
+let mockedUsers: UserModel[]
+let mockedUser: UserModel
 let expectedResults: User[]
 let expectedResult: User
 let expectedError: Error
@@ -26,8 +32,11 @@ describe('UserController', () => {
     res = Testing.fakeResponse()
     next = Testing.fakeNext()
 
-    expectedResults = Testing.generateTypeOrmArray(User, 3)
-    expectedResult = Testing.generateTypeOrm(User)
+    mockedUsers = Testing.generateTypeOrmArray(UserModel, 3)
+    mockedUser = Testing.generateTypeOrm(UserModel)
+
+    expectedResults = mockedUsers.map(serialize)
+    expectedResult = serialize(mockedUser)
     expectedError = new Error('Expected Error')
 
     expectedDbResult = {} as UpdateResult
@@ -36,13 +45,12 @@ describe('UserController', () => {
   describe('GET - /users', () => {
     describe('200 - Ok', () => {
       beforeEach(async () => {
-        UserService.list = jest.fn().mockImplementation(() => Promise.resolve(expectedResults))
+        UserService.list = jest.fn().mockImplementation(() => Promise.resolve(mockedUsers))
         await controller.get(req, res, next) // what we're testing
       })
 
-      test('Returns list of users', () => expect(req.users).toEqual(expectedResults))
-      test('Status code is 200', () => expect(req.statusCode).toEqual(200))
-      test('Next called empty', () => expect(next).toBeCalledWith())
+      test('Returns list of users', () => expect(res.json).toBeCalledWith(expectedResults))
+      test('Status code is 200', () => expect(res.status).toBeCalledWith(200))
     })
 
     describe('400 - Bad request', () => {
@@ -63,13 +71,12 @@ describe('UserController', () => {
   describe('GET - /users/:id', () => {
     describe('200 - Ok', () => {
       beforeEach(async () => {
-        UserService.retrieve = jest.fn().mockImplementation(() => Promise.resolve(expectedResult))
+        UserService.retrieve = jest.fn().mockImplementation(() => Promise.resolve(mockedUser))
         await controller.detail(req, res, next)
       })
 
-      test('Returns expected user', () => expect(req.user).toEqual(expectedResult))
-      test('Status code is 200', () => expect(req.statusCode).toEqual(200))
-      test('Next called empty', () => expect(next).toBeCalledWith())
+      test('Returns expected user', () => expect(res.json).toBeCalledWith(expectedResult))
+      test('Status code is 200', () => expect(res.status).toBeCalledWith(200))
     })
 
     describe('404 - Not Found', () => {
@@ -101,13 +108,12 @@ describe('UserController', () => {
   describe('POST - /users/', () => {
     describe('201 - Created', () => {
       beforeEach(async () => {
-        UserService.create = jest.fn().mockImplementation(() => Promise.resolve(expectedResult))
+        UserService.create = jest.fn().mockImplementation(() => Promise.resolve(mockedUser))
         await controller.post(req, res, next)
       })
 
-      test('Returns expected user', () => expect(req.user).toEqual(expectedResult))
-      test('Status code is 201', () => expect(req.statusCode).toEqual(201))
-      test('Next called empty', () => expect(next).toBeCalledWith())
+      test('Returns expected user', () => expect(res.json).toBeCalledWith(expectedResult))
+      test('Status code is 201', () => expect(res.status).toBeCalledWith(201))
     })
 
     describe('400 - Bad Reqeust', () => {

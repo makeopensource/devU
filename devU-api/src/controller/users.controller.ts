@@ -4,12 +4,14 @@ import UserService from '../services/user.service'
 
 import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 
+import { serialize } from '../utils/serializer/users.serializer'
+
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    req.users = await UserService.list()
-    req.statusCode = 200
+    const users = await UserService.list()
+    const response = users.map(serialize)
 
-    next()
+    res.status(200).json(response)
   } catch (err) {
     next(err)
   }
@@ -22,10 +24,9 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
     if (!user) return res.status(404).json(NotFound)
 
-    req.user = user
-    req.statusCode = 200
+    const response = serialize(user)
 
-    next()
+    res.status(200).json(response)
   } catch (err) {
     next(err)
   }
@@ -33,10 +34,10 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
-    req.user = await UserService.create(req.body)
-    req.statusCode = 201
+    const user = await UserService.create(req.body)
+    const response = serialize(user)
 
-    next()
+    res.status(201).json(response)
   } catch (err) {
     res.status(400).json(new GenericResponse(err.message))
   }

@@ -37,13 +37,19 @@ Run the initial migrations to setup our DB schema
 npm run typeorm -- migration:run
 ```
 
+Run the setup script to create local development auth keys. These are used in local development for signing and authenticating JWTs.
+
+```
+npm run generate-config
+```
+
 Once you've got all the dependencies installed you can run the project via
 
 ```
 npm start
 ```
 
-By defualt the project runs at `localhost:3001`, but you can change the port by setting an alternate port by setting the `PORT` environment variable.
+By default the project runs at `localhost:3001`, but you can change the port by setting an alternate port by setting the `PORT` environment variable.
 
 If you're working in vscode, a configuration has been included to allow for debugging. Open up the VS Code Run and Debug section and click `Debug API`.
 
@@ -67,6 +73,10 @@ npm run format
 
 Use [Azure Data Studio](https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver15) (or some other sql client) for easier sql queries/ testing while developing. We're using [PostgresSQL](https://www.postgresql.org/) so keep that in mind while googling how to query things as the syntax and features can be slightly different across sql flavors. **[AZURE DATA STUDIO REQUIRES A POSTGRES PLUGIN TO WORK WITH POSTGRESQL](https://docs.microsoft.com/en-us/sql/azure-data-studio/extensions/postgres-extension?view=sql-server-ver15)**. So if you want to use Azure Data Studio, you'll have to install that extension.
 
+### Local Auth Providers
+
+If you're looking for more information on how to setup auth for your developement environment, check out more info [here](./docs/localAuth.md)
+
 ## Working in the Project
 
 This project is built using
@@ -82,7 +92,7 @@ For those unfamiliar with Express, I'll attempt to give a brief rundown before t
 Express is a REST framework for node. Devs new to express will likely find one of the most perplexing parts of Express to be how it handles middleware. For those unfamiliar with what middleware is, it's largely a catch all term for code that connects together pieces of code in the api. In Express's context, middleware is basically everything that runs within each router; here's an example:
 
 ```typescript
-Router.get('/:id', idAsInt, UserController.detail, serializer)
+Router.get('/:id', idAsInt, UserController.detail)
 ```
 
 In express, all of the functions added after the route's path are considered middleware and each route can have as many middleware as is needed. In this project we separate out `controllers` into their own directory though they are still considered middleware.
@@ -113,13 +123,13 @@ Let's take this from the top
 - `index.ts`: where the application is bootstrapped from, controls all global server controls and middlewares
 - `routers/index.ts`: largely a rollup for all the other routers. Can be used to add router specific middleware to routes/ subroutes
 - `routers/route.ts`: Individual routes for each resource, where the list of middleware can be found. _All routers call unique middleware_
-- Middleware: The above diagram is a bit of a misnomer. Not every endpoint will have validators, controllers, and serializers. Some will have all of those, some may have none. Each route will have at least one middleware, and the last middleware will deal with returning the requested data
+- Middleware: The above diagram is a bit of a misnomer. Not every endpoint will have auth, validators, and controllers. Some will have all of those, some may have none. Each route will have at least one middleware, and the last middleware will deal with returning the requested data
+- Auth: checks the access/ refresh tokens
 - Validators: validates the bodies of requests
-- Controllers: deals with setting status codes, and directing to services
+- Controllers: deals with setting status codes, and directing to services. For the most part, controllers should be the last piece of middleware in the chain.
 - Services: Workhorse of the application. Deals with all major application logic and database calls
-- Serializers: Formats the data to be a sane, reusable response.
 
-The database models live outside of this control flow as they don't deal with any buisness logic. However services will use them to access the database. You can largely think of the the models as a 1:1 map to database tables.
+The database models live outside of this control flow as they don't deal with any buisness logic. However services will use them to access the database. You can largely think of the models as a 1:1 map to database tables.
 
 ### Shared Modules
 
@@ -127,7 +137,7 @@ This project uses shared modules between it and it's client. What this means is 
 
 The project can be found [here](https://github.com/UBAutograding/devu-shared).
 
-When developing if you need to update the modules, you can do so by updating the branch or SHA on the package url in the `package.json`. As an example, if you wanted to use shared modules from the `auth` branch, you could change the dependancy line in the `package.json` to:
+When developing if you need to update the modules, you can do so by updating the branch or SHA on the package url in the `package.json`. As an example, if you wanted to use shared modules from the `auth` branch, you could change the dependency line in the `package.json` to:
 
 ```
 "devu-shared-modules": "github:UBAutograding/devu-shared#auth",
@@ -141,7 +151,7 @@ npm install
 
 to install the updated package
 
-If you were to make changes to the your shared branch and push it to the remote, you can update what version you local files are looking at via
+If you were to make changes to your shared branch and push it to the remote, you can update what version your local files are looking at via
 
 ```
 npm update devu-shared-modules
@@ -175,7 +185,7 @@ And lastly, if you want to narrow it down to running less than a single test fil
 npm test -- -t "some test description or name"
 ```
 
-I wouldn't reccomend digging that far down as the of tests should be more human readable, and therefor not super great to grab via a regex; but if you really wish to do so, you can.
+I wouldn't recommend digging that far down as the of tests should be more human-readable, and therefore not super great to grab via a regex; but if you really wish to do so, you can.
 
 ### Common TypeORM Commands (Database/ Schema Stuff)
 
@@ -196,6 +206,36 @@ And revert the latest migration with
 ```
 npm run typeorm --migration:revert
 ```
+
+### Configuration Options
+
+Most of the API's configuraiton options live in a file called `environment.ts`. That file is bootstrapped at startup using the [config library]https://www.npmjs.com/package/config), as well as some environment variables.
+
+What this means for you (the developer) is that you can control certain api options via environment variables at runtime, or by using your `config/default.yml`. To see which `environment.ts` options support using environment variables directly, open that file and see which are using `process.env.*`; everything else should be configurable via your `default.yml`
+
+If you update your `default.yml` be sure to hard restart your API, as changing the config options does not update until you rebootstrap the API.
+
+### Style Guide
+
+While we use prettier to control most of the style choices for the application, it is not a silver bullet. Here we'll list a few conventions that will (hopefully) make working in the API a little bit more sane.
+
+When importing stuff we try to keep things in a certain order. Example
+
+```
+import Libraries
+
+import RootLevelStuff
+
+import Controllers
+
+import Middleware
+
+import Routers
+
+import Utils
+```
+
+The important thing here is once you get into the modules (models/ controllers/ routers/ etc), import them alphebetically with a single empty line inbetween them.
 
 ## Production Builds
 

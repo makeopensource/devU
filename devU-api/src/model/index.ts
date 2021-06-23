@@ -1,5 +1,5 @@
-import User from './users.model'
+import UserModel from './users.model'
 
-type Models = User
+type Models = UserModel
 
 export default Models

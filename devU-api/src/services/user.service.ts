@@ -1,30 +1,45 @@
-import { getRepository } from 'typeorm'
+import { getRepository, IsNull } from 'typeorm'
 
-import { User as UserType } from 'devu-shared-modules'
+import UserModel from '../model/users.model'
 
-import User from '../model/users.model'
+import { User } from 'devu-shared-modules'
 
-const connect = () => getRepository(User)
+const connect = () => getRepository(UserModel)
 
-export async function create(user: UserType) {
+export async function create(user: User) {
   return await connect().save(user)
 }
 
-export async function update(user: UserType) {
-  const { id, email, schoolId, preferredName } = user
-  return await connect().update(id, { email, schoolId, preferredName })
+export async function update(user: User) {
+  const { id, email, externalId, preferredName } = user
+
+  if (!id) throw new Error('Missing Id')
+
+  return await connect().update(id, { email, externalId, preferredName })
 }
 
 export async function _delete(id: number) {
-  return await connect().softDelete({ id, deletedAt: null })
+  return await connect().softDelete({ id, deletedAt: IsNull() })
 }
 
 export async function retrieve(id: number) {
-  return await connect().findOne({ id, deletedAt: null })
+  return await connect().findOne({ id, deletedAt: IsNull() })
 }
 
 export async function list() {
-  return await connect().find({ deletedAt: null })
+  return await connect().find({ deletedAt: IsNull() })
+}
+
+export async function ensure(userInfo: User) {
+  const { externalId, email } = userInfo
+
+  const user = await connect().findOne({ externalId })
+
+  if (user) return { user, isNewUser: false }
+
+  const newUser = await create({ email, externalId })
+
+  return { user: newUser, isNewUser: true }
 }
 
 export default {
@@ -33,4 +48,5 @@ export default {
   update,
   _delete,
   list,
+  ensure,
 }
