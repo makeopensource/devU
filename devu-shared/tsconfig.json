@@ -4,7 +4,7 @@
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "./build",
+    "outDir": "./",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
@@ -22,7 +22,8 @@
     "forceConsistentCasingInFileNames": true,
     "newLine": "lf",
     "typeRoots": ["@types", "./node_modules/@types"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "declaration": true // puts declarations into build for our other projects to use
   },
   "exclude": [
     "src/**/*.test.ts",
