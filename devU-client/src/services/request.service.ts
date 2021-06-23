@@ -1,9 +1,9 @@
 import config from '../config'
 
-import { getToken } from 'services/authentication.service'
+import { getToken } from 'utils/authentication.utils'
 
 const proxiedUrls = {
-  '/api': `${config.apiUrl}/api`,
+  '/api': `${config.apiUrl}`,
 }
 
 /**
@@ -25,7 +25,12 @@ function _handleResponse(res: Response) {
   // unfulfilled promise & error handling for non json response bodies
   const body = res.json().catch((err) => _handleNonJsonResponse(err, res))
 
+  // One off header check for /login
+  // if we see this header, we force our user to relogin
+  if (res.headers.get('x-nearing-expiration') === 'true') throw new Error('Forced token expiration')
+
   if (res.ok) return body
+
   return body.then((err) => {
     throw err
   })
@@ -53,13 +58,13 @@ async function get(url: string, options: RequestInit = {}, unauthenticated = fal
 
   const request: any = {
     method: 'GET',
-    headers: { accept: 'application/json' },
+    headers: { accept: 'application/json', 'content-type': 'application/json' },
     ...options, // Provieds users a way to override everything
   }
 
   if (!unauthenticated) {
     const authToken = await getToken()
-    if (authToken) request.headers['authorization'] = `JWT ${authToken}`
+    if (authToken) request.headers['authorization'] = `Bearer ${authToken}`
   }
 
   return _fetchWrapper(proxy, request)
@@ -70,7 +75,7 @@ async function post(url: string, body: Record<string, any>, options: RequestInit
 
   const request: any = {
     method: 'POST',
-    headers: { accept: 'application/json' },
+    headers: { accept: 'application/json', 'content-type': 'application/json' },
     body: JSON.stringify(body),
     ...options,
   }
@@ -78,7 +83,7 @@ async function post(url: string, body: Record<string, any>, options: RequestInit
   if (!unauthenticated) {
     const authToken = await getToken()
 
-    if (authToken) request.headers['authorization'] = `JWT ${authToken}`
+    if (authToken) request.headers['authorization'] = `Bearer ${authToken}`
   }
 
   return _fetchWrapper(proxy, request)
@@ -90,7 +95,7 @@ async function put(url: string, body: Record<string, any>, options: RequestInit 
 
   return _fetchWrapper(proxy, {
     method: 'PUT',
-    headers: { accept: 'application/json', authorization: `JWT ${token}` },
+    headers: { accept: 'application/json', 'content-type': 'application/json', authorization: `Bearer ${token}` },
     body: JSON.stringify(body),
     ...options,
   })
@@ -102,7 +107,7 @@ async function deleteRequest(url: string, options: RequestInit = {}) {
 
   return _fetchWrapper(proxy, {
     method: 'DELETE',
-    headers: { accept: 'application/json', authorization: `JWT ${authToken}` },
+    headers: { accept: 'application/json', 'content-type': 'application/json', authorization: `Bearer ${authToken}` },
     ...options,
   })
 }
@@ -113,7 +118,7 @@ async function upload(url: string, file: File, options: RequestInit = {}) {
 
   return _fetchWrapper(proxy, {
     method: 'POST',
-    headers: { authorization: `JWT ${token}` },
+    headers: { authorization: `Bearer ${token}` },
     body: file,
     ...options,
   })

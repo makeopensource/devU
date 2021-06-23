@@ -40,6 +40,8 @@ export const IconLibrary = {
   edit: FaIcons.faEdit,
   plus: FaIcons.faPlus,
   'external-link': FaIcons.faExternalLinkAlt,
+  sun: FaIcons.faSun,
+  moon: FaIcons.faMoon,
 }
 
 export const RegularIconLibrary = {
@@ -54,7 +56,7 @@ export const RegularIconLibrary = {
   moon: FaRegularIcons.faMoon,
 }
 
-type Props = { className?: string } & (
+export type Props = { className?: string } & (
   | { icon: keyof typeof IconLibrary; regularIcon?: never }
   | { icon?: never; regularIcon: keyof typeof RegularIconLibrary }
 )

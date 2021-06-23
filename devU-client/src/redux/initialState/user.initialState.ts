@@ -1,24 +1,13 @@
 import { UserState } from 'redux/types/user.types'
 
 const defaultState: UserState = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  institution: {
-    id: '',
-    name: '',
-    profileImage: '',
-    colors: [],
-    lastUpdated: '',
-  },
-  meta: {
-    dateCreated: '',
-  },
-  role: '',
-  systemUser: false,
-  features: [],
-  accountId: '',
+  id: undefined,
+  accessToken: '',
   externalId: '',
+  email: '',
+  createdAt: '',
+  updatedAt: '',
+  preferredName: '',
 }
 
 export default defaultState

@@ -20,15 +20,15 @@
     text-size-adjust: 100%;
 
     background-color: var(--background);
-    color: var(--text-color);;
+    color: var(--text-color);
 
     --background: white;
     --text-color: black;
 
     --primary: #0984e3;
     --primary-darker: #054272;
-    --secondary:#797D7D;
-    --secondary-darker:#3d3f3f;
+    --secondary: #797d7d;
+    --secondary-darker: #3d3f3f;
   }
 
   body.dark-mode {
@@ -37,8 +37,8 @@
 
     --primary: #266781;
     --primary-darker: #133441;
-    --secondary:#3d3f3f;
-    --secondary-darker:#1f2020;
+    --secondary: #3d3f3f;
+    --secondary-darker: #1f2020;
 
     background-color: var(--background);
     color: var(--text-color);
