@@ -5,5 +5,7 @@ devu-shared-modules/
 *.js
 *.d.ts
 *.map.*
+*js.map
 
 ./types
+./utils
