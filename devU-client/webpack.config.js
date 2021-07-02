@@ -10,7 +10,7 @@ module.exports = () => {
   const isDevServer = process.env.WEBPACK_DEV_SERVER;
   const env = process.env.NODE_ENV || "local";
   const dotenv = require('dotenv').config({ path: `./.env.${env}` });
-  const envPlugin = new Dotenv({ path: `./.env.${env}` });
+  const envPlugin = new Dotenv({ path: `./.env.${env}`, systemvars: true });
   const htmlPlugin = new HtmlWebPackPlugin({
     template: "./src/index.html",
     filename: "./index.html",
