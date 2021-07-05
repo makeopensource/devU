@@ -53,7 +53,7 @@ export function getToken(): Promise<string> | string {
     .catch(() => {
       // If for whatever reason the user can't be reauthenticated
       // Refresh to restart the auth flow
-      window.location.reload
+      window.location.reload()
 
       return '' // to make sure the function always returns a string
     })

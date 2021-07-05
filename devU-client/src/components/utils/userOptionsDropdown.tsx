@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react'
 import { connect, ConnectedProps } from 'react-redux'
 
 import FaIcon from 'components/shared/icons/faIcon'
 
 import { RootState } from 'redux/reducers'
+
+import RequestService from 'services/request.service'
 
 import styles from './userOptionsDropdown.scss'
 
@@ -13,34 +15,21 @@ const connected = connect(mapState)
 type Props = ConnectedProps<typeof connected>
 
 const UserOptionsDropdown = ({ name }: Props) => {
-  const [open, setOpen] = useState(false)
-  const dropdown = useRef<HTMLDivElement>(null)
-
-  const handleClickOutside = (e: MouseEvent) => {
-    if (dropdown.current === null) return
-    if (dropdown.current.contains(e.target as Node)) return
-
-    setOpen(false)
-  }
-
   const handleViewAccount = () => {
     // TODO - implmenet account page
     console.log('TODO - implement account page')
   }
 
-  const handleLogout = () => {
-    // TODO - call api/logout
-    console.log('TODO - call logout api endpoint and reload to origin')
+  const handleLogout = async () => {
+    // Clears refreshToken httpOnly cookie - requires cookie credentials to be included for them to be reset
+    // window.location.reload is not a normal function an cannot be invoked within a function chain
+    RequestService.get(`/api/logout`, { credentials: 'include' }, true).finally(() => window.location.reload())
   }
 
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside, { capture: true })
-    return () => document.removeEventListener('mousedown', handleClickOutside, { capture: true })
-  }, [])
-
   return (
-    <div className={styles.dropdown} ref={dropdown}>
-      <button className={styles.trigger} onClick={() => setOpen(!open)}>
+    <div className={styles.dropdown}>
+      {/* Opening and closing dropdown handled via CSS -  unfocusing dropdown will force close*/}
+      <button className={styles.trigger}>
         {/* Name vs icon dislpay controlled via CSS */}
         <label className={styles.name}>{name}</label>
         <FaIcon icon='user-circle' className={styles.userIcon} />
@@ -48,7 +37,7 @@ const UserOptionsDropdown = ({ name }: Props) => {
       </button>
 
       {/* Menu open closed controlled via CSS */}
-      <div className={`${styles.menu} ${open ? styles.open : ''}`}>
+      <div className={styles.menu}>
         <button onClick={handleViewAccount} className={styles.option}>
           Account
         </button>

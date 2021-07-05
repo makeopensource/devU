@@ -4,6 +4,13 @@
   display: flex;
   flex-direction: column;
   position: relative;
+
+  &:focus-within {
+    .menu {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
 }
 
 .button {
@@ -61,13 +68,9 @@
   margin: 0;
 }
 
-.open {
-  visibility: visible;
-  opacity: 1;
-}
-
 .option {
   @extend .button;
+
   background-color: $background;
   color: $text-color;
 
