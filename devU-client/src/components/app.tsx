@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { connect, ConnectedProps } from 'react-redux'
-import { Switch, Route, Router } from 'react-router-dom'
+import { Router } from 'react-router-dom'
 
+import AuthenticatedRouter from 'components/authenticatedRouter'
 import AuthProvider from 'components/pages/authProvider'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-import HomePage from 'components/pages/homePage'
-import NotFoundPage from 'components/pages/notFoundPage'
 
 import { setUser } from 'redux/actions/user.actions'
 
@@ -41,10 +40,7 @@ const App = ({ setUser }: Props) => {
   // TODO - As the list of Routes grows, we should move this into a router.tsx
   return (
     <Router history={history}>
-      <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route component={NotFoundPage} />
-      </Switch>
+      <AuthenticatedRouter />
     </Router>
   )
 }
