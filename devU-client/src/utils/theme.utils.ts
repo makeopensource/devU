@@ -7,7 +7,18 @@ const themes = {
   dark: { name: 'dark', class: 'dark-mode' },
 }
 
-export const isDarkMode = () => themes.dark.name === LocalStorageService.get(LOCALSTORAGE_THEME_KEY)
+export const isDarkMode = () => {
+  // If they've set a theme, use that theme
+  const localStorageTheme = LocalStorageService.get(LOCALSTORAGE_THEME_KEY)
+  if (localStorageTheme) return themes.dark.name === localStorageTheme
+
+  // If they have a system theme, use that
+  const osDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+  if (osDarkTheme) return osDarkTheme
+
+  // If no theme was detected return light theme
+  return false
+}
 
 export const setDarkMode = () => {
   setDarkModeFlag()
