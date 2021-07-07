@@ -2,8 +2,7 @@ import { Token, AccessToken } from 'devu-shared-modules'
 
 import RequestService from 'services/request.service'
 
-import store from 'redux/store'
-import { RootState } from 'redux/reducers'
+import store, { RootState } from 'redux/store'
 import { SET_USER } from 'redux/types/user.types'
 
 export function decodeAccessToken(accessToken: string): AccessToken {

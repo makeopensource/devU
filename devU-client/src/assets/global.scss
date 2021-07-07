@@ -27,14 +27,14 @@
 
     --primary: #0984e3;
     --primary-darker: #054272;
-    --secondary: #797d7d;
-    --secondary-darker: #3d3f3f;
+    --secondary: #a8abab;
+    --secondary-darker: #686b6b;
 
     transition: background-color 150ms linear;
   }
 
   body.dark-mode {
-    --background: #2d3436;
+    --background: #1b1f20;
     --text-color: white;
 
     --primary: #266781;

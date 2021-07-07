@@ -1,24 +1,17 @@
 import React from 'react'
-import { connect, ConnectedProps } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import FaIcon from 'components/shared/icons/faIcon'
 
-import { RootState } from 'redux/reducers'
+import { useAppSelector } from 'redux/hooks'
 
 import RequestService from 'services/request.service'
 
 import styles from './userOptionsDropdown.scss'
 
-const mapState = (state: RootState) => ({ name: state.user.preferredName || state.user.email })
-const connected = connect(mapState)
-
-type Props = ConnectedProps<typeof connected>
-
-const UserOptionsDropdown = ({ name }: Props) => {
-  const handleViewAccount = () => {
-    // TODO - implmenet account page
-    console.log('TODO - implement account page')
-  }
+const UserOptionsDropdown = () => {
+  const name = useAppSelector((state) => state.user.preferredName || state.user.email)
+  const userId = useAppSelector((state) => state.user.id)
 
   const handleLogout = async () => {
     // Clears refreshToken httpOnly cookie - requires cookie credentials to be included for them to be reset
@@ -38,10 +31,9 @@ const UserOptionsDropdown = ({ name }: Props) => {
 
       {/* Menu open closed controlled via CSS */}
       <div className={styles.menu}>
-        <button onClick={handleViewAccount} className={styles.option}>
+        <Link to={`/users/${userId}/update`} className={styles.option}>
           Account
-        </button>
-        <hr />
+        </Link>
         <button onClick={handleLogout} className={styles.option}>
           Logout
         </button>
@@ -50,4 +42,4 @@ const UserOptionsDropdown = ({ name }: Props) => {
   )
 }
 
-export default connected(UserOptionsDropdown)
+export default UserOptionsDropdown
