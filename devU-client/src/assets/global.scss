@@ -24,6 +24,7 @@
 
     --background: white;
     --text-color: black;
+    --focus: #38c172;
 
     --primary: #0984e3;
     --primary-darker: #054272;
@@ -47,6 +48,6 @@
   }
 
   *:focus {
-    outline-color: #38c172;
+    outline-color: var(--focus);
   }
 }
