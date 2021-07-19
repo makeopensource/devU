@@ -41,7 +41,7 @@ describe('Global Error Handler', () => {
       expect(res.json).toBeCalledWith(Unknown)
     })
 
-    test('Response with GenericRepsonse - 400 with "other" errors', () => {
+    test('Response with GenericResponse - 400 with "other" errors', () => {
       globalErrorHandler(new Error(expectedErrorMessage), req, res, next)
 
       expect(res.status).toBeCalledWith(400)

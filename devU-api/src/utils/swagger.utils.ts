@@ -3,7 +3,7 @@ import swaggerJSDoc from 'swagger-jsdoc'
 const swaggerOptioner = {
   openapi: '3.0.0',
   info: {
-    title: 'Typescirpt Example Docs',
+    title: 'Typescript Example Docs',
     version: '1.0.0',
     description: 'Example API documentation',
     contact: {

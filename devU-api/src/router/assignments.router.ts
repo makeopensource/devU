@@ -3,7 +3,7 @@ import express from 'express'
 
 // Middleware
 import validator from '../middleware/validator/assignments.validator'
-import { idAsInt } from '../middleware/validator/generic.validator'
+import { asInt } from '../middleware/validator/generic.validator'
 
 // Controller
 import AssignmentsController from '../controller/assignments.controller'
@@ -24,7 +24,7 @@ Router.get('/', AssignmentsController.get)
  *   get:
  *     summary: Retrieve a single assignment
  */
-Router.get('/:id', idAsInt, AssignmentsController.detail)
+Router.get('/:id', asInt(), AssignmentsController.detail)
 
 /**
  * @swagger
@@ -40,7 +40,7 @@ Router.post('/', validator, AssignmentsController.post)
  *   put:
  *     summary: Update an assignment
  */
-Router.put('/:id', idAsInt, validator, AssignmentsController.put)
+Router.put('/:id', asInt(), validator, AssignmentsController.put)
 
 /**
  * @swagger
@@ -48,6 +48,6 @@ Router.put('/:id', idAsInt, validator, AssignmentsController.put)
  *   delete:
  *     summary: Delete an assignment
  */
-Router.delete('/:id', idAsInt, AssignmentsController._delete)
+Router.delete('/:id', asInt(), AssignmentsController._delete)
 
 export default Router

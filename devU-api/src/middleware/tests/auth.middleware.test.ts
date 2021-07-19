@@ -42,7 +42,7 @@ describe('AuthMiddleware', () => {
     })
 
     describe('Authorization Failure', () => {
-      test('Missing authroization header', async () => {
+      test('Missing authorization header', async () => {
         delete req.headers.authorization
         await isAuthorized(req, res, next)
 

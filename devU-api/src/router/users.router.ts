@@ -1,7 +1,7 @@
 import express from 'express'
 
 import validator from '../middleware/validator/users.validator'
-import { idAsInt } from '../middleware/validator/generic.validator'
+import { asInt } from '../middleware/validator/generic.validator'
 
 import UserController from '../controller/users.controller'
 
@@ -21,7 +21,7 @@ Router.get('/', UserController.get)
  *   get:
  *     summary: Retrieve a single user
  */
-Router.get('/:id', idAsInt, UserController.detail)
+Router.get('/:id', asInt(), UserController.detail)
 
 /**
  * @swagger
@@ -33,11 +33,11 @@ Router.post('/', validator, UserController.post)
 
 /**
  * @swagger
- * /users:
+ * /users/{id}:
  *   put:
  *     summary: Update a user
  */
-Router.put('/:id', idAsInt, validator, UserController.put)
+Router.put('/:id', asInt(), validator, UserController.put)
 
 /**
  * @swagger
@@ -45,6 +45,6 @@ Router.put('/:id', idAsInt, validator, UserController.put)
  *   delete:
  *     summary: Delete a user
  */
-Router.delete('/:id', idAsInt, UserController._delete)
+Router.delete('/:id', asInt(), UserController._delete)
 
 export default Router

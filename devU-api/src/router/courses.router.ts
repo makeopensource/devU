@@ -3,7 +3,7 @@ import express from 'express'
 
 // Middleware
 import validator from '../middleware/validator/courses.validator'
-import { idAsInt } from '../middleware/validator/generic.validator'
+import { asInt } from '../middleware/validator/generic.validator'
 
 // Controller
 import CourseController from '../controller/courses.controller'
@@ -24,7 +24,7 @@ Router.get('/', CourseController.get)
  *   get:
  *     summary: Retrieve a single course
  */
-Router.get('/:id', idAsInt, CourseController.detail)
+Router.get('/:id', asInt(), CourseController.detail)
 
 /**
  * @swagger
@@ -40,7 +40,7 @@ Router.post('/', validator, CourseController.post)
  *   put:
  *     summary: Update a course
  */
-Router.put('/:id', idAsInt, validator, CourseController.put)
+Router.put('/:id', asInt(), validator, CourseController.put)
 
 /**
  * @swagger
@@ -48,6 +48,6 @@ Router.put('/:id', idAsInt, validator, CourseController.put)
  *   delete:
  *     summary: Delete a course
  */
-Router.delete('/:id', idAsInt, CourseController._delete)
+Router.delete('/:id', asInt(), CourseController._delete)
 
 export default Router

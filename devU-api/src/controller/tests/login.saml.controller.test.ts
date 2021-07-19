@@ -49,7 +49,7 @@ describe('LoginSamlController', () => {
     })
 
     describe('400 - Bad Request', () => {
-      test('Next called with err if user service failes', async () => {
+      test('Next called with err if user service fails', async () => {
         UserService.ensure = jest.fn().mockImplementation(() => {
           throw expectedError
         })
@@ -59,7 +59,7 @@ describe('LoginSamlController', () => {
         expect(next).toHaveBeenCalledWith(expectedError)
       })
 
-      test('Next called with err if auth service failes', async () => {
+      test('Next called with err if auth service fails', async () => {
         AuthService.createRefreshToken = jest.fn().mockImplementation(() => {
           throw expectedError
         })
