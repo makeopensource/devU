@@ -1,6 +1,7 @@
 node_modules/
 build/
 env/
+.idea/
 
 config/*.yml
 !config/test.yml
