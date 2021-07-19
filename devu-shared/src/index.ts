@@ -5,6 +5,7 @@ export * from './types/auth.types'
 export * from './types/course.types'
 export * from './types/user.types'
 export * from './types/validation.types'
+export * from './types/userCourse.types'
 
 export * from './utils/object.utils'
 export * from './utils/string.utils'
