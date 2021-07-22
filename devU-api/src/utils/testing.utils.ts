@@ -10,6 +10,17 @@ export function fakeRequest(overrides?: Partial<Request>): Request {
   req.headers = {}
   req.cookies = {}
 
+  //@ts-ignore - don't feel like defining every single socket property
+  req.socket = {
+    remoteAddress: 'requesting user ip',
+  }
+
+  // Mocking out passsport user
+  req.currentUser = { userId: 1, email: 'user@mail.com' }
+  req.refreshUser = { userId: 1, isRefreshToken: true }
+
+  req.header = jest.fn().mockImplementation((key: string) => undefined)
+
   return { ...req, ...overrides } as Request
 }
 
