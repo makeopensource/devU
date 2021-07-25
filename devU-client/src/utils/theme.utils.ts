@@ -42,3 +42,20 @@ export function initializeTheme() {
   if (isDark) setDarkModeCss()
   else setLightModeCss()
 }
+
+export function getCssVariables() {
+  const body = getComputedStyle(document.body)
+
+  return {
+    textColor: body.getPropertyValue('--text-color'),
+    background: body.getPropertyValue('--background'),
+
+    primary: body.getPropertyValue('--primary'),
+    primaryDarker: body.getPropertyValue('--primary-darker'),
+
+    secondary: body.getPropertyValue('--secondary'),
+    secondaryDarker: body.getPropertyValue('--secondary-darker'),
+
+    focus: body.getPropertyValue('--focus'),
+  }
+}
