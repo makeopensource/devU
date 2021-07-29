@@ -11,11 +11,11 @@ export async function create(user: User) {
 }
 
 export async function update(user: User) {
-  const { id, email, externalId, preferredName } = user
+  const { id, preferredName } = user
 
   if (!id) throw new Error('Missing Id')
 
-  return await connect().update(id, { email, externalId, preferredName })
+  return await connect().update(id, { preferredName })
 }
 
 export async function _delete(id: number) {
