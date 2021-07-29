@@ -3,6 +3,8 @@ import Select, { Styles, GroupTypeBase } from 'react-select'
 
 import { getCssVariables } from 'utils/theme.utils'
 
+import styles from './dropdown.scss'
+
 export type Option = {
   value: any
   label: string
@@ -11,13 +13,24 @@ export type Option = {
 type Props = {
   options: Option[]
   onChange: (value: any) => void
-  defaultValue?: any
+  defaultOption?: Option
   placeholder?: string
   disabled?: boolean
   search?: boolean
+  className?: string
+  label?: string
 }
 
-const Dropdown = ({ options, onChange, placeholder, disabled, search = false, defaultValue }: Props) => {
+const Dropdown = ({
+  options,
+  onChange,
+  placeholder,
+  disabled,
+  search = false,
+  defaultOption,
+  className = '',
+  label,
+}: Props) => {
   const [theme, setTheme] = useState(getCssVariables())
 
   // Needs a custom observer to force an update when the css variables change
@@ -36,7 +49,7 @@ const Dropdown = ({ options, onChange, placeholder, disabled, search = false, de
 
   // Styling into this component isn't really possible with raw css alone due to its implementation
   // Because of this we're going to use their style apis
-  const styles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
+  const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
     menu: (provided) => ({ ...provided, background }),
     input: (provided) => ({ ...provided, background }),
     control: (provided) => ({ ...provided, background, cursor: 'pointer' }),
@@ -49,15 +62,19 @@ const Dropdown = ({ options, onChange, placeholder, disabled, search = false, de
   }
 
   return (
-    <Select
-      styles={styles}
-      options={options}
-      onChange={handleChange}
-      placeholder={placeholder}
-      isDisabled={disabled}
-      isSearchable={search}
-      defaultValue={defaultValue}
-    />
+    <div className={`${styles.dropdown} ${className}`}>
+      {!!label && <label>{label}</label>}
+      <Select
+        aria-label={label}
+        styles={customStyles}
+        options={options}
+        onChange={handleChange}
+        placeholder={placeholder}
+        isDisabled={disabled}
+        isSearchable={search}
+        defaultValue={defaultOption}
+      />
+    </div>
   )
 }
 

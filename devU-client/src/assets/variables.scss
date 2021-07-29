@@ -3,12 +3,19 @@
 // be controlled via css
 $background: var(--background);
 $text-color: var(--text-color);
+$text-color-secondary: var(--text-color-secondary);
 
+$primary-lighter: var(--primary-lighter);
 $primary: var(--primary);
 $primary-darker: var(--primary-darker);
 
+$secondary-lighter: var(--secondary-lighter);
 $secondary: var(--secondary);
 $secondary-darker: var(--secondary-darker);
+
+$list-item-background: var(--list-item-background);
+$list-item-background-hover: var(--list-item-background-hover);
+$list-item-subtext: var(--list-item-subtext);
 
 $focus: var(--focus);
 

@@ -6,12 +6,13 @@ import styles from './pageWrapper.scss'
 
 type Props = {
   children: React.ReactNode
+  className?: string
 }
 
-const PageWrapper = ({ children }: Props) => (
+const PageWrapper = ({ children, className = '' }: Props) => (
   <div className={styles.page}>
     <GlobalToolbar />
-    <div className={styles.content}>{children}</div>
+    <div className={`${styles.content} ${className}`}>{children}</div>
   </div>
 )
 
