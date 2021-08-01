@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { connect, ConnectedProps } from 'react-redux'
 import { Router } from 'react-router-dom'
+
+import { useAppDispatch } from 'redux/hooks'
+import { SET_USER } from 'redux/types/user.types'
 
 import AuthenticatedRouter from 'components/authenticatedRouter'
 import AuthProvider from 'components/pages/authProvider'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-
-import { setUser } from 'redux/actions/user.actions'
+import ErrorPage from './pages/errorPage'
 
 import history from 'services/history.service'
 
 import fetchUser from 'utils/fetchUser.utils'
 import { initializeTheme } from 'utils/theme.utils'
 
-const mapDispatch = { setUser }
-const connector = connect(null, mapDispatch)
+const App = () => {
+  const setUser = useAppDispatch<typeof SET_USER>(SET_USER)
 
-type Props = ConnectedProps<typeof connector>
-
-const App = ({ setUser }: Props) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [authenticated, setAuthenticated] = useState(false)
@@ -35,9 +33,8 @@ const App = ({ setUser }: Props) => {
 
   if (loading) return <LoadingOverlay delay={100} />
   if (!authenticated) return <AuthProvider />
-  if (error) return <div>Error</div> // Should probably be an actual errors page
+  if (error) return <ErrorPage error={error} />
 
-  // TODO - As the list of Routes grows, we should move this into a router.tsx
   return (
     <Router history={history}>
       <AuthenticatedRouter />
@@ -45,4 +42,4 @@ const App = ({ setUser }: Props) => {
   )
 }
 
-export default connector(App)
+export default App

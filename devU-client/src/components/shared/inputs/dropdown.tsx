@@ -5,15 +5,15 @@ import { getCssVariables } from 'utils/theme.utils'
 
 import styles from './dropdown.scss'
 
-export type Option = {
-  value: any
+export type Option<T = any> = {
+  value: T
   label: string
 }
 
 type Props = {
-  options: Option[]
+  options: Option<any>[]
   onChange: (value: any) => void
-  defaultOption?: Option
+  defaultOption?: Option<any>
   placeholder?: string
   disabled?: boolean
   search?: boolean

@@ -2,8 +2,11 @@ export function set(key: string, value: string) {
   localStorage.setItem(key, value)
 }
 
-export function get(key: string) {
-  return localStorage.getItem(key)
+// Not totally typesafe if something in local storage doesn't match it's type on read
+export function get<T = any>(key: string): T | null {
+  const storedValue: unknown = localStorage.getItem(key)
+
+  return storedValue ? (storedValue as T) : null
 }
 
 export function setObject(key: string, obj: any) {
@@ -12,7 +15,8 @@ export function setObject(key: string, obj: any) {
   localStorage.setItem(key, value)
 }
 
-export function getObject(key: string): any | null {
+// Not totally typesafe if something in local storage doesn't match it's type on read
+export function getObject<T = any>(key: string): T | null {
   const value = localStorage.getItem(key)
 
   if (!value) return null

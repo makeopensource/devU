@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { UserCourse, Course } from 'devu-shared-modules'
 
-
+import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import UserCourseListItem from 'components/listItems/userCourseListItem'
-import Dropdown from 'components/shared/inputs/dropdown'
+import Dropdown, { Option } from 'components/shared/inputs/dropdown'
 import ErrorPage from './errorPage'
 
 import RequestService from 'services/request.service'
+import LocalStorageService from 'services/localStorage.service'
 
 import styles from './userCoursesListPage.scss'
-import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 
-const filterOptions = [
+const FILTER_LOCAL_STORAGE_KEY = 'courses_filter'
+
+type Filter = 'all' | 'active' | 'inactive' | 'dropped'
+
+const filterOptions: Option<Filter>[] = [
   { label: 'All', value: 'all' },
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
@@ -20,12 +24,17 @@ const filterOptions = [
 ]
 
 const UserCoursesListPage = () => {
+  const defaultFilter = LocalStorageService.get<Filter>(FILTER_LOCAL_STORAGE_KEY) || 'active'
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [userCourses, setUserCourses] = useState(new Array<UserCourse>())
   const [courses, setCourses] = useState<Record<string, Course>>({})
-  const currentFilter = JSON.parse(localStorage.getItem('status') || '')
-  const [filter, setFilter] = useState<'all' | 'active' | 'inactive' | 'dropped'>(currentFilter)
+  const [filter, setFilter] = useState<Filter>(defaultFilter)
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const fetchData = async () => {
     try {
@@ -33,8 +42,6 @@ const UserCoursesListPage = () => {
       const userCourses: UserCourse[] = await RequestService.get(`/api/user-courses?filterBy=${filter}`)
       const courseRequests = userCourses.map((u) => RequestService.get(`/api/courses/${u.courseId}`))
       const courses: Course[] = await Promise.all(courseRequests)
-
-      localStorage.setItem('status', JSON.stringify(filter) || '')
 
       // Mapify course ids so we can look them up more easilly via their id
       const courseMap: Record<string, Course> = {}
@@ -49,9 +56,12 @@ const UserCoursesListPage = () => {
     }
   }
 
-  useEffect(() => {
+  const handleFilterChange = (updatedFilter: Filter) => {
+    setFilter(updatedFilter)
     fetchData()
-  }, [filter])
+
+    LocalStorageService.set(FILTER_LOCAL_STORAGE_KEY, updatedFilter)
+  }
 
   if (loading) return <LoadingOverlay />
   if (error) return <ErrorPage error={error} />
@@ -67,7 +77,7 @@ const UserCoursesListPage = () => {
             label='Filter Courses'
             className={styles.dropdown}
             options={filterOptions}
-            onChange={setFilter}
+            onChange={handleFilterChange}
             defaultOption={defaultOption}
           />
         </div>
