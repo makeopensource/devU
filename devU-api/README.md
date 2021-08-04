@@ -31,16 +31,17 @@ Install all node dependancies. All of the database environment variables can cha
 npm install
 ```
 
-Run the initial migrations to setup our DB schema
-
-```
-npm run typeorm -- migration:run
-```
-
 Run the setup script to create local development auth keys. These are used in local development for signing and authenticating JWTs.
 
 ```
 npm run generate-config
+```
+
+
+Run the initial migrations to setup our DB schema
+
+```
+npm run typeorm -- migration:run
 ```
 
 Once you've got all the dependencies installed you can run the project via

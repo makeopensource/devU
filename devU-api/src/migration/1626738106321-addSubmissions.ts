@@ -20,7 +20,6 @@ export class addSubmissions1626738106321 implements MigrationInterface {
         "type" "submissions_type_enum" NOT NULL,
         "content" character varying NOT NULL,
         "submitter_ip" character varying(64) NOT NULL,
-        "original_submission_id" integer,
         CONSTRAINT "submissions_primary_key_constraint" PRIMARY KEY ("id")
     )`);
 
