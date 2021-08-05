@@ -23,14 +23,19 @@ let mockedUserCourse: UserCourseModel
 let expectedResults: UserCourse[]
 let expectedResult: UserCourse
 let expectedError: Error
+let expectedUserId: number
 
 let expectedDbResult: UpdateResult
 
 describe('UserCourseController', () => {
   beforeEach(() => {
+    expectedUserId = 1234
+
     req = Testing.fakeRequest()
     res = Testing.fakeResponse()
     next = Testing.fakeNext()
+
+    req.currentUser.userId = expectedUserId
 
     mockedUserCourses = Testing.generateTypeOrmArray(UserCourseModel, 3)
     mockedUserCourse = Testing.generateTypeOrm(UserCourseModel)
@@ -48,7 +53,8 @@ describe('UserCourseController', () => {
         UserCourseService.list = jest.fn().mockImplementation(() => Promise.resolve(mockedUserCourses))
         await controller.get(req, res, next) // what we're testing
       })
-
+      
+      test('UserId is passed to UserCourseService',() => expect(UserCourseService.list).toBeCalledWith(expectedUserId))
       test('Returns list of userCourses', () => expect(res.json).toBeCalledWith(expectedResults))
       test('Status code is 200', () => expect(res.status).toBeCalledWith(200))
     })

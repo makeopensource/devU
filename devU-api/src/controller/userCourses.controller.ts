@@ -7,7 +7,9 @@ import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const userCourses = await UserCourseService.list()
+    if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
+    
+    const userCourses = await UserCourseService.list(req.currentUser.userId)
 
     res.status(200).json(userCourses.map(serialize))
   } catch (err) {

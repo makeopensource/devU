@@ -26,8 +26,8 @@ export async function retrieve(id: number) {
   return await connect().findOne({ id, deletedAt: IsNull() })
 }
 
-export async function list() {
-  return await connect().find({ deletedAt: IsNull() })
+export async function list(userId: number) {
+  return await connect().find({ deletedAt: IsNull(), userId })
 }
 
 export default {
