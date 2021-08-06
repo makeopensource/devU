@@ -53,7 +53,7 @@ function _fetchWrapper(url: string, request: any) {
   return fetch(url, request).then(_handleResponse).catch(_handleError)
 }
 
-async function get(url: string, options: RequestInit = {}, unauthenticated = false) {
+async function get<T = any>(url: string, options: RequestInit = {}, unauthenticated = false): Promise<T> {
   const proxy = _replaceUrl(url)
 
   const request: any = {
@@ -70,7 +70,12 @@ async function get(url: string, options: RequestInit = {}, unauthenticated = fal
   return _fetchWrapper(proxy, request)
 }
 
-async function post(url: string, body: Record<string, any>, options: RequestInit = {}, unauthenticated = false) {
+async function post<T = any>(
+  url: string,
+  body: Record<string, any>,
+  options: RequestInit = {},
+  unauthenticated = false,
+): Promise<T> {
   const proxy = _replaceUrl(url)
 
   const request: any = {
@@ -89,7 +94,7 @@ async function post(url: string, body: Record<string, any>, options: RequestInit
   return _fetchWrapper(proxy, request)
 }
 
-async function put(url: string, body: Record<string, any>, options: RequestInit = {}) {
+async function put<T = any>(url: string, body: Record<string, any>, options: RequestInit = {}): Promise<T> {
   const token = await getToken()
   const proxy = _replaceUrl(url)
 
@@ -101,7 +106,7 @@ async function put(url: string, body: Record<string, any>, options: RequestInit 
   })
 }
 
-async function deleteRequest(url: string, options: RequestInit = {}) {
+async function deleteRequest<T = any>(url: string, options: RequestInit = {}): Promise<T> {
   const authToken = await getToken()
   const proxy = _replaceUrl(url)
 
@@ -112,7 +117,7 @@ async function deleteRequest(url: string, options: RequestInit = {}) {
   })
 }
 
-async function upload(url: string, file: File, options: RequestInit = {}) {
+async function upload<T = any>(url: string, file: File, options: RequestInit = {}): Promise<T> {
   const token = await getToken()
   const proxy = _replaceUrl(url)
 

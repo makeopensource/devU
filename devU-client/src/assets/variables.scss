@@ -1,6 +1,10 @@
 // These vars are defined and pulled from global.scss
 // scss by definition cannot be dynamic and therefor the dynamic vars need to
 // be controlled via css
+
+// Defining them in CSS also allows us to read the variables in JS as well as CSS and SCSS
+
+// Theme colors
 $background: var(--background);
 $text-color: var(--text-color);
 $text-color-secondary: var(--text-color-secondary);
@@ -20,25 +24,26 @@ $list-item-subtext: var(--list-item-subtext);
 $focus: var(--focus);
 
 // These variables WILL NOT update with dark vs light theme
-$grey-lightest: #dfe6e9;
-$grey-lighter: #b2bec3;
-$grey: #636e72;
+$grey-lightest: var(--grey-lightest);
+$grey-lighter: var(--grey-lighter);
+$grey: var(--grey);
 
-$blue-lighter: #74b9ff;
-$blue: #0984e3;
+$blue-lighter: var(--blue-lighter);
+$blue: var(--blue);
 
-$red-lighter: #ff7675;
-$red: #d63031;
+$red-lighter: var(--red-lighter);
+$red: var(--red);
 
-$purple-lighter: #a29bfe;
-$purple: #6c5ce7;
+$purple-lighter: var(--purple-lighter);
+$purple: var(--purple);
 
-$green-lighter: #55efc4;
-$green: #00b894;
+$green-lighter: var(--green-lighter);
+$green: var(--green);
 
-$yellow-lighter: #ffeaa7;
-$yellow: #fdcb6e;
+$yellow-lighter: var(--yellow-lighter);
+$yellow: var(--yellow);
 
+// Non color CSS variables
 $border-radius: 3px;
 
 $box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);

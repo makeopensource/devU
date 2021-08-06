@@ -11,12 +11,6 @@
   width: 300px;
 }
 
-@media (max-width: 700px) {
-  .dropdown {
-    width: 100%;
-  }
-}
-
 .header {
   color: $text-color;
   display: flex;
@@ -24,22 +18,11 @@
 }
 
 @media (max-width: 700px) {
+  .dropdown {
+    width: 100%;
+  }
+
   .header {
     display: block;
-  }
-}
-
-.myCourses {
-  font-size: 3rem;
-  margin: 0 2rem;
-  font-weight: 300;
-  color: $list-item-subtext;
-  white-space: nowrap;
-}
-
-@media (max-width: 700px) {
-  .myCourses {
-    margin-bottom: 2rem;
-    margin-left: 0;
   }
 }

@@ -1,0 +1,58 @@
+@import 'variables';
+
+.defaultButton {
+	background-color: $primary;
+	color: $text-color;
+	border: 0px;
+	padding: 10px 40px;
+	border-radius: 50px;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.defaultButton:disabled{
+	cursor: not-allowed;
+}
+
+
+.isLoading {
+	position:relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	.buttonLabel{
+		opacity: 0;
+	}
+	.loading:after {
+		display: block;
+	}
+
+}
+
+.loading {
+  font-size: 14px;
+  position: absolute;
+}
+
+.loading:after {
+  overflow: hidden;
+  display: none;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4,end) 1000ms infinite;      
+  animation: ellipsis steps(4,end) 1000ms infinite;
+  content: "\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 1.25em;    
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 1.25em;    
+  }
+}

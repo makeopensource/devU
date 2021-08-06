@@ -47,6 +47,7 @@ export function getCssVariables() {
   const body = getComputedStyle(document.body)
 
   return {
+    // Theme colors
     textColor: body.getPropertyValue('--text-color'),
     background: body.getPropertyValue('--background'),
 
@@ -57,5 +58,25 @@ export function getCssVariables() {
     secondaryDarker: body.getPropertyValue('--secondary-darker'),
 
     focus: body.getPropertyValue('--focus'),
+
+    // Other CSS colors
+    greyLightest: body.getPropertyValue('--grey-lightest'),
+    greyLighter: body.getPropertyValue('--grey-lighter'),
+    grey: body.getPropertyValue('--grey'),
+
+    blueLighter: body.getPropertyValue('--blue-lighter'),
+    blue: body.getPropertyValue('--blue'),
+
+    redLighter: body.getPropertyValue('--red-lighter'),
+    red: body.getPropertyValue('--red'),
+
+    purpleLighter: body.getPropertyValue('--purple-lighter'),
+    purple: body.getPropertyValue('--purple'),
+
+    greenLighter: body.getPropertyValue('--green-lighter'),
+    green: body.getPropertyValue('--green'),
+
+    yellowLighter: body.getPropertyValue('--yellow-lighter'),
+    yellow: body.getPropertyValue('--yellow'),
   }
 }

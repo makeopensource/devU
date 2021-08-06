@@ -39,9 +39,9 @@ const UserCoursesListPage = () => {
   const fetchData = async () => {
     try {
       // The filter isn't implemented by the API yet
-      const userCourses: UserCourse[] = await RequestService.get(`/api/user-courses?filterBy=${filter}`)
-      const courseRequests = userCourses.map((u) => RequestService.get(`/api/courses/${u.courseId}`))
-      const courses: Course[] = await Promise.all(courseRequests)
+      const userCourses = await RequestService.get<UserCourse[]>(`/api/user-courses?filterBy=${filter}`)
+      const courseRequests = userCourses.map((u) => RequestService.get<Course>(`/api/courses/${u.courseId}`))
+      const courses = await Promise.all(courseRequests)
 
       // Mapify course ids so we can look them up more easilly via their id
       const courseMap: Record<string, Course> = {}
@@ -71,7 +71,7 @@ const UserCoursesListPage = () => {
   return (
     <PageWrapper>
       <div className={styles.header}>
-        <h2 className={styles.myCourses}>My Courses</h2>
+        <h1>My Courses</h1>
         <div className={styles.filters}>
           <Dropdown
             label='Filter Courses'

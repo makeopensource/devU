@@ -1,0 +1,59 @@
+@import 'variables';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+
+  z-index: 1;
+
+  margin: 0.25rem;
+
+  border-radius: $border-radius;
+
+  height: 50px;
+  width: $extreme;
+
+  transition: transform 0.25s ease-in;
+  animation: alert-in-left 0.25s;
+
+  color: #fff;
+  padding: 10px 15px 10px 10px;
+
+  &:hover {
+    box-shadow: 0 0 10px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: $small) {
+  .container {
+    width: 225px;
+  }
+}
+
+.icon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+}
+
+.message {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes alert-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}

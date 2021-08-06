@@ -4,6 +4,7 @@ import { Router } from 'react-router-dom'
 import { useAppDispatch } from 'redux/hooks'
 import { SET_USER } from 'redux/types/user.types'
 
+import Alert from 'components/shared/alerts/alert'
 import AuthenticatedRouter from 'components/authenticatedRouter'
 import AuthProvider from 'components/pages/authProvider'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -37,6 +38,7 @@ const App = () => {
 
   return (
     <Router history={history}>
+      <Alert />
       <AuthenticatedRouter />
     </Router>
   )

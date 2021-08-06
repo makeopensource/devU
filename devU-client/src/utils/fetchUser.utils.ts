@@ -12,7 +12,7 @@ import { decodeAccessToken } from 'utils/authentication.utils'
  * Right now that means grabbing yourself an access token as well as the user info for yourself
  */
 async function fetchUserInfo(): Promise<UserState> {
-  const loginResponse: Token = await RequestService.get('/api/login', { credentials: 'include' })
+  const loginResponse = await RequestService.get<Token>('/api/login', { credentials: 'include' })
   const decodedToken = decodeAccessToken(loginResponse.accessToken)
 
   // Normally the RequestService will handle all of this for us
@@ -27,7 +27,7 @@ async function fetchUserInfo(): Promise<UserState> {
   }
 
   // Telling the request service to not use it's auth (it's not there) and passing by hand via options
-  const user: User = await RequestService.get(`/api/users/${decodedToken.userId}`, options, true)
+  const user = await RequestService.get<User>(`/api/users/${decodedToken.userId}`, options, true)
 
   return { ...loginResponse, ...user }
 }

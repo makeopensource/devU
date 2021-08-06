@@ -28,6 +28,14 @@ $font-size: 16px;
   }
 }
 
+.header {
+  @extend .link;
+
+  font-size: 2em;
+
+  font-weight: bold;
+}
+
 .bar {
   height: $bar-height;
 

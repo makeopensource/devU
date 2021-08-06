@@ -68,6 +68,7 @@ const ProviderForm = ({ provider }: ProivderFormProps) => {
           {fields.map((fieldName, index) => (
             <TextField
               id={`input-${index}`}
+              // @ts-expect-error - fields come from configuration yml in api, no way to type check that
               type={fieldName}
               label={fieldName}
               onChange={(value: string) => handleUpdateForm(fieldName, value)}
@@ -91,7 +92,7 @@ const AuthProvider = ({}) => {
   const [provider, setProvider] = useState<AuthProvider>()
 
   const fetchProviders = () => {
-    RequestService.get('/api/login/providers')
+    RequestService.get<AuthProvider[]>('/api/login/providers')
       .then(setProviders)
       .catch(setError)
       .finally(() => setLoading(false))

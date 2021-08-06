@@ -14,13 +14,13 @@ type Props = {
 }
 
 const colorHash = (input: string) => {
-  const hash = new ColorHash({hue: {min: 90, max: 270}});
-  return hash.hex(input);
+  const hash = new ColorHash({ hue: { min: 90, max: 270 } })
+  return hash.hex(input)
 }
 
 const UserCourseListItem = ({ course }: Props) => (
   <Link to={`/courses/${course.id}`} className={styles.container}>
-    <div className={styles.tag} style={{backgroundColor: colorHash(course.number)}}></div>
+    <div className={styles.tag} style={{ backgroundColor: colorHash(course.number) }}></div>
     <div>
       <div className={styles.name}>{course.name}</div>
       <div className={styles.subText}>

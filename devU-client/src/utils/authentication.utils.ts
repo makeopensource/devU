@@ -44,7 +44,7 @@ export function getToken(): Promise<string> | string {
 
   const decodedToken = decodeAccessToken(accessToken)
 
-  if(decodedToken.exp && timeInSecondsToEpoch() < decodedToken.exp - 60) return accessToken
+  if (decodedToken.exp && timeInSecondsToEpoch() < decodedToken.exp - 60) return accessToken
 
   return RequestService.get('/api/login', { credentials: 'include' })
     .then(setToken)
