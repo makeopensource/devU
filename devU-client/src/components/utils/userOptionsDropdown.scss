@@ -5,6 +5,8 @@
   flex-direction: column;
   position: relative;
 
+  outline: none;
+
   &:focus-within {
     .menu {
       visibility: visible;

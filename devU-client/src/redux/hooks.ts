@@ -1,38 +1,30 @@
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { useMemo } from 'react'
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
 
 import { RootState, AppDispatch } from './store'
 import ActionTypes from './types'
 
 type ActionFunction = (...args: any[]) => ActionTypes
 
-/**
- * Allows you to setup action function as react hook
- *
- * @param action
- * @returns
- */
-export const useAction = <T extends ActionFunction>(action: ActionFunction) => {
-  type Arguments = Parameters<T>
-  const dispatch = useDispatch<AppDispatch>()
+export function useActions<T extends ActionFunction[]>(...actions: T): T {
+  const dispatch = useDispatch()
 
-  return (...params: Arguments) => dispatch(action(...params))
+  // @ts-expect-error
+  return useMemo(() => actions.map((a) => bindActionCreators(a, dispatch)), [])
 }
 
-/**
- * Calls redux dispatch without action
- *
- * @param type - Any action type
- * @returns - dispatch hook () => void
- */
-export const useAppDispatch = <T extends ActionTypes['type']>(type: T) => {
-  // Get the spcific action type and get the type of that action type's payload
-  type Action = Extract<ActionTypes, { type: T }>
-  type Payload = Action['payload']
+export function useActionless<T extends ActionTypes['type'][]>(...types: T) {
+  type Actions = {
+    [Index in keyof T]: (
+      payload: Extract<ActionTypes, { type: T[Index] }>['payload'],
+    ) => Dispatch<Extract<ActionTypes, { type: T[Index] }>>
+  }
 
   const dispatch = useDispatch<AppDispatch>()
 
   // @ts-expect-error
-  return (payload: Payload) => dispatch({ type, payload })
+  return useMemo(() => types.map((type) => (payload) => dispatch({ type, payload })), []) as Actions
 }
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

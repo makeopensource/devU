@@ -1,3 +1,3 @@
-import { SET_USER, UserState } from 'redux/types/user.types'
+import * as T from 'redux/types/user.types'
 
-export const setUser = (payload: UserState) => ({ type: SET_USER, payload })
+export const setUser = (payload: T.UserState): T.SetUser => ({ type: T.SET_USER, payload })

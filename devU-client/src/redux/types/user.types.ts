@@ -4,12 +4,13 @@ export type UserState = User & Token
 
 export const SET_USER = 'SET_USER'
 export const UPDATE_USER = 'UPDATE_USER'
-interface SetUser {
+
+export interface SetUser {
   type: typeof SET_USER
   payload: UserState
 }
 
-interface UpdateUser {
+export interface UpdateUser {
   type: typeof UPDATE_USER
   payload: Partial<UserState>
 }

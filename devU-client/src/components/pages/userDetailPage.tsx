@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 
 import { User } from 'devu-shared-modules'
 
-import { useAppDispatch } from 'redux/hooks'
+import { useActionless } from 'redux/hooks'
 import { UPDATE_USER } from 'redux/types/user.types'
 
 import RequestService from 'services/request.service'
@@ -21,7 +21,7 @@ type UrlParams = {
 
 const UserDetailPage = ({}) => {
   const { userId } = useParams() as UrlParams
-  const updateUser = useAppDispatch(UPDATE_USER)
+  const [updateUser] = useActionless(UPDATE_USER)
 
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState({} as User)

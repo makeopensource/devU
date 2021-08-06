@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { User, ExpressValidationError } from 'devu-shared-modules'
 
-import { useAppDispatch } from 'redux/hooks'
+import { useActionless } from 'redux/hooks'
 import { SET_ALERT } from 'redux/types/active.types'
 
 import RequestService from 'services/request.service'
@@ -16,7 +16,7 @@ type Props = {
 }
 
 const EditUserForm = ({ user, onSubmit }: Props) => {
-  const setAlert = useAppDispatch(SET_ALERT)
+  const [setAlert] = useActionless(SET_ALERT)
 
   const [formData, setFormData] = useState<User>(user)
   const [loading, setLoading] = useState(false)

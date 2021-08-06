@@ -63,7 +63,7 @@ const UserCoursesListPage = () => {
     LocalStorageService.set(FILTER_LOCAL_STORAGE_KEY, updatedFilter)
   }
 
-  if (loading) return <LoadingOverlay />
+  if (loading) return <LoadingOverlay delay={250} />
   if (error) return <ErrorPage error={error} />
 
   const defaultOption = filterOptions.find((o) => o.value === filter)
