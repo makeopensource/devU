@@ -83,7 +83,11 @@ const UserCoursesListPage = () => {
         </div>
       </div>
       {userCourses.map((userCourse) => (
-        <UserCourseListItem key={userCourse.courseId} userCourse={userCourse} course={courses[userCourse.id || '']} />
+        <UserCourseListItem
+          key={userCourse.courseId}
+          userCourse={userCourse}
+          course={courses[userCourse.courseId || '']}
+        />
       ))}
     </PageWrapper>
   )
