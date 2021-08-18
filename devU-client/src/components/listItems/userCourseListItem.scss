@@ -1,43 +1,13 @@
 @import 'variables';
 
-.tag {
-  min-width: 8px;
-  background-color: $primary;
-  margin-right: 10px;
-}
-
-.container {
-  text-decoration: none;
-
-  display: flex;
-  flex-direction: row;
-
-  background: $list-item-background;
-  border-radius: 0.6rem;
-
-  padding: 2rem;
-
-  // May want to remove in the future if this item gets removed
-  margin-bottom: 1rem;
-
-  transition: background-color 0.2s linear;
-
-  &:hover,
-  &:focus {
-    background: $list-item-background-hover;
-  }
-}
-
 .name {
   font-size: 1.2rem;
   font-weight: 700;
-  color: $text-color;
   margin-bottom: 0.4rem;
 }
 
 .subText {
   font-size: 1rem;
-  color: $text-color;
   display: flex;
   justify-content: space-between;
   gap: 2rem;
