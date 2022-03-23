@@ -5,6 +5,7 @@ import swagger from '../utils/swagger.utils'
 
 import userCourse from './userCourses.router'
 import assignments from './assignments.router'
+import assignmentProblems from './assignmentProblems.router'
 import courses from './courses.router'
 import login from './login.router'
 import logout from './logout.router'
@@ -19,6 +20,7 @@ import { NotFound } from '../utils/apiResponse.utils'
 const Router = express.Router()
 
 Router.use('/assignments', isAuthorized, assignments)
+Router.use('/assignment-problems', isAuthorized, assignmentProblems)
 Router.use('/courses', isAuthorized, courses)
 Router.use('/user-courses', isAuthorized, userCourse)
 Router.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))

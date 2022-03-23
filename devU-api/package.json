@@ -54,7 +54,7 @@
     "config": "^3.3.6",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "devu-shared-modules": "github:UBAutograding/devu-shared#master",
+    "devu-shared-modules": "github:UBAutograding/devu-shared#assignment-problems",
     "express": "^4.17.1",
     "express-validator": "^6.11.1",
     "helmet": "^4.6.0",
