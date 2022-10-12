@@ -9,6 +9,7 @@ export * from './types/validation.types'
 export * from './types/userCourse.types'
 export * from './types/codeAssignment.types'
 export * from './types/assignmentProblem.types'
+export * from './types/submissionProblemScore.types'
 
 export * from './utils/object.utils'
 export * from './utils/string.utils'
