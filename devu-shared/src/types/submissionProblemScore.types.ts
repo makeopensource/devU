@@ -4,7 +4,7 @@ export type SubmissionProblemScore = {
   assignmentProblemId: number
   score: number
   feedback: string
-  release?: string
+  releasedAt?: string
   createdAt?: string
   updatedAt?: string
 }
