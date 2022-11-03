@@ -1,19 +1,15 @@
-import { SubmissionProblemScore } from 'devu-shared-modules'
 import { Request, Response, NextFunction } from 'express'
 
-import SubmissionProblemScoreService from '../services/submissionProblemScore.service'
+import CodeAssignmentService from '../services/codeAssignments.service'
+import { serialize } from '../utils/serializer/codeAssignments.serializer'
 
 import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 
-import { serialize } from '../utils/serializer/submissionProblemScore.serializer'
-
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const submissionId = parseInt(req.params.id)
-    const submissionProblemScores = await SubmissionProblemScoreService.list(submissionId)
-    const response = submissionProblemScores.map(serialize)
+    const codeAssignment = await CodeAssignmentService.list()
 
-    res.status(200).json(response)
+    res.status(200).json(codeAssignment.map(serialize))
   } catch (err) {
     next(err)
   }
@@ -22,11 +18,12 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
-    const submissionProblemScore = await SubmissionProblemScoreService.retrieve(id)
+    const codeAssignment = await CodeAssignmentService.retrieve(id)
 
-    if (!submissionProblemScore) return res.status(404).json(NotFound)
+    if (!codeAssignment) return res.status(404).json(NotFound)
 
-    const response = serialize(submissionProblemScore)
+    const response = serialize(codeAssignment)
+
     res.status(200).json(response)
   } catch (err) {
     next(err)
@@ -35,12 +32,10 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
-    if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
+    if (!req.file) return res.status(400).json(new GenericResponse('Code Assignment requires file upload for grader'))
 
-    const requestBody: SubmissionProblemScore = req.body
-
-    const submissionProblemScore = await SubmissionProblemScoreService.create(requestBody)
-    const response = serialize(submissionProblemScore)
+    const codeAssignment = await CodeAssignmentService.create(req.body, req.file.buffer)
+    const response = serialize(codeAssignment)
 
     res.status(201).json(response)
   } catch (err) {
@@ -50,8 +45,10 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
+    if (!req.file) return res.status(400).json(new GenericResponse('Code Assignment requires file upload for grader'))
+
     req.body.id = parseInt(req.params.id)
-    const results = await SubmissionProblemScoreService.update(req.body)
+    const results = await CodeAssignmentService.update(req.body, req.file.buffer)
 
     if (!results.affected) return res.status(404).json(NotFound)
 
@@ -64,7 +61,7 @@ export async function put(req: Request, res: Response, next: NextFunction) {
 export async function _delete(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
-    const results = await SubmissionProblemScoreService._delete(id)
+    const results = await CodeAssignmentService._delete(id)
 
     if (!results.affected) return res.status(404).json(NotFound)
 

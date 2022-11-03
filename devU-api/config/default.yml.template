@@ -10,6 +10,12 @@ database:
   password: 'password'
   name: 'typescript_api'
 
+minio:
+  host: localhost
+  port: 9002
+  username: 'typescript_user'
+  password: 'changeMe'
+
 logging:
   db: false
 

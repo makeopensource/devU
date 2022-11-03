@@ -13,6 +13,7 @@ import passport from 'passport'
 
 import environment from './environment'
 import connectionInfo from './database'
+import { initializeMinio } from './fileStorage'
 
 // Middleware
 import router from './router'
@@ -23,7 +24,8 @@ import './utils/passport.utils'
 
 const app = express()
 
-createConnection(connectionInfo)
+initializeMinio()
+  .then(() => createConnection(connectionInfo))
   .then(_connection => {
     app.use(helmet())
     app.use(bodyParser.urlencoded({ extended: true }))

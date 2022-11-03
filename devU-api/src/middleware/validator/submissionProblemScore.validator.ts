@@ -1,7 +1,6 @@
-import {check} from 'express-validator'
+import { check } from 'express-validator'
 
 import validate from './generic.validator'
-
 
 //submissionId: foreign_key
 //  numeric: not nullable
@@ -17,7 +16,7 @@ const score = check('score').isNumeric()
 
 //feedback: string
 //  is string: nullable
-const feedback = check('feedback').isString().trim().optional({nullable: true})
+const feedback = check('feedback').isString().trim().optional({ nullable: true })
 
 //released: date
 //  date.validator.ts?

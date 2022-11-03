@@ -58,6 +58,12 @@ const environment = {
   dbPassword: (load('database.password') || 'password') as string,
   database: (load('database.name') || 'typescript_api') as string,
 
+  // MinIO setting
+  minioHost: (load('minio.host') || 'localhost') as string,
+  minioPort: (load('minio.port') || 9002) as number,
+  minioUsername: (load('minio.username') || 'typescript_user') as string,
+  minioPassword: (load('minio.password') || 'changeMe') as string,
+
   // Logging
   logDB: (process.env.LOG_DB !== undefined || load('logging.db')) as boolean, // logs all sql commands for gut/fact checking endpoints
 

@@ -5,6 +5,7 @@ import UserModel from './user.model'
 import UserCourseModel from './userCourse.model'
 import SubmissionProblemScoreModel from './submissionProblemScore.model'
 import SubmissionScoreModel from './submissionScore.model'
+import CodeAssignmentsModel from './codeAssignments.model'
 
 type Models =
   | AssignmentModel
@@ -14,5 +15,6 @@ type Models =
   | UserModel
   | SubmissionProblemScoreModel
   | SubmissionScoreModel
+  | CodeAssignmentsModel
 
 export default Models

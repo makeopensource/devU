@@ -14,12 +14,12 @@ If you wish to better understand how this works, here's a bit more information.
 
 When developer auth is enabled, users can provide the email & externalId of the user they wish to login as (or create) and recieve a valid refresh/ access token.
 
-
 ### Fetching the bearer token
 
 Request: `POST /login/developer`
 
 Sample Request body:
+
 ```
 {
     "email": "name@buffalo.edu",
@@ -36,6 +36,7 @@ Sample Response:
 ```
 
 Sample Response Headers:
+
 ```
 {
     "Set-Cookie": "refreshToken=<token>;<cookie settings>"
@@ -43,7 +44,7 @@ Sample Response Headers:
 ```
 
 ### Using the Bearer token
-  
+
 Request: `GET /users`
 
 Request headers (notice the space between `Bearer` and `<token>`!):
@@ -55,8 +56,6 @@ Request headers (notice the space between `Bearer` and `<token>`!):
 ```
 
 With this flag on, it enabled the `/login/developer` route (see `./router/login.router.ts` for more details).
-
-
 
 ## Testing SAML Authentication Locally
 
