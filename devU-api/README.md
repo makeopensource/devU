@@ -1,4 +1,4 @@
-# Typescript Example Project
+# devU API
 
 This is an API for the v4 autograder. The main purpose of this project is to act as an in-between for the containers doing the autograding, and the users submitting assignments.
 
@@ -9,7 +9,7 @@ This is an API for the v4 autograder. The main purpose of this project is to act
 
 For now the only reason we're including docker is to more easily control the development database. In the future we may very well dockerize the api itself for ease of development and deployment, but for now this writeup is expecting it to be running directly on your machine via node.
 
-## Running the project locally
+## Running the Project Locally
 
 ### Getting Everything Started
 
@@ -25,7 +25,7 @@ docker run \
   -d postgres
 ```
 
-Install all node dependancies. All of the database environment variables can change, and can be set as environment variables on your machine if you want to overwrite the defaults
+Install all node dependencies. All of the database environment variables can change, and can be set as environment variables on your machine if you want to overwrite the defaults
 
 ```
 npm install
@@ -36,7 +36,6 @@ Run the setup script to create local development auth keys. These are used in lo
 ```
 npm run generate-config
 ```
-
 
 Run the initial migrations to setup our DB schema
 
@@ -76,13 +75,13 @@ Use [Azure Data Studio](https://docs.microsoft.com/en-us/sql/azure-data-studio/d
 
 ### Local Auth Providers
 
-If you're looking for more information on how to setup auth for your developement environment, check out more info [here](./docs/localAuth.md)
+If you're looking for more information on how to setup auth for your development environment, check out more info [here](./docs/localAuth.md)
 
 ## Working in the Project
 
 This project is built using
 
-- [Typescript](https://www.typescriptlang.org/) - A superset of JavaScript. The language of the applciation
+- [Typescript](https://www.typescriptlang.org/) - A superset of JavaScript. The language of the application
 - [Express](https://expressjs.com/) - A Node REST framework.
 - [TypeORM](https://typeorm.io/#/) - A Typescript ORM (manages the DB and all DB calls)
 
@@ -101,7 +100,7 @@ In express, all of the functions added after the route's path are considered mid
 Express's middleware is always a function with three arguments
 
 ```typescript
-function middlwareName(req: Reques, res: Response, next: NextFunction)
+function middlewareName(req: Request, res: Response, next: NextFunction)
 ```
 
 Here's what you need to know:
@@ -130,7 +129,7 @@ Let's take this from the top
 - Controllers: deals with setting status codes, and directing to services. For the most part, controllers should be the last piece of middleware in the chain.
 - Services: Workhorse of the application. Deals with all major application logic and database calls
 
-The database models live outside of this control flow as they don't deal with any buisness logic. However services will use them to access the database. You can largely think of the models as a 1:1 map to database tables.
+The database models live outside of this control flow as they don't deal with any business logic. However services will use them to access the database. You can largely think of the models as a 1:1 map to database tables.
 
 ### Shared Modules
 
@@ -168,7 +167,7 @@ npm test
 
 Keep in mind that when testing, jest is looking for `*.test.ts` files, so be sure to include the `.test` portion in those filenames.
 
-If durring development, you want to only run a single test file (via command line), you can do so by adding a string to the end of the test command. That string will be used as a regex against the filename(s). So as an example, if we wanted to run all of the controller tests, you could do so by:
+If during development, you want to only run a single test file (via command line), you can do so by adding a string to the end of the test command. That string will be used as a regex against the filename(s). So as an example, if we wanted to run all of the controller tests, you could do so by:
 
 ```
 npm test "controller"
@@ -210,7 +209,7 @@ npm run typeorm -- migration:revert
 
 ### Configuration Options
 
-Most of the API's configuraiton options live in a file called `environment.ts`. That file is bootstrapped at startup using the [config library]https://www.npmjs.com/package/config), as well as some environment variables.
+Most of the API's configuration options live in a file called `environment.ts`. That file is bootstrapped at startup using the [config library](https://www.npmjs.com/package/config), as well as some environment variables.
 
 What this means for you (the developer) is that you can control certain api options via environment variables at runtime, or by using your `config/default.yml`. To see which `environment.ts` options support using environment variables directly, open that file and see which are using `process.env.*`; everything else should be configurable via your `default.yml`
 
@@ -236,7 +235,7 @@ import Routers
 import Utils
 ```
 
-The important thing here is once you get into the modules (models/ controllers/ routers/ etc), import them alphebetically with a single empty line inbetween them.
+The important thing here is once you get into the modules (models/ controllers/ routers/ etc), import them alphabetically with a single empty line in between them.
 
 ## Production Builds
 

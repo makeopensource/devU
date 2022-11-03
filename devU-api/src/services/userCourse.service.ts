@@ -2,7 +2,7 @@ import { getRepository, IsNull } from 'typeorm'
 
 import { UserCourse as UserCourseType } from 'devu-shared-modules'
 
-import UserCourse from '../model/userCourses.model'
+import UserCourse from '../model/userCourse.model'
 
 const connect = () => getRepository(UserCourse)
 

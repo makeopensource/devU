@@ -1,6 +1,6 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import CourseModel from '../model/courses.model'
+import CourseModel from '../model/course.model'
 
 import { Course } from 'devu-shared-modules'
 

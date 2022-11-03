@@ -3,15 +3,16 @@ import swaggerUi from 'swagger-ui-express'
 
 import swagger from '../utils/swagger.utils'
 
-import userCourse from './userCourses.router'
-import assignments from './assignments.router'
-import assignmentProblems from './assignmentProblems.router'
-import courses from './courses.router'
+import userCourse from './userCourse.router'
+import assignments from './assignment.router'
+import assignmentProblems from './assignmentProblem.router'
+import courses from './course.router'
 import login from './login.router'
 import logout from './logout.router'
 import status from './status.router'
-import submissions from './submissions.router'
-import users from './users.router'
+import submissions from './submission.router'
+import users from './user.router'
+import submissionProblemScores from './submissionProblemScore.router'
 
 import { isAuthorized } from '../middleware/auth.middleware'
 
@@ -26,6 +27,7 @@ Router.use('/user-courses', isAuthorized, userCourse)
 Router.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))
 Router.use('/submissions', isAuthorized, submissions)
 Router.use('/users', isAuthorized, users)
+Router.use('/submission-problem-scores', isAuthorized, submissionProblemScores)
 
 Router.use('/login', login)
 Router.use('/logout', logout)

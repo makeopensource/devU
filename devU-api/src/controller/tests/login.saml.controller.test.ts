@@ -1,6 +1,6 @@
 import controller from '../login.saml.controller'
 
-import UserModel from '../../model/users.model'
+import UserModel from '../../model/user.model'
 
 import UserService from '../../services/user.service'
 import AuthService from '../../services/auth.service'

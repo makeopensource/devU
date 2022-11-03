@@ -1,6 +1,6 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import UserModel from '../model/users.model'
+import UserModel from '../model/user.model'
 
 import { User } from 'devu-shared-modules'
 

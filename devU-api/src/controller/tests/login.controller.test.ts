@@ -2,7 +2,7 @@ import { Token } from 'devu-shared-modules'
 
 import controller from '../login.controller'
 
-import UserModel from '../../model/users.model'
+import UserModel from '../../model/user.model'
 
 import UserService from '../../services/user.service'
 import AuthService from '../../services/auth.service'
