@@ -20,7 +20,7 @@ import AssignmentModel from './assignment.model'
  * such assignments should not have and other such assignments types (eg. NonCodeAssignment, ManualAssignment).
  */
 @Entity('code_assignments')
-export default class CodeAssignmentsModel {
+export default class CodeAssignmentModel {
   @PrimaryGeneratedColumn()
   id: number
 

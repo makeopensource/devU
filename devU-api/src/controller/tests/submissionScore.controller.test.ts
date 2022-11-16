@@ -1,15 +1,14 @@
 import { UpdateResult } from 'typeorm'
-// import * as Multer from 'multer'
 
-import { CodeAssignment } from 'devu-shared-modules'
+import { SubmissionScore } from 'devu-shared-modules'
 
-import controller from '../codeAssignments.controller'
+import controller from '../submissionScore.controller'
 
-import CodeAssignmentModel from '../../model/codeAssignments.model'
+import SubmissionScoreModel from '../../model/submissionScore.model'
 
-import CodeAssignmentService from '../../services/codeAssignments.service'
+import SubmissionScoreService from '../../services/submissionScore.service'
 
-import { serialize } from '../../utils/serializer/codeAssignments.serializer'
+import { serialize } from '../../utils/serializer/submissionScore.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
@@ -19,44 +18,44 @@ let req: any
 let res: any
 let next: any
 
-let mockedCodeAssignments: CodeAssignmentModel[]
-let mockedCodeAssignment: CodeAssignmentModel
-let expectedResults: CodeAssignment[]
-let expectedResult: CodeAssignment
+let mockedSubmissionScores: SubmissionScoreModel[]
+let mockedSubmissionScore: SubmissionScoreModel
+let expectedResults: SubmissionScore[]
+let expectedResult: SubmissionScore
 let expectedError: Error
 
 let expectedDbResult: UpdateResult
 
-describe('CodeAssignmentController', () => {
+describe('SubmissionScoreController', () => {
   beforeEach(() => {
     req = Testing.fakeRequest()
     res = Testing.fakeResponse()
     next = Testing.fakeNext()
 
-    mockedCodeAssignments = Testing.generateTypeOrmArray(CodeAssignmentModel, 3)
-    mockedCodeAssignment = Testing.generateTypeOrm(CodeAssignmentModel)
+    mockedSubmissionScores = Testing.generateTypeOrmArray(SubmissionScoreModel, 3)
+    mockedSubmissionScore = Testing.generateTypeOrm(SubmissionScoreModel)
 
-    expectedResults = mockedCodeAssignments.map(serialize)
-    expectedResult = serialize(mockedCodeAssignment)
+    expectedResults = mockedSubmissionScores.map(serialize)
+    expectedResult = serialize(mockedSubmissionScore)
     expectedError = new Error('Expected Error')
 
     expectedDbResult = {} as UpdateResult
   })
 
-  describe('GET - /code-assignments', () => {
+  describe('GET - /submission-score', () => {
     describe('200 - Ok', () => {
       beforeEach(async () => {
-        CodeAssignmentService.list = jest.fn().mockImplementation(() => Promise.resolve(mockedCodeAssignments))
+        SubmissionScoreService.list = jest.fn().mockImplementation(() => Promise.resolve(mockedSubmissionScores))
         await controller.get(req, res, next) // what we're testing
       })
 
-      test('Returns list of codeAssignments', () => expect(res.json).toBeCalledWith(expectedResults))
+      test('Returns list of submissionScores', () => expect(res.json).toBeCalledWith(expectedResults))
       test('Status code is 200', () => expect(res.status).toBeCalledWith(200))
     })
 
     describe('400 - Bad request', () => {
       test('Next called with expected error', async () => {
-        CodeAssignmentService.list = jest.fn().mockImplementation(() => Promise.reject(expectedError))
+        SubmissionScoreService.list = jest.fn().mockImplementation(() => Promise.reject(expectedError))
 
         try {
           await controller.get(req, res, next)
@@ -69,31 +68,31 @@ describe('CodeAssignmentController', () => {
     })
   })
 
-  describe('GET - /code-assignments/:id', () => {
+  describe('GET - /submission-score/:id', () => {
     describe('200 - Ok', () => {
       beforeEach(async () => {
-        CodeAssignmentService.retrieve = jest.fn().mockImplementation(() => Promise.resolve(mockedCodeAssignment))
+        SubmissionScoreService.retrieve = jest.fn().mockImplementation(() => Promise.resolve(mockedSubmissionScore))
         await controller.detail(req, res, next)
       })
 
-      test('Returns expected code assignment', () => expect(res.json).toBeCalledWith(expectedResult))
+      test('Returns expected submissionScore', () => expect(res.json).toBeCalledWith(expectedResult))
       test('Status code is 200', () => expect(res.status).toBeCalledWith(200))
     })
 
     describe('404 - Not Found', () => {
       beforeEach(async () => {
-        CodeAssignmentService.retrieve = jest.fn().mockImplementation(() => Promise.resolve()) // No results
+        SubmissionScoreService.retrieve = jest.fn().mockImplementation(() => Promise.resolve()) // No results
         await controller.detail(req, res, next)
       })
 
-      test('Status code is 404 on missing codeAssignment', () => expect(res.status).toBeCalledWith(404))
-      test('Responds with NotFound on missing codeAssignment', () => expect(res.json).toBeCalledWith(NotFound))
-      test('Next not called on missing codeAssignment', () => expect(next).toBeCalledTimes(0))
+      test('Status code is 404 on missing submissionScore', () => expect(res.status).toBeCalledWith(404))
+      test('Responds with NotFound on missing submissionScore', () => expect(res.json).toBeCalledWith(NotFound))
+      test('Next not called on missing submissionScore', () => expect(next).toBeCalledTimes(0))
     })
 
     describe('400 - Bad Request', () => {
       test('Next called with expected error', async () => {
-        CodeAssignmentService.retrieve = jest.fn().mockImplementation(() => Promise.reject(expectedError))
+        SubmissionScoreService.retrieve = jest.fn().mockImplementation(() => Promise.reject(expectedError))
 
         try {
           await controller.detail(req, res, next)
@@ -106,22 +105,20 @@ describe('CodeAssignmentController', () => {
     })
   })
 
-  describe('POST - /code-assignments', () => {
+  describe('POST - /submission-score/', () => {
     describe('201 - Created', () => {
       beforeEach(async () => {
-        CodeAssignmentService.create = jest.fn().mockImplementation(() => Promise.resolve(mockedCodeAssignment))
-        req.file = { stream: 'content' }
+        SubmissionScoreService.create = jest.fn().mockImplementation(() => Promise.resolve(mockedSubmissionScore))
         await controller.post(req, res, next)
       })
 
-      test('Returns expected code assignment', () => expect(res.json).toBeCalledWith(expectedResult))
+      test('Returns expected submissionScore', () => expect(res.json).toBeCalledWith(expectedResult))
       test('Status code is 201', () => expect(res.status).toBeCalledWith(201))
     })
 
     describe('400 - Bad Request', () => {
       beforeEach(async () => {
-        CodeAssignmentService.create = jest.fn().mockImplementation(() => Promise.reject(expectedError))
-        req.file = { stream: 'content' }
+        SubmissionScoreService.create = jest.fn().mockImplementation(() => Promise.reject(expectedError))
 
         try {
           await controller.post(req, res, next)
@@ -139,12 +136,11 @@ describe('CodeAssignmentController', () => {
     })
   })
 
-  describe('PUT - /code-assignments/:id', () => {
+  describe('PUT - /submission-score/:id', () => {
     describe('200 - Ok', () => {
       beforeEach(async () => {
         expectedDbResult.affected = 1 // mocking service return shape
-        CodeAssignmentService.update = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
-        req.file = { stream: 'content' }
+        SubmissionScoreService.update = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
         await controller.put(req, res, next)
       })
 
@@ -156,8 +152,7 @@ describe('CodeAssignmentController', () => {
     describe('404 - Not Found', () => {
       beforeEach(async () => {
         expectedDbResult.affected = 0 // No records affected in db
-        CodeAssignmentService.update = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
-        req.file = { stream: 'content' }
+        SubmissionScoreService.update = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
         await controller.put(req, res, next)
       })
 
@@ -168,8 +163,7 @@ describe('CodeAssignmentController', () => {
 
     describe('400 - Bad Request', () => {
       beforeEach(async () => {
-        CodeAssignmentService.update = jest.fn().mockImplementation(() => Promise.reject(expectedError))
-        req.file = { stream: 'content' }
+        SubmissionScoreService.update = jest.fn().mockImplementation(() => Promise.reject(expectedError))
         await controller.put(req, res, next)
       })
 
@@ -177,11 +171,11 @@ describe('CodeAssignmentController', () => {
     })
   })
 
-  describe('DELETE - /code-assignments/:id', () => {
+  describe('DELETE - /submission-score/:id', () => {
     describe('204 - No Content', () => {
       beforeEach(async () => {
         expectedDbResult.affected = 1
-        CodeAssignmentService._delete = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
+        SubmissionScoreService._delete = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
         await controller._delete(req, res, next)
       })
 
@@ -193,7 +187,7 @@ describe('CodeAssignmentController', () => {
     describe('404 - Not Found', () => {
       beforeEach(async () => {
         expectedDbResult.affected = 0
-        CodeAssignmentService._delete = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
+        SubmissionScoreService._delete = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
         await controller._delete(req, res, next)
       })
 
@@ -204,7 +198,7 @@ describe('CodeAssignmentController', () => {
 
     describe('400 - Bad Request', () => {
       beforeEach(async () => {
-        CodeAssignmentService._delete = jest.fn().mockImplementation(() => Promise.reject(expectedError))
+        SubmissionScoreService._delete = jest.fn().mockImplementation(() => Promise.reject(expectedError))
         await controller._delete(req, res, next)
       })
 

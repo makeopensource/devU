@@ -2,7 +2,7 @@ import { getRepository, IsNull } from 'typeorm'
 
 import { CodeAssignment } from 'devu-shared-modules'
 
-import CodeAssignmentsModel from '../model/codeAssignments.model'
+import CodeAssignmentsModel from '../model/codeAssignment.model'
 import { minioClient, BucketNames } from '../fileStorage'
 
 const connect = () => getRepository(CodeAssignmentsModel)
