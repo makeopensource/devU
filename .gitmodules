@@ -1,0 +1,9 @@
+[submodule "devU-api"]
+	path = devU-api
+	url = git@github.com:makeopensource/devU-api.git
+[submodule "devu-shared"]
+	path = devu-shared
+	url = git@github.com:makeopensource/devu-shared.git
+[submodule "devU-client"]
+	path = devU-client
+	url = git@github.com:makeopensource/devU-client.git
