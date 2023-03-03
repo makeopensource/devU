@@ -12,7 +12,7 @@ services:
   config:
     build:
       context: devU-api/scripts
-    command: "./generateConfig.sh config/newconfig.yml"
+    command: "./generateConfig.sh config/default.yml"
     image: ubautograding/devtools
     volumes:
       - ./devU-api/config:/config
@@ -21,7 +21,10 @@ services:
     environment:
       WAIT_HOSTS: db:5432
     depends_on:
-      - "db"
+      db:
+        condition: service_started
+      config:
+        condition: service_completed_successfully
     ports:
       - '3001:3001'
 
