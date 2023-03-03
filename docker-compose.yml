@@ -9,12 +9,13 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - '5432:5432'
-#   config:
-#     image: ubautograding/devtools
-#     volumes:
-#       - type: bind
-#         source: ./devU-api/config
-#         target: /config
+  config:
+    build:
+      context: devU-api/scripts
+    command: "./generateConfig.sh config/newconfig.yml"
+    image: ubautograding/devtools
+    volumes:
+      - ./devU-api/config:/config
   web:
     build: devU-api
     environment:
