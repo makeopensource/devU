@@ -45,4 +45,4 @@ services:
     volumes:
       - ./dist/local:/usr/share/nginx/html
     ports:
-      - "80:80"
+      - "9000:80"
