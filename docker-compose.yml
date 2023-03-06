@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   db:
+    # Runs the PostgreSQL database
     image: postgres
     restart: always
     environment:
@@ -10,6 +11,7 @@ services:
     ports:
       - '5432:5432'
   config:
+    # Generates a config file for the API
     build:
       context: devU-api/scripts
     command: "./generateConfig.sh config/default.yml"
@@ -17,6 +19,7 @@ services:
     volumes:
       - ./devU-api/config:/config
   web:
+    # Runs the API
     build: devU-api
     environment:
       WAIT_HOSTS: db:5432
@@ -27,4 +30,19 @@ services:
         condition: service_completed_successfully
     ports:
       - '3001:3001'
-
+  client:
+    # Builds the front end and exports static files to ./dist
+    build:
+      dockerfile: ../Dockerfile-client
+      context: devU-client
+    volumes:
+      - ./dist:/out
+  nginx:
+    # Hosts the front end static files from ./dist/local thorough a web server
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    volumes:
+      - ./dist/local:/usr/share/nginx/html
+    ports:
+      - "80:80"
