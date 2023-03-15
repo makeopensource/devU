@@ -102,4 +102,6 @@ If this is the case, you would get an error similar to this:
 unable to prepare context: path "<repo>/<filename>" not found 
 ```
 
-We are using `submodules` for this project, which means that both `devU-client/` and `devU-api/` are links to other repos. Make sure that you follow the instructions for cloning the repo above, and make sure you use the `--recurse-submodules` option when cloning.
+We are using `submodules` for this project, which means that both `devU-client/` and `devU-api/` are links to other repos. Make sure you follow the directions for cloning carefully: use the `--recurse-submodules` option when cloning.
+
+**If you already cloned the project**, run the command `git submodule update --init --recursive`, which should pull the appropriate submodules for you.
