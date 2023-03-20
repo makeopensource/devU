@@ -92,3 +92,16 @@ query: START TRANSACTION
 query: CREATE TABLE "users" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP, "username" character varying(32) NOT NULL, "name" character varying(128) NOT NULL, "email" character varying(128) NOT NULL, CONSTRAINT "users_primary_key_constraint" PRIMARY KEY ("id"))
 ...
 ```
+
+### Why is the devU-client/devU-api repo is empty?
+
+If this is the case, you would get an error similar to this:
+
+```
+[+] Building 0.0s (0/0)
+unable to prepare context: path "<repo>/<filename>" not found 
+```
+
+We are using `submodules` for this project, which means that both `devU-client/` and `devU-api/` are links to other repos. Make sure you follow the directions for cloning carefully: use the `--recurse-submodules` option when cloning.
+
+**If you already cloned the project**, run the command `git submodule update --init --recursive`, which should pull the appropriate submodules for you.
