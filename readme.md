@@ -102,5 +102,4 @@ query: SELECT * FROM "migrations" "migrations" ORDER BY "id" DESC
 8 migrations are new migrations that needs to be executed.
 query: START TRANSACTION
 query: CREATE TABLE "users" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP, "username" character varying(32) NOT NULL, "name" character varying(128) NOT NULL, "email" character varying(128) NOT NULL, CONSTRAINT "users_primary_key_constraint" PRIMARY KEY ("id"))
-...
 ```
