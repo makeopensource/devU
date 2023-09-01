@@ -1,0 +1,88 @@
+@import 'variables';
+
+$container-size: 175px;
+$square-size: 125px;
+
+$animation: 3s ease-in-out 0s infinite;
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.border {
+  @extend .center;
+  width: $square-size;
+  height: $square-size;
+  padding: 3px;
+  position: absolute;
+}
+
+.squares {
+  @extend .center;
+  background-color: transparent;
+  width: $container-size;
+  height: $container-size;
+}
+
+.border1 {
+  @extend .border;
+  background: $red;
+  animation: configure-clockwise $animation;
+}
+
+.border2 {
+  @extend .border;
+  background: $blue;
+  transform: rotate(45deg);
+  animation: configure-xclockwise $animation;
+}
+
+.core {
+  width: 100%;
+  height: 100%;
+  background-color: $background;
+}
+
+.label {
+  color: $text-color;
+}
+
+@keyframes configure-clockwise {
+  0% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes configure-xclockwise {
+  0% {
+    transform: rotate(45deg);
+  }
+  25% {
+    transform: rotate(-45deg);
+  }
+  50% {
+    transform: rotate(-135deg);
+  }
+  75% {
+    transform: rotate(-225deg);
+  }
+  100% {
+    transform: rotate(-315deg);
+  }
+}

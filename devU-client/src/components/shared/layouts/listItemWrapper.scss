@@ -1,0 +1,43 @@
+@import 'variables';
+
+.tag {
+  min-width: 8px;
+  background-color: $primary;
+  margin-right: 10px;
+}
+
+.container {
+  text-decoration: none;
+
+  display: flex;
+  flex-direction: row;
+
+  background: $list-item-background;
+  border-radius: 0.6rem;
+
+  padding: 1.5rem;
+
+  // May want to remove in the future if this item gets removed
+  margin-bottom: 1rem;
+
+  transition: background-color 0.2s linear;
+
+  color: $text-color;
+
+  &:hover,
+  &:focus {
+    background: $list-item-background-hover;
+  }
+}
+
+@media (max-width: $medium) {
+  .container {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: $extreme) {
+  .container {
+    padding: 0.75rem;
+  }
+}
