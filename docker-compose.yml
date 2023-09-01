@@ -3,13 +3,14 @@ services:
   db:
     # Runs the PostgreSQL database
     image: postgres
-    restart: always
     environment:
       POSTGRES_DB: typescript_api
       POSTGRES_USER: typescript_user
       POSTGRES_PASSWORD: password
-    ports:
-      - '5432:5432'
+    #    ports:
+    #      - '5432:5432'
+    expose:
+      - '5432'
   config:
     # Generates a config file for the API
     build:
@@ -46,3 +47,17 @@ services:
       - ./dist/local:/usr/share/nginx/html
     ports:
       - "9000:80"
+  minio:
+    image: minio/minio
+    #    ports:
+    #      - '9002:9000'
+    #      - '9001:9001'
+    expose:
+      - '9000'
+    #    volumes:
+    #      - /tmp/data:/data
+    environment:
+      MINIO_ROOT_USER: typescript_user
+      MINIO_ROOT_PASSWORD: changeMe
+    command: server /data --console-address ":9001"
+
