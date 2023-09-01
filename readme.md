@@ -75,19 +75,17 @@ re-running `docker compose up --build` a few times.
 Error during migration run:
 Error: Configuration property "auth.jwt.activeKeyId" is not defined
 at Config.get (/app/node_modules/config/lib/config### Why is the devU-client/devU-api repo empty?
+```
 
 If this is the case, you would get an error similar to this:
 
 ```
 [+] Building 0.0s (0/0)
 unable to prepare context: path "<repo>/<filename>" not found
-    ```
-
     We are using `submodules` for this project, which means that both `devU-client/` and `devU-api/` are links to other repos. Make sure you follow the directions for cloning carefully: use the `--recurse-submodules` option when cloning.
 
     **If you already cloned the project**, run the command `git submodule update --init --recursive`, which should pull the appropriate submodules for you.
     .js:182:11)
-    ...
 ```
 
 It usually works within 5 runs. I haven't been able to narrow down why this happens. Further investigation is welcome!
