@@ -1,11 +1,11 @@
 import { Submission } from 'devu-shared-modules'
 import { Request, Response, NextFunction } from 'express'
 
-import SubmissionService from '../services/submission.service'
+import SubmissionService from '../submission/submission.service'
 
 import { GenericResponse, NotFound } from '../utils/apiResponse.utils'
 
-import { serialize } from '../utils/serializer/submission.serializer'
+import { serialize } from '../submission/submission.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {

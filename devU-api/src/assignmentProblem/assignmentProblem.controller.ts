@@ -4,7 +4,7 @@ import AssignmentProblemService from './assignmentProblem.service'
 
 import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 
-import { serialize } from '.assignmentProblem.serializer'
+import { serialize } from './assignmentProblem.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {

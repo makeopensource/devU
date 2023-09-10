@@ -1,6 +1,6 @@
 import { check } from 'express-validator'
 
-import validate from './generic.validator'
+import validate from '../middleware/validator/generic.validator'
 
 //submissionId: foreign_key
 //  numeric: not nullable

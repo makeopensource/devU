@@ -1,8 +1,8 @@
 import { serialize } from '../submission.serializer'
 
-import SubmissionModel from '../../../model/submission.model'
+import SubmissionModel from '../../submission/submission.model'
 
-import Testing from '../../testing.utils'
+import Testing from '../../utils/testing.utils'
 
 let mockSubmission: SubmissionModel
 

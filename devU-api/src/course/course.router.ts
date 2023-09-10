@@ -6,7 +6,7 @@ import validator from './course.validator'
 import { asInt } from '../middleware/validator/generic.validator'
 
 // Controller
-import CourseController from '../controller/course.controller'
+import CourseController from './course.controller'
 
 const Router = express.Router()
 

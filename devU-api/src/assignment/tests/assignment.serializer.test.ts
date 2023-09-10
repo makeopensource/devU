@@ -2,7 +2,7 @@ import { serialize } from '../assignment.serializer'
 
 import AssignmentModel from '../assignment.model'
 
-import Testing from '../../testing.utils'
+import Testing from '../../utils/testing.utils'
 
 let mockAssignment: AssignmentModel
 

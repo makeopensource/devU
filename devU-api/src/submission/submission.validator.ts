@@ -2,7 +2,7 @@ import { check } from 'express-validator'
 
 import { submissionTypes } from 'devu-shared-modules'
 
-import validate from './generic.validator'
+import validate from '../middleware/validator/generic.validator'
 
 const userId = check('userId').isNumeric()
 const assignmentId = check('assignmentId').isNumeric()

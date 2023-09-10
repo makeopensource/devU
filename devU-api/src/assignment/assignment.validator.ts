@@ -3,7 +3,7 @@ import { check } from 'express-validator'
 import { gradingTypes } from 'devu-shared-modules'
 
 import validate from '../middleware/validator/generic.validator'
-import { isBeforeParam, isAfterParam } from '..middleware/validator/date.validator'
+import { isBeforeParam, isAfterParam } from '../middleware/validator/date.validator'
 
 const courseId = check('courseId').isNumeric()
 const name = check('name').isString().trim().isLength({ max: 128 })

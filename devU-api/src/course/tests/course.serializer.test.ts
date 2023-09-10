@@ -2,7 +2,7 @@ import { serialize } from '../course.serializer'
 
 import CourseModel from '../course.model'
 
-import Testing from '../../testing.utils'
+import Testing from '../../utils/testing.utils'
 
 let mockCourse: CourseModel
 

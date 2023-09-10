@@ -3,8 +3,8 @@ import { User } from 'devu-shared-modules'
 
 import environment from '../environment'
 
-import UserService from '../services/user.service'
-import AuthService from '../services/auth.service'
+import UserService from '../user/user.service'
+import AuthService from '../auth/auth.service'
 
 import { samlStrategy } from '../utils/passport/saml.passport'
 import { refreshCookieOptions } from '../utils/cookie.utils'

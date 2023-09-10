@@ -9,7 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm'
 
-import AssignmentModel from './assignment.model'
+import AssignmentModel from '../assignment/assignment.model'
 
 @Entity('assignment_problems')
 export default class AssignmentProblem {

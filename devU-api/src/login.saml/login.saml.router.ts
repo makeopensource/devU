@@ -1,11 +1,11 @@
 // Libraries
 import express from 'express'
 
-import controller from '../controller/login.saml.controller'
+import controller from '../login.saml/login.saml.controller'
 
-import { saml } from '../middleware/auth.middleware'
+import { saml } from '../auth/auth.middleware'
 
-import { authCallbackValidator } from '../middleware/validator/login.validator'
+import { authCallbackValidator } from '../login/login.validator'
 
 const Router = express.Router()
 

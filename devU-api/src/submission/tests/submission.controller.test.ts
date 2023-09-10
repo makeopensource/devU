@@ -4,11 +4,11 @@ import { Submission } from 'devu-shared-modules'
 
 import controller from '../submission.controller'
 
-import SubmissionModel from '../../model/submission.model'
+import SubmissionModel from '../../submission/submission.model'
 
-import SubmissionService from '../../services/submission.service'
+import SubmissionService from '../../submission/submission.service'
 
-import { serialize } from '../../utils/serializer/submission.serializer'
+import { serialize } from '../../submission/submission.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound } from '../../utils/apiResponse.utils'

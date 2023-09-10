@@ -4,9 +4,9 @@ import { SubmissionScore } from 'devu-shared-modules'
 
 import controller from '../submissionScore.controller'
 
-import SubmissionScoreModel from '../../model/submissionScore.model'
+import SubmissionScoreModel from '../submissionScore.model'
 
-import SubmissionScoreService from '../../services/submissionScore.service'
+import SubmissionScoreService from '../submissionScore.service'
 
 import { serialize } from '../../utils/serializer/submissionScore.serializer'
 

@@ -1,6 +1,6 @@
 import express from 'express'
 
-import Logout from '../controller/logout.controller'
+import Logout from './logout.controller'
 
 const Router = express.Router()
 

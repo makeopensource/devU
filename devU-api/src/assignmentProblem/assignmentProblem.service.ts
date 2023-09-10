@@ -1,6 +1,6 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import AssignmentProblemModel from '../model/assignmentProblem.model'
+import AssignmentProblemModel from './assignmentProblem.model'
 
 import { AssignmentProblem } from 'devu-shared-modules'
 

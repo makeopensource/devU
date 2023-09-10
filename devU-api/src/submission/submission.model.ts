@@ -11,9 +11,9 @@ import {
   DeleteDateColumn,
 } from 'typeorm'
 
-import AssignmentModel from './assignment.model'
-import CourseModel from './course.model'
-import UserModel from './user.model'
+import AssignmentModel from '../assignment/assignment.model'
+import CourseModel from '../course/course.model'
+import UserModel from '../user/user.model'
 
 @Entity('submissions')
 export default class Submission {

@@ -4,11 +4,11 @@ import { SubmissionProblemScore } from 'devu-shared-modules'
 
 import controller from '../submissionProblemScore.controller'
 
-import SubmissionProblemScoreModel from '../../model/submissionProblemScore.model'
+import SubmissionProblemScoreModel from '../../submissionProblemScore/submissionProblemScore.model'
 
-import SubmissionProblemScoreService from '../../services/submissionProblemScore.service'
+import SubmissionProblemScoreService from '../../submissionProblemScore/submissionProblemScore.service'
 
-import { serialize } from '../../utils/serializer/submissionProblemScore.serializer'
+import { serialize } from '../../submissionProblemScore/submissionProblemScore.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound } from '../../utils/apiResponse.utils'

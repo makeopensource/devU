@@ -1,6 +1,6 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import SubmissionModel from '../model/submission.model'
+import SubmissionModel from '../submission/submission.model'
 
 import { Submission } from 'devu-shared-modules'
 

@@ -2,7 +2,7 @@ import { getRepository, IsNull } from 'typeorm'
 
 import { SubmissionProblemScore as SubmissionProblemScoreModel } from 'devu-shared-modules'
 
-import SubmissionProblemScore from '../model/submissionProblemScore.model'
+import SubmissionProblemScore from './submissionProblemScore.model'
 
 const connect = () => getRepository(SubmissionProblemScore)
 

@@ -9,8 +9,8 @@ import {
   DeleteDateColumn,
 } from 'typeorm'
 
-import SubmissionModel from './submission.model'
-import AssignmentProblemModel from './assignmentProblem.model'
+import SubmissionModel from '../submission/submission.model'
+import AssignmentProblemModel from '../assignmentProblem/assignmentProblem.model'
 
 @Entity('submission_problem_scores')
 export default class SubmissionProblemScore {

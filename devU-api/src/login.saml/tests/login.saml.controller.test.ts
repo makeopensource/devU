@@ -1,9 +1,9 @@
 import controller from '../login.saml.controller'
 
-import UserModel from '../../model/user.model'
+import UserModel from '../../user/user.model'
 
-import UserService from '../../services/user.service'
-import AuthService from '../../services/auth.service'
+import UserService from '../../user/user.service'
+import AuthService from '../../auth/auth.service'
 
 import Testing from '../../utils/testing.utils'
 import { refreshCookieOptions } from '../../utils/cookie.utils'

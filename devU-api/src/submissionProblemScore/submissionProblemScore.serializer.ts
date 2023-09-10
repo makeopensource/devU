@@ -1,6 +1,6 @@
 import { SubmissionProblemScore } from 'devu-shared-modules'
 
-import SubmissionProblemScoreModel from '../../model/submissionProblemScore.model'
+import SubmissionProblemScoreModel from './submissionProblemScore.model'
 
 export function serialize(submissionProblemScore: SubmissionProblemScoreModel): SubmissionProblemScore {
   return {
