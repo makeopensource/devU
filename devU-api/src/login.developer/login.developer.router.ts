@@ -1,8 +1,8 @@
 import express from 'express'
 
-import controller from '../controller/login.developer.controller'
+import controller from '../login.developer/login.developer.controller'
 
-import { validateDeveloper } from '../middleware/validator/login.validator'
+import { validateDeveloper } from '../login/login.validator'
 
 const Router = express.Router()
 

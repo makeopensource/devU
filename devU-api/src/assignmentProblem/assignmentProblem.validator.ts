@@ -1,6 +1,6 @@
 import { check } from 'express-validator'
 
-import validate from './generic.validator'
+import validate from '../middleware/validator/generic.validator'
 
 const assignmentId = check('assignmentId').isNumeric()
 const problemName = check('problemName').isString().trim().isLength({ max: 128 })

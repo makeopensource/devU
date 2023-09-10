@@ -1,7 +1,7 @@
 import { check } from 'express-validator'
 
-import validate from './generic.validator'
-import { isAfterParam, isBeforeParam } from './date.validator'
+import validate from '../middleware/validator/generic.validator'
+import { isAfterParam, isBeforeParam } from '../middleware/validator/date.validator'
 
 const name = check('name').isString().trim().isLength({ max: 128 })
 const number = check('number').isString().trim().isLength({ max: 128 })

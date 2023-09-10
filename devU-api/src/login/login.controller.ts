@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 
-import UserService from '../services/user.service'
-import AuthService from '../services/auth.service'
-import ProviderService from '../services/provider.service'
+import UserService from '../user/user.service'
+import AuthService from '../auth/auth.service'
+import ProviderService from '../provider/provider.service'
 
 import { Unauthorized } from '../utils/apiResponse.utils'
 

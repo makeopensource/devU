@@ -9,7 +9,7 @@ import {
   DeleteDateColumn,
 } from 'typeorm'
 
-import AssignmentModel from './assignment.model'
+import AssignmentModel from '../assignment/assignment.model'
 
 /**
  * One entity of this type is created for each assignment where the 'grading_type' is set to 'code'

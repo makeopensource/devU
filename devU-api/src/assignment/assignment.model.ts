@@ -11,7 +11,7 @@ import {
   JoinColumn,
 } from 'typeorm'
 
-import CourseModel from './course.model'
+import CourseModel from '../course/course.model'
 
 @Entity('assignments')
 export default class Assignment {

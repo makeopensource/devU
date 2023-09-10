@@ -4,11 +4,11 @@ import { Course } from 'devu-shared-modules'
 
 import controller from '../course.controller'
 
-import CourseModel from '../../model/course.model'
+import CourseModel from '../course.model'
 
-import CourseService from '../../services/course.service'
+import CourseService from '../course.service'
 
-import { serialize } from '../../utils/serializer/course.serializer'
+import { serialize } from '../course.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'

@@ -4,11 +4,11 @@ import { Assignment } from 'devu-shared-modules'
 
 import controller from '../assignment.controller'
 
-import AssignmentModel from '../../model/assignment.model'
+import AssignmentModel from '../assignment.model'
 
-import AssignmentService from '../../services/assignment.service'
+import AssignmentService from '../assignment.service'
 
-import { serialize } from '../../utils/serializer/assignment.serializer'
+import { serialize } from '../assignment.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'

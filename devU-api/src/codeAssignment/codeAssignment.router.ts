@@ -1,10 +1,10 @@
 import express from 'express'
 import multer from 'multer'
 
-import validator from '../middleware/validator/codeAssignment.validator'
+import validator from './codeAssignment.validator'
 import { asInt } from '../middleware/validator/generic.validator'
 
-import CodeAssignmentController from '../controller/codeAssignment.controller'
+import CodeAssignmentController from './codeAssignment.controller'
 
 const Router = express.Router()
 const upload = multer()

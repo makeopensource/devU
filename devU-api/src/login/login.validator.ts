@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import { check, validationResult } from 'express-validator'
 import { User } from 'devu-shared-modules'
 
-import validate from './generic.validator'
-import environment from '../../environment'
+import validate from '../middleware/validator/generic.validator'
+import environment from '../environment'
 
 const email = check('email').isString().trim().isEmail()
 const externalId = check('externalId').isString().trim()

@@ -1,6 +1,6 @@
 import { AssignmentProblem } from 'devu-shared-modules'
 
-import AssignmentProblemModel from '../../model/assignmentProblem.model'
+import AssignmentProblemModel from './assignmentProblem.model'
 
 export function serialize(assignmentProblem: AssignmentProblemModel): AssignmentProblem {
   return {

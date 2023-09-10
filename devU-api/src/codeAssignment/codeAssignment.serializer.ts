@@ -1,6 +1,6 @@
 import { CodeAssignment } from 'devu-shared-modules'
 
-import CodeAssignmentModel from '../../model/codeAssignment.model'
+import CodeAssignmentModel from './codeAssignment.model'
 
 export function serialize(codeAssignment: CodeAssignmentModel): CodeAssignment {
   return {

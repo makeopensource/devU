@@ -4,7 +4,7 @@ import environment from '../../environment'
 
 import { isAuthorized, isValidRefreshToken, isRefreshNearingExpiration } from '../auth.middleware'
 
-import AuthService from '../../services/auth.service'
+import AuthService from '../auth.service'
 
 import Testing from '../../utils/testing.utils'
 import { Unauthorized } from '../../utils/apiResponse.utils'

@@ -5,11 +5,11 @@ import { CodeAssignment } from 'devu-shared-modules'
 
 import controller from '../codeAssignment.controller'
 
-import CodeAssignmentModel from '../../model/codeAssignment.model'
+import CodeAssignmentModel from '../codeAssignment.model'
 
-import CodeAssignmentService from '../../services/codeAssignment.service'
+import CodeAssignmentService from '../codeAssignment.service'
 
-import { serialize } from '../../utils/serializer/codeAssignment.serializer'
+import { serialize } from '../codeAssignment.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'

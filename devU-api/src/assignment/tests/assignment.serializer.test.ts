@@ -1,6 +1,6 @@
 import { serialize } from '../assignment.serializer'
 
-import AssignmentModel from '../../../model/assignment.model'
+import AssignmentModel from '../assignment.model'
 
 import Testing from '../../testing.utils'
 

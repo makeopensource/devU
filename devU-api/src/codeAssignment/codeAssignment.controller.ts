@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 
-import CodeAssignmentService from '../services/codeAssignment.service'
-import { serialize } from '../utils/serializer/codeAssignment.serializer'
+import CodeAssignmentService from './codeAssignment.service'
+import { serialize } from './codeAssignment.serializer'
 
 import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 

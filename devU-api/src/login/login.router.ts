@@ -3,12 +3,12 @@ import colors from 'colors'
 
 import environment from '../environment'
 
-import controller from '../controller/login.controller'
+import controller from '../login/login.controller'
 
-import { isValidRefreshToken, isRefreshNearingExpiration } from '../middleware/auth.middleware'
+import { isValidRefreshToken, isRefreshNearingExpiration } from '../auth/auth.middleware'
 
-import SamlRouter from './login.saml.router'
-import DeveloperRouter from './login.developer.router'
+import SamlRouter from '../login.saml/login.saml.router'
+import DeveloperRouter from '../login.developer/login.developer.router'
 
 const Router = express.Router()
 
