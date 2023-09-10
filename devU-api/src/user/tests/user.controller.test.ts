@@ -4,11 +4,11 @@ import { User } from 'devu-shared-modules'
 
 import controller from '../user.controller'
 
-import UserModel from '../../model/user.model'
+import UserModel from '../user.model'
 
-import UserService from '../../services/user.service'
+import UserService from '../user.service'
 
-import { serialize } from '../../utils/serializer/user.serializer'
+import { serialize } from '../user.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'

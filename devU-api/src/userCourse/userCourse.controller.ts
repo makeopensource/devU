@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 
-import UserCourseService from '../services/userCourse.service'
-import { serialize } from '../utils/serializer/userCourse.serializer'
+import UserCourseService from './userCourse.service'
+import { serialize } from './userCourse.serializer'
 
 import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 

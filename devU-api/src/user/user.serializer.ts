@@ -1,6 +1,6 @@
 import { User } from 'devu-shared-modules'
 
-import UserModel from '../../model/user.model'
+import UserModel from './user.model'
 
 export function serialize(user: UserModel): User {
   return {

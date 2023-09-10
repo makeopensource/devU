@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
-import submissionScoreService from '../services/submissionScore.service'
+import submissionScoreService from './submissionScore.service'
 
-import SubmissionScoreService from '../services/submissionScore.service'
+import SubmissionScoreService from './submissionScore.service' //why is this twice im not even gonna touch it lmao 
 
 import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 
-import { serialize } from '../utils/serializer/submissionScore.serializer'
+import { serialize } from './submissionScore.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {

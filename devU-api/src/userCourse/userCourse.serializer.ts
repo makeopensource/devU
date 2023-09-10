@@ -1,6 +1,6 @@
 import { UserCourse } from 'devu-shared-modules'
 
-import UserCourseModel from '../../model/userCourse.model'
+import UserCourseModel from './userCourse.model'
 
 export function serialize(userCourse: UserCourseModel): UserCourse {
   return {

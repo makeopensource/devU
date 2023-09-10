@@ -11,8 +11,8 @@ import {
 
 import { UserCourseLevel, userCourseLevels } from 'devu-shared-modules'
 
-import UserModel from './user.model'
-import CourseModel from './course.model'
+import UserModel from '../user/user.model'
+import CourseModel from '../course/course.model'
 
 @Entity('user_courses')
 export default class UserCourseModel {

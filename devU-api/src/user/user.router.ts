@@ -1,9 +1,9 @@
 import express from 'express'
 
-import validator from '../middleware/validator/user.validator'
+import validator from './user.validator'
 import { asInt } from '../middleware/validator/generic.validator'
 
-import UserController from '../controller/user.controller'
+import UserController from './user.controller'
 
 const Router = express.Router()
 

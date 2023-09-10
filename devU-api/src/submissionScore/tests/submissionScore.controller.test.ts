@@ -8,7 +8,7 @@ import SubmissionScoreModel from '../submissionScore.model'
 
 import SubmissionScoreService from '../submissionScore.service'
 
-import { serialize } from '../../utils/serializer/submissionScore.serializer'
+import { serialize } from '../submissionScore.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'

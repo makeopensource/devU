@@ -1,8 +1,8 @@
 import { serialize } from '../userCourse.serializer'
 
-import UserCourseModel from '../../../model/userCourse.model'
+import UserCourseModel from '../userCourse.model'
 
-import Testing from '../../testing.utils'
+import Testing from '../../utils/testing.utils'
 
 let mockUserCourse: UserCourseModel
 

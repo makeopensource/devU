@@ -1,8 +1,8 @@
-import { serialize } from '../user.serializer'
+import { serialize } from '../../user/user.serializer'
 
-import UserModel from '../../../model/user.model'
+import UserModel from '../../user/user.model'
 
-import Testing from '../../testing.utils'
+import Testing from '../../utils/testing.utils'
 
 let mockUser: UserModel
 
