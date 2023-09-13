@@ -12,7 +12,7 @@ const typeORMConfiguration: ConnectionOptions = {
   synchronize: false, // prevents api from auto migrating to match models on startup
   logging: environment.logDB,
   maxQueryExecutionTime: 1000, // logs queries longer than 1 second
-  entities: [`${__dirname}/model/**/*.{ts,js}`],
+  entities: [`${__dirname}/**/*.model.{ts,js}`],
   migrations: [`${__dirname}/migration/**/*.{ts,js}`],
   subscribers: [`${__dirname}/migration/**/*.{ts,js}`],
   cli: {
