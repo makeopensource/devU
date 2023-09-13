@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 
-import UserService from '../user/user.service'
-import AuthService from '../auth/auth.service'
-import ProviderService from '../provider/provider.service'
+import UserService from '../../user/user.service'
+import AuthService from '../../auth/auth.service'
+import ProviderService from '../../provider/provider.service'
 
-import { Unauthorized } from '../utils/apiResponse.utils'
+import { Unauthorized } from '../../utils/apiResponse.utils'
 
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {

@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 
-import UserService from '../user/user.service'
-import AuthService from '../auth/auth.service'
+import UserService from '../../user/user.service'
+import AuthService from '../../auth/auth.service'
 
-import { GenericResponse } from '../utils/apiResponse.utils'
-import { refreshCookieOptions } from '../utils/cookie.utils'
+import { GenericResponse } from '../../utils/apiResponse.utils'
+import { refreshCookieOptions } from '../../utils/cookie.utils'
 
 export async function callback(req: Request, res: Response, next: NextFunction) {
   try {

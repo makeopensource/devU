@@ -1,12 +1,12 @@
 import controller from '../login.developer.controller'
 
-import UserModel from '../../user/user.model'
+import UserModel from '../../../user/user.model'
 
-import UserService from '../../user/user.service'
-import AuthService from '../../auth/auth.service'
+import UserService from '../../../user/user.service'
+import AuthService from '../../../auth/auth.service'
 
-import Testing from '../../utils/testing.utils'
-import { refreshCookieOptions } from '../../utils/cookie.utils'
+import Testing from '../../../utils/testing.utils'
+import { refreshCookieOptions } from '../../../utils/cookie.utils'
 
 // Testing Globals
 let req: any

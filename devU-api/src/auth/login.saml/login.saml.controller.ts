@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
 import { User } from 'devu-shared-modules'
 
-import environment from '../environment'
+import environment from '../../environment'
 
-import UserService from '../user/user.service'
-import AuthService from '../auth/auth.service'
+import UserService from '../../user/user.service'
+import AuthService from '../../auth/auth.service'
 
-import { samlStrategy } from '../utils/passport/saml.passport'
-import { refreshCookieOptions } from '../utils/cookie.utils'
+import { samlStrategy } from '../../utils/passport/saml.passport'
+import { refreshCookieOptions } from '../../utils/cookie.utils'
 
 export async function callback(req: Request, res: Response, next: NextFunction) {
   try {

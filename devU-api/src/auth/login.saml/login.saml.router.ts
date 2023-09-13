@@ -3,7 +3,7 @@ import express from 'express'
 
 import controller from '../login.saml/login.saml.controller'
 
-import { saml } from '../auth/auth.middleware'
+import { saml } from '../../auth/auth.middleware'
 
 import { authCallbackValidator } from '../login/login.validator'
 

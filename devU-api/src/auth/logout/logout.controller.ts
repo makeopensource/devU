@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import { GenericResponse } from '../utils/apiResponse.utils'
-import { refreshToken } from '../utils/cookie.utils'
+import { GenericResponse } from '../../utils/apiResponse.utils'
+import { refreshToken } from '../../utils/cookie.utils'
 
 export async function logout(req: Request, res: Response, next: NextFunction) {
   try {

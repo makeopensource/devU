@@ -1,11 +1,11 @@
 import express from 'express'
 import colors from 'colors'
 
-import environment from '../environment'
+import environment from '../../environment'
 
 import controller from '../login/login.controller'
 
-import { isValidRefreshToken, isRefreshNearingExpiration } from '../auth/auth.middleware'
+import { isValidRefreshToken, isRefreshNearingExpiration } from '../../auth/auth.middleware'
 
 import SamlRouter from '../login.saml/login.saml.router'
 import DeveloperRouter from '../login.developer/login.developer.router'
