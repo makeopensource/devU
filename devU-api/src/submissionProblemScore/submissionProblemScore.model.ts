@@ -17,6 +17,17 @@ export default class SubmissionProblemScore {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Column({ name: 'submission_id' })
+  @JoinColumn({ name: 'submission_id' })
+  @ManyToOne(() => SubmissionModel)
+  submissionId: number
+
+
+  @Column({ name: 'assignment_problem_id' })
+  @JoinColumn({ name: 'assignment_problem_id' })
+  @ManyToOne(() => AssignmentProblemModel)
+  assignmentProblemId: number
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date
 
@@ -25,16 +36,6 @@ export default class SubmissionProblemScore {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date
-
-  @Column({ name: 'submission_id' })
-  @JoinColumn({ name: 'submission_id' })
-  @ManyToOne(() => SubmissionModel)
-  submissionId: number
-
-  @Column({ name: 'assignment_problem_id' })
-  @JoinColumn({ name: 'assignment_problem_id' })
-  @ManyToOne(() => AssignmentProblemModel)
-  assignmentProblemId: number
 
   @Column({ name: 'score', type: 'float', nullable: true })
   score: number | null
