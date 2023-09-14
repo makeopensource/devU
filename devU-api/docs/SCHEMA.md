@@ -6,8 +6,8 @@
 - [x] [Assignment](#assignment)
 - [x] [Submission](#submission)
 - [x] [AssignmentProblem](#assignmentproblem)
-- [ ] [SubmissionProblemScore](#submissionproblemscore)
-- [ ] [SubmissionScore](#submissionscore)
+- [x] [SubmissionProblemScore](#submissionproblemscore)
+- [x] [SubmissionScore](#submissionscore)
 - [ ] [AssignmentScore](#assignmentscore)
 - [ ] [CategoryScore](#categoryscore)
 - [ ] [Category](#category)
@@ -78,8 +78,6 @@ _Links a user to a course_
 - problemName: ?
 - maxScore: ?
 
-**------ Everything above this line exists in the code. Everything below needs to be built ------**
-
 ### SubmissionProblemScore
 
 - submissionId: foreign_key
@@ -95,25 +93,30 @@ _Links a user to a course_
 - feedback: ?
 - released: ?
 
+**------ Everything above this line exists in the code. Everything below needs to be built ------**
+
 ### AssignmentScore
 
 - assignmentId: foreign_key
 - userId: foreign_key
 - score: ?
 
+
 ### CategoryScore
 
-- categoryId: foreign_key
+- courseId: foreign_key
 - userId: foreign_key
-- _missing attributes_
+- category: string
+- score: ?
 
 ### Category
 
 - courseId: foreign_key
-- _missing attributes_
+- name: string
 
 ### CourseScore
 
 - courseId: foreign_key
 - userId: foreign_key
-- _missing attributes_
+- score: ?
+- letterGrade: string
