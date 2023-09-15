@@ -1,6 +1,6 @@
 import { AssignmentScore } from 'devu-shared-modules'
 
-import AssignmentScoreModel from '../../model/assignmentScore.model'
+import AssignmentScoreModel from './assignmentScore.model'
 
 export function serialize(assignmentScore: AssignmentScoreModel): AssignmentScore {
     return {

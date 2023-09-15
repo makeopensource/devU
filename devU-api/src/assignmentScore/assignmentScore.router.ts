@@ -2,12 +2,12 @@
 import express from 'express'
 
 //Middleware
-import validator from '../middleware/validator/assignmentScore.validator'
+import validator from './assignmentScore.validator'
 import { asInt } from '../middleware/validator/generic.validator'
 
 //Controller
-import AssignmentScoreController from '../controller/assignmentScore.controller'
-import Assignment from '../model/assignments.model'
+import AssignmentScoreController from './assignmentScore.controller'
+import Assignment from '../assignment/assignment.model'
 
 const Router = express.Router()
 

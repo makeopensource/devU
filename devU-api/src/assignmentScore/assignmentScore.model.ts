@@ -9,8 +9,8 @@ import {
     JoinColumn,
 } from 'typeorm'
 
-import AssignmentModel from './assignments.model'
-import UserModel from './users.model'
+import AssignmentModel from '../assignment/assignment.model'
+import UserModel from '../user/user.model'
 
 @Entity('assignment_scores')
 export default class AssignmentScore {

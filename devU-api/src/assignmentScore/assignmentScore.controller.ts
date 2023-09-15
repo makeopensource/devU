@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 
-import AssignmentScoreService from '../services/assignmentScore.service'
+import AssignmentScoreService from './assignmentScore.service'
 
 import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 
-import { serialize } from '../utils/serializer/assignmentScore.serializer'
+import { serialize } from './assignmentScore.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
     try {

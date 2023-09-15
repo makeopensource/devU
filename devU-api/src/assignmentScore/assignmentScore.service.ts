@@ -1,6 +1,6 @@
 import { getRepository, IsNull } from "typeorm";
 
-import AssignmentScoreModel from '../model/assignmentScore.model'
+import AssignmentScoreModel from './assignmentScore.model'
 
 import { AssignmentScore } from 'devu-shared-modules'
 

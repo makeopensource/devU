@@ -1,9 +1,9 @@
 import { serialize } from '../assignmentScore.serializer'
 
-import AssignmentModel from '../../../model/assignmentScore.model'
+import AssignmentModel from '../assignmentScore.model'
 
-import Testing from '../../testing.utils'
-import AssignmentScore from '../../../model/assignmentScore.model'
+import Testing from '../../utils/testing.utils'
+import AssignmentScore from '../assignmentScore.model'
 
 let mockAssignmentScore = AssignmentModel
 

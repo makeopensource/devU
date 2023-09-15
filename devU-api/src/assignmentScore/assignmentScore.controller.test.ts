@@ -2,16 +2,16 @@ import { UpdateResult } from 'typeorm'
 
 import { AssignmentScore } from 'devu-shared-modules'
 
-import controller from '../assignmentScore.controller'
+import controller from './assignmentScore.controller'
 
-import AssignmentScoresModel from '../../model/assignmentScore.model'
+import AssignmentScoresModel from './assignmentScore.model'
 
-import AssignmentScoreService from '../../services/assignmentScore.service'
+import AssignmentScoreService from './assignmentScore.service'
 
-import { serialize } from '../../utils/serializer/assignmentScore.serializer'
+import { serialize } from './assignmentScore.serializer'
 
-import Testing from '../../utils/testing.utils'
-import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
+import Testing from '../utils/testing.utils'
+import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 
 //Testing Globals
 let req: any
