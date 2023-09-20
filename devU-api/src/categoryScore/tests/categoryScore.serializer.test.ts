@@ -1,8 +1,8 @@
-import { serialize } from '../category.serializer'
+import { serialize } from '../../category/category.serializer'
 
-import CategoryModel from '../../../model/courses.model'
+import CategoryModel from '../../category/category.model'
 
-import Testing from '../../testing.utils'
+import Testing from '../../utils/testing.utils'
 
 let mockCategory: CategoryModel
 
