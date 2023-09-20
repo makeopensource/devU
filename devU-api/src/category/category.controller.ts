@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 
-import CategoryService from '../services/category.service'
+import CategoryService from './category.service'
 
 import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
 
-import { serialize } from '../utils/serializer/category.serializer'
+import { serialize } from './category.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {

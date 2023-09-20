@@ -1,6 +1,6 @@
 import { Category } from 'devu-shared-modules'
 
-import CategoryModel from '../../model/category.model'
+import CategoryModel from './category.model'
 
 export function serialize(category: CategoryModel): Category {
   return {

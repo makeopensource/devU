@@ -1,6 +1,6 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import CategoryModel from '../model/category.model'
+import CategoryModel from './category.model'
 
 import { Category } from 'devu-shared-modules'
 

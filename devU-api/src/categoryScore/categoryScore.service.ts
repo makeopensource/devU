@@ -1,6 +1,6 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import CategoryScoreModel from '../model/categoryScore.model'
+import CategoryScoreModel from './categoryScore.model'
 
 import { CategoryScore } from 'devu-shared-modules'
 
