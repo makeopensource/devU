@@ -1,6 +1,6 @@
 import { check } from 'express-validator'
 
-import validate from './generic.validator'
+import validate from '../middleware/validator/generic.validator'
 
 const name = check('name').isString().trim().isLength({ max: 128 })
 
