@@ -1,6 +1,6 @@
 import { CategoryScore } from 'devu-shared-modules'
 
-import CategoryScoreModel from '../../model/categoryScore.model'
+import CategoryScoreModel from './categoryScore.model'
 
 export function serialize(categoryScore: CategoryScoreModel): CategoryScore {
     return {
