@@ -4,11 +4,11 @@ import { Category } from 'devu-shared-modules'
 
 import controller from '../category.controller'
 
-import CategoryModel from '../../model/category.model'
+import CategoryModel from '../category.model'
 
-import CategoryService from '../../services/category.service'
+import CategoryService from '../category.service'
 
-import { serialize } from '../../utils/serializer/category.serializer'
+import { serialize } from '../category.serializer'
 
 import Testing from '../../utils/testing.utils'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
