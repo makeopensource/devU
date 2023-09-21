@@ -14,15 +14,6 @@
 - [ ] [CourseScore](#coursescore)
 # Entity Details
 
-### Generic Entity Attributes
-
-- id: number
-- createdAt: Date
-- updatedAt: Date
-- deletedAt: ?Date
-- email: string
-- externalId: string
-- preferredName: string
 
 ### User
 
@@ -49,14 +40,18 @@ _Student user for devu_
 ### UserCourse
 
 _Links a user to a course_
-
-- userId: foreign_key
-- courseId: foreign_key
-- level: ?
+- id: number
+- createdAt: Date
+- updatedAt: Date
+- deletedAt: ?Date
+- userId: number foreign_key ManyToOne -> User
+- courseId: number foreign_key ManyToOne -> Course 
+- level: UserCourseLevel
 - dropped: boolean
 
 ### Assignment
 
+- id: number primary_key
 - courseId: foreign_key ManyToOne -> Course
 - name: string
 - startDate: Date
@@ -68,21 +63,29 @@ _Links a user to a course_
 - maxFileSize: number
 - maxSubmissions: number | null
 - disableHandins: boolean
+- createdAt: Date 
+- updatedAt: Date
+- deletedAt: ?Date
 
 ### Submission
 
-- courseId: foreign_key ManyToOne -> Course
-- assignmentId: foreign_key -> ManyToOne -> Assignment
-- userId: foreign_key -> ManyToOne -> User
+- id: number primary_key
+- createdAt: Date
+- updatedAt: Date
+- deletedAt: ?Date
+- courseId: number foreign_key ManyToOne -> Course
+- assignmentId: number foreign_key -> ManyToOne -> Assignment
+- userId: number foreign_key -> ManyToOne -> User
 - content: string
 - type: SubmissionType
 - submitterIp: string
-- submittedBy: number
-- orignalSubmissionId: number | null
+- submittedBy: number foreign_key ManyToOne -> User
+- orignalSubmissionId: number | null foreign_key ManyToOne -> Submission
 
 ### AssignmentProblem
 
-- assignmentId: foreign_key ManyToOne -> Assignment
+- id: number primary_key
+- assignmentId: number foreign_key ManyToOne -> Assignment
 - problemName: string
 - maxScore: number
 - createdAt: Date
@@ -102,40 +105,51 @@ _Links a user to a course_
 
 ### SubmissionScore
 
-- submissionScoreId: number (primary_key)
-- submissionId: foreign_key
+- id: number primary_key
+- submissionId: number foreign_key ManyToOne -> Submission
 - score: number | null
 - createAt: Date
 - updatedAt: Date
-- delatedAt?: Date
+- delatedAt: ?Date
 - feedback: string | null
-- releasedAt?: Date
+- releasedAt: ?Date
 
 
 ### Category
 
-- courseId: foreign_key
+- id: number primary_key
 - name: string
-
-**------ Everything above this line exists in the code. Everything below needs to be built ------**
+- createdAt: Date
+- updatedAt: Date
+- delatedAt: ?Date
 
 ### AssignmentScore
 
-- assignmentId: foreign_key
-- userId: foreign_key
-- score: ?
+- id: number primary_key
+- assignmentId: number foreign_key ManyToOne -> Assignment
+- userId: number foreign_key User
+- score: number
+- createdAt: Date
+- updatedAt: Date
+- DeletedAt: ?Date
 
 
 ### CategoryScore
-
-- courseId: foreign_key
-- userId: foreign_key
+- if: number
+- createdAt: Date
+- updatedAt: Date
+- deletedAt: ?Date
+- courseId: number foreign_key ManyToOne -> Course 
+- userId: number foreign_key ManyToOne -> Category
 - category: string
-- score: ?
+- score: number
+- letterGrade: LetterGrade
 
 ### CourseScore
-
-- courseId: foreign_key
-- userId: foreign_key
-- score: ?
+- id: number 
+- courseId: number foreign_key ManyToOne -> Course
+- score: number
 - letterGrade: string
+- createdAt: Date
+- updatedAt: Date
+- deletedAt: ?Date
