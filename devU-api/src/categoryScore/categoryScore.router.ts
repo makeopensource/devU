@@ -2,11 +2,11 @@
 import express from 'express'
 
 //validators
-import validator from '../middleware/validator/categoryScore.validator'
+import validator from './categoryScore.validator'
 import { asInt } from '../middleware/validator/generic.validator'
 
 //Controller
-import CategoryScoreController from '../controller/categoryScore.controller'
+import CategoryScoreController from './categoryScore.controller'
 
 const Router = express.Router()
 

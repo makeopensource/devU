@@ -12,31 +12,39 @@
 - [ ] [CategoryScore](#categoryscore)
 - [ ] [Category](#category)
 - [ ] [CourseScore](#coursescore)
-
 # Entity Details
 
 ### Generic Entity Attributes
 
-- id
-- createdAt
-- updatedAt
-- deletedAt
+- id: number
+- createdAt: Date
+- updatedAt: Date
+- deletedAt: ?Date
+- email: string
+- externalId: string
+- preferredName: string
 
 ### User
 
 _Student user for devu_
-
+- id: number
+- createdAt: Date
+- updatedAt: Date
+- deletedAt: Date
 - email: string
 - externalId: foreign_key
 - preferredName: string
-
+- 
 ### Course
-
+- id: number primary_key
 - name: string
 - semester: string
 - number: string _ex: cse220_
-- startDate: ?
-- endDate: ?
+- startDate: Date
+- endDate: Date
+- createdAt: Date
+- updatedAt: Date
+- deletedAt: ?Date
 
 ### UserCourse
 
