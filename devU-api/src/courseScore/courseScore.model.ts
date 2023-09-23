@@ -1,5 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm'
 
+import CourseModel from '../course/course.model'
+
 @Entity('courseScore')
 export default class CourseScoreModel {
     @PrimaryGeneratedColumn()
