@@ -14,6 +14,9 @@ import submissions from '../submission/submission.router'
 import users from '../user/user.router'
 import submissionScore from '../submissionScore/submissionScore.router'
 
+// import categories from '../category/category.router'
+// import assignmentScore from "../assignmentScore/assignmentScore.router"
+
 import { isAuthorized } from '../auth/auth.middleware'
 
 import { NotFound } from '../utils/apiResponse.utils'
@@ -28,6 +31,9 @@ Router.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))
 Router.use('/submissions', isAuthorized, submissions)
 Router.use('/users', isAuthorized, users)
 Router.use('/submission-scores', isAuthorized, submissionScore)
+
+// Router.use('/categories', isAuthorized, categories)
+// Router.use('/assignment-score', isAuthorized, assignmentScore)
 
 Router.use('/login', login)
 Router.use('/logout', logout)

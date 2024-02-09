@@ -13,7 +13,7 @@ const swaggerOptioner = {
   },
 }
 
-const jsDocOptions = { swaggerDefinition: swaggerOptioner, apis: ['./src/router/*.ts'] }
+const jsDocOptions = { swaggerDefinition: swaggerOptioner, apis: ['./src/router/*.ts', './src/course/course.router.ts'] } //Add routers to this, I think?
 const swaggerSpec = swaggerJSDoc(jsDocOptions)
 
 export default swaggerSpec
