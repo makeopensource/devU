@@ -7,18 +7,18 @@ services:
       POSTGRES_DB: typescript_api
       POSTGRES_USER: typescript_user
       POSTGRES_PASSWORD: password
-    #    ports:
-    #      - '5432:5432'
+    ports:
+      - '5432:5432'
     expose:
       - '5432'
-  config:
+  #config:
     # Generates a config file for the API
-    build:
-      context: devU-api/scripts
-    command: "./generateConfig.sh config/default.yml"
-    image: ubautograding/devtools
-    volumes:
-      - ./devU-api/config:/config
+    #build:
+      #context: devU-api/scripts
+    #command: "./generateConfig.sh config/default.yml"
+    #image: ubautograding/devtools
+    #volumes:
+      #- ./devU-api/config:/config
   web:
     # Runs the API
     build: devU-api
@@ -27,8 +27,8 @@ services:
     depends_on:
       db:
         condition: service_started
-      config:
-        condition: service_completed_successfully
+      #config:
+        #condition: service_completed_successfully
     ports:
       - '3001:3001'
   client:
