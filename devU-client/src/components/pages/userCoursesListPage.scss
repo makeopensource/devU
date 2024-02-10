@@ -1,5 +1,12 @@
 @import 'variables';
 
+
+.addCourseBtn {
+  color: $text-color;
+  display: flex;
+  justify-content: center;
+}
+
 .filters {
   display: flex;
   justify-content: flex-end;

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+
 import { UserCourse, Course } from 'devu-shared-modules'
+import { useAppSelector } from 'redux/hooks'
 
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
@@ -11,6 +14,7 @@ import RequestService from 'services/request.service'
 import LocalStorageService from 'services/localStorage.service'
 
 import styles from './userCoursesListPage.scss'
+//import Button from 'components/shared/inputs/button'
 
 const FILTER_LOCAL_STORAGE_KEY = 'courses_filter'
 
@@ -24,6 +28,8 @@ const filterOptions: Option<Filter>[] = [
 ]
 
 const UserCoursesListPage = () => {
+  const userId = useAppSelector((store) => store.user.id)
+
   const defaultFilter = LocalStorageService.get<Filter>(FILTER_LOCAL_STORAGE_KEY) || 'active'
 
   const [loading, setLoading] = useState(true)
@@ -68,10 +74,18 @@ const UserCoursesListPage = () => {
 
   const defaultOption = filterOptions.find((o) => o.value === filter)
 
+
   return (
     <PageWrapper>
       <div className={styles.header}>
         <h1>My Courses</h1>
+
+        <div className={styles.addCourseBtn}>
+          <Link to={`/users/${userId}/courses/courseForm`}>
+            Add Courses
+          </Link>
+        </div>
+
         <div className={styles.filters}>
           <Dropdown
             label='Filter Courses'
