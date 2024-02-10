@@ -17,6 +17,7 @@ import submissionScore from '../submissionScore/submissionScore.router'
 import { isAuthorized } from '../auth/auth.middleware'
 
 import { NotFound } from '../utils/apiResponse.utils'
+import nonContainerAutoGraderRouter from "../nonContainerAutoGrader/nonContainerAutoGrader.router";
 
 const Router = express.Router()
 
@@ -28,6 +29,7 @@ Router.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))
 Router.use('/submissions', isAuthorized, submissions)
 Router.use('/users', isAuthorized, users)
 Router.use('/submission-scores', isAuthorized, submissionScore)
+Router.use('/nonContainerAutoGrader', isAuthorized, nonContainerAutoGraderRouter)
 
 Router.use('/login', login)
 Router.use('/logout', logout)
