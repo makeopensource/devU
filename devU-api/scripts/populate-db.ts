@@ -14,10 +14,14 @@ async function SendPOST(path: string, requestBody: string) {
         body: requestBody
     })
     if (response.status == 401 || response.status == 403) {
-        console.log("Response code: " + response.status)
+        console.log("Status code: " + response.status)
+        const responseBody = await response.json()
+        console.log(responseBody)
         throw new Error("401 or 403 HTTP Response Recieved, make sure you set the TOKEN constant to a valid auth token")
     } else if (response.status >= 400) {
-        console.log("Response code: " + response.status)
+        console.log("Status code: " + response.status)
+        const responseBody = await response.json()
+        console.log(responseBody)
         throw new Error("400/500 Level HTTP Response Recieved")
     } else {
         const responseBody = await response.json()
@@ -54,10 +58,10 @@ async function RunRequests() {
 
         //Courses
         const course312 = await SendPOST("/courses", JSON.stringify({
-            name: "Web Applications", semester: "s2024", number: "CSE312", startDate: "2024-01-24", endDate: "2024-05-10"
+            name: "Web Applications", semester: "s2024", number: "CSE312", startDate: "2024-01-24T00:00:00-0500", endDate: "2024-05-10T23:59:59-0500"
         }))
         const course302 = await SendPOST("/courses", JSON.stringify({
-            name: "Intro to Experiential Learning", semester: "s2024", number: "CSE302", startDate: "2024-01-24", endDate: "2024-05-07"
+            name: "Intro to Experiential Learning", semester: "s2024", number: "CSE302", startDate: "2024-01-24T00:00:00-0500", endDate: "2024-05-07T23:59:59-0500"
         }))
 
 
@@ -78,42 +82,42 @@ async function RunRequests() {
 
         //Assignments
         const assign312_1 = await SendPOST("/assignments", JSON.stringify({
-            courseId: course312, name: "Homework 1", startDate: "2024-02-05", dueDate: "2024-02-26", endDate: "2024-03-11", gradingType: "code", categoryName: "Homework",
-            description: "HTTP", maxFileSize: 10000000, maxSubmissions: 10, disableHandins: false
+            courseId: course312, name: "Homework 1", startDate: "2024-02-05T00:00:00-0500", dueDate: "2024-02-26T23:59:59-0500", endDate: "2024-03-11T23:59:59-0500", 
+            gradingType: "code", categoryName: "Homework", description: "HTTP", maxFileSize: 10000000, maxSubmissions: 10, disableHandins: false
         }))
         const assign312_2 = await SendPOST("/assignments", JSON.stringify({
-            courseId: course312, name: "Homework 2", startDate: "2024-02-19", dueDate: "2024-03-11", endDate: "2024-04-01", gradingType: "code", categoryName: "Homework",
-            description: "Authentication", maxFileSize: 10000000, maxSubmissions: 10, disableHandins: false
+            courseId: course312, name: "Homework 2", startDate: "2024-02-19T00:00:00-0500", dueDate: "2024-03-11T23:59:59-0500", endDate: "2024-04-01T23:59:59-0500", 
+            gradingType: "code", categoryName: "Homework", description: "Authentication", maxFileSize: 10000000, maxSubmissions: 10, disableHandins: false
         }))
         SendPOST("/assignments", JSON.stringify({
-            courseId: course312, name: "Homework 3", startDate: "2024-03-04", dueDate: "2024-04-01", endDate: "2024-04-15", gradingType: "code", categoryName: "Homework",
-            description: "Image Uploads", maxFileSize: 10000000, maxSubmissions: 10, disableHandins: false
+            courseId: course312, name: "Homework 3", startDate: "2024-03-04T00:00:00-0500", dueDate: "2024-04-01T23:59:59-0500", endDate: "2024-04-15T23:59:59-0500", 
+            gradingType: "code", categoryName: "Homework", description: "Image Uploads", maxFileSize: 10000000, maxSubmissions: 10, disableHandins: false
         }))
-        // const assign312_quiz = await SendPOST("/assignments", JSON.stringify({
-        //     courseId: course312, name: "2/19 Quiz", startDate: "2024-02-09T16:00:00-0500", dueDate: "2024-02-09T17:00:00-0500", endDate: "2024-02-09T17:00:01-0500", 
-        //     gradingType: "non-code", categoryName: "Quizzes", description: "Pop quiz!", maxFileSize: 10000000, maxSubmissions: 1, disableHandins: false
-        // }))
+        const assign312_quiz = await SendPOST("/assignments", JSON.stringify({
+            courseId: course312, name: "2/19 Quiz", startDate: "2024-02-09T16:00:00-0500", dueDate: "2024-02-09T17:00:00-0500", endDate: "2024-02-09T17:00:00-0500", 
+            gradingType: "non-code", categoryName: "Quizzes", description: "Pop quiz!", maxFileSize: 10000000, maxSubmissions: 1, disableHandins: false
+        }))
         const assign302_1 = await SendPOST("/assignments", JSON.stringify({
-            courseId: course302, name: "Sprint 1", startDate: "2024-01-26", dueDate: "2024-02-17", endDate: "2024-02-17T00:00:01-0500", gradingType: "manual", categoryName: "Sprints",
-            description: "The First Sprint", maxFileSize: 10000000, disableHandins: false
+            courseId: course302, name: "Sprint 1", startDate: "2024-01-26T00:00:00-0500", dueDate: "2024-02-17T23:59:59-0500", endDate: "2024-02-17T23:59:59-0500", 
+            gradingType: "manual", categoryName: "Sprints", description: "The First Sprint", maxFileSize: 10000000, disableHandins: false
         }))
         const assign302_2 = await SendPOST("/assignments", JSON.stringify({
-            courseId: course302, name: "Sprint 2", startDate: "2024-02-17", dueDate: "2024-03-09", endDate: "2024-03-09T00:00:01-0500", gradingType: "manual", categoryName: "Sprints",
-            description: "The Second Sprint", maxFileSize: 10000000, disableHandins: false
+            courseId: course302, name: "Sprint 2", startDate: "2024-02-17T00:00:00-0500", dueDate: "2024-03-09T23:59:59-0500", endDate: "2024-03-09T23:59:59-0500", 
+            gradingType: "manual", categoryName: "Sprints", description: "The Second Sprint", maxFileSize: 10000000, disableHandins: false
         }))
         SendPOST("/assignments", JSON.stringify({
-            courseId: course302, name: "Sprint 3", startDate: "2024-03-09", dueDate: "2024-04-06", endDate: "2024-04-06T00:00:01-0500", gradingType: "manual", categoryName: "Sprints",
-            description: "The Third Sprint", maxFileSize: 10000000, disableHandins: false
+            courseId: course302, name: "Sprint 3", startDate: "2024-04-06T00:00:00-0500", dueDate: "2024-04-06T23:59:59-0500", endDate: "2024-04-06T23:59:59-0500", 
+            gradingType: "manual", categoryName: "Sprints", description: "The Third Sprint", maxFileSize: 10000000, disableHandins: false
         }))
 
 
-        //AssignmentProblems - ROUTE NOT IMPLEMENTED
-        // const assign312_quiz_q1 = await SendPOST("/assignment-problems", JSON.stringify({
-        //     assignmentId: assign312_quiz, problemName: "q1", maxScore: 5
-        // }))
-        // const assign312_quiz_q2 = await SendPOST("/assignment-problems", JSON.stringify({
-        //     assignmentId: assign312_quiz, problemName: "q2", maxScore: 5
-        // }))
+        //AssignmentProblems
+        const assign312_quiz_q1 = await SendPOST("/assignment-problems", JSON.stringify({
+            assignmentId: assign312_quiz, problemName: "q1", maxScore: 5
+        }))
+        const assign312_quiz_q2 = await SendPOST("/assignment-problems", JSON.stringify({
+            assignmentId: assign312_quiz, problemName: "q2", maxScore: 5
+        }))
 
 
         //Submissions
@@ -130,30 +134,36 @@ async function RunRequests() {
             submitterIp: "127.0.0.1", submittedBy: userBob
         }))
         SendPOST("/submissions", JSON.stringify({
-            courseId: course312, assignmentId: assign312_2, userId: userBob, content: "im begging you jesse give this one a good grade", type: "text",
+            courseId: course312, assignmentId: assign312_2, userId: userBob, content: "im begging you jesse please show mercy", type: "text",
             submitterIp: "127.0.0.1", submittedBy: userBob
         }))
-        // const submission_bob_312_quiz1 = await SendPOST("/submissions", JSON.stringify({
-        //     courseId: course312, assignmentId: assign312_quiz, userId: userBob, content: "B", type: "text", submitterIp: "127.0.0.1", submittedBy: userBob
-        // }))
-        
-        
-        //SubmissionProblemScores - ROUTE NOT IMPLEMENTED
-        // SendPOST("/submission-problem-scores", JSON.stringify({
-        //     submissionId: submission_bob_312_quiz1, assignmentProblemId: assign312_quiz_q1, score: 5, feedback: "Good job!"
-        // }))
-
-
-        //SubmissionScores - Swagger documentation is wrong, /submission-scores not /submission-score
-        SendPOST("/submission-scores", JSON.stringify({
-            submissionId: submission_billy_302_1, score: 90, feedback: "Good work, but make sure you come to each team meeting fully prepared.", releasedAt: "2024-02-27"
+        const submission_bob_312_quiz1 = await SendPOST("/submissions", JSON.stringify({
+            courseId: course312, assignmentId: assign312_quiz, userId: userBob, content: "B, D", type: "text", submitterIp: "127.0.0.1", submittedBy: userBob
         }))
-        SendPOST("/submission-scores", JSON.stringify({
-            submissionId: submission_bob_312_1, score: 20, feedback: "no", releasedAt: "2024-03-02"
+        
+        
+        //SubmissionProblemScores
+        SendPOST("/submission-problem-scores", JSON.stringify({
+            submissionId: submission_bob_312_quiz1, assignmentProblemId: assign312_quiz_q1, score: 5, feedback: "Good job!", releasedAt: "2024-02-09T17:00:00-0500"
+        }))
+        SendPOST("/submission-problem-scores", JSON.stringify({
+            submissionId: submission_bob_312_quiz1, assignmentProblemId: assign312_quiz_q2, score: 0, feedback: "Incorrect, the correct answer was C.", releasedAt: "2024-02-09T17:00:00-0500"
         }))
 
 
-        //AssignmentScore - ROUTE NOT IMPLEMENTED
+        //SubmissionScores
+        SendPOST("/submission-scores", JSON.stringify({
+            submissionId: submission_billy_302_1, score: 90, feedback: "Good work, but please make sure you come to each team meeting fully prepared.", releasedAt: "2024-02-27T07:17:27-0500"
+        }))
+        SendPOST("/submission-scores", JSON.stringify({
+            submissionId: submission_bob_312_1, score: 20, feedback: "no", releasedAt: "2024-03-02T18:34:57-0500"
+        }))
+        SendPOST("/submission-scores", JSON.stringify({
+            submissionId: submission_bob_312_1, score: 5, feedback: "1/2 Questions Correct", releasedAt: "2024-02-09T17:00:00-0500"
+        }))
+
+
+        //AssignmentScore - ROUTE NOT FUNCTIONAL
         // SendPOST("/assignment-score", JSON.stringify({
         //     assignmentId: assign302_1, userId: userBilly, score: 90
         // }))
@@ -162,10 +172,13 @@ async function RunRequests() {
         // }))
 
 
-        //Categories - ROUTE NOT IMPLEMENTED
+        //Categories - ROUTE NOT FUNCTIONAL
 
 
-        //CourseScores - ROUTE NOT IMPLEMENTED
+        //CategoryScores - ROUTE NOT FUNCTIONAL
+
+
+        //CourseScores - ROUTE NOT FUNCTIONAL
 
         console.log("Script completed successfully!")
     } catch (e) {
