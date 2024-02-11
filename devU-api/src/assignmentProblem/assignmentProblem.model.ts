@@ -13,6 +13,25 @@ import AssignmentModel from '../assignment/assignment.model'
 
 @Entity('assignment_problems')
 export default class AssignmentProblem {
+  /**
+   * @swagger
+   * tags:
+   *   - name: AssignmentProblems
+   *     description:
+   * components:
+   *  schemas:
+   *    AssignmentProblem:
+   *      type: object
+   *      required: [assignmentId, problemName, maxScore]
+   *      properties:
+   *        assignmentId:
+   *          type: integer
+   *        problemName:
+   *          type: string
+   *        maxScore:
+   *          type: integer
+   */
+
   @PrimaryGeneratedColumn()
   id: number
 

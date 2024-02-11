@@ -17,6 +17,33 @@ import UserModel from '../user/user.model'
 
 @Entity('submissions')
 export default class Submission {
+  /**
+   * @swagger
+   * tags:
+   *   - name: Submissions
+   *     description: originalSubmissionId field is left out of schema due to issues with sending null as an optional value
+   * components:
+   *  schemas:
+   *    Submission:
+   *      type: object
+   *      required: [courseId, assignmentId, userId, content, type, submitterIp, submittedBy]
+   *      properties:
+   *        courseId:
+   *          type: integer
+   *        assignmentId:
+   *          type: integer
+   *        userId:
+   *          type: integer
+   *        content:
+   *          type: string
+   *        type:
+   *          type: string
+   *          description: Must be either "filepath", "json", or "text"
+   *        submitterIp:
+   *          type: string
+   *        submittedBy:
+   *          type: integer
+   */
   @PrimaryGeneratedColumn()
   id: number
 

@@ -15,6 +15,11 @@ const Router = express.Router()
  * /course-score:
  *  get:
  *      summary: Retrieve a list of all course scores
+ *      tags:
+ *        - CourseScores
+ *      responses:
+ *        '200':
+ *          description: OK
  */
 Router.get('/', CourseScoreController.get)
 
@@ -24,6 +29,17 @@ Router.get('/', CourseScoreController.get)
  * /course-score/{id}:
  *  get:
  *      summary: Retrieve a single course score
+ *      tags:
+ *        - CourseScores
+ *      responses:
+ *        '200':
+ *          description: OK
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          schema:
+ *            type: integer
  */
 Router.get('/:id', asInt(), CourseScoreController.detail)
 
@@ -32,6 +48,16 @@ Router.get('/:id', asInt(), CourseScoreController.detail)
  * /course-score:
  *  post:
  *      summary: Create a course score
+ *      tags:
+ *        - CourseScores
+ *      responses:
+ *        '200':
+ *          description: OK
+ *      requestBody:
+ *        content:
+ *          application/x-www-form-urlencoded:
+ *            schema:
+ *              $ref: '#/components/schemas/CourseScore'
  */
 Router.post('/', validator, CourseScoreController.post)
 
@@ -40,6 +66,22 @@ Router.post('/', validator, CourseScoreController.post)
  * /course-score/{id}:
  *  put:
  *      summary: Update a course score
+ *      tags:
+ *        - CourseScores
+ *      responses:
+ *        '200':
+ *          description: OK
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          schema:
+ *            type: integer
+ *      requestBody:
+ *        content:
+ *          application/x-www-form-urlencoded:
+ *            schema:
+ *              $ref: '#/components/schemas/CourseScore'
  */
 Router.put('/:id', validator, asInt(), CourseScoreController.put)
 
@@ -48,6 +90,17 @@ Router.put('/:id', validator, asInt(), CourseScoreController.put)
  * /course-score/{id}:
  *  delete:
  *      summary: Delete a course score
+ *      tags:
+ *        - CourseScores
+ *      responses:
+ *        '200':
+ *          description: OK
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          schema:
+ *            type: integer
  */
 Router.delete('/:id', asInt(), CourseScoreController._delete)
 

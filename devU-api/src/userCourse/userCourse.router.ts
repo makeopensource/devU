@@ -12,17 +12,41 @@ const Router = express.Router()
 
 /**
  * @swagger
- * /user-courses:
+ * /user-courses/user/{user-id}:
  *   get:
- *     summary: Retrieve a list of all user-course associations
+ *     summary: Retrieve a list of all of a user's user-course associations.
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: user-id
+ *         description: Enter User Id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
-Router.get('/', UserCourseController.get)
+Router.get('/user/:id', asInt(), UserCourseController.get)
 
 /**
  * @swagger
  * /user-courses/{id}:
  *   get:
  *     summary: Retrieve a single user-course association
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         description: Enter User-Course Id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.get('/:id', asInt(), UserCourseController.detail)
 
@@ -31,6 +55,16 @@ Router.get('/:id', asInt(), UserCourseController.detail)
  * /user-courses:
  *   post:
  *     summary: Create a new user-course association
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/UserCourse'
  */
 Router.post('/', validator, UserCourseController.post)
 
@@ -39,6 +73,22 @@ Router.post('/', validator, UserCourseController.post)
  * /users-courses/{id}:
  *   put:
  *     summary: Update a user-course association
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/UserCourse'
  */
 Router.put('/:id', asInt(), validator, UserCourseController.put)
 
@@ -47,6 +97,17 @@ Router.put('/:id', asInt(), validator, UserCourseController.put)
  * /user-courses/{id}:
  *   delete:
  *     summary: Delete a user-course association
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.delete('/:id', asInt(), UserCourseController._delete)
 

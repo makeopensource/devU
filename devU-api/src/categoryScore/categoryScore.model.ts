@@ -17,6 +17,29 @@ import {
   
   @Entity('category_score')
   export default class CategoryScore {
+  /**
+   * @swagger
+   * tags:
+   *   - name: CategoryScores
+   *     description: Route is currently non-functional, TS2305 error (Issue #34)
+   * components:
+   *  schemas:
+   *    CategoryScore:
+   *      type: object
+   *      required: [category, courseId, userId, score]
+   *      properties:
+   *        category:
+   *          type: string
+   *        courseId:
+   *          type: integer
+   *        userId:
+   *          type: integer
+   *        score:
+   *          type: number
+   *        letterGrade:
+   *          type: string
+   *          description: Must equal one of the following values "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F", ">F<", "FX", "I", "S", "U", "W"
+   */
     @PrimaryGeneratedColumn()
     id: number
   

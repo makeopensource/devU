@@ -1,6 +1,6 @@
 const API_URL = "http://localhost:3001"
 
-//Set to a valid refreshToken
+//Set to a valid refreshToken, which is set as a cookie after logging in at localhost:9000
 const TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNrMDcxMTIwMjEifQ.eyJ1c2VySWQiOjMsImlzUmVmcmVzaFRva2VuIjp0cnVlLCJpYXQiOjE3MDczNjI3MDEsImV4cCI6MTcwODIyNjcwMSwiYXVkIjpbImRldlUtYXBpIiwiZGV2VS1jbGllbnQiXSwiaXNzIjoiZGV2VS1hdXRoIiwic3ViIjoiMyJ9.keUclDZXPaqn9-AWV3Vx1BmhN4IgC21VUfSe64xSAOxpYBejYI3OW9_0mC_2LPUz122WRKzLPq7F87z58GLL5BZ11kHCbBL1gAToVlfNig1sQFHUh3HP0NPe5If0xIZEpeG-fJsgbCfBjxTRnLOgsQgDBTrCz5fZHWPRLk0VT_NVtZc6ReCpatX6H4eeLxybY5GSJcPu-GyHETbNnwtt5TRMFsaaEXzPsACzI3LGSurXKNmiAnnG7nm04s1Y3aVIk67YLL1DxmvZFj-u5t9Il7HCFCLTNAyMZIicDBwaa0K5FjG3DF_ufM8Zrvq-uM8y1j-eY1RCyrYW1wGfLjdhmsKh2F5mhuBxk7DLmdS4GCXPekphFtH1Y0uN6CQM4_8tvbNX0v3BzG3FEeLoF4j5WmZa8DmT-QXs4PxtloCCNw9NFbXqATN684FnG5U7BiZVij4mG81Rfn990GDzmEd4BEOMn8mwXeG1-k0YCMU0I5lXkSlRO-M_n030M1dNyPnb"
 
 //Returns the ID of the newly created entry
@@ -13,8 +13,11 @@ async function SendPOST(path: string, requestBody: string) {
         },
         body: requestBody
     })
-    if (response.status >= 400) {
-        console.log(response.status)
+    if (response.status == 401 || response.status == 403) {
+        console.log("Response code: " + response.status)
+        throw new Error("401 or 403 HTTP Response Recieved, make sure you set the TOKEN constant to a valid auth token")
+    } else if (response.status >= 400) {
+        console.log("Response code: " + response.status)
         throw new Error("400/500 Level HTTP Response Recieved")
     } else {
         const responseBody = await response.json()

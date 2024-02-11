@@ -12,41 +12,94 @@ const Router = express.Router()
 
 /**
  * @swagger
- * /submission-score:
+ * /submission-scores:
  *   get:
  *     summary: Retrieve a list of submission score
+ *     tags:
+ *       - SubmissionScores
+ *     responses:
+ *       '200':
+ *         description: OK
  */
 Router.get('/', SubmissionScoreController.get)
 
 /**
  * @swagger
- * /submission-score/{id}:
+ * /submission-scores/{id}:
  *   get:
  *     summary: Retrieve a single submission score
+ *     tags:
+ *       - SubmissionScores
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.get('/:id', asInt(), SubmissionScoreController.detail)
 
 /**
  * @swagger
- * /submission-score:
+ * /submission-scores:
  *   post:
  *     summary: Create a submission score
+ *     tags:
+ *       - SubmissionScores
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/SubmissionScore'
  */
 Router.post('/', validator, SubmissionScoreController.post)
 
 /**
  * @swagger
- * /submission-score:
+ * /submission-scores:
  *   put:
  *     summary: Update a submission score
+ *     tags:
+ *       - SubmissionScores
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/SubmissionScore'
  */
 Router.put('/:id', asInt(), validator, SubmissionScoreController.put)
 
 /**
  * @swagger
- * /submission-score/{id}:
+ * /submission-scores/{id}:
  *   delete:
  *     summary: Delete a submission score
+ *     tags:
+ *       - SubmissionScores
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.delete('/:id', asInt(), SubmissionScoreController._delete)
 

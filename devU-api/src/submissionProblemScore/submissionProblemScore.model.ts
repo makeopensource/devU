@@ -14,6 +14,30 @@ import AssignmentProblemModel from '../assignmentProblem/assignmentProblem.model
 
 @Entity('submission_problem_scores')
 export default class SubmissionProblemScore {
+  /**
+   * @swagger
+   * tags:
+   *   - name: SubmissionProblemScores
+   *     description: 
+   * components:
+   *  schemas:
+   *    SubmissionProblemScore:
+   *      type: object
+   *      required: [submissionId, assignmentProblemId, score, releasedAt]
+   *      properties:
+   *        submissionId:
+   *          type: integer
+   *        assignmentProblemId:
+   *          type: integer
+   *        score:
+   *          type: number
+   *        feedback:
+   *          type: string
+   *        releasedAt:
+   *          type: string
+   *          format: date-time
+   *          description: Must be in ISO 8601 format
+   */
   @PrimaryGeneratedColumn()
   id: number
 

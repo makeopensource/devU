@@ -13,9 +13,8 @@ import status from '../status/status.router'
 import submissions from '../submission/submission.router'
 import users from '../user/user.router'
 import submissionScore from '../submissionScore/submissionScore.router'
-
-// import categories from '../category/category.router'
-// import assignmentScore from "../assignmentScore/assignmentScore.router"
+import assignmentProblem from '../assignmentProblem/assignmentProblem.router'
+import submissionProblemScore from '../submissionProblemScore/submissionProblemScore.router'
 
 import { isAuthorized } from '../auth/auth.middleware'
 
@@ -24,15 +23,14 @@ import { NotFound } from '../utils/apiResponse.utils'
 const Router = express.Router()
 
 Router.use('/assignments', isAuthorized, assignments)
+Router.use('/assignment-problems', isAuthorized, assignmentProblem)
+Router.use('/users', isAuthorized, users)
 Router.use('/courses', isAuthorized, courses)
 Router.use('/user-courses', isAuthorized, userCourse)
 Router.use('/code-assignments', isAuthorized, codeAssignment)
 Router.use('/submissions', isAuthorized, submissions)
-Router.use('/users', isAuthorized, users)
 Router.use('/submission-scores', isAuthorized, submissionScore)
-
-// Router.use('/categories', isAuthorized, categories)
-// Router.use('/assignment-score', isAuthorized, assignmentScore)
+Router.use('/submission-problem-scores', isAuthorized, submissionProblemScore)
 
 Router.use('/login', login)
 Router.use('/logout', logout)

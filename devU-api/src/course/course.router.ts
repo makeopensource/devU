@@ -76,6 +76,11 @@ Router.post('/', validator, CourseController.post)
  *         required: true
  *         schema:
  *           type: integer
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/Course'
  */
 Router.put('/:id', asInt(), validator, CourseController.put)
 

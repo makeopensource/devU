@@ -11,6 +11,7 @@ export default class Course {
    *  schemas:
    *    Course:
    *      type: object
+   *      required: [name, semester, number, startDate, endDate]
    *      properties:
    *        name:
    *          type: string

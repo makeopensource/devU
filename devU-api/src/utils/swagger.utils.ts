@@ -6,7 +6,7 @@ const swaggerOptioner = {
     info: {
       title: 'DevU API Documentation',
       version: '1.0.0',
-      description: 'Example API documentation',
+      description: '',
     },
     components: {
       securitySchemes: {
@@ -25,7 +25,6 @@ const swaggerOptioner = {
     './src/router/*.ts', './src/*/*.router.ts', './src/*/*.model.ts'],
 }
 
-//const jsDocOptions = { swaggerDefinition: swaggerOptioner}
 const swaggerSpec = swaggerJSDoc(swaggerOptioner)
 
 export default swaggerSpec

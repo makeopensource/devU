@@ -6,6 +6,6 @@ const courseId = check('courseId').isNumeric()
 const userId = check('userId').isNumeric()
 const score = check('score').isNumeric()
 
-const validator = [courseId, userId, score]
+const validator = [courseId, userId, score, validate]
 
 export default validator
