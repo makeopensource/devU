@@ -2,6 +2,9 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import AssignmentDetailPage from 'components/pages/assignmentDetailPage'
+
+import EditAssignmentFormPage from 'components/pages/assignmentFormPage'
+
 import AssignmentUpdatePage from 'components/pages/assignmentUpdatePage'
 import CourseAssignmentsListPage from 'components/pages/courseAssignmentsListPage'
 import CourseDetailPage from 'components/pages/courseDetailPage'
@@ -22,6 +25,7 @@ const AuthenticatedRouter = () => (
     <Route exact path='/users/:userId/submissions' component={UserSubmissionsListPage} />
     {/* Just reuse the homepage here, for now this is fine. we might want to change this in the future though which is why they exist as separate routes */}
     <Route exact path='/users/:userId/assignments' component={HomePage} />
+    <Route exact path='/users/:userId/assignments/assignmentForm' Component={EditAssignmentFormPage}/>
     <Route exact path='/users/:userId/courses' component={UserCoursesListPage} />
     <Route exact path='/submissions/:submissionId' component={SubmissionDetailPage} />
     <Route exact path='/courses/' component={CoursesListPage} />
