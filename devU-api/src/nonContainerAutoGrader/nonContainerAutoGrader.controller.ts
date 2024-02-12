@@ -8,6 +8,7 @@ import NonContainerAutoGraderService from './nonContainerAutoGrader.service'
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
     const assignmentId = parseInt(req.params.id)
+
     const nonContainerQuestions = await NonContainerAutoGraderService.list(assignmentId)
 
     res.status(200).json(nonContainerQuestions.map(serialize))
@@ -16,7 +17,6 @@ export async function get(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-// TODO returns { q : grade }
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)

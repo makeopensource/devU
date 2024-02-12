@@ -1,4 +1,4 @@
-export type nonContainerAutoGrader = {
+export type NonContainerAutoGrader = {
     id: number
     assignmentId: number
     question: string

@@ -12,15 +12,15 @@ const Router = express.Router()
 
 /**
  * @swagger
- * /questions:
+ * /nonContainerAutoGrader:
  *   get:
- *     summary: Retrieve a list of all questions
+ *     summary: Retrieve a list of all nonContainerAutoGrader
  */
 Router.get('/', nonContainerQuestions.get)
 
 /**
  * @swagger
- * /questions/{id}:
+ * /nonContainerAutoGrader/{id}:
  *   get:
  *     summary: Retrieve a single question
  */
@@ -28,7 +28,7 @@ Router.get('/:id', asInt(), nonContainerQuestions.detail)
 
 /**
  * @swagger
- * /questions:
+ * /nonContainerAutoGrader:
  *   post:
  *     summary: Create a question
  */
@@ -36,7 +36,7 @@ Router.post('/', validator, nonContainerQuestions.post)
 
 /**
  * @swagger
- * /questions:
+ * /nonContainerAutoGrader:
  *   put:
  *     summary: Update a question
  */
@@ -44,7 +44,7 @@ Router.put('/:id', asInt(), validator, nonContainerQuestions.put)
 
 /**
  * @swagger
- * /questions/{id}:
+ * /nonContainerAutoGrader/{id}:
  *   delete:
  *     summary: Delete a question
  */

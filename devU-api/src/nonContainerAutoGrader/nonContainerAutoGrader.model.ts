@@ -27,11 +27,12 @@ export default class NonContainerAutoGraderModel {
     @OneToOne(() => AssignmentModel)
     assignmentId: number
 
-    @Column({ length: 128 })
+    @Column({name:'question', length: 128 })
     question: string
 
+    @Column({name:'score'})
     score: number
 
-    @Column({ length: 128 })
+    @Column({ name:'correct_string', length: 128 })
     correctString: string
 }
