@@ -7,7 +7,7 @@ import NonContainerAutoGraderService from './nonContainerAutoGrader.service'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const assignmentId = parseInt(req.params.id)
+    const assignmentId = parseInt(req.params.assignmentId)
 
     const nonContainerQuestions = await NonContainerAutoGraderService.list(assignmentId)
 

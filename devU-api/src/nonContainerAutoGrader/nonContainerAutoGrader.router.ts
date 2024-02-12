@@ -14,9 +14,9 @@ const Router = express.Router()
  * @swagger
  * /nonContainerAutoGrader:
  *   get:
- *     summary: Retrieve a list of all nonContainerAutoGrader
+ *     summary: Retrieve a list of all nonContainerAutoGrader with the assignment ID
  */
-Router.get('/', nonContainerQuestions.get)
+Router.get('/:assignmentId', nonContainerQuestions.get)
 
 /**
  * @swagger
