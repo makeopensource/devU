@@ -8,11 +8,12 @@ import NonContainerAutoGraderService from './nonContainerAutoGrader.service'
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
     const assignmentId = parseInt(req.params.assignmentId)
-
+    console.log(assignmentId)
     const nonContainerQuestions = await NonContainerAutoGraderService.list(assignmentId)
 
     res.status(200).json(nonContainerQuestions.map(serialize))
   } catch (err) {
+    console.log(err)
     next(err)
   }
 }

@@ -6,6 +6,7 @@ import UserCourseModel from '../userCourse/userCourse.model'
 import SubmissionProblemScoreModel from '../submissionProblemScore/submissionProblemScore.model'
 import SubmissionScoreModel from '../submissionScore/submissionScore.model'
 import CodeAssignmentModel from '../codeAssignment/codeAssignment.model'
+import NonContainerAutoGraderModel from '../nonContainerAutoGrader/nonContainerAutoGrader.model'
 
 type Models =
   | AssignmentModel
@@ -16,5 +17,6 @@ type Models =
   | SubmissionProblemScoreModel
   | SubmissionScoreModel
   | CodeAssignmentModel
+  | NonContainerAutoGraderModel
 
 export default Models
