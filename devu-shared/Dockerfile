@@ -11,7 +11,7 @@ RUN npm run clean-directory
 RUN npm install
 
 # run build modules script
-RUN npm run build-local
+RUN npm run build-docker
 
 # copy generated file into /app -> which is the api dir
 COPY ./devu-shared-modules ../app/
