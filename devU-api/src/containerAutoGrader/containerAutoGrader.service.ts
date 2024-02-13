@@ -39,6 +39,7 @@ export async function create(containerAutoGrader: ContainerAutoGrader, graderInp
 }
 
 export async function update(containerAutoGrader: ContainerAutoGrader, graderInputFile: Buffer, makefileInputFile: Buffer | null = null) {
+    if (!containerAutoGrader.id) throw new Error('Missing Id')
     const graderFileRecordName: string = assignmentGraderFileRecordName(containerAutoGrader)
 
     await minioClient.putObject(BucketNames.GRADERS, graderFileRecordName, graderInputFile)

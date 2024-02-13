@@ -1,5 +1,5 @@
 export type ContainerAutoGrader = {
-  id: number
+  id?: number
   assignmentId: number
   graderFilename?: string // filename
   makefileFilename: string | null // filename
