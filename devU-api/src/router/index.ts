@@ -13,6 +13,7 @@ import status from '../status/status.router'
 import submissions from '../submission/submission.router'
 import users from '../user/user.router'
 import submissionScore from '../submissionScore/submissionScore.router'
+import containerAutoGrader from '../containerAutoGrader/containerAutoGrader.router'
 
 import { isAuthorized } from '../auth/auth.middleware'
 
@@ -28,6 +29,7 @@ Router.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))
 Router.use('/submissions', isAuthorized, submissions)
 Router.use('/users', isAuthorized, users)
 Router.use('/submission-scores', isAuthorized, submissionScore)
+Router.use('/container-auto-graders', isAuthorized, containerAutoGrader)
 
 Router.use('/login', login)
 Router.use('/logout', logout)
