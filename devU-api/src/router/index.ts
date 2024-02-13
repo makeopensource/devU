@@ -13,6 +13,8 @@ import status from '../status/status.router'
 import submissions from '../submission/submission.router'
 import users from '../user/user.router'
 import submissionScore from '../submissionScore/submissionScore.router'
+import assignmentProblem from '../assignmentProblem/assignmentProblem.router'
+import submissionProblemScore from '../submissionProblemScore/submissionProblemScore.router'
 
 import { isAuthorized } from '../auth/auth.middleware'
 
@@ -21,18 +23,21 @@ import { NotFound } from '../utils/apiResponse.utils'
 const Router = express.Router()
 
 Router.use('/assignments', isAuthorized, assignments)
+Router.use('/assignment-problems', isAuthorized, assignmentProblem)
+Router.use('/users', isAuthorized, users)
 Router.use('/courses', isAuthorized, courses)
 Router.use('/user-courses', isAuthorized, userCourse)
 Router.use('/code-assignments', isAuthorized, codeAssignment)
-Router.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))
 Router.use('/submissions', isAuthorized, submissions)
-Router.use('/users', isAuthorized, users)
 Router.use('/submission-scores', isAuthorized, submissionScore)
+Router.use('/submission-problem-scores', isAuthorized, submissionProblemScore)
 
 Router.use('/login', login)
 Router.use('/logout', logout)
 
+//To access docs, go to localhost:3001/docs in your browser
 Router.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))
+
 Router.use('/status', status)
 Router.use('/', (req: Request, res: Response, next: NextFunction) => res.status(404).send(NotFound))
 

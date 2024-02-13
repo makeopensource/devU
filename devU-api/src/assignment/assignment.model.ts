@@ -15,6 +15,48 @@ import CourseModel from '../course/course.model'
 
 @Entity('assignments')
 export default class Assignment {
+  /**
+   * @swagger
+   * tags:
+   *   - name: Assignments
+   *     description: 
+   * components:
+   *  schemas:
+   *    Assignment:
+   *      type: object
+   *      required: [courseId, name, categoryName, gradingType, maxFileSize, disableHandins, startDate, dueDate, endDate]
+   *      properties:
+   *        courseId:
+   *          type: integer
+   *        name:
+   *          type: string
+   *        categoryName:
+   *          type: string
+   *        description:
+   *          type: string
+   *        gradingType:
+   *          type: string
+   *          description: Must be either "code", "non-code", or "manual"
+   *        maxFileSize:
+   *          type: integer
+   *        maxSubmissions:
+   *          type: integer
+   *        disableHandins:
+   *          type: boolean
+   *        startDate:
+   *          type: string
+   *          format: date-time
+   *          description: Must be in ISO 8601 format
+   *        dueDate:
+   *          type: string
+   *          format: date-time
+   *          description: Must be in ISO 8601 format
+   *        endDate:
+   *          type: string
+   *          format: date-time
+   *          description: Must be in ISO 8601 format
+   */
+
   @PrimaryGeneratedColumn()
   id: number
 

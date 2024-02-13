@@ -14,6 +14,25 @@ import UserModel from '../user/user.model'
 
 @Entity('assignment_scores')
 export default class AssignmentScore {
+  /**
+   * @swagger
+   * tags:
+   *   - name: AssignmentScore
+   *     description: Route is currently non-functional, TS2305 error (Issue #34)
+   * components:
+   *  schemas:
+   *    AssignmentScore:
+   *      type: object
+   *      required: [assignmentId, userId, score]
+   *      properties:
+   *        assignmentId:
+   *          type: integer
+   *        userId:
+   *          type: integer
+   *        score:
+   *          type: number
+   */
+
     @PrimaryGeneratedColumn()
     id: number
 

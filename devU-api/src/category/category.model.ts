@@ -2,6 +2,20 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 
 @Entity('category')
 export default class CategoryModel {
+  /**
+   * @swagger
+   * tags:
+   *   - name: Categories
+   *     description: Route is currently non-functional, TS2305 error (Issue #34)
+   * components:
+   *  schemas:
+   *    Category:
+   *      type: object
+   *      required: [name]
+   *      properties:
+   *        name:
+   *          type: string
+   */
   @PrimaryGeneratedColumn()
   id: number
 

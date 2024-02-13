@@ -19,8 +19,26 @@ import AssignmentModel from '../assignment/assignment.model'
  * There should be a 1-to-1 relation between CodeAssignments and Assignments with grading type code. Furthermore,
  * such assignments should not have and other such assignments types (eg. NonCodeAssignment, ManualAssignment).
  */
-@Entity('code_assignments')
+@Entity('code_assignment')
 export default class CodeAssignmentModel {
+  /**
+   * @swagger
+   * tags:
+   *   - name: CodeAssignments
+   *     description: The POST and PUT operations currently do not work due to this entity requiring a file uploaded in the multipart/formdata format, unsure how to support this
+   * components:
+   *  schemas:
+   *    CodeAssignment:
+   *      type: object
+   *      required: [assignmentId, grader, gradingImage]
+   *      properties:
+   *        assignmentId:
+   *          type: integer
+   *        grader:
+   *          type: string
+   *        gradingImage:
+   *          type: string
+   */
   @PrimaryGeneratedColumn()
   id: number
 

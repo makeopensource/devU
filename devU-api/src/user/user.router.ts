@@ -12,6 +12,11 @@ const Router = express.Router()
  * /users:
  *   get:
  *     summary: Retrieve a list of users
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
  */
 Router.get('/', UserController.get)
 
@@ -20,6 +25,17 @@ Router.get('/', UserController.get)
  * /users/{id}:
  *   get:
  *     summary: Retrieve a single user
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.get('/:id', asInt(), UserController.detail)
 
@@ -28,6 +44,16 @@ Router.get('/:id', asInt(), UserController.detail)
  * /users:
  *   post:
  *     summary: Create a user
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  */
 Router.post('/', validator, UserController.post)
 
@@ -36,6 +62,22 @@ Router.post('/', validator, UserController.post)
  * /users/{id}:
  *   put:
  *     summary: Update a user
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
  */
 Router.put('/:id', asInt(), validator, UserController.put)
 
@@ -44,6 +86,17 @@ Router.put('/:id', asInt(), validator, UserController.put)
  * /users/{id}:
  *   delete:
  *     summary: Delete a user
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.delete('/:id', asInt(), UserController._delete)
 

@@ -2,6 +2,24 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 
 @Entity('users')
 export default class UserModel {
+  /**
+   * @swagger
+   * tags:
+   *   - name: Users
+   *     description: 
+   * components:
+   *  schemas:
+   *    User:
+   *      type: object
+   *      required: [email, externalId]
+   *      properties:
+   *        email:
+   *          type: string
+   *        externalId:
+   *          type: string
+   *        preferredName:
+   *          type: string
+   */
   @PrimaryGeneratedColumn()
   id: number
 

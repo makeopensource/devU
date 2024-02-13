@@ -12,7 +12,7 @@ export function isBeforeParam(dateParam: string): CustomValidator {
     const date = new Date(value)
     const futureDate = new Date(futureParameter)
 
-    if (futureDate <= date) throw new Error(`Date must be before ${dateParam}`)
+    if (futureDate < date) throw new Error(`Date must be before or equal to ${dateParam}`)
 
     return true
   }
@@ -30,7 +30,7 @@ export function isAfterParam(dateParam: string): CustomValidator {
     const date = new Date(value)
     const pastDate = new Date(pastParameter)
 
-    if (date <= pastDate) throw new Error(`Date must be after ${dateParam}`)
+    if (date < pastDate) throw new Error(`Date must be after or equal to ${dateParam}`)
 
     return true
   }
