@@ -57,6 +57,14 @@ const environment = {
   dbUsername: (load('database.username') || 'typescript_user') as string,
   dbPassword: (load('database.password') || 'password') as string,
   database: (load('database.name') || 'typescript_api') as string,
+  
+  // the below one is for local migration, due to some issues with command will not running load function nor 'localhost'
+  
+  // dbHost: ('localhost') as string,
+  // dbUsername: ('typescript_user') as string,
+  // dbPassword: ('password') as string,
+  // database: ('typescript_api') as string,
+
 
   // MinIO setting
   minioHost: (load('minio.host') || 'localhost') as string,
