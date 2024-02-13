@@ -12,7 +12,7 @@ import {
 import AssignmentModel from '../assignment/assignment.model'
 
 @Entity('container_auto_grader')
-export default class ContainerAutoGrader {
+export default class ContainerAutoGraderModel {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -33,7 +33,7 @@ export default class ContainerAutoGrader {
     @Column({ name: 'grader_filename', length: 128 })
     graderFilename: string
 
-    @Column({ name: 'makefile_filename', length: 128, type: 'string' , nullable: true })
+    @Column({ name: 'makefile_filename', type: 'text' , nullable: true })
     makefileFilename: string | null
 
     @Column({ name: 'autograding_image' })

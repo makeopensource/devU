@@ -1,4 +1,4 @@
-import { ContainerAutoGrader } from 'devu-shared-modules'
+import { ContainerAutoGrader } from '../../../devu-shared/src'
 
 import ContainerAutoGraderModel from './containerAutoGrader.model'
 
@@ -13,4 +13,4 @@ export function serialize(containerAutoGrader: ContainerAutoGraderModel): Contai
         createdAt: containerAutoGrader.createdAt.toISOString(),
         updatedAt: containerAutoGrader.updatedAt.toISOString(),
     }
-    }
+}

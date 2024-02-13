@@ -1,6 +1,6 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import { ContainerAutoGrader } from 'devu-shared-modules'
+import { ContainerAutoGrader } from '../../../devu-shared/src'
 
 import ContainerAutoGraderModel from './containerAutoGrader.model'
 import { minioClient, BucketNames } from '../fileStorage'
@@ -13,6 +13,7 @@ function assignmentGraderFileRecordName(containerAutoGrader: ContainerAutoGrader
 }
 
 export async function create(containerAutoGrader: ContainerAutoGrader, graderInputFile: Buffer, makefileInputFile: Buffer | null = null) {
+    containerAutoGrader.graderFilename = "Temp value. You'll see this if the file upload to MinIO fails"
     const newContainerAutoGrader = await connect().save(containerAutoGrader)
     const graderFileRecordName: string = assignmentGraderFileRecordName(newContainerAutoGrader)
 
@@ -23,11 +24,11 @@ export async function create(containerAutoGrader: ContainerAutoGrader, graderInp
       * for review. Same with the update method.
     */
     await minioClient.putObject(BucketNames.GRADERS, graderFileRecordName, graderInputFile)
-    newContainerAutoGrader.grader = graderFileRecordName
+    newContainerAutoGrader.graderFilename = graderFileRecordName
 
     if (makefileInputFile) {
         await minioClient.putObject(BucketNames.MAKEFILES, 'makefile', makefileInputFile)
-        newContainerAutoGrader.makefile = 'makefile'
+        newContainerAutoGrader.makefileFilename = 'makefile'
     }
 
     const { id, assignmentId, graderFilename, makefileFilename, autogradingImage, timeout } = newContainerAutoGrader
@@ -41,11 +42,11 @@ export async function update(containerAutoGrader: ContainerAutoGrader, graderInp
     const graderFileRecordName: string = assignmentGraderFileRecordName(containerAutoGrader)
 
     await minioClient.putObject(BucketNames.GRADERS, graderFileRecordName, graderInputFile)
-    containerAutoGrader.grader = graderFileRecordName
+    containerAutoGrader.graderFilename = graderFileRecordName
 
     if (makefileInputFile) {
         await minioClient.putObject(BucketNames.MAKEFILES, 'makefile', makefileInputFile)
-        containerAutoGrader.makefile = 'makefile'
+        containerAutoGrader.makefileFilename = 'makefile'
     }
 
     const { id, assignmentId, graderFilename, makefileFilename, autogradingImage, timeout } = containerAutoGrader

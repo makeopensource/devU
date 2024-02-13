@@ -1,10 +1,10 @@
 export type ContainerAutoGrader = {
-  id?: number
+  id: number
   assignmentId: number
   graderFilename?: string // filename
-  makefileFilename?: string // filename
+  makefileFilename: string | null // filename
   autogradingImage?: string 
-  timeout?: number
+  timeout: number
   createdAt?: string
   updatedAt?: string
   }
