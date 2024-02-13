@@ -2,6 +2,34 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 
 @Entity('courses')
 export default class Course {
+  /**
+   * @swagger
+   * tags:
+   *   - name: Courses
+   *     description: 
+   * components:
+   *  schemas:
+   *    Course:
+   *      type: object
+   *      required: [name, semester, number, startDate, endDate]
+   *      properties:
+   *        name:
+   *          type: string
+   *        semester:
+   *          type: string
+   *          description: Must be in the format 'u2021, f2021, s2022, w2022'
+   *        number:
+   *          type: string
+   *        startDate:
+   *          type: string
+   *          format: date-time
+   *          description: Must be in ISO 8601 format
+   *        endDate:
+   *          type: string
+   *          format: date-time
+   *          description: Must be in ISO 8601 format
+   */
+
   @PrimaryGeneratedColumn()
   id: number
 

@@ -15,6 +15,11 @@ const Router = express.Router()
  * /assignments:
  *   get:
  *     summary: Retrieve a list of assignments
+ *     tags:
+ *       - Assignments
+ *     responses:
+ *       '200':
+ *         description: OK
  */
 Router.get('/', AssignmentsController.get)
 
@@ -23,6 +28,17 @@ Router.get('/', AssignmentsController.get)
  * /assignments/{id}:
  *   get:
  *     summary: Retrieve a single assignment
+ *     tags:
+ *       - Assignments
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer    
  */
 Router.get('/:id', asInt(), AssignmentsController.detail)
 
@@ -31,14 +47,40 @@ Router.get('/:id', asInt(), AssignmentsController.detail)
  * /assignments:
  *   post:
  *     summary: Create an assignment
+ *     tags:
+ *       - Assignments
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/Assignment'
  */
 Router.post('/', validator, AssignmentsController.post)
 
 /**
  * @swagger
- * /assignments:
+ * /assignments/{id}:
  *   put:
  *     summary: Update an assignment
+ *     tags:
+ *       - Assignments
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer   
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/Assignment'
  */
 Router.put('/:id', asInt(), validator, AssignmentsController.put)
 
@@ -47,6 +89,17 @@ Router.put('/:id', asInt(), validator, AssignmentsController.put)
  * /assignments/{id}:
  *   delete:
  *     summary: Delete an assignment
+ *     tags:
+ *       - Assignments
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer   
  */
 Router.delete('/:id', asInt(), AssignmentsController._delete)
 

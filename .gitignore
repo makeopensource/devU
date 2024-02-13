@@ -1,3 +1,4 @@
 /dist/
 node_modules/
 /delete.py
+./docker-compose.yml
