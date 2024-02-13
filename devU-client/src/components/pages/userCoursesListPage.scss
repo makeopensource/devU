@@ -2,10 +2,19 @@
 
 
 .addCourseBtn {
-  color: $text-color;
-  display: flex;
   justify-content: center;
+	background-color: $primary;
+	color: $text-color;
+	border: 0px;
+	padding: 10px 40px;
+	border-radius: 50px;
+	font-size: 14px;
+	font-weight: 700;
+  text-decoration: none;
+	cursor: pointer;
 }
+
+.addCourse
 
 .filters {
   display: flex;

@@ -80,8 +80,8 @@ const UserCoursesListPage = () => {
       <div className={styles.header}>
         <h1>My Courses</h1>
 
-        <div className={styles.addCourseBtn}>
-          <Link to={`/users/${userId}/courses/courseForm`}>
+        <div>
+          <Link className={styles.addCourseBtn} to={`/users/${userId}/courses/courseForm`}>
             Add Courses
           </Link>
         </div>

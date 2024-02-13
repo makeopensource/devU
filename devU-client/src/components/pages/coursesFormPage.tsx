@@ -28,7 +28,6 @@ const EditCourseFormPage = () => {
 
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
-        console.log(formData)
         setFormData(prevState => ({...prevState,[key] : value}))
     }
     const handleStartDateChange = (date : Date) => {setStartDate(date)}
