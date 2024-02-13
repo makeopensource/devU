@@ -17,12 +17,12 @@ async function SendPOST(path: string, requestBody: string) {
         console.log("Status code: " + response.status)
         const responseBody = await response.json()
         console.log(responseBody)
-        throw new Error("401 or 403 HTTP Response Recieved, make sure you set the TOKEN constant to a valid auth token")
+        throw new Error("401 or 403 HTTP Response Received, make sure you set the TOKEN constant to a valid auth token")
     } else if (response.status >= 400) {
         console.log("Status code: " + response.status)
         const responseBody = await response.json()
         console.log(responseBody)
-        throw new Error("400/500 Level HTTP Response Recieved")
+        throw new Error("400/500 Level HTTP Response Received: " + response.status)
     } else {
         const responseBody = await response.json()
         return responseBody.id
