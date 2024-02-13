@@ -21,7 +21,7 @@ import { NotFound } from '../utils/apiResponse.utils'
 const Router = express.Router()
 
 Router.use('/assignments', isAuthorized, assignments)
-Router.use('/courses', isAuthorized, courses)
+Router.use('/courses', isAuthorized courses)
 Router.use('/user-courses', isAuthorized, userCourse)
 Router.use('/code-assignments', isAuthorized, codeAssignment)
 Router.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))
