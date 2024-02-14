@@ -1,10 +1,12 @@
 import {
-    Entity,
     Column,
-    PrimaryGeneratedColumn,
     CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
     UpdateDateColumn,
-    DeleteDateColumn, JoinColumn, OneToOne,
 } from 'typeorm'
 import AssignmentModel from '../assignment/assignment.model'
 
@@ -24,7 +26,7 @@ export default class NonContainerAutoGraderModel {
 
     @Column({ name: 'assignment_id' })
     @JoinColumn({ name: 'assignment_id' })
-    @OneToOne(() => AssignmentModel)
+    @ManyToOne(() => AssignmentModel)
     assignmentId: number
 
     @Column({name:'question', length: 128 })
