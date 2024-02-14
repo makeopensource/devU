@@ -3,7 +3,7 @@ import express from 'express'
 
 // Middleware
 import validator from './nonContainerAutoGrader.validator'
-import {asInt} from '../middleware/validator/generic.validator'
+import { asInt } from '../middleware/validator/generic.validator'
 
 // Controller
 import nonContainerQuestions from './nonContainerAutoGrader.controller'
@@ -12,7 +12,7 @@ const Router = express.Router()
 
 /**
  * @swagger
- * /nonContainerAutoGrader:
+ * /nonContainerAutoGrader/{assignmentId}:
  *   get:
  *     summary: Retrieve a list of all nonContainerAutoGrader with the assignment ID
  */
