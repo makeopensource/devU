@@ -11,8 +11,6 @@
     "postinstall": "npm-run-all build",
     "build-docker": "tsc --outDir ./devu-shared-modules",
     "build-local": "tsc --outDir ./devu-shared-modules/devU-client && tsc --outDir ./devu-shared-modules/devU-api",
-    "build-local-api": "",
-    "build-local-client": "",
     "format": "prettier --write \"./**/*.{js,ts,json,md}\"",
     "pre-commit": "lint-staged"
   },
