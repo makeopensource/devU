@@ -13,6 +13,7 @@ import status from '../status/status.router'
 import submissions from '../submission/submission.router'
 import users from '../user/user.router'
 import submissionScore from '../submissionScore/submissionScore.router'
+import containerAutoGrader from '../containerAutoGrader/containerAutoGrader.router'
 import assignmentProblem from '../assignmentProblem/assignmentProblem.router'
 import submissionProblemScore from '../submissionProblemScore/submissionProblemScore.router'
 
@@ -30,6 +31,7 @@ Router.use('/user-courses', isAuthorized, userCourse)
 Router.use('/code-assignments', isAuthorized, codeAssignment)
 Router.use('/submissions', isAuthorized, submissions)
 Router.use('/submission-scores', isAuthorized, submissionScore)
+Router.use('/container-auto-graders', isAuthorized, containerAutoGrader)
 Router.use('/submission-problem-scores', isAuthorized, submissionProblemScore)
 
 Router.use('/login', login)

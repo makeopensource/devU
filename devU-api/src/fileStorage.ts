@@ -5,6 +5,7 @@ import environment from './environment'
 export enum BucketNames {
   GRADERS = 'graders',
   SUBMISSIONS = 'submissions',
+  MAKEFILES = 'makefiles',
 }
 
 const minioConfiguration: Minio.ClientOptions = {
