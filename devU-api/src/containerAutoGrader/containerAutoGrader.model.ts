@@ -31,10 +31,10 @@ export default class ContainerAutoGraderModel {
     assignmentId: number
 
     @Column({ name: 'grader_filename', length: 128 })
-    graderFilename: string
+    graderFile: string
 
     @Column({ name: 'makefile_filename', type: 'text' , nullable: true })
-    makefileFilename: string | null
+    makefileFile: string | null
 
     @Column({ name: 'autograding_image' })
     autogradingImage: string

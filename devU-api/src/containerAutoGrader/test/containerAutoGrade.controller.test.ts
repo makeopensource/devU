@@ -116,7 +116,7 @@ describe("ContainerAutoGraderController", () => {
         describe("201 - Created", () => {
             beforeEach(async () => {
                 ContainerAutoGraderService.create = jest.fn().mockImplementation(() => Promise.resolve(mockedContainerAutoGrader))
-                req.files = { graderFilename: { name: "graderFilename"}, makefileFilename: { name: "makefileFilename"} }
+                req.files = { graderFile: { name: "graderFile"}, makefileFile: { name: "makefileFile"} }
                 await controller.post(req, res, next)
             })
 
@@ -127,7 +127,7 @@ describe("ContainerAutoGraderController", () => {
         describe("400 - Bad request", () => {
             beforeEach(async () => {
                 ContainerAutoGraderService.create = jest.fn().mockImplementation(() => Promise.reject(expectedError))
-                req.files = { graderFilename: { name: "graderFilename"}, makefileFilename: { name: "makefileFilename"} }
+                req.files = { graderFile: { name: "graderFile"}, makefileFile: { name: "makefileFile"} }
 
                 try {
                     await controller.post(req, res, next)
@@ -152,7 +152,7 @@ describe("ContainerAutoGraderController", () => {
             beforeEach(async () => {
                 expectedDbResult.affected = 1
                 ContainerAutoGraderService.update = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
-                req.files = { graderFilename: { name: "graderFilename"}, makefileFilename: { name: "makefileFilename"} }
+                req.files = { graderFile: { name: "graderFile"}, makefileFile: { name: "makefileFile"} }
                 await controller.put(req, res, next)
             })
 
@@ -165,7 +165,7 @@ describe("ContainerAutoGraderController", () => {
             beforeEach(async () => {
                 expectedDbResult.affected = 0
                 ContainerAutoGraderService.update = jest.fn().mockImplementation(() => Promise.resolve(expectedDbResult))
-                req.files = { graderFilename: { name: "graderFilename"}, makefileFilename: { name: "makefileFilename"} }
+                req.files = { graderFile: { name: "graderFile"}, makefileFile: { name: "makefileFile"} }
                 await controller.put(req, res, next)
             })
 
@@ -177,7 +177,7 @@ describe("ContainerAutoGraderController", () => {
         describe("400 - Bad request", () => {
             beforeEach(async () => {
                 ContainerAutoGraderService.update = jest.fn().mockImplementation(() => Promise.reject(expectedError))
-                req.files = { graderFilename: { name: "graderFilename"}, makefileFilename: { name: "makefileFilename"} }
+                req.files = { graderFile: { name: "graderFile"}, makefileFile: { name: "makefileFile"} }
                 await controller.put(req, res, next)
             })
 

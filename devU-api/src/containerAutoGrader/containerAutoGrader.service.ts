@@ -13,9 +13,9 @@ function assignmentGraderFileRecordName(containerAutoGrader: ContainerAutoGrader
 }
 
 export async function create(containerAutoGrader: ContainerAutoGrader, graderInputFile: Buffer, makefileInputFile: Buffer | null = null) {
-    containerAutoGrader.graderFilename = "Temp value. You'll see this if the file upload to MinIO fails"
+    containerAutoGrader.graderFile = "Temp value. You'll see this if the file upload to MinIO fails"
     const newContainerAutoGrader = await connect().save(containerAutoGrader)
-    const graderFileRecordName: string = assignmentGraderFileRecordName(newContainerAutoGrader)
+    const FileRecordName: string = assignmentGraderFileRecordName(newContainerAutoGrader)
 
     /*
       * For the minioClient.putObject method, I am not sure how the objectName is, but it seems like
@@ -23,35 +23,35 @@ export async function create(containerAutoGrader: ContainerAutoGrader, graderInp
       * but I am not sure if the makefile should also use the same objectName as the grader. Marking this 
       * for review. Same with the update method.
     */
-    await minioClient.putObject(BucketNames.GRADERS, graderFileRecordName, graderInputFile)
-    newContainerAutoGrader.graderFilename = graderFileRecordName
+    await minioClient.putObject(BucketNames.GRADERS, FileRecordName, graderInputFile)
+    newContainerAutoGrader.graderFile = FileRecordName
 
     if (makefileInputFile) {
-        await minioClient.putObject(BucketNames.MAKEFILES, 'makefile', makefileInputFile)
-        newContainerAutoGrader.makefileFilename = 'makefile'
+        await minioClient.putObject(BucketNames.MAKEFILES, FileRecordName, makefileInputFile)
+        newContainerAutoGrader.makefileFile = FileRecordName
     }
 
-    const { id, assignmentId, graderFilename, makefileFilename, autogradingImage, timeout } = newContainerAutoGrader
+    const { id, assignmentId, graderFile, makefileFile, autogradingImage, timeout } = newContainerAutoGrader
 
-    await connect().update(id, { assignmentId, graderFilename, makefileFilename, autogradingImage, timeout })
+    await connect().update(id, { assignmentId, graderFile, makefileFile, autogradingImage, timeout })
 
     return newContainerAutoGrader
 }
 
 export async function update(containerAutoGrader: ContainerAutoGrader, graderInputFile: Buffer, makefileInputFile: Buffer | null = null) {
     if (!containerAutoGrader.id) throw new Error('Missing Id')
-    const graderFileRecordName: string = assignmentGraderFileRecordName(containerAutoGrader)
+    const FileRecordName: string = assignmentGraderFileRecordName(containerAutoGrader)
 
-    await minioClient.putObject(BucketNames.GRADERS, graderFileRecordName, graderInputFile)
-    containerAutoGrader.graderFilename = graderFileRecordName
+    await minioClient.putObject(BucketNames.GRADERS, FileRecordName, graderInputFile)
+    containerAutoGrader.graderFile = FileRecordName
 
     if (makefileInputFile) {
-        await minioClient.putObject(BucketNames.MAKEFILES, 'makefile', makefileInputFile)
-        containerAutoGrader.makefileFilename = 'makefile'
+        await minioClient.putObject(BucketNames.MAKEFILES, FileRecordName, makefileInputFile)
+        containerAutoGrader.makefileFile = FileRecordName
     }
 
-    const { id, assignmentId, graderFilename, makefileFilename, autogradingImage, timeout } = containerAutoGrader
-    return await connect().update(id, { assignmentId, graderFilename, makefileFilename, autogradingImage, timeout })
+    const { id, assignmentId, graderFile, makefileFile, autogradingImage, timeout } = containerAutoGrader
+    return await connect().update(id, { assignmentId, graderFile, makefileFile, autogradingImage, timeout })
 }
 
 export async function _delete(id: number) {

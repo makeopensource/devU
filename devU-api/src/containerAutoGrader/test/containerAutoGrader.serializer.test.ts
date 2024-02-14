@@ -12,8 +12,8 @@ describe('ContainerAutoGrader Serializer', () => {
 
     mockContainerAutoGrader.id = 5
     mockContainerAutoGrader.assignmentId = 1
-    mockContainerAutoGrader.graderFilename = 'path/to/grader/on/blobby'
-    mockContainerAutoGrader.makefileFilename = 'path/to/makefile/on/blobby'
+    mockContainerAutoGrader.graderFile = 'path/to/grader/on/blobby'
+    mockContainerAutoGrader.makefileFile = 'path/to/makefile/on/blobby'
     mockContainerAutoGrader.autogradingImage = 'autograding_image_3'
     mockContainerAutoGrader.timeout = 500
     mockContainerAutoGrader.createdAt = new Date()
@@ -27,8 +27,8 @@ describe('ContainerAutoGrader Serializer', () => {
         expect(actualResult).toBeDefined()
         expect(actualResult.id).toEqual(mockContainerAutoGrader.id)
         expect(actualResult.assignmentId).toEqual(mockContainerAutoGrader.assignmentId)
-        expect(actualResult.graderFilename).toEqual(mockContainerAutoGrader.graderFilename)
-        expect(actualResult.makefileFilename).toEqual(mockContainerAutoGrader.makefileFilename)
+        expect(actualResult.graderFile).toEqual(mockContainerAutoGrader.graderFile)
+        expect(actualResult.makefileFile).toEqual(mockContainerAutoGrader.makefileFile)
         expect(actualResult.autogradingImage).toEqual(mockContainerAutoGrader.autogradingImage)
         expect(actualResult.timeout).toEqual(mockContainerAutoGrader.timeout)
     })

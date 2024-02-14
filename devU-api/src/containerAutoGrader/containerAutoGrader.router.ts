@@ -31,7 +31,7 @@ Router.get('/:id', asInt(), ContainerAutoGraderController.detail);
  *   post:
  *     summary: Create a new container auto grader
  */
-Router.post('/', upload.fields([{name: 'graderFilename'},{name: 'makefileFilename'}]), validator, ContainerAutoGraderController.post);
+Router.post('/', upload.fields([{name: 'graderFile'},{name: 'makefileFile'}]), validator, ContainerAutoGraderController.post);
 
 /**
  * @swagger
@@ -39,7 +39,7 @@ Router.post('/', upload.fields([{name: 'graderFilename'},{name: 'makefileFilenam
  *   put:
  *     summary: Update a container auto grader's grader file and/or makefile
  */
-Router.put('/:id', asInt(), upload.fields([{name: 'graderFilename'},{name: 'makefileFilename'}]), validator, ContainerAutoGraderController.put);
+Router.put('/:id', asInt(), upload.fields([{name: 'graderFile'},{name: 'makefileFile'}]), validator, ContainerAutoGraderController.put);
 
 /**
  * @swagger

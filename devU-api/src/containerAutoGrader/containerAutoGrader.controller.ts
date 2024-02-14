@@ -38,11 +38,11 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 */
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
-    if (!req.files || !('graderFilename' in req.files)) {
+    if (!req.files || !('graderFile' in req.files)) {
       return res.status(400).json(new GenericResponse('Container Auto Grader requires file upload for grader'));
     }
-    const graderFile = req.files['graderFilename'][0]?.buffer
-    const makefile = req.files['makefileFilename'] ? req.files['makefileFilename'][0]?.buffer : null
+    const graderFile = req.files['graderFile'][0]?.buffer
+    const makefile = req.files['makefileFile'] ? req.files['makefileFile'][0]?.buffer : null
 
     const containerAutoGrader = await ContainerAutoGraderService.create(req.body, graderFile, makefile)
     const response = serialize(containerAutoGrader)
@@ -62,12 +62,12 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 */
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
-    if (!req.files || !('graderFilename' in req.files)) {
+    if (!req.files || !('graderFile' in req.files)) {
       return res.status(400).json(new GenericResponse('Container Auto Grader requires file upload for grader'));
     }
 
-    const graderFile = req.files['graderFilename'][0]?.buffer
-    const makefile = req.files['makefileFilename'] ? req.files['makefileFilename'][0]?.buffer : null
+    const graderFile = req.files['graderFile'][0]?.buffer
+    const makefile = req.files['makefileFile'] ? req.files['makefileFile'][0]?.buffer : null
 
     req.body.id = parseInt(req.params.id)
     const results = await ContainerAutoGraderService.update(req.body, graderFile, makefile)

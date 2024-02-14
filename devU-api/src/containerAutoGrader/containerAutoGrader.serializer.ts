@@ -6,8 +6,8 @@ export function serialize(containerAutoGrader: ContainerAutoGraderModel): Contai
     return {
         id: containerAutoGrader.id,
         assignmentId: containerAutoGrader.assignmentId,
-        graderFilename: containerAutoGrader.graderFilename,
-        makefileFilename: containerAutoGrader.makefileFilename,
+        graderFile: containerAutoGrader.graderFile,
+        makefileFile: containerAutoGrader.makefileFile,
         autogradingImage: containerAutoGrader.autogradingImage,
         timeout: containerAutoGrader.timeout,
         createdAt: containerAutoGrader.createdAt.toISOString(),
