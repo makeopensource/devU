@@ -1,6 +1,6 @@
 import {
     JoinColumn,
-    OneToOne,
+    ManyToOne,
     Entity,
     Column,
     PrimaryGeneratedColumn,
@@ -27,7 +27,7 @@ export default class ContainerAutoGraderModel {
 
     @Column({ name: 'assignment_id' })
     @JoinColumn({ name: 'assignment_id' })
-    @OneToOne(() => AssignmentModel)
+    @ManyToOne(() => AssignmentModel)
     assignmentId: number
 
     @Column({ name: 'grader_filename', length: 128 })
