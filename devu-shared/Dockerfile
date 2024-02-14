@@ -15,3 +15,6 @@ RUN npm run build-docker
 
 # copy generated file into /app -> which is the api dir
 COPY ./devu-shared-modules ../app/
+
+# copy generated file into /client -> which is the frontend dir
+COPY ./devu-shared-modules ../client/
