@@ -10,7 +10,7 @@ import {
 } from 'typeorm'
 import AssignmentModel from '../assignment/assignment.model'
 
-@Entity('nonContainerAutoGrader')
+@Entity({ name: 'nonContainerAutoGrader' })
 export default class NonContainerAutoGraderModel {
     @PrimaryGeneratedColumn()
     id: number
