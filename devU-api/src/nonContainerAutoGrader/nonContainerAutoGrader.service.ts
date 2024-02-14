@@ -24,10 +24,15 @@ export async function retrieve(id: number) {
 }
 
 // Retrieve all the nonContainerQuestions linked to a particular assignment by assignmentId
-export async function list(assignmentId: number) {
+export async function listByAssignmentId(assignmentId: number) {
   if (!assignmentId) throw new Error('Missing AssignmentId')
   return await connect().find({ assignmentId: assignmentId, deletedAt: IsNull() })
 }
+
+export async function list() {
+  return await connect().find({ deletedAt: IsNull() })
+}
+
 
 export default {
   create,
@@ -35,4 +40,5 @@ export default {
   update,
   _delete,
   list,
+  listByAssignmentId,
 }

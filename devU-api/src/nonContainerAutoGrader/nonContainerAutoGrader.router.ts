@@ -12,19 +12,27 @@ const Router = express.Router()
 
 /**
  * @swagger
- * /nonContainerAutoGrader/{assignmentId}:
+ * /nonContainerAutoGrader:
  *   get:
- *     summary: Retrieve a list of all nonContainerAutoGrader with the assignment ID
+ *     summary: Retrieve a list of all nonContainerAutoGraders
  */
-Router.get('/:assignmentId', nonContainerQuestions.get)
+Router.get('/', nonContainerQuestions.get)
 
 /**
  * @swagger
- * /nonContainerAutoGrader/{id}:
+ * /nonContainerAutoGrader/byAssignmentId/{assignmentId}:
+ *   get:
+ *     summary: Retrieve a list of all nonContainerAutoGrader with the assignment ID
+ */
+Router.get('/byAssignmentId/:assignmentId', nonContainerQuestions.getByAssignmentId)
+
+/**
+ * @swagger
+ * /nonContainerAutoGrader/byId/{id}:
  *   get:
  *     summary: Retrieve a single question
  */
-Router.get('/:id', asInt(), nonContainerQuestions.detail)
+Router.get('/byId/:id', asInt(), nonContainerQuestions.detail)
 
 /**
  * @swagger
