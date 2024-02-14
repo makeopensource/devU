@@ -10,7 +10,7 @@
     "build": "npm-run-all clean lint",
     "postinstall": "npm-run-all build",
     "build-docker": "tsc --outDir ./devu-shared-modules",
-    "build-local": "npm run build-docker && cp ./devu-shared-modules ,,/devU-client && cp ./devu-shared-modules ,,/devU-api",
+    "build-local": "tsc --outDir ./devu-shared-modules/devU-client && tsc --outDir ./devu-shared-modules/devU-api",
     "build-local-api": "",
     "build-local-client": "",
     "format": "prettier --write \"./**/*.{js,ts,json,md}\"",
