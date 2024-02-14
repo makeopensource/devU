@@ -25,8 +25,9 @@ const AuthenticatedRouter = () => (
     <Route exact path='/users/:userId/submissions' component={UserSubmissionsListPage} />
     {/* Just reuse the homepage here, for now this is fine. we might want to change this in the future though which is why they exist as separate routes */}
     <Route exact path='/users/:userId/assignments' component={HomePage} />
-    <Route exact path='/users/:userId/assignments/assignmentForm' Component={EditAssignmentFormPage}/>
+    <Route exact path='/users/:userId/assignments/assignmentForm' component={EditAssignmentFormPage}/>
     <Route exact path='/users/:userId/courses' component={UserCoursesListPage} />
+    <Route exact path='/users/:userId/courses/updateAssignment' component={AssignmentUpdatePage}/>
     <Route exact path='/submissions/:submissionId' component={SubmissionDetailPage} />
     <Route exact path='/courses/' component={CoursesListPage} />
     <Route exact path='/courses/:courseId' component={CourseDetailPage} />

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Assignment, UserCourse, Course } from 'devu-shared-modules'
+import { Assignment, Course } from 'devu-shared-modules'
 
 import ListItemWrapper from 'components/shared/layouts/listItemWrapper'
 

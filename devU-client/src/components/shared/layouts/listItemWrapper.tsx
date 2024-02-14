@@ -10,7 +10,7 @@ type Props = {
   children: React.ReactNode
   tag?: string
   className?: string
-  assignmentName?: string
+  
 }
 
 const colorHash = (input: string) => {
@@ -19,10 +19,9 @@ const colorHash = (input: string) => {
   return hash.hex(input)
 }
 
-const ListItemWrapper = ({ to, children, tag, className = '', assignmentName = '' }: Props) => (
-  <Link to={to} className={styles.container} assignmentName={styles.container}>
+const ListItemWrapper = ({ to, children, tag, className = '' }: Props) => (
+  <Link to={to} className={styles.container} >
     {tag && <div className={styles.tag} style={{ backgroundColor: colorHash(tag) }}></div>}
-    {tag && <div assignmentName={styles.tag} style={{backgroundColor: ColorHash(tag)}}></div>}
     <div className={className}>{children}</div>
   </Link>
 )
