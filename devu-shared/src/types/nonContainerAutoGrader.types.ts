@@ -1,5 +1,5 @@
 export type NonContainerAutoGrader = {
-    id: number
+    id?: number
     assignmentId: number
     question: string
     score:number
