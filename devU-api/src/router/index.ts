@@ -21,6 +21,7 @@ import fileUpload from '../fileUpload/fileUpload.router'
 import { isAuthorized } from '../auth/auth.middleware'
 
 import { NotFound } from '../utils/apiResponse.utils'
+import nonContainerAutoGraderRouter from "../nonContainerAutoGrader/nonContainerAutoGrader.router";
 
 const Router = express.Router()
 
@@ -32,6 +33,7 @@ Router.use('/user-courses', isAuthorized, userCourse)
 Router.use('/code-assignments', isAuthorized, codeAssignment)
 Router.use('/submissions', isAuthorized, submissions)
 Router.use('/submission-scores', isAuthorized, submissionScore)
+Router.use('/nonContainerAutoGrader', isAuthorized, nonContainerAutoGraderRouter)
 Router.use('/container-auto-graders', isAuthorized, containerAutoGrader)
 Router.use('/submission-problem-scores', isAuthorized, submissionProblemScore)
 Router.use('/file-upload', isAuthorized, fileUpload)

@@ -1,4 +1,4 @@
-import { ContainerAutoGrader } from '../../../devu-shared/src'
+import { ContainerAutoGrader } from '../../devu-shared-modules'
 
 import ContainerAutoGraderModel from './containerAutoGrader.model'
 
