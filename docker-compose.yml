@@ -19,6 +19,12 @@ services:
     image: ubautograding/devtools
     volumes:
       - ./devU-api/config:/config
+  shared-modules:
+    build:
+      context: devu-shared/
+    volumes:
+      - ./devU-client:/client
+      - ./devU-api:/app
   web:
     # Runs the API
     build: devU-api
@@ -27,6 +33,8 @@ services:
     depends_on:
       db:
         condition: service_started
+      shared-modules:
+        condition: service_completed_successfully
       config:
         condition: service_completed_successfully
     ports:
@@ -38,6 +46,9 @@ services:
       context: devU-client
     volumes:
       - ./dist:/out
+    depends_on:
+      shared-modules:
+        condition: service_completed_successfully
   nginx:
     # Hosts the front end static files from ./dist/local thorough a web server
     build:
