@@ -13,6 +13,28 @@ import SubmissionModel from '../submission/submission.model'
 
 @Entity('submission_scores')
 export default class SubmissionScore {
+  /**
+   * @swagger
+   * tags:
+   *   - name: SubmissionScores
+   *     description: 
+   * components:
+   *  schemas:
+   *    SubmissionScore:
+   *      type: object
+   *      required: [submissionId, score, releasedAt]
+   *      properties:
+   *        submissionId:
+   *          type: integer
+   *        score:
+   *          type: number
+   *        feedback:
+   *          type: string
+   *        releasedAt:
+   *          type: string
+   *          format: date-time
+   *          description: Must be in ISO 8601 format
+   */
   @PrimaryGeneratedColumn()
   id: number
 

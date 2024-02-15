@@ -15,6 +15,11 @@ const Router = express.Router()
  * /submissions:
  *   get:
  *     summary: Retrieve a list of submissions
+ *     tags:
+ *       - Submissions
+ *     responses:
+ *       '200':
+ *         description: OK
  */
 Router.get('/', SubmissionController.get)
 
@@ -23,6 +28,17 @@ Router.get('/', SubmissionController.get)
  * /submissions/{id}:
  *   get:
  *     summary: Retrieve a single submission
+ *     tags:
+ *       - Submissions
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.get('/:id', asInt(), SubmissionController.detail)
 
@@ -31,6 +47,16 @@ Router.get('/:id', asInt(), SubmissionController.detail)
  * /submissions:
  *   post:
  *     summary: Create a submission
+ *     tags:
+ *       - Submissions
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/Submission'
  */
 Router.post('/', validator, SubmissionController.post)
 
@@ -39,6 +65,17 @@ Router.post('/', validator, SubmissionController.post)
  * /submissions/{id}:
  *   delete:
  *     summary: Delete a submission
+ *     tags:
+ *       - Submissions
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.delete('/:id', asInt(), SubmissionController._delete)
 

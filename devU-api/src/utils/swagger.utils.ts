@@ -1,19 +1,30 @@
 import swaggerJSDoc from 'swagger-jsdoc'
 
 const swaggerOptioner = {
-  openapi: '3.0.0',
-  info: {
-    title: 'Typescript Example Docs',
-    version: '1.0.0',
-    description: 'Example API documentation',
-    contact: {
-      name: 'The Daves',
-      url: 'https://static.wikia.nocookie.net/donkeykong/images/2/28/Donkey_Kong.jpg/revision/latest?cb=20080919234913',
+  definition: {
+      openapi: '3.0.0',
+    info: {
+      title: 'DevU API Documentation',
+      version: '1.0.0',
+      description: '',
     },
+    components: {
+      securitySchemes: {
+        Authorization: {
+          type: 'http',
+          scheme: 'bearer',
+          name: 'authorization',
+        }
+      }
+    },
+    security: [{
+      Authorization: [],
+    }],
   },
+  apis: [
+    './src/router/*.ts', './src/*/*.router.ts', './src/*/*.model.ts'],
 }
 
-const jsDocOptions = { swaggerDefinition: swaggerOptioner, apis: ['./src/router/*.ts'] }
-const swaggerSpec = swaggerJSDoc(jsDocOptions)
+const swaggerSpec = swaggerJSDoc(swaggerOptioner)
 
 export default swaggerSpec

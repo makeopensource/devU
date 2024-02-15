@@ -16,6 +16,25 @@ import CourseModel from '../course/course.model'
 
 @Entity('user_courses')
 export default class UserCourseModel {
+  /**
+   * @swagger
+   * tags:
+   *   - name: UserCourses
+   *     description: GET /user/{user-id} does not function properly, only returns empty set []
+   * components:
+   *  schemas:
+   *    UserCourse:
+   *      type: object
+   *      required: [userId, courseId, level]
+   *      properties:
+   *        userId:
+   *          type: integer
+   *        courseId:
+   *          type: integer
+   *        level:
+   *          type: string
+   *          description: Must be either "student", "ta", or "instructor"
+   */
   @PrimaryGeneratedColumn()
   id: number
 

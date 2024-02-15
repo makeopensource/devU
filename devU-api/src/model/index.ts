@@ -7,6 +7,7 @@ import SubmissionProblemScoreModel from '../submissionProblemScore/submissionPro
 import SubmissionScoreModel from '../submissionScore/submissionScore.model'
 import CodeAssignmentModel from '../codeAssignment/codeAssignment.model'
 import NonContainerAutoGraderModel from '../nonContainerAutoGrader/nonContainerAutoGrader.model'
+import ContainerAutoGraderModel from '../containerAutoGrader/containerAutoGrader.model'
 
 type Models =
   | AssignmentModel
@@ -18,5 +19,6 @@ type Models =
   | SubmissionScoreModel
   | CodeAssignmentModel
   | NonContainerAutoGraderModel
+  | ContainerAutoGraderModel
 
 export default Models

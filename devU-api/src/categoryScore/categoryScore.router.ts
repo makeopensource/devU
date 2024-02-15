@@ -15,7 +15,12 @@ const Router = express.Router()
  * /category-score:
  *  get:
  *      summary: Retrieve a list of all category scores
- */
+ *      tags:
+ *        - CategoryScores
+ *      responses:
+ *        '200':
+ *          description: OK
+ */ 
 Router.get('/', CategoryScoreController.get)
 
 
@@ -24,6 +29,17 @@ Router.get('/', CategoryScoreController.get)
  * /category-score/{id}:
  *  get:
  *      summary: Retrieve a single category score
+ *      tags:
+ *        - CategoryScores
+ *      responses:
+ *        '200':
+ *          description: OK
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          schema:
+ *            type: integer
  */
 Router.get('/:id', asInt(), CategoryScoreController.detail)
 
@@ -32,6 +48,16 @@ Router.get('/:id', asInt(), CategoryScoreController.detail)
  * /category-score:
  *  post:
  *      summary: Create a category score
+ *      tags:
+ *        - CategoryScores
+ *      responses:
+ *        '200':
+ *          description: OK
+ *      requestBody:
+ *        content:
+ *          application/x-www-form-urlencoded:
+ *            schema:
+ *              $ref: '#/components/schemas/CategoryScore'
  */
 Router.post('/', validator, CategoryScoreController.post)
 
@@ -40,6 +66,22 @@ Router.post('/', validator, CategoryScoreController.post)
  * /category-score/{id}:
  *  put:
  *      summary: Update a category score
+ *      tags:
+ *        - CategoryScores
+ *      responses:
+ *        '200':
+ *          description: OK
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          schema:
+ *            type: integer
+ *      requestBody:
+ *        content:
+ *          application/x-www-form-urlencoded:
+ *            schema:
+ *              $ref: '#/components/schemas/CategoryScore'
  */
 Router.put('/:id', validator, asInt(), CategoryScoreController.put)
 
@@ -48,6 +90,17 @@ Router.put('/:id', validator, asInt(), CategoryScoreController.put)
  * /category-score/{id}:
  *  delete:
  *      summary: Delete a category score
+ *      tags:
+ *        - CategoryScores
+ *      responses:
+ *        '200':
+ *          description: OK
+ *      parameters:
+ *        - name: id
+ *          in: path
+ *          required: true
+ *          schema:
+ *            type: integer
  */
 Router.delete('/:id', asInt(), CategoryScoreController._delete)
 
