@@ -13,9 +13,13 @@ import status from '../status/status.router'
 import submissions from '../submission/submission.router'
 import users from '../user/user.router'
 import submissionScore from '../submissionScore/submissionScore.router'
+<<<<<<< Updated upstream
 import containerAutoGrader from '../containerAutoGrader/containerAutoGrader.router'
 import assignmentProblem from '../assignmentProblem/assignmentProblem.router'
 import submissionProblemScore from '../submissionProblemScore/submissionProblemScore.router'
+=======
+import assignmentProblem from '../assignmentProblem/assignmentProblem.router'
+>>>>>>> Stashed changes
 
 import { isAuthorized } from '../auth/auth.middleware'
 
@@ -24,10 +28,16 @@ import nonContainerAutoGraderRouter from "../nonContainerAutoGrader/nonContainer
 
 const Router = express.Router()
 
+<<<<<<< Updated upstream
 Router.use('/assignments', isAuthorized, assignments)
 Router.use('/assignment-problems', isAuthorized, assignmentProblem)
 Router.use('/users', isAuthorized, users)
 Router.use('/courses', isAuthorized, courses)
+=======
+Router.use('/assignments', /*isAuthorized,*/ assignments)
+Router.use('/assignment-problems', /*isAuthorized,*/ assignmentProblem)
+Router.use('/courses', /*isAuthorized,*/ courses)
+>>>>>>> Stashed changes
 Router.use('/user-courses', isAuthorized, userCourse)
 Router.use('/code-assignments', isAuthorized, codeAssignment)
 Router.use('/submissions', isAuthorized, submissions)
