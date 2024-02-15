@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 services:
   db:
     # Runs the PostgreSQL database
@@ -18,17 +18,19 @@ services:
     depends_on:
       db:
         condition: service_started
-    # Comment selection:
+    # Old Comment:
     # The volumes of the config is mounted onto the config/tmp to prevent overwrites of the data once it is mounted.
     # This can be pervented using copyno option in volumes, sadly I'm too dumb to set it up
     # You can also not use volumes at all, just hard to keep files during build time from containers
-    # Optional for local testing
+
+    # Docker docs: https://docs.docker.com/storage/bind-mounts/#mount-into-a-non-empty-directory-on-the-container
+    # Related issue: https://stackoverflow.com/questions/61886645/files-inside-a-docker-image-disappear-when-mounting-a-volume
+
+    # Optional for local testing, make sure to check devU-api Dockerfile to switch CMD command
     # volumes:
-    #   - ./devU-api/config:/app/config/tmp
+    #   - ./devU-api/config/tmp:/app/config/tmp
     ports:
       - '3001:3001'
-
-  # Frontend Docker service
   # Builds the frontend of the applications
   # This includes the devU-client, Nginx
   client:
@@ -41,6 +43,8 @@ services:
     # Same issue as above can be mount correctly using nocopy but need to amount into a alter folder, that the files was copy into after
     # the build stage was finish to prevent overwriting the folders during mounting
     # This will be optional, since it should only be used for local testing, most of the stuff should be done in docker
+
+    # Optional for local testing, make sure to check devU-client Dockerfile to switch CMD command
     # volumes:
     #   - ./dist/local:/dist/local:rw
     ports:
@@ -53,7 +57,17 @@ services:
       MINIO_ROOT_USER: typescript_user
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
-# Definiting config files
+# Definiting Config top-level elements
 configs:
   nginx_config:
     file: ./nginx.conf
+
+# Future update needed
+# Definiting name Volumes top-level elements
+# volumes:
+#   devU_config:
+#     driver: local
+#     driver_opts:
+#       type: "none"
+#       o: "blind"
+#       device: "/home/tomato/devU/devU-api/config/"

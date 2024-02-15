@@ -9,14 +9,13 @@ COPY ./scripts/generateConfig.sh ./generateConfig.sh
 RUN apk add --no-cache bash jq openssl \
   && pip install yq
 RUN ./generateConfig.sh ./default.yml
-RUN cat default.yml
 
 # Starting up the devU-api
 FROM node:16
 WORKDIR /app
 COPY . .
 # Moving the generated config ymal files into the config folder
-COPY --from=config /stage/default.yml config/default.yml
+COPY --from=config /stage/default.yml ./config/default.yml
 COPY package.json package-lock.json ./
 RUN npm install
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait

@@ -5,3 +5,4 @@ node_modules/
 ./docker-compose.yml
 /.idea
 /.vscode
+/devU-api/config/default.yml
