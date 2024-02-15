@@ -49,6 +49,7 @@ module.exports = () => {
               }
             },
           ],
+          exclude: /react-datepicker.css/
         },
         {
           test: /\.(eot|svg|ttf|woff|woff2|png)$/,
@@ -62,6 +63,15 @@ module.exports = () => {
               },
             },
           ],
+        },
+        {
+          test:[ /react-datepicker.css/],
+          use: [{
+            loader: 'style-loader'
+          },{
+            loader: 'css-loader',
+          }],
+          exclude:/src/
         },
       ],
     },
