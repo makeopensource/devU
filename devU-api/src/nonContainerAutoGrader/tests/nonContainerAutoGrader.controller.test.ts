@@ -89,7 +89,8 @@ describe('NonContainerAutoGraderController', () => {
 
           fail('Expected test to throw')
         } catch {
-          expect(next).toBeCalledWith(expectedError)
+          const assignmentIdError = Error('Missing AssignmentId')
+          expect(next).toBeCalledWith(assignmentIdError)
         }
       })
     })
