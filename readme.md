@@ -69,13 +69,15 @@ than a minute, review the output in your terminal for errors, most notably: [Why
 ## Frequently Asked Questions
 
 ### Why is the backend service failing to start right after cloning the repo?
-It seems that sometimes the database migrations aren't made when they should be. If you see the following, try
+
+<!-- Removed since it was solved -->
+<!-- It seems that sometimes the database migrations aren't made when they should be. If you see the following, try
 re-running `docker compose up --build` a few times.
 ```
 Error during migration run:
 Error: Configuration property "auth.jwt.activeKeyId" is not defined
 at Config.get (/app/node_modules/config/lib/config### Why is the devU-client/devU-api repo empty?
-```
+``` -->
 
 If this is the case, you would get an error similar to this:
 

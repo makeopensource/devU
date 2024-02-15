@@ -1,4 +1,5 @@
-/dist/
+#Only ignores the files within /dist/local/ as the folders need to still be still for mounting during client docker compose
+/dist/local/*
 node_modules/
 /delete.py
 ./docker-compose.yml
