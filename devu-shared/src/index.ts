@@ -14,6 +14,7 @@ export * from './types/assignmentProblem.types'
 export * from './types/submissionProblemScore.types'
 export * from './types/categoryScore.types'
 export * from './types/submissionScore.types'
+export * from './types/fileUpload.types'
 
 export * from './utils/object.utils'
 export * from './utils/string.utils'
