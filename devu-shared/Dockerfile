@@ -8,8 +8,8 @@ COPY . .
 # Clean any files that might cause conflicts, install dependencies, and run build script in one step
 # we do this because if divide the commands docker will run each command in new container
 # which will cause the files genrated to be not found on each command.
-RUN npm run clean-directory && \
-    npm install && \
+RUN npm install && \
+    npm run clean-directory && \
     npm run build-docker && \
     # Copy generated file into /app -> which is the api dir
     cp -r ./devu-shared-modules ../app/ && \
