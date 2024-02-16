@@ -1,8 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
-/*import RequestService from 'services/request.service'
+import RequestService from 'services/request.service'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -11,11 +11,11 @@ import { ExpressValidationError } from 'devu-shared-modules'
 import { useActionless } from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
 import Button from 'components/shared/inputs/button'
-import { SET_ALERT } from 'redux/types/active.types'*/
+import { SET_ALERT } from 'redux/types/active.types'
 
-const CourseUpdatePage = ({}) => <PageWrapper>course update</PageWrapper>
+const CourseUpdatePage = ({}) => {
 
-    /*const [setAlert] = useActionless(SET_ALERT)
+    const [setAlert] = useActionless(SET_ALERT)
 
     const [formData,setFormData] = useState({
         name: '',
@@ -46,9 +46,7 @@ const CourseUpdatePage = ({}) => <PageWrapper>course update</PageWrapper>
         setLoading(true)
 
         RequestService.put('/api/courses/:courseId/update', finalFormData)
-            .then((res) => {
-                setStartDate(res.startDate)
-                setEndDate(res.endDate)
+            .then(() => {
                 
 
                 setAlert({ autoDelete: true, type: 'success', message: 'Course Updated' })
@@ -74,7 +72,7 @@ const CourseUpdatePage = ({}) => <PageWrapper>course update</PageWrapper>
         <Button onClick={handleCourseUpdate} loading={loading}>Update Course</Button>
     </PageWrapper>
     )
-}*/
+}
 
 
 export default CourseUpdatePage
