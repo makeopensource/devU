@@ -1,11 +1,12 @@
-import { FileUpload } from "../../../devu-shared/src"
+import { FileUpload } from "../../devu-shared-modules"
 
 
 
-export function serialize(fileName: string, originalName: string, fieldName: string ): FileUpload {
+export function serialize(file:FileUpload): FileUpload {
   return {
-    fieldName: fieldName,
-    originalName: originalName,
-    fileName: fileName
+    fieldName: file.fieldName,
+    originalName: file.originalName,
+    fileName: file.fileName,
+    etags: file.etags
   }
 }

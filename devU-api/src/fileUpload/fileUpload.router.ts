@@ -4,7 +4,7 @@ import multer, { Field } from 'multer'
 import validator from './fileUpload.validator';
 
 import FileUploadController from './fileUpload.controller';
-import { fileUploadTypes } from '../../../devu-shared/src/types/fileUpload.types';
+import { fileUploadTypes } from '../../devu-shared-modules';
 
 const Router = express.Router();
 const upload = multer();
@@ -41,10 +41,7 @@ Router.get('/:bucketName/:fileName', FileUploadController.detail);
   *   post:
   *     summary: Upload a new file to the bucket
  */
-Router.post('/',
-  upload.fields(fields),
-  validator,
-  FileUploadController.post);
+Router.post('/', upload.fields(fields), validator, FileUploadController.post);
 
 /*
   * does not have idea whether the path should have the bucketName or not

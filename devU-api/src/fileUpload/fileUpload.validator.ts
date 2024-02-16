@@ -1,7 +1,7 @@
 import { check } from 'express-validator'
 
 import validate from '../middleware/validator/generic.validator'
-import { fileUploadTypes } from '../../../devu-shared/src/types/fileUpload.types'
+import { fileUploadTypes } from '../../devu-shared-modules'
 
 /*
   * This file is a validator for the file upload routes.
