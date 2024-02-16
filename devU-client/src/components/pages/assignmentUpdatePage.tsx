@@ -21,9 +21,6 @@ const AssignmentUpdatePage = () => {
     const [formData, setFormData] = useState({
         courseId: 0,
         name: '',
-        startDate: '',
-        dueDate: '',
-        endDate: '',
         categoryName: null,
         description: null,
         maxFileSize: 0,
@@ -50,7 +47,6 @@ const AssignmentUpdatePage = () => {
             startDate : startDate.toISOString(),
             dueDate: dueDate.toISOString(),
             endDate : endDate.toISOString(),
-            gradingType: '',
             categoryName: formData.categoryName,
             description: formData.description,
             maxFileSize: formData.maxFileSize,
