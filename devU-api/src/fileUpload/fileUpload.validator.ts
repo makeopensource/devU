@@ -1,7 +1,6 @@
 import { check } from 'express-validator'
 
 import validate from '../middleware/validator/generic.validator'
-import { fileUploadTypes } from '../../devu-shared-modules'
 
 /*
   * This file is a validator for the file upload routes.
@@ -10,18 +9,15 @@ import { fileUploadTypes } from '../../devu-shared-modules'
   * This can be added in the future
  */
 
-const checkFiles = check('files')
+const FileUploaded = check('files')
   .custom((_value, { req }) =>{
-    fileUploadTypes.map(name => {
-      if (req.files && req.files[name]){
-        return req.files[name].length > 0
-      }
-      return true
-    })
+    if (!req.files) {
+      throw new Error('No file uploaded')
+    }
+    return true
   })
-  .withMessage('No file uploaded')
 
 
-const validator = [checkFiles, validate]
+const validator = [FileUploaded, validate]
 
 export default validator

@@ -56,38 +56,46 @@ export async function update(file: Express.Multer.File[], bucketName: BucketName
   return fileUpload
 }
 
-export async function retrieve(bucketName: string, fileName: string){
-  let file:Buffer[] = []
-  minioClient.getObject(bucketName, fileName,function (err, dataStream) {
-    if (err) {
-      throw err
-    }
-    dataStream.on('data', function (chunk:Buffer) {
-      file.push(chunk)
-    })
-    dataStream.on('end', function () {
-      return file
-    })
-    dataStream.on('error', function (err:Error) {
-      throw err
-    })
-  })
-  return file
+export async function retrieve(bucketName: string, fileName: string): Promise<Buffer>{
+  return new Promise((resolve, reject) => {
+    minioClient.getObject(bucketName, fileName, function(err, dataStream) {
+      if (err) {
+        reject(err);
+      }
+
+      let file: Buffer[] = [];
+      dataStream.on('data', function(chunk:Buffer) {
+        file.push(chunk);
+      });
+
+      dataStream.on('end', function() {
+        resolve(Buffer.concat(file));
+      });
+
+      dataStream.on('error', function(err:Error) {
+        reject(err);
+      });
+    });
+  });
 }
 
-export async function list(bucketName: string){
-  const stream = minioClient.listObjects(bucketName)
-  let files: object[] = []
-  stream.on('data', function(obj) {
-    files.push(obj)
-  })
-  stream.on('error', function(err) {
-    throw err
-  })
-  stream.on('end', function() {
-    return files
-  })
-  return files
+export async function list(bucketName: string) {
+  return new Promise((resolve, reject) => {
+    const stream = minioClient.listObjects(bucketName);
+    let files: object[] = [];
+
+    stream.on('data', function(obj) {
+      files.push(obj);
+    });
+
+    stream.on('error', function(err) {
+      reject(err);
+    });
+
+    stream.on('end', function() {
+      resolve(files);
+    });
+  });
 }
 
 

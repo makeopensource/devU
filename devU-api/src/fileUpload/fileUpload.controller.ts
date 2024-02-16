@@ -24,7 +24,7 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
     const bucketName = req.params.bucketName
     const fileName = req.params.fileName
-    const file: Buffer[] = await FileUploadService.retrieve(bucketName, fileName)
+    const file: Buffer = await FileUploadService.retrieve(bucketName, fileName)
 
     if (!file) return res.status(404).json(NotFound)
 
