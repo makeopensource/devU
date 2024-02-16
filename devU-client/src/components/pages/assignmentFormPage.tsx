@@ -17,9 +17,6 @@ const EditAssignmentFormPage = () => {
     const [formData, setFormData] = useState({
         courseId: 0,
         name: '',
-        startDate: '',
-        dueDate: '',
-        endDate: '',
         gradingType: '',
         categoryName: null,
         description: null,
@@ -46,9 +43,20 @@ const EditAssignmentFormPage = () => {
 
 
     const handleSubmit = () => {
+        const finalFormData = {
+            name: formData.name,
+            startDate : startDate.toISOString(),
+            dueDate: dueDate.toISOString(),
+            endDate : endDate.toISOString(),
+            categoryName: formData.categoryName,
+            description: formData.description,
+            maxFileSize: formData.maxFileSize,
+            maxSubmissions: formData.maxSubmissions,
+            disableHandins: formData.disableHandins,
+        }
+       
         setLoading(true)
-
-        RequestService.post('/api/assignments/', formData)
+        RequestService.post('/api/assignments/', finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
             })
@@ -58,6 +66,8 @@ const EditAssignmentFormPage = () => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
             .finally(() => setLoading(false))
+
+        
     }
 
     return(
