@@ -23,7 +23,7 @@ services:
     # Runs the API
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-api
     environment:
       WAIT_HOSTS: db:5432
     depends_on:
