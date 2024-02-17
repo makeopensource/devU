@@ -16,6 +16,7 @@ import submissionScore from '../submissionScore/submissionScore.router'
 import containerAutoGrader from '../containerAutoGrader/containerAutoGrader.router'
 import assignmentProblem from '../assignmentProblem/assignmentProblem.router'
 import submissionProblemScore from '../submissionProblemScore/submissionProblemScore.router'
+import fileUpload from '../fileUpload/fileUpload.router'
 
 import { isAuthorized } from '../auth/auth.middleware'
 
@@ -35,6 +36,7 @@ Router.use('/submission-scores', isAuthorized, submissionScore)
 Router.use('/nonContainerAutoGrader', isAuthorized, nonContainerAutoGraderRouter)
 Router.use('/container-auto-graders', isAuthorized, containerAutoGrader)
 Router.use('/submission-problem-scores', isAuthorized, submissionProblemScore)
+Router.use('/file-upload', isAuthorized, fileUpload)
 
 Router.use('/login', login)
 Router.use('/logout', logout)

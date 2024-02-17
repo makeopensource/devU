@@ -38,6 +38,9 @@ const UserCoursesListPage = () => {
   const [courses, setCourses] = useState<Record<string, Course>>({})
   const [filter, setFilter] = useState<Filter>(defaultFilter)
 
+  //Temporary place to store state for all courses
+  const [allCourses, setAllCourses] = useState(new Array<Course>())
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -52,6 +55,10 @@ const UserCoursesListPage = () => {
       // Mapify course ids so we can look them up more easilly via their id
       const courseMap: Record<string, Course> = {}
       for (const course of courses) courseMap[course.id || ''] = course
+
+      // Temporary place to grab and display all courses
+      const allCourses = await RequestService.get('/api/courses')
+      setAllCourses(allCourses)
 
       setUserCourses(userCourses)
       setCourses(courseMap)
@@ -103,6 +110,11 @@ const UserCoursesListPage = () => {
           course={courses[userCourse.courseId || '']}
         />
       ))}
+      {allCourses.map(course => (
+          <div>
+            <Link className={styles.courseName} to={`/courses/${course.id}`}>{course.name}</Link>
+          </div>
+        ))}
     </PageWrapper>
   )
 }

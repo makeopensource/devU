@@ -1,6 +1,6 @@
 import { UpdateResult } from "typeorm"
 
-import { ContainerAutoGrader } from '../../../../devu-shared/src'
+import { ContainerAutoGrader } from '../../../devu-shared-modules'
 
 import controller from "../containerAutoGrader.controller"
 
