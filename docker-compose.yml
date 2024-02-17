@@ -19,11 +19,11 @@ services:
     image: ubautograding/devtools
     volumes:
       - ./devU-api/config:/config
-  web:
+  api:
     # Runs the API
     build:
       context: .
-      dockerfile: ./devU-api/Dockerfile
+      dockerfile: Dockerfile
     environment:
       WAIT_HOSTS: db:5432
     depends_on:
