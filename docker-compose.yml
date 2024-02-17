@@ -27,7 +27,9 @@ services:
       - ./devU-api:/app
   web:
     # Runs the API
-    build: devU-api
+    build:
+      context: .
+      dockerfile: ./devU-api/Dockerfile
     environment:
       WAIT_HOSTS: db:5432
     depends_on:
@@ -42,8 +44,8 @@ services:
   client:
     # Builds the front end and exports static files to ./dist
     build:
-      dockerfile: ../Dockerfile-client
-      context: devU-client
+      dockerfile: ./Dockerfile-client
+      context: .
     volumes:
       - ./dist:/out
     depends_on:
