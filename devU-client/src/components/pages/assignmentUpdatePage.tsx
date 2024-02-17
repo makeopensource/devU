@@ -62,9 +62,9 @@ const AssignmentUpdatePage = () => {
         <Button onClick={toggleProblemForm}>Add Problem</Button>
         {toggleForm && (
             <div>
-                <TextField id='assignmentId' label='Assignment Id' onChange={handleChange} value={formData.assignmentId}/>
-                <TextField id='problemName' label='Problem Question' onChange={handleChange} value={formData.problemName}/>
-                <TextField id='maxScore' label='Max Score' onChange={handleChange} value={formData.maxScore}/>
+                <TextField id='assignmentId' label='Assignment Id' onChange={handleChange} defaultValue={formData.assignmentId}/>
+                <TextField id='problemName' label='Problem Question' onChange={handleChange} defaultValue={formData.problemName}/>
+                <TextField id='maxScore' label='Max Score' onChange={handleChange} defaultValue={formData.maxScore}/>
                 <Button onClick={handleSubmit} loading={loading}>Create Problem</Button>
             </div>
         )}
