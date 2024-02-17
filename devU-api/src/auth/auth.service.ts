@@ -5,7 +5,7 @@ import { AccessToken, RefreshToken } from 'devu-shared-modules'
 
 import environment from '../environment'
 
-import UserModel from '../user/user.model'
+import UserModel from '../entities/user/user.model'
 
 const signingKey = environment.keys[environment.activeKeyId].privateKey
 

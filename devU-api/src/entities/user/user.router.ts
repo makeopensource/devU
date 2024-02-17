@@ -1,7 +1,7 @@
 import express from 'express'
 
 import validator from './user.validator'
-import { asInt } from '../middleware/validator/generic.validator'
+import { asInt } from '../../middleware/validator/generic.validator'
 
 import UserController from './user.controller'
 

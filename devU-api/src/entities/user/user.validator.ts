@@ -1,6 +1,6 @@
 import { check } from 'express-validator'
 
-import validate from '../middleware/validator/generic.validator'
+import validate from '../../middleware/validator/generic.validator'
 
 const email = check('email').isString().trim().isEmail()
 const preferredName = check('preferredName').isString().trim().isLength({ max: 128 }).optional({ nullable: true })
