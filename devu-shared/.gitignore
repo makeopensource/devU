@@ -1,5 +1,5 @@
 node_modules/
-devu-shared-modules/
+../devU-api/devu-shared-modules/
 
 # Build Files
 *.js
