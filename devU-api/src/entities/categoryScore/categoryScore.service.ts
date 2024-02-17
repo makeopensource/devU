@@ -11,11 +11,11 @@ export async function create(categoryScore: CategoryScore) {
 }
 
 export async function update(categoryScore: CategoryScore) {
-  const { id, courseId, userId, category, score, letterGrade } = categoryScore
+  const { id, courseId, userId, categoryId, score } = categoryScore
 
   if (!id) throw new Error('Missing Id')
 
-  return await connect().update(id, { courseId, userId, category, score, letterGrade })
+  return await connect().update(id, { courseId, userId, categoryId, score })
 }
 
 export async function _delete(id: number) {
@@ -26,9 +26,13 @@ export async function retrieve(id: number) {
   return await connect().findOne({ id, deletedAt: IsNull() })
 }
 
-// Retrieve all the categoryScores linked to a particular category
-export async function list(category: string) {
-  return await connect().find({ category, deletedAt: IsNull() })
+// Retrieve all the categoryScores linked to a particular category (TODO: This endpoint doesn't have a path)
+// export async function listByCategory(categoryId: number) {
+//   return await connect().find({ categoryId: categoryId, deletedAt: IsNull() })
+
+
+export async function list() {
+  return await connect().find({ deletedAt: IsNull() })
 }
 
 export default {
@@ -36,5 +40,6 @@ export default {
   retrieve,
   update,
   _delete,
+  // listByCategory,
   list,
 }

@@ -1,4 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  JoinColumn, ManyToOne
+} from 'typeorm'
+import CourseModel from "../course/course.model";
 
 @Entity('category')
 export default class CategoryModel {
@@ -18,6 +27,11 @@ export default class CategoryModel {
    */
   @PrimaryGeneratedColumn()
   id: number
+
+  @Column({name: 'course_id'})
+  @JoinColumn({name: 'course_id'})
+  @ManyToOne(() => CourseModel)
+  courseId: number
 
   @Column({ length: 128 })
   name: string

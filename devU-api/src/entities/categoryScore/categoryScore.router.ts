@@ -3,7 +3,7 @@ import express from 'express'
 
 //validators
 import validator from './categoryScore.validator'
-import { asInt } from '../middleware/validator/generic.validator'
+import { asInt } from '../../middleware/validator/generic.validator'
 
 //Controller
 import CategoryScoreController from './categoryScore.controller'

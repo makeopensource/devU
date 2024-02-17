@@ -12,7 +12,7 @@ import {
 import AssignmentModel from '../assignment/assignment.model'
 
 @Entity('assignment_problems')
-export default class AssignmentProblem {
+export default class AssignmentProblemModel {
   /**
    * @swagger
    * tags:

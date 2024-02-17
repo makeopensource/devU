@@ -2,7 +2,7 @@ import { serialize } from '../submission.serializer'
 
 import SubmissionModel from '../../submission/submission.model'
 
-import Testing from '../../utils/testing.utils'
+import Testing from '../../../utils/testing.utils'
 
 let mockSubmission: SubmissionModel
 
@@ -16,10 +16,8 @@ describe('Submission Serializer', () => {
     mockSubmission.courseId = 1
     mockSubmission.assignmentId = 2
     mockSubmission.userId = 456
-    mockSubmission.type = 'filepath'
     mockSubmission.content = 'LARGE STRING'
     mockSubmission.submitterIp = '1A2B3C4D5yes'
-    mockSubmission.originalSubmissionId = null
     mockSubmission.submittedBy = 1
   })
 
@@ -32,10 +30,8 @@ describe('Submission Serializer', () => {
       expect(expectedResult.courseId).toEqual(mockSubmission.courseId)
       expect(expectedResult.assignmentId).toEqual(mockSubmission.assignmentId)
       expect(expectedResult.userId).toEqual(mockSubmission.userId)
-      expect(expectedResult.type).toEqual(mockSubmission.type)
       expect(expectedResult.content).toEqual(mockSubmission.content)
       expect(expectedResult.submitterIp).toEqual(mockSubmission.submitterIp)
-      expect(expectedResult.originalSubmissionId).toEqual(mockSubmission.originalSubmissionId)
       expect(expectedResult.submittedBy).toEqual(mockSubmission.submittedBy)
     })
 

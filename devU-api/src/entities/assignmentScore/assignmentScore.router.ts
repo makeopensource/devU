@@ -3,11 +3,10 @@ import express from 'express'
 
 //Middleware
 import validator from './assignmentScore.validator'
-import { asInt } from '../middleware/validator/generic.validator'
+import { asInt } from '../../middleware/validator/generic.validator'
 
 //Controller
 import AssignmentScoreController from './assignmentScore.controller'
-import Assignment from '../assignment/assignment.model'
 
 const Router = express.Router()
 
@@ -15,7 +14,7 @@ const Router = express.Router()
  * @swagger
  * /assignment-score/{assigment-id}:
  *  get:
- *    summary: Retrieve a list of assigmnet scores belonging to an assignment by assignment id
+ *    summary: Retrieve a list of assignment scores belonging to an assignment by assignment id
  *    tags:
  *      - AssignmentScore
  *    responses:

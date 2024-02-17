@@ -3,7 +3,7 @@ import submissionScoreService from './submissionScore.service'
 
 import SubmissionScoreService from './submissionScore.service' //why is this twice im not even gonna touch it lmao 
 
-import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
+import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 import { serialize } from './submissionScore.serializer'
 

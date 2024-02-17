@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import SubmissionService from '../submission/submission.service'
 
-import { GenericResponse, NotFound } from '../utils/apiResponse.utils'
+import { GenericResponse, NotFound } from '../../utils/apiResponse.utils'
 
 import { serialize } from '../submission/submission.serializer'
 

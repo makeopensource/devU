@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import CourseService from './course.service'
 
-import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
+import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 import { serialize } from './course.serializer'
 

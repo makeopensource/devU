@@ -1,9 +1,9 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import { ContainerAutoGrader } from '../../devu-shared-modules'
+import { ContainerAutoGrader } from 'devu-shared-modules'
 
 import ContainerAutoGraderModel from './containerAutoGrader.model'
-import { BucketNames, minioClient } from '../fileStorage'
+import { BucketNames, minioClient } from '../../fileStorage'
 
 const connect = () => getRepository(ContainerAutoGraderModel)
 

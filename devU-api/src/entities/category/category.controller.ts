@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import CategoryService from './category.service'
 
-import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
+import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 import { serialize } from './category.serializer'
 

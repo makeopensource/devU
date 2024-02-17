@@ -3,7 +3,7 @@ import express from 'express'
 
 // Middleware
 import validator from './userCourse.validator'
-import { asInt } from '../middleware/validator/generic.validator'
+import { asInt } from '../../middleware/validator/generic.validator'
 
 // Controller
 import UserCourseController from './userCourse.controller'

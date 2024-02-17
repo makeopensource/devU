@@ -1,6 +1,6 @@
 import { UpdateResult } from "typeorm"
 
-import { ContainerAutoGrader } from '../../../devu-shared-modules'
+import { ContainerAutoGrader } from 'devu-shared-modules'
 
 import controller from "../containerAutoGrader.controller"
 
@@ -10,8 +10,8 @@ import ContainerAutoGraderService from "../containerAutoGrader.service"
 
 import { serialize } from "../containerAutoGrader.serializer"
 
-import Testing from "../../utils/testing.utils"
-import { GenericResponse, NotFound, Updated } from "../../utils/apiResponse.utils"
+import Testing from "../../../utils/testing.utils"
+import { GenericResponse, NotFound, Updated } from "../../../utils/apiResponse.utils"
 
 
 // Testing Globals

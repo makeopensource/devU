@@ -10,8 +10,8 @@ import CourseService from '../course.service'
 
 import { serialize } from '../course.serializer'
 
-import Testing from '../../utils/testing.utils'
-import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
+import Testing from '../../../utils/testing.utils'
+import { GenericResponse, NotFound, Updated } from '../../../utils/apiResponse.utils'
 
 // Testing Globals
 let req: any

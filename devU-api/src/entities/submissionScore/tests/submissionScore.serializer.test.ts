@@ -2,7 +2,7 @@ import { serialize } from '../submissionScore.serializer'
 
 import SubmissionScoreModel from '../submissionScore.model'
 
-import Testing from '../../utils/testing.utils'
+import Testing from '../../../utils/testing.utils'
 
 let mockSubmissionScore: SubmissionScoreModel
 

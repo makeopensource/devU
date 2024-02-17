@@ -1,21 +1,20 @@
-import { serialize } from '../../category/category.serializer'
+import { serialize } from '../categoryScore.serializer'
 
-import CategoryModel from '../../category/category.model'
+import CategoryScoreModel from '../../categoryScore/categoryScore.model'
 
-import Testing from '../../utils/testing.utils'
+import Testing from '../../../utils/testing.utils'
 
-let mockCategory: CategoryModel
+let mockCategory: CategoryScoreModel
 
 describe('Category Serializer', () => {
   beforeEach(() => {
-  mockCategory = Testing.generateTypeOrm<CategoryModel>(CategoryModel)
+  mockCategory = Testing.generateTypeOrm<CategoryScoreModel>(CategoryScoreModel)
   
   mockCategory.id = 10
   mockCategory.courseId = 123
   mockCategory.userId = 50
-  mockCategory.category = 1
+  mockCategory.categoryId = 1
   mockCategory.score = 100
-  mockCategory.letterGrade = "A"
   })
 
   describe('Serializing category', () => {
@@ -26,9 +25,8 @@ describe('Category Serializer', () => {
       expect(expectedResult.id).toEqual(mockCategory.id)
       expect(expectedResult.courseId).toEqual(mockCategory.courseId)
       expect(expectedResult.userId).toEqual(mockCategory.userId)
-      expect(expectedResult.category).toEqual(mockCategory.category)
+      expect(expectedResult.categoryId).toEqual(mockCategory.categoryId)
       expect(expectedResult.score).toEqual(mockCategory.score)
-      expect(expectedResult.letterGrade).toEqual(mockCategory.letterGrade)
     })
   })
 })

@@ -1,6 +1,6 @@
 import { UpdateResult } from 'typeorm'
 
-import { Assignment } from 'devU-api/devu-shared-modules'
+import { Assignment } from 'devu-shared-modules'
 
 import controller from '../assignment.controller'
 

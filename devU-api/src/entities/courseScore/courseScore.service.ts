@@ -11,11 +11,11 @@ export async function create(courseScore: CourseScore) {
 }
 
 export async function update(courseScore: CourseScore) {
-  const { id, courseId, score, letterGrade } = courseScore
+  const { id, courseId, userId, score } = courseScore
 
   if (!id) throw new Error('Missing Id')
 
-  return await connect().update(id, { courseId, score, letterGrade })
+  return await connect().update(id, { courseId, userId, score })
 }
 
 export async function _delete(id: number) {

@@ -3,7 +3,7 @@ import express from 'express'
 
 // Middleware
 import validator from './nonContainerAutoGrader.validator'
-import { asInt } from '../middleware/validator/generic.validator'
+import { asInt } from '../../middleware/validator/generic.validator'
 
 // Controller
 import nonContainerQuestions from './nonContainerAutoGrader.controller'
@@ -24,7 +24,7 @@ Router.get('/', nonContainerQuestions.get)
  *   get:
  *     summary: Retrieve a list of all nonContainerAutoGrader with the assignment ID
  */
-Router.get('/byAssignmentId/:assignmentId', nonContainerQuestions.getByAssignmentId)
+Router.get('/byAssignmentId/:assignmentId', asInt("assignmentId"), nonContainerQuestions.getByAssignmentId)
 
 /**
  * @swagger

@@ -13,7 +13,7 @@ import SubmissionModel from '../submission/submission.model'
 import AssignmentProblemModel from '../assignmentProblem/assignmentProblem.model'
 
 @Entity('submission_problem_scores')
-export default class SubmissionProblemScore {
+export default class SubmissionProblemScoreModel {
   /**
    * @swagger
    * tags:

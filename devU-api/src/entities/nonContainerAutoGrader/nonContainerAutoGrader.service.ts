@@ -1,6 +1,6 @@
 import { getRepository, IsNull } from 'typeorm'
 import NonContainerAutoGraderModel from './nonContainerAutoGrader.model'
-import { NonContainerAutoGrader } from '../../devu-shared-modules'
+import { NonContainerAutoGrader } from 'devu-shared-modules'
 
 const connect = () => getRepository(NonContainerAutoGraderModel)
 

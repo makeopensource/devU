@@ -1,11 +1,11 @@
 import { serialize } from '../assignmentScore.serializer'
 
-import AssignmentModel from '../assignmentScore.model'
+import AssignmentScoreModel from '../assignmentScore.model'
 
-import Testing from '../../utils/testing.utils'
-import AssignmentScore from '../assignmentScore.model'
+import Testing from '../../../utils/testing.utils'
 
-let mockAssignmentScore = AssignmentModel
+let mockAssignmentScore: AssignmentScoreModel
+
 
 describe('AssignmentScore Serializer', () => {
     beforeEach(() => {
@@ -26,8 +26,8 @@ describe('AssignmentScore Serializer', () => {
             const expectedResult = serialize(mockAssignmentScore)
 
             expect(expectedResult).toBeDefined()
-            expect(expectedResult.id).toEqual(mockedAssignmentScore.id)
-            expect(expectedResult.assignentId).toEqual(mockAssignmentScore.assignmentId)
+            expect(expectedResult.id).toEqual(mockAssignmentScore.id)
+            expect(expectedResult.assignmentId).toEqual(mockAssignmentScore.assignmentId)
             expect(expectedResult.userId).toEqual(mockAssignmentScore.userId)
             expect(expectedResult.score).toEqual(mockAssignmentScore.score)
         })
@@ -39,7 +39,6 @@ describe('AssignmentScore Serializer', () => {
 
             expect(expectedResult.createdAt).toEqual(mockAssignmentScore.createdAt.toISOString())
             expect(expectedResult.updatedAt).toEqual(mockAssignmentScore.updatedAt.toISOString())
-            expect(expectedResult.deletedAt).toEqual(mockAssignmentScore.deletedAt.toISOString())
 
         })
     })

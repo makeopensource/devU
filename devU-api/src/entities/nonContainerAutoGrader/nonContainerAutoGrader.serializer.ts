@@ -1,6 +1,6 @@
 import NonContainerAutoGraderModel from './nonContainerAutoGrader.model'
 
-import { NonContainerAutoGrader } from '../../devu-shared-modules'
+import { NonContainerAutoGrader } from 'devu-shared-modules'
 
 export function serialize(nonContainerAutoGrader: NonContainerAutoGraderModel): NonContainerAutoGrader {
   return {

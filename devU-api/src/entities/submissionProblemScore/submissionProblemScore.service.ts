@@ -1,16 +1,16 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import { SubmissionProblemScore as SubmissionProblemScoreModel } from 'devu-shared-modules'
+import { SubmissionProblemScore } from 'devu-shared-modules'
 
-import SubmissionProblemScore from './submissionProblemScore.model'
+import SubmissionProblemScoreModel from './submissionProblemScore.model'
 
-const connect = () => getRepository(SubmissionProblemScore)
+const connect = () => getRepository(SubmissionProblemScoreModel)
 
-export async function create(submissionProblemScore: SubmissionProblemScoreModel) {
+export async function create(submissionProblemScore: SubmissionProblemScore) {
   return await connect().save(submissionProblemScore)
 }
 
-export async function update(submissionProblemScore: SubmissionProblemScoreModel) {
+export async function update(submissionProblemScore: SubmissionProblemScore) {
   const { id, submissionId, assignmentProblemId, score, feedback, releasedAt } = submissionProblemScore
 
   if (!id) throw new Error('Missing Id')

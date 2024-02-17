@@ -13,7 +13,7 @@ import AssignmentModel from '../assignment/assignment.model'
 import UserModel from '../user/user.model'
 
 @Entity('assignment_scores')
-export default class AssignmentScore {
+export default class AssignmentScoreModel {
   /**
    * @swagger
    * tags:
@@ -46,7 +46,7 @@ export default class AssignmentScore {
     @ManyToOne( () => UserModel)
     userId: number
 
-    @Column({ name: 'score'})
+    @Column({ name: 'score', nullable: true})
     score: number
 
     @CreateDateColumn({ name: 'created_at' })

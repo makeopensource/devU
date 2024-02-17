@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 import ContainerAutoGraderService from './containerAutoGrader.service'
 import { serialize } from './containerAutoGrader.serializer'
 
-import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
+import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {

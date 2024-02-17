@@ -2,7 +2,7 @@ import { serialize } from '../category.serializer'
 
 import CategoryModel from '../category.model'
 
-import Testing from '../../utils/testing.utils'
+import Testing from '../../../utils/testing.utils'
 
 let mockCategory: CategoryModel
 
@@ -12,6 +12,7 @@ describe('Category Serializer', () => {
 
     mockCategory.id = 42
     mockCategory.name = 'Project'
+    mockCategory.courseId = 55
     mockCategory.createdAt = new Date()
     mockCategory.updatedAt = new Date()
   })
@@ -22,6 +23,7 @@ describe('Category Serializer', () => {
 
       expect(expectedResult).toBeDefined()
       expect(expectedResult.id).toEqual(mockCategory.id)
+      expect(expectedResult.courseId).toEqual(mockCategory.courseId)
       expect(expectedResult.name).toEqual(mockCategory.name)
     })
 

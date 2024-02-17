@@ -5,9 +5,9 @@ import CategoryScoreModel from './categoryScore.model'
 export function serialize(categoryScore: CategoryScoreModel): CategoryScore {
     return {
         id: categoryScore.id,
+        userId: categoryScore.userId,
         courseId: categoryScore.courseId,
-        category: categoryScore.category,
-        score: categoryScore.score,
-        letterGrade: categoryScore.letterGrade,
+        categoryId: categoryScore.categoryId,
+        score: categoryScore.score
     }
 }

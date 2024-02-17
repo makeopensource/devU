@@ -2,7 +2,7 @@ import { serialize } from '../assignment.serializer'
 
 import AssignmentModel from '../assignment.model'
 
-import Testing from '../../utils/testing.utils'
+import Testing from '../../../utils/testing.utils'
 
 let mockAssignment: AssignmentModel
 
@@ -16,7 +16,6 @@ describe('Assignment Serializer', () => {
     mockAssignment.startDate = new Date()
     mockAssignment.dueDate = new Date()
     mockAssignment.endDate = new Date()
-    mockAssignment.gradingType = 'code'
     mockAssignment.categoryName = 'Super Awesome Category Name'
     mockAssignment.description = 'Woww! Such a description'
     mockAssignment.maxFileSize = 1
@@ -35,7 +34,6 @@ describe('Assignment Serializer', () => {
       expect(expectedResult.id).toEqual(mockAssignment.id)
       expect(expectedResult.courseId).toEqual(mockAssignment.courseId)
       expect(expectedResult.name).toEqual(mockAssignment.name)
-      expect(expectedResult.gradingType).toEqual(mockAssignment.gradingType)
       expect(expectedResult.categoryName).toEqual(mockAssignment.categoryName)
       expect(expectedResult.description).toEqual(mockAssignment.description)
       expect(expectedResult.maxFileSize).toEqual(mockAssignment.maxFileSize)

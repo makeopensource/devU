@@ -1,6 +1,6 @@
 import { UpdateResult } from 'typeorm'
 
-import { NonContainerAutoGrader } from '../../../devu-shared-modules'
+import { NonContainerAutoGrader } from 'devu-shared-modules'
 
 import controller from '../nonContainerAutoGrader.controller'
 
@@ -10,8 +10,8 @@ import NonContainerAutoGraderService from '../nonContainerAutoGrader.service'
 
 import { serialize } from '../nonContainerAutoGrader.serializer'
 
-import Testing from '../../utils/testing.utils'
-import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
+import Testing from '../../../utils/testing.utils'
+import { GenericResponse, NotFound, Updated } from '../../../utils/apiResponse.utils'
 
 // Testing Globals
 let req: any
@@ -72,7 +72,7 @@ describe('NonContainerAutoGraderController', () => {
   describe('GET - /nonContainerAutoGrader/byAssignmentID/:assignmentId', () => {
     describe('200 - Ok', () => {
       beforeEach(async () => {
-        NonContainerAutoGraderService.list = jest.fn().mockImplementation(() => Promise.resolve(mockedNonContainerAutoGraders))
+        NonContainerAutoGraderService.listByAssignmentId = jest.fn().mockImplementation(() => Promise.resolve(mockedNonContainerAutoGraders))
         await controller.getByAssignmentId(req, res, next) // what we're testing
       })
 
@@ -80,19 +80,16 @@ describe('NonContainerAutoGraderController', () => {
       test('Status code is 200', () => expect(res.status).toBeCalledWith(200))
     })
 
-    describe('400 - Bad request', () => {
-      test('Next called with expected error', async () => {
-        NonContainerAutoGraderService.list = jest.fn().mockImplementation(() => Promise.reject(expectedError))
-
-        try {
+    describe('404 - Not Found', () => {
+      beforeEach(async () => {
+          NonContainerAutoGraderService.listByAssignmentId = jest.fn().mockImplementation(() => Promise.resolve())
           await controller.getByAssignmentId(req, res, next)
-
-          fail('Expected test to throw')
-        } catch {
-          const assignmentIdError = Error('Missing AssignmentId')
-          expect(next).toBeCalledWith(assignmentIdError)
-        }
       })
+
+      test('Status code is 404', () => expect(res.status).toBeCalledWith(404))
+      test('Returns Not found message', () => expect(res.json).toBeCalledWith(NotFound))
+      test('Next is not called', () => expect(next).toHaveBeenCalledTimes(0))
+
     })
   })
 

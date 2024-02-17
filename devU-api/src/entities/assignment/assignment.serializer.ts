@@ -10,7 +10,6 @@ export function serialize(assignment: AssignmentModel): Assignment {
     startDate: assignment.startDate.toISOString(),
     dueDate: assignment.dueDate.toISOString(),
     endDate: assignment.endDate.toISOString(),
-    gradingType: assignment.gradingType,
     categoryName: assignment.categoryName,
     description: assignment.description,
     maxFileSize: assignment.maxFileSize,

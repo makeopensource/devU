@@ -1,6 +1,6 @@
 import { UpdateResult } from 'typeorm'
 
-import { User } from 'devU-api/devu-shared-modules'
+import { User } from 'devu-shared-modules'
 
 import controller from '../user.controller'
 

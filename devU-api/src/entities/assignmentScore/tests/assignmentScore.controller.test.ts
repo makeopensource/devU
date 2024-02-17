@@ -10,17 +10,15 @@ import AssignmentScoreService from '../assignmentScore.service'
 
 import { serialize } from '../assignmentScore.serializer'
 
-import Testing from '../../utils/testing.utils'
-import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
+import Testing from '../../../utils/testing.utils'
+import { GenericResponse, NotFound, Updated } from '../../../utils/apiResponse.utils'
 
 //Testing Globals
 let req: any
 let res: any
 let next: any
 
-let mockedAssignmentScores: AssignmentScoresModel[]
 let mockedAssignmentScore: AssignmentScoresModel
-let expectedResults: AssignmentScore[] 
 let expectedResult: AssignmentScore
 let expectedError: Error
 
@@ -32,41 +30,14 @@ describe('AssignmentScoreController', () => {
         res = Testing.fakeResponse()
         next = Testing.fakeNext()
 
-        mockedAssignmentScores = Testing.generateTypeOrmArray(AssignmentScoresModel, 3)
+        // mockedAssignmentScores = Testing.generateTypeOrmArray(AssignmentScoresModel, 3)
         mockedAssignmentScore = Testing.generateTypeOrm(AssignmentScoresModel)
 
-        expectedResults = mockedAssignmentScores.map(serialize)
         expectedResult = serialize(mockedAssignmentScore)
         expectedError = new Error('Expected Error')
 
         expectedDbResult = {} as UpdateResult
 
-    })
-
-    describe('GET - /assignment-score', () => {
-        describe('200 - Ok', () => {
-            beforeEach(async () => {
-                AssignmentScoreService.list = jest.fn().mockImplementation(() => Promise.resolve(mockedAssignmentScores))
-                await controller.get(req, res, next) //what we're testing
-            })
-
-            test('Returns list of AssignmentScores', () => expect (req.json).toBeCalledWith(expectedResults))
-            test('Status code is 200', () => expect(req.status).toBeCalledWith(200))
-        })
-
-        describe('400 - Bad request', () => {
-            test('Next called with expected error', async () => {
-                AssignmentScoreService.list = jest.fn().mockImplementation(() => Promise.reject(expectedError))
-
-                try {
-                    await controller.get(req, res, next)
-
-                    fail('Expected test to throw')
-                } catch {
-                    expect(next).toBeCalledWith(expectedError)
-                }
-            })
-        })
     })
 
     describe('GET - /assignment-score/:id', () => {

@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 
 import validator from './containerAutoGrader.validator';
-import { asInt } from '../middleware/validator/generic.validator';
+import { asInt } from '../../middleware/validator/generic.validator';
 
 import ContainerAutoGraderController from './containerAutoGrader.controller';
 

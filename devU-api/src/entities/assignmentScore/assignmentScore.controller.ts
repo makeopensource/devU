@@ -2,13 +2,14 @@ import { Request, Response, NextFunction } from 'express'
 
 import AssignmentScoreService from './assignmentScore.service'
 
-import { GenericResponse, NotFound, Updated } from '../utils/apiResponse.utils'
+import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 import { serialize } from './assignmentScore.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
     try {
-        const assignmentScores = await AssignmentScoreService.list()
+        const id = parseInt(req.params.id)
+        const assignmentScores = await AssignmentScoreService.list(id)
         const response = assignmentScores.map(serialize)
 
         res.status(200).json(response)
@@ -39,7 +40,7 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
         res.status(201).json(response)
     } catch (err) {
-        next(err)
+        res.status(400).json(new GenericResponse(err.message))
     }
 }
 

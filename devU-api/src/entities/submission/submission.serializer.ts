@@ -8,11 +8,9 @@ export function serialize(submission: SubmissionModel): Submission {
     courseId: submission.courseId,
     assignmentId: submission.assignmentId,
     userId: submission.userId,
-    type: submission.type,
     content: submission.content,
     submitterIp: submission.submitterIp,
     submittedBy: submission.submittedBy,
-    // originalSubmissionId: submission.originalSubmissionId,
     createdAt: submission.createdAt.toISOString(),
     updatedAt: submission.updatedAt.toISOString(),
   }

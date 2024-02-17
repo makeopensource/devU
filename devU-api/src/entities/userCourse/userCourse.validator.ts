@@ -2,7 +2,7 @@ import { check } from 'express-validator'
 
 import { userCourseLevels } from 'devu-shared-modules'
 
-import validate from '../middleware/validator/generic.validator'
+import validate from '../../middleware/validator/generic.validator'
 
 const userId = check('userId').isNumeric()
 const courseId = check('courseId').isNumeric()

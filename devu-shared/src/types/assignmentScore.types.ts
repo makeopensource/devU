@@ -1,8 +1,7 @@
-export type CategoryScore = {
+export type AssignmentScore = {
     id?: number
+    assignmentId: number
     userId: number
-    courseId: number
-    categoryId: number
     score?: number
     createdAt?: string
     updatedAt?: string

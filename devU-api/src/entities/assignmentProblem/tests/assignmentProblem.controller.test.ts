@@ -10,8 +10,8 @@ import AssignmentProblemService from '../assignmentProblem.service'
 
 import { serialize } from '../assignmentProblem.serializer'
 
-import Testing from '../../utils/testing.utils'
-import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
+import Testing from '../../../utils/testing.utils'
+import { GenericResponse, NotFound, Updated } from '../../../utils/apiResponse.utils'
 
 // Testing Globals
 let req: any
@@ -32,9 +32,7 @@ describe('AssignmentProblemController', () => {
     res = Testing.fakeResponse()
     next = Testing.fakeNext()
 
-    // @ts-ignore - Not sure why this doesn't work without suppressing
     mockedAssignmentProblems = Testing.generateTypeOrmArray(AssignmentProblemsModel, 3)
-    // @ts-ignore
     mockedAssignmentProblem = Testing.generateTypeOrm(AssignmentProblemsModel)
 
     expectedResults = mockedAssignmentProblems.map(serialize)

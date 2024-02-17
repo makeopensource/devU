@@ -1,4 +1,4 @@
-import { NonContainerAutoGrader } from '../../devu-shared-modules'
+import { NonContainerAutoGrader } from 'devu-shared-modules'
 
 export async function checkAnswer(studentAnswer: string, nonContainerAutoGrader: NonContainerAutoGrader) {
   if (studentAnswer === nonContainerAutoGrader.correctString) {

@@ -12,7 +12,7 @@ import {
 import SubmissionModel from '../submission/submission.model'
 
 @Entity('submission_scores')
-export default class SubmissionScore {
+export default class SubmissionScoreModel {
   /**
    * @swagger
    * tags:

@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm'
 
 import CourseModel from '../course/course.model'
+import UserModel from '../user/user.model'
 
 @Entity('courseScore')
 export default class CourseScoreModel {
@@ -23,19 +24,21 @@ export default class CourseScoreModel {
      *          type: string
      */
     @PrimaryGeneratedColumn()
-    id: Number
+    id: number
 
     @Column({ name: 'course_id' })
     @JoinColumn({ name: 'course_id' })
     @ManyToOne(() => CourseModel)
     courseId: number
 
+
+    @Column({ name: 'user_id' })
+    @JoinColumn({ name: 'user_id' })
+    @ManyToOne(() => UserModel)
+    userId: number
+
     @Column({ name: 'score' })
-    score: Number
-
-    @Column({ name: 'letterGrade' })
-    letterGrade: string
-
+    score: number
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date

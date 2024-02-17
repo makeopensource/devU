@@ -2,7 +2,7 @@ import { serialize } from '../nonContainerAutoGrader.serializer'
 
 import NonContainerAutoGrader from '../nonContainerAutoGrader.model'
 
-import Testing from '../../utils/testing.utils'
+import Testing from '../../../utils/testing.utils'
 
 let mockQuestion: NonContainerAutoGrader
 
