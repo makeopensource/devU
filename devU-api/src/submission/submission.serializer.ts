@@ -12,7 +12,7 @@ export function serialize(submission: SubmissionModel): Submission {
     content: submission.content,
     submitterIp: submission.submitterIp,
     submittedBy: submission.submittedBy,
-    originalSubmissionId: submission.originalSubmissionId,
+    // originalSubmissionId: submission.originalSubmissionId,
     createdAt: submission.createdAt.toISOString(),
     updatedAt: submission.updatedAt.toISOString(),
   }

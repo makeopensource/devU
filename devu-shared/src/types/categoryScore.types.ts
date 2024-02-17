@@ -7,3 +7,26 @@ export type CategoryScore = {
     createdAt?: string
     updatedAt?: string
 }
+
+export const letterGrades = [
+    'A+',
+    'A',
+    'A-',
+    'B+',
+    'B',
+    'B-',
+    'C+',
+    'C',
+    'C-',
+    'D+',
+    'D',
+    'D-',
+    'F',
+    '>F<',
+    'FX',
+    'I',
+    'S',
+    'U',
+    'W',
+] as const
+export type LetterGrade = typeof letterGrades[number]
