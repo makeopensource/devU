@@ -48,7 +48,7 @@ const UserCoursesListPage = () => {
   const fetchData = async () => {
     try {
       // The filter isn't implemented by the API yet
-      const userCourses = await RequestService.get<UserCourse[]>(`/api/user-courses?filterBy=${filter}`)
+      //const userCourses = await RequestService.get<UserCourse[]>(`/api/user-courses?filterBy=${filter}`)
       const courseRequests = userCourses.map((u) => RequestService.get<Course>(`/api/courses/${u.courseId}`))
       const courses = await Promise.all(courseRequests)
 
@@ -112,7 +112,7 @@ const UserCoursesListPage = () => {
       ))}
       {allCourses.map(course => (
           <div>
-            <Link className={styles.courseName} to={`/courses/${course.id}`}>{course.name}</Link>
+            <Link className={styles.courseName} to={{ pathname:`/courses/${course.id}`,state:{course} }}>{course.name}</Link>
           </div>
         ))}
     </PageWrapper>
