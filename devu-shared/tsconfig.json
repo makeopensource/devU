@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "lib": ["es5", "es6"],
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "strict": true, // Force some below options to be true (we know it's redundant)
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": false, // Fixes typeorm models issues with strict
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
+    "newLine": "lf",
+    "typeRoots": ["@types", "./node_modules/@types"],
+    "resolveJsonModule": true,
+    "declaration": true // puts declarations into build for our other projects to use
+  },
+  "exclude": ["src/**/*.test.ts", "jest.config.ts"]
+}

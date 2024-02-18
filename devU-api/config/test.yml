@@ -1,0 +1,2 @@
+# If you need any env stuff for tests, place here.
+# This file exists solely to prevent jest & config from throwing console errors

@@ -1,0 +1,79 @@
+{
+  "name": "devu-api",
+  "version": "1.0.0",
+  "description": "Auto-grading 4.0 API",
+  "scripts": {
+    "start": "ts-node-dev src/index.ts",
+    "update-shared": "npm update devu-shared-modules",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js  --config src/database.ts",
+    "test": "jest --passWithNoTests",
+    "clean": "rimraf build/*",
+    "lint": "tsc",
+    "build": "npm-run-all clean lint",
+    "format": "prettier --write \"./**/*.{js,ts,json,md}\"",
+    "pre-commit": "lint-staged",
+    "generate-config": "docker run --pull always -v $(pwd)/config:/config --user $(id -u):$(id -g) --rm ubautograding/devtools /generateConfig.sh config/default.yml",
+    "populate-db": "ts-node-dev ./scripts/populate-db.ts"
+  },
+  "lint-staged": {
+    "./**/*.{js,ts,json,md}": [
+      "prettier --write"
+    ]
+  },
+  "imports": {
+    "devu-shared-modules": "file:/devu-shared-modules"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "devDependencies": {
+    "@types/config": "^0.0.38",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.12",
+    "@types/helmet": "^4.0.0",
+    "@types/jest": "^26.0.24",
+    "@types/jsonwebtoken": "^8.5.1",
+    "@types/jws": "^3.2.3",
+    "@types/minio": "^7.0.8",
+    "@types/morgan": "^1.9.2",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^15.12.2",
+    "@types/passport": "^1.0.6",
+    "@types/passport-strategy": "^0.2.35",
+    "@types/swagger-jsdoc": "^6.0.0",
+    "@types/swagger-ui-express": "^4.1.2",
+    "husky": "^6.0.0",
+    "jest": "^27.0.4",
+    "lint-staged": "^11.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.2",
+    "ts-node": "^10.0.0",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "colors": "^1.4.0",
+    "config": "^3.3.6",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "devu-shared-modules": "./devu-shared-modules",
+    "express": "^4.17.1",
+    "express-validator": "^6.14.2",
+    "helmet": "^4.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "minio": "^7.0.18",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "passport": "^0.6.0",
+    "passport-saml": "^3.2.2",
+    "pg": "^8.4.0",
+    "reflect-metadata": "^0.1.10",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6",
+    "typeorm": "0.2.32"
+  }
+}

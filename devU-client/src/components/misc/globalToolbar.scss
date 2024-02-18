@@ -1,0 +1,106 @@
+@import 'variables';
+
+$bar-height: 50px;
+$sidebar-width: 260px;
+$hover-effect: 0.7;
+$font-size: 16px;
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 1.5rem;
+}
+
+.link {
+  @extend .flex;
+
+  text-decoration: none;
+
+  color: $text-color;
+  font-size: $font-size;
+
+  height: $bar-height;
+
+  &:hover {
+    opacity: $hover-effect;
+  }
+}
+
+.header {
+  @extend .link;
+
+  font-size: 2em;
+
+  font-weight: bold;
+}
+
+.bar {
+  height: $bar-height;
+
+  @extend .flex;
+  justify-content: space-between;
+}
+
+.controls,
+.sidebar,
+.menu {
+  @extend .flex;
+}
+
+.hamburger {
+  visibility: hidden;
+}
+
+// Controls turning the menu options into a sidebar
+// As well as whether or not that sidebar is being shown
+@media (max-width: $medium) {
+  .flex {
+    gap: 1rem;
+  }
+
+  .menu {
+    flex-direction: column;
+
+    position: fixed;
+    height: 100%;
+    width: $sidebar-width;
+
+    background: $primary;
+
+    top: 0;
+    left: -$sidebar-width;
+
+    z-index: 1;
+
+    transition: 0.2s;
+  }
+
+  .hamburger {
+    visibility: visible;
+
+    background: transparent;
+    border: none;
+
+    color: $text-color;
+    font-size: $font-size;
+
+    &:hover {
+      cursor: pointer;
+      opacity: $hover-effect;
+    }
+  }
+
+  .sidebar:focus-within {
+    .menu {
+      left: 0;
+    }
+  }
+}
+
+@media (max-width: $extreme) {
+  .flex {
+    gap: 0.3rem;
+  }
+}

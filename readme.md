@@ -1,4 +1,4 @@
-# DevU all-in-one
+# DevU
 
 DevU is an automated software-grading platform being developed at the University at Buffalo. DevU aims to be incredibly
 extensible, allowing professors to add any functionality they desire without reaching a dead end. It will eventually
@@ -6,8 +6,8 @@ replace Autolab and other services.
 
 This repo contains everything necessary to run the entirety of DevU in Docker:
 
-* The [DevU back-end API](https://github.com/makeopensource/devU-api)
-* The build process for the [DevU front-end web client](https://github.com/makeopensource/devU-client)
+* The DevU back-end API
+* The build process for the DevU front-end web client
 * An Nginx web server to host the front-end files
 * A PostgreSQL database
 * A configuration builder for the back-end API
@@ -43,10 +43,10 @@ mkdir demo
 cd demo
 ```
 
-Clone the repo and submodules.
+Clone the repo.
 
 ```bash
-git clone --recurse-submodules git@github.com:makeopensource/devU.git
+git clone git@github.com:makeopensource/devU.git
 ```
 
 Enter the project repo.
@@ -74,8 +74,18 @@ re-running `docker compose up --build` a few times.
 ```
 Error during migration run:
 Error: Configuration property "auth.jwt.activeKeyId" is not defined
-    at Config.get (/app/node_modules/config/lib/config.js:182:11)
-    ...
+at Config.get (/app/node_modules/config/lib/config### Why is the devU-client/devU-api repo empty?
+```
+
+If this is the case, you would get an error similar to this:
+
+```
+[+] Building 0.0s (0/0)
+unable to prepare context: path "<repo>/<filename>" not found
+    We are using `submodules` for this project, which means that both `devU-client/` and `devU-api/` are links to other repos. Make sure you follow the directions for cloning carefully: use the `--recurse-submodules` option when cloning.
+
+    **If you already cloned the project**, run the command `git submodule update --init --recursive`, which should pull the appropriate submodules for you.
+    .js:182:11)
 ```
 
 It usually works within 5 runs. I haven't been able to narrow down why this happens. Further investigation is welcome!
@@ -90,18 +100,4 @@ query: SELECT * FROM "migrations" "migrations" ORDER BY "id" DESC
 8 migrations are new migrations that needs to be executed.
 query: START TRANSACTION
 query: CREATE TABLE "users" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP, "username" character varying(32) NOT NULL, "name" character varying(128) NOT NULL, "email" character varying(128) NOT NULL, CONSTRAINT "users_primary_key_constraint" PRIMARY KEY ("id"))
-...
 ```
-
-### Why is the devU-client/devU-api repo is empty?
-
-If this is the case, you would get an error similar to this:
-
-```
-[+] Building 0.0s (0/0)
-unable to prepare context: path "<repo>/<filename>" not found 
-```
-
-We are using `submodules` for this project, which means that both `devU-client/` and `devU-api/` are links to other repos. Make sure you follow the directions for cloning carefully: use the `--recurse-submodules` option when cloning.
-
-**If you already cloned the project**, run the command `git submodule update --init --recursive`, which should pull the appropriate submodules for you.

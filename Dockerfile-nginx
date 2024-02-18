@@ -1,3 +1,0 @@
-FROM nginx:1.23.3
-
-#COPY dist/local /usr/share/nginx/html

@@ -1,0 +1,110 @@
+@import 'variables';
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  outline: none;
+
+  &:focus-within {
+    .menu {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}
+
+.button {
+  border: none;
+
+  font-size: 16px;
+  background: transparent;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.trigger {
+  @extend .button;
+
+  color: $text-color;
+
+  height: 50px;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.name {
+  cursor: pointer;
+}
+
+.userIcon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.caret {
+  margin-left: 5px;
+}
+
+.menu {
+  width: 100%;
+
+  position: absolute;
+  top: 50px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+
+  box-shadow: $box-shadow;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: opacity 0.2s ease-in-out;
+
+  z-index: 1;
+}
+
+.option {
+  @extend .button;
+
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+
+  background-color: $primary;
+  color: $text-color;
+
+  height: 50px;
+  text-align: left;
+
+  text-decoration: none;
+
+  &:hover {
+    background: $primary-darker;
+  }
+}
+
+@media (max-width: $small) {
+  .name {
+    display: none;
+  }
+
+  .menu {
+    width: 120px !important;
+    right: -10px;
+  }
+}
+
+@media (min-width: $small) {
+  .userIcon {
+    display: none;
+  }
+}

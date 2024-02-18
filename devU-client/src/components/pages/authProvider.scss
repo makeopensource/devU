@@ -1,0 +1,67 @@
+@import 'variables';
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+
+  background: $background;
+}
+
+.card {
+  padding: 20px;
+  box-shadow: $box-shadow;
+  background: $primary;
+}
+
+.header {
+  margin-top: 0;
+}
+
+.providerList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.providerButton {
+  width: 100%;
+  padding: 10px;
+
+  &:hover:enabled {
+    cursor: pointer;
+  }
+}
+
+.submitForm {
+  max-width: 300px;
+}
+
+.description {
+  width: 300px;
+  font-weight: 300;
+}
+
+.fields {
+  margin-bottom: 30px;
+}
+
+.submit {
+  width: 100%;
+  background: $green;
+  color: white;
+
+  padding: 10px;
+  text-align: center;
+
+  border: none;
+  border-radius: $border-radius;
+
+  font-size: 18px;
+
+  &:hover:enabled {
+    cursor: pointer;
+  }
+}

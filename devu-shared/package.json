@@ -1,0 +1,41 @@
+{
+  "name": "devu-shared-modules",
+  "version": "1.0.0",
+  "description": "Autograding shared modules",
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "clean-directory": "rimraf devu-shared-modules index.ts index.d.ts types utils ./**/*.d.ts ./**/*.js ./**/*js.map",
+    "clean": "rimraf index.ts index.d.ts types utils",
+    "lint": "tsc",
+    "build": "npm-run-all clean lint",
+    "postinstall": "npm-run-all build",
+    "build-docker": "tsc --outDir ./devu-shared-modules",
+    "build-local": "tsc --outDir ../devU-client/devu-shared-modules && tsc --outDir ../devU-api/devu-shared-modules",
+    "format": "prettier --write \"./**/*.{js,ts,json,md}\"",
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "./**/*.{js,ts,json,md}": [
+      "prettier --write"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UBAutograding/devu-shared.git"
+  },
+  "dependencies": {
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.2",
+    "husky": "^6.0.0",
+    "jest": "^27.0.4",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.3.0",
+    "ts-jest": "^27.0.3",
+    "ts-node": "^10.0.0"
+  }
+}

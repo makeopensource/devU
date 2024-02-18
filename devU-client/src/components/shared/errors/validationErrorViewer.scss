@@ -1,0 +1,11 @@
+@import 'variables';
+
+.errorContainer {
+  background: $red;
+  border: 2px solid $red-lighter;
+
+  border-radius: $border-radius;
+
+  padding: 5px;
+  margin-bottom: 15px;
+}
