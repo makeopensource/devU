@@ -23,7 +23,7 @@ services:
     # Runs the API
     build:
       context: .
-      dockerfile: Dockerfile-api
+      dockerfile: api.Dockerfile
     environment:
       WAIT_HOSTS: db:5432
     depends_on:
@@ -36,7 +36,7 @@ services:
   client:
     # Builds the front end and exports static files to ./dist
     build:
-      dockerfile: ./Dockerfile-client
+      dockerfile: client.Dockerfile
       context: .
     volumes:
       - ./dist:/out
@@ -44,7 +44,7 @@ services:
     # Hosts the front end static files from ./dist/local thorough a web server
     build:
       context: .
-      dockerfile: Dockerfile-nginx
+      dockerfile: nginx.Dockerfile
     volumes:
       - ./dist/local:/usr/share/nginx/html
     ports:

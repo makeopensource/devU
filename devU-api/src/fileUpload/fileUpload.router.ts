@@ -47,11 +47,13 @@ Router.post('/', upload.fields(fields), validator, FileUploadController.post);
 
 /**
  * @swagger
- * does not have idea whether the path should have the bucketName or not
- * leave for discussion
  * /file-upload/{bucketName}:
  *   put:
  *     summary: Update a file in the bucket
+ *
+ *
+ * does not have idea whether the path should have the bucketName or not
+ * leave for discussion
  */
 Router.put('/:bucketName', upload.fields(fields), validator, FileUploadController.put);
 

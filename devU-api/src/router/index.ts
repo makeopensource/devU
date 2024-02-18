@@ -3,7 +3,6 @@ import swaggerUi from 'swagger-ui-express'
 
 import swagger from '../utils/swagger.utils'
 
-import codeAssignment from '../entities/codeAssignment/codeAssignment.router'
 import userCourse from '../entities/userCourse/userCourse.router'
 import assignments from '../entities/assignment/assignment.router'
 import courses from '../entities/course/course.router'
@@ -30,7 +29,6 @@ Router.use('/assignment-problems', isAuthorized, assignmentProblem)
 Router.use('/users', isAuthorized, users)
 Router.use('/courses', isAuthorized, courses)
 Router.use('/user-courses', isAuthorized, userCourse)
-Router.use('/code-assignments', isAuthorized, codeAssignment)
 Router.use('/submissions', isAuthorized, submissions)
 Router.use('/submission-scores', isAuthorized, submissionScore)
 Router.use('/nonContainerAutoGrader', isAuthorized, nonContainerAutoGraderRouter)

@@ -29,6 +29,9 @@ export async function retrieve(id: number) {
 export async function list(userId: number) {
   return await connect().find({ deletedAt: IsNull(), userId })
 }
+export async function listAll() {
+  return await connect().find({ deletedAt: IsNull() })
+}
 
 export default {
   create,
@@ -36,4 +39,5 @@ export default {
   update,
   _delete,
   list,
+  listAll,
 }

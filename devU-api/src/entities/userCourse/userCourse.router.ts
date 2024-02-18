@@ -12,6 +12,20 @@ const Router = express.Router()
 
 /**
  * @swagger
+ * /user-courses/:
+ *   get:
+ *     summary: List of all user-course.
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ */
+Router.get('/user', UserCourseController.getAll)
+
+
+/**
+ * @swagger
  * /user-courses/user/{user-id}:
  *   get:
  *     summary: Retrieve a list of all of a user's user-course associations.

@@ -7,7 +7,7 @@ const history = createBrowserHistory({ basename: config.rootPath })
 
 export function updateUrlParams(newParams: Record<string, string> = {}) {
   // Converts object to URL param format
-  // Noteably we're not encoding them here
+  // Notably, we're not encoding them here
   // Maybe we should ¯\_(ツ)_/¯
   const search = Object.keys(newParams)
     .map((key) => `${key}=${newParams[key]}`)

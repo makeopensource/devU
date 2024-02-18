@@ -5,6 +5,16 @@ import { serialize } from './userCourse.serializer'
 
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
+export async function getAll(req: Request, res: Response, next: NextFunction) {
+  try {
+
+    const userCourses = await UserCourseService.listAll()
+
+    res.status(200).json(userCourses.map(serialize))
+  } catch (err) {
+    next(err)
+  }
+}
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
@@ -69,4 +79,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, detail, post, put, _delete }
+export default { get, getAll, detail, post, put, _delete }
