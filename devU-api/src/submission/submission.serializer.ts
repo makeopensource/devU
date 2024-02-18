@@ -1,4 +1,4 @@
-import { Submission } from 'devu-shared-modules'
+import { Submission } from '../../devu-shared-modules'
 
 import SubmissionModel from './submission.model'
 
