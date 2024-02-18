@@ -3,25 +3,24 @@ import swaggerUi from 'swagger-ui-express'
 
 import swagger from '../utils/swagger.utils'
 
-import codeAssignment from '../codeAssignment/codeAssignment.router'
-import userCourse from '../userCourse/userCourse.router'
-import assignments from '../assignment/assignment.router'
-import courses from '../course/course.router'
+import userCourse from '../entities/userCourse/userCourse.router'
+import assignments from '../entities/assignment/assignment.router'
+import courses from '../entities/course/course.router'
 import login from '../auth/login/login.router'
 import logout from '../auth/logout/logout.router'
 import status from '../status/status.router'
-import submissions from '../submission/submission.router'
-import users from '../user/user.router'
-import submissionScore from '../submissionScore/submissionScore.router'
-import containerAutoGrader from '../containerAutoGrader/containerAutoGrader.router'
-import assignmentProblem from '../assignmentProblem/assignmentProblem.router'
-import submissionProblemScore from '../submissionProblemScore/submissionProblemScore.router'
+import submissions from '../entities/submission/submission.router'
+import users from '../entities/user/user.router'
+import submissionScore from '../entities/submissionScore/submissionScore.router'
+import containerAutoGrader from '../entities/containerAutoGrader/containerAutoGrader.router'
+import assignmentProblem from '../entities/assignmentProblem/assignmentProblem.router'
+import submissionProblemScore from '../entities/submissionProblemScore/submissionProblemScore.router'
 import fileUpload from '../fileUpload/fileUpload.router'
 
 import { isAuthorized } from '../auth/auth.middleware'
 
 import { NotFound } from '../utils/apiResponse.utils'
-import nonContainerAutoGraderRouter from "../nonContainerAutoGrader/nonContainerAutoGrader.router";
+import nonContainerAutoGraderRouter from "../entities/nonContainerAutoGrader/nonContainerAutoGrader.router";
 
 const Router = express.Router()
 
@@ -30,7 +29,6 @@ Router.use('/assignment-problems', isAuthorized, assignmentProblem)
 Router.use('/users', isAuthorized, users)
 Router.use('/courses', isAuthorized, courses)
 Router.use('/user-courses', isAuthorized, userCourse)
-Router.use('/code-assignments', isAuthorized, codeAssignment)
 Router.use('/submissions', isAuthorized, submissions)
 Router.use('/submission-scores', isAuthorized, submissionScore)
 Router.use('/nonContainerAutoGrader', isAuthorized, nonContainerAutoGraderRouter)

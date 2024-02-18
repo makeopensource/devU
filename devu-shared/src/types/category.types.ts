@@ -1,7 +1,7 @@
 export type Category = {
-    id: number;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt?: string;
+    id?: number
+    courseId: number
+    name: string
+    createdAt?: string
+    updatedAt?: string
 }

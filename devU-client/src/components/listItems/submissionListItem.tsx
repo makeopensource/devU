@@ -25,7 +25,7 @@ const SubmissionListItem = ({ submission, assignment, course }: Props) => (
     )}
     {assignment && (
       <div className={styles.assignment}>
-        {assignment.name} - {assignment.gradingType}
+        {assignment.name}
       </div>
     )}
     <div className={styles.meta}>

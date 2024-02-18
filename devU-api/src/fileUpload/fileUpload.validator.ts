@@ -9,7 +9,7 @@ import validate from '../middleware/validator/generic.validator'
   * This can be added in the future
  */
 
-const FileUploaded = check('files')
+const fileUploaded = check('files')
   .custom((_value, { req }) =>{
     if (!req.files) {
       throw new Error('No file uploaded')
@@ -17,7 +17,6 @@ const FileUploaded = check('files')
     return true
   })
 
-
-const validator = [FileUploaded, validate]
+const validator = [fileUploaded, validate]
 
 export default validator
