@@ -5,7 +5,7 @@ import SubmissionService from '../submission/submission.service'
 
 import { GenericResponse, NotFound } from '../utils/apiResponse.utils'
 
-import { serialize } from '../submission/submission.serializer'
+import { serialize } from './submission.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {

@@ -1,4 +1,3 @@
-import { SubmissionType, submissionTypes } from 'devu-shared-modules'
 
 import {
   JoinColumn,
@@ -71,12 +70,6 @@ export default class Submission {
   @ManyToOne(() => UserModel)
   userId: number
 
-  @Column({ name: 'content' })
-  content: string
-
-  @Column({ name: 'type', type: 'enum', enum: submissionTypes })
-  type: SubmissionType
-
   // Should never be set by anyone other than the API
   @Column({ name: 'submitter_ip', length: 64 })
   submitterIp: string
@@ -87,9 +80,7 @@ export default class Submission {
   @ManyToOne(() => UserModel)
   submittedBy: number
 
-  // If this field is populated it means that this submission is a regraded assignment. If null it's a normal submission
-  @Column({ name: 'original_submission_id', type: 'int', nullable: true })
-  @JoinColumn({ name: 'original_submission_id' })
-  @ManyToOne(() => Submission)
-  originalSubmissionId: number | null
+  @Column({ type: 'json' })
+  filenames: string[]
+
 }

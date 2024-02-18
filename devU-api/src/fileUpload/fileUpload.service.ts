@@ -2,27 +2,40 @@ import { FileUpload } from '../../devu-shared-modules'
 import { generateFilename } from '../utils/fileUpload.utils'
 
 import { minioClient, BucketNames} from '../fileStorage'
-export async function create(file:Express.Multer.File[] , bucketName: BucketNames){
-  let fileName:string[] = [] ;
-  let originalName:string[] = []
-  let fieldName:string = file[0].fieldname;
-  let etags:string[] = []
+export async function create(files: Express.Multer.File[], bucketName: BucketNames) {
+  let fileName: string[] = [];
+  let originalName: string[] = [];
+  let fieldName: string = files[0].fieldname;
+  let etags: string[] = [];
 
-  for (let i = 0; i < file.length; i++) {
-    const filename = generateFilename(file[i].originalname)
-    fileName.push(filename);
-    originalName.push(file[i].originalname);
-    minioClient.putObject(bucketName, filename, file[i].buffer, (err, etag) => {
-      if (err) {
-        throw new Error("File failed to upload")
-      }
-      const info = etag.etag
-      etags.push(info)
-    })
+  const uploadPromises = files.map((file) => {
+
+    return new Promise((resolve, reject) => {
+      const filename = generateFilename(file.originalname);
+      fileName.push(filename);
+      originalName.push(file.originalname);
+
+      minioClient.putObject(bucketName, filename, file.buffer, (err, etag) => {
+        if (err) {
+          reject(new Error("File failed to upload"));
+        } else {
+          resolve(etag.etag);
+        }
+      });
+
+    });
+
+  });
+
+  try {
+    //@ts-ignore
+    etags = await Promise.all(uploadPromises);
+
+    let fileUpload: FileUpload = { fieldName: fieldName, originalName: originalName, fileName: fileName, etags: etags };
+    return fileUpload;
+  } catch (error) {
+    throw new Error("Error uploading files: " + error.message);
   }
-
-  let fileUpload: FileUpload = { fieldName: fieldName, originalName: originalName, fileName: fileName, etags: etags }
-  return fileUpload
 }
 
 /*
