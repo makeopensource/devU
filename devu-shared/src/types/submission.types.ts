@@ -3,13 +3,9 @@ export type Submission = {
   userId: number
   assignmentId: number
   courseId: number
-  filenames: string[]
+  content: string
   submitterIp?: string
-
   submittedBy?: number
   createdAt?: string
   updatedAt?: string
-  deletedAt?: string
 }
-
-

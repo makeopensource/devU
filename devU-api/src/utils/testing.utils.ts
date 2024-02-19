@@ -15,7 +15,7 @@ export function fakeRequest(overrides?: Partial<Request>): Request {
     remoteAddress: 'requesting user ip',
   }
 
-  // Mocking out passsport user
+  // Mocking out passport user
   req.currentUser = { userId: 1, email: 'user@mail.com' }
   req.refreshUser = { userId: 1, isRefreshToken: true }
 

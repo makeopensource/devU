@@ -1,8 +1,8 @@
 import controller from '../login.developer.controller'
 
-import UserModel from '../../../user/user.model'
+import UserModel from '../../../entities/user/user.model'
 
-import UserService from '../../../user/user.service'
+import UserService from '../../../entities/user/user.service'
 import AuthService from '../../../auth/auth.service'
 
 import Testing from '../../../utils/testing.utils'
