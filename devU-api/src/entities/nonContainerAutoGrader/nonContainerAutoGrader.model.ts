@@ -12,6 +12,27 @@ import AssignmentModel from '../assignment/assignment.model'
 
 @Entity({ name: 'nonContainerAutoGrader' })
 export default class NonContainerAutoGraderModel {
+  /**
+   * @swagger
+   * tags:
+   *   - name: NonContainerAutoGraders
+   *     description: 
+   * components:
+   *  schemas:
+   *    NonContainerAutoGrader:
+   *      type: object
+   *      required: [assignmentId, question, score, correctString]
+   *      properties:
+   *        assignmentId:
+   *          type: integer
+   *        question:
+   *          type: string
+   *        score:
+   *          type: number
+   *        correctString:
+   *          type: string
+   */
+
     @PrimaryGeneratedColumn()
     id: number
 

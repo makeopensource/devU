@@ -15,6 +15,11 @@ const Router = express.Router()
  * /nonContainerAutoGrader:
  *   get:
  *     summary: Retrieve a list of all nonContainerAutoGraders
+ *     tags:
+ *       - NonContainerAutoGraders
+ *     responses:
+ *       '200':
+ *         description: OK
  */
 Router.get('/', nonContainerQuestions.get)
 
@@ -23,6 +28,17 @@ Router.get('/', nonContainerQuestions.get)
  * /nonContainerAutoGrader/byAssignmentId/{assignmentId}:
  *   get:
  *     summary: Retrieve a list of all nonContainerAutoGrader with the assignment ID
+ *     tags:
+ *       - NonContainerAutoGraders
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: assignmentId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.get('/byAssignmentId/:assignmentId', asInt("assignmentId"), nonContainerQuestions.getByAssignmentId)
 
@@ -31,6 +47,17 @@ Router.get('/byAssignmentId/:assignmentId', asInt("assignmentId"), nonContainerQ
  * /nonContainerAutoGrader/byId/{id}:
  *   get:
  *     summary: Retrieve a single question
+ *     tags:
+ *       - NonContainerAutoGraders
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.get('/byId/:id', asInt(), nonContainerQuestions.detail)
 
@@ -39,6 +66,16 @@ Router.get('/byId/:id', asInt(), nonContainerQuestions.detail)
  * /nonContainerAutoGrader:
  *   post:
  *     summary: Create a question
+ *     tags:
+ *       - NonContainerAutoGraders
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/NonContainerAutoGrader'
  */
 Router.post('/', validator, nonContainerQuestions.post)
 
@@ -47,6 +84,22 @@ Router.post('/', validator, nonContainerQuestions.post)
  * /nonContainerAutoGrader:
  *   put:
  *     summary: Update a question
+ *     tags:
+ *       - NonContainerAutoGraders
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/NonContainerAutoGrader'
  */
 Router.put('/:id', asInt(), validator, nonContainerQuestions.put)
 
@@ -55,6 +108,17 @@ Router.put('/:id', asInt(), validator, nonContainerQuestions.put)
  * /nonContainerAutoGrader/{id}:
  *   delete:
  *     summary: Delete a question
+ *     tags:
+ *       - NonContainerAutoGraders
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  */
 Router.delete('/:id', asInt(), nonContainerQuestions._delete)
 

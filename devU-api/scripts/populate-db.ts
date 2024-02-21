@@ -32,11 +32,9 @@ async function SendPOST(path: string, requestBody: string) {
 /*
     -- Billy --
     Student in 302
-    has submitted two assignments, one is graded
 
     -- Bob --
     Student in 312
-    has submitted two assignments, one is graded
 
     -- Jones --
     Student in 302 & 312
@@ -112,11 +110,20 @@ async function RunRequests() {
 
 
         //AssignmentProblems
-        const assign312_quiz_q1 = await SendPOST("/assignment-problems", JSON.stringify({
-            assignmentId: assign312_quiz, problemName: "q1", maxScore: 5
+        SendPOST("/assignment-problems", JSON.stringify({
+            assignmentId: assign312_quiz, problemName: "Of the following letters A-D, which is B?", maxScore: 5
         }))
-        const assign312_quiz_q2 = await SendPOST("/assignment-problems", JSON.stringify({
-            assignmentId: assign312_quiz, problemName: "q2", maxScore: 5
+        SendPOST("/assignment-problems", JSON.stringify({
+            assignmentId: assign312_quiz, problemName: "Of the following letters A-D, which is C?", maxScore: 5
+        }))
+        
+
+        //NonContainerAutoGraders
+        SendPOST("/nonContainerAutoGrader", JSON.stringify({
+            assignmentId: assign312_quiz, question: "Of the following letters A-D, which is B?", score: 5, correctString: "B"
+        }))
+        SendPOST("/nonContainerAutoGrader", JSON.stringify({
+            assignmentId: assign312_quiz, question: "Of the following letters A-D, which is C?", score: 5, correctString: "C"
         }))
 
 
@@ -138,17 +145,14 @@ async function RunRequests() {
             submitterIp: "127.0.0.1", submittedBy: userBob
         }))
         const submission_bob_312_quiz1 = await SendPOST("/submissions", JSON.stringify({
-            courseId: course312, assignmentId: assign312_quiz, userId: userBob, content: "B, D", type: "text", submitterIp: "127.0.0.1", submittedBy: userBob
-        }))
+            courseId: course312, assignmentId: assign312_quiz, userId: userBob, 
+            content: '{"form":{"Of the following letters A-D, which is B?":"B","Of the following letters A-D, which is C?":"D"},"filepaths":""}', 
+            type: "json", submitterIp: "127.0.0.1", submittedBy: userBob
+        })) 
         
-        
-        //SubmissionProblemScores
-        SendPOST("/submission-problem-scores", JSON.stringify({
-            submissionId: submission_bob_312_quiz1, assignmentProblemId: assign312_quiz_q1, score: 5, feedback: "Good job!", releasedAt: "2024-02-09T17:00:00-0500"
-        }))
-        SendPOST("/submission-problem-scores", JSON.stringify({
-            submissionId: submission_bob_312_quiz1, assignmentProblemId: assign312_quiz_q2, score: 0, feedback: "Incorrect, the correct answer was C.", releasedAt: "2024-02-09T17:00:00-0500"
-        }))
+
+        //Grading (creates a SubmissionScore and SubmissionProblemScores)
+        await SendPOST("/grade/" + submission_bob_312_quiz1, JSON.stringify({}))
 
 
         //SubmissionScores
@@ -157,9 +161,6 @@ async function RunRequests() {
         }))
         SendPOST("/submission-scores", JSON.stringify({
             submissionId: submission_bob_312_1, score: 20, feedback: "no", releasedAt: "2024-03-02T18:34:57-0500"
-        }))
-        SendPOST("/submission-scores", JSON.stringify({
-            submissionId: submission_bob_312_1, score: 5, feedback: "1/2 Questions Correct", releasedAt: "2024-02-09T17:00:00-0500"
         }))
 
 
@@ -188,4 +189,3 @@ async function RunRequests() {
 }
 
 RunRequests()
-
