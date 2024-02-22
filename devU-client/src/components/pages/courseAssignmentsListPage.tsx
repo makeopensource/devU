@@ -39,7 +39,11 @@ const CourseAssignmentsListPage = () => {
             <h1>Course Assignments List Page</h1>
             {assignments.map(assignment => (
                 <div>
-                    <Link className={styles.assignmentName} to={`/courses/${assignment.courseId}/assignments/${assignment.id}`}>{assignment.name}</Link>
+                    <Link 
+                    className={styles.assignmentName} 
+                    to={{pathname : `/courses/${assignment.courseId}/assignments/${assignment.id}`, state : assignment }}
+                    >
+                    {assignment.name}</Link>
                 </div>
             ))}
         </PageWrapper>
