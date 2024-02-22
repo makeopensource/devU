@@ -1,10 +1,14 @@
 import { NonContainerAutoGrader } from 'devu-shared-modules'
 
-export async function checkAnswer(studentAnswer: string, nonContainerAutoGrader: NonContainerAutoGrader) {
+import parseRegex from 'regex-parser'
+
+export function checkAnswer(studentAnswer: string, nonContainerAutoGrader: NonContainerAutoGrader) {
 
   if (nonContainerAutoGrader.isRegex) {
     // Create a regex pattern
-    const pattern: RegExp = new RegExp(nonContainerAutoGrader.correctString)
+    // we use parseRegex lib here because regular Regex() class will try to add its own escape characters
+    // we don't want that since we know correct string should always contain a valid regex
+    const pattern = parseRegex(nonContainerAutoGrader.correctString)
     // Use the test method
     const isMatch: boolean = pattern.test(studentAnswer)
     if (isMatch) {
@@ -18,6 +22,6 @@ export async function checkAnswer(studentAnswer: string, nonContainerAutoGrader:
   }
 
   // default value to return if all conditions fail to execute
-  // i.e. student has the incorrect answer or improperly formatted
+  // i.e. the answer is incorrect or improperly formatted
   return 0
 }
