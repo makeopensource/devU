@@ -9,10 +9,10 @@ export async function create(nonContainerQuestion: NonContainerAutoGrader) {
 }
 
 export async function update(nonContainerQuestion: NonContainerAutoGrader) {
-  const { id, question, score, correctString } = nonContainerQuestion
+  const { id, question, score, correctString, isRegex, assignmentId } = nonContainerQuestion
   if (!id) throw new Error('Missing Id')
 
-  return await connect().update(id, { score, question, correctString })
+  return await connect().update(id, { score, question, correctString, isRegex, assignmentId })
 }
 
 export async function _delete(id: number) {
