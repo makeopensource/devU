@@ -3,13 +3,12 @@ import { NonContainerAutoGrader } from 'devu-shared-modules'
 import parseRegex from 'regex-parser'
 
 export function checkAnswer(studentAnswer: string, nonContainerAutoGrader: NonContainerAutoGrader) {
-
   if (nonContainerAutoGrader.isRegex) {
     // Create a regex pattern
     // we use parseRegex lib here because regular Regex() class will try to add its own escape characters
     // we don't want that since we know correct string should always contain a valid regex
     const pattern = parseRegex(nonContainerAutoGrader.correctString)
-    // Use the test method
+
     const isMatch: boolean = pattern.test(studentAnswer)
     if (isMatch) {
       return nonContainerAutoGrader.score
