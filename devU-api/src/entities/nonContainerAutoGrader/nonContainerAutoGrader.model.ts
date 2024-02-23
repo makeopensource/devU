@@ -35,7 +35,7 @@ export default class NonContainerAutoGraderModel {
   @Column({ name: 'score' })
   score: number
 
-  @Column({ name: 'is_regex' })
+  @Column({ name: 'is_regex', type: 'boolean' })
   isRegex: boolean
 
   @Column({ name: 'correct_string', length: 128 })
