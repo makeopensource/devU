@@ -162,25 +162,34 @@ The database models live outside of this control flow as they don't deal with an
 This project uses shared modules to share types between the api and the client. What this means is that there exists
 code that operates in both this project and it's client. That project is being imported here as `devu-shared-modules`.
 
-To generate types for local development you must go to the ``/devu-shared`` directory
+To generate types for local development run the following commands (all commands assume you are in project root)
 
-1. run ```npm install``` (if you haven't already)
-2. run ```npm run build-local```
+1. ```bash
+   cd ./devu-shared
+   ``` 
+2. ```bash
+   npm install
+   ``` 
+3. ```bash
+   npm run build-local
+   ```
 
-This command will create a ``devu-shared-modules`` folder in api and client dir
+This will create a ``devu-shared-modules`` folder in ``devU-api`` and ``devU-client`` dir
 
-When developing if you need to update the modules,
+When developing if you need to create a new type,
 
-1. create the type in ``devu-shared/src/types/example.type.ts``
-2. export the type in ``devu-shared/src/index.ts``
-3. rerun ``npm run build-local``
+1. create the type file in ``devu-shared/src/types/example.type.ts``
+2. export the new type in ``devu-shared/src/index.ts``
+3. rerun
+   ```bash
+   npm run build-local
+   ```
 
-This will update the types in the api and client folders.
+This will update the types in ``devU-api`` and ``devU-client`` folders.
 
-#### Note if the types are not being detected by your IDE
+**Note if the types are not being detected by your IDE**
 
-Go to the ``devU-api/`` and ``devU-client/`` and run ``npm install`` to update the shared modules for the individual
-project
+**Go to the ``devU-api/`` and ``devU-client/`` and run ``npm install`` in each folder to update the shared modules.**
 
 ### Testing
 
