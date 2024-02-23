@@ -56,18 +56,6 @@ Router.get('/:id', asInt(), ContainerAutoGraderController.detail);
  *         application/x-www-form-urlencoded:
  *           schema:
  *             $ref: '#/components/schemas/ContainerAutoGrader'
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               makefileFile:
- *                 type: string
- *                 format: binary
- *                 description: Swagger file upload currently not set up properly, expect an error
- *               graderFile:
- *                 type: string
- *                 format: binary
- *                 description: Swagger file upload currently not set up properly, expect an error
  */
 Router.post('/', upload.fields([{name: 'graderFile'},{name: 'makefileFile'}]), validator, ContainerAutoGraderController.post);
 
@@ -92,18 +80,6 @@ Router.post('/', upload.fields([{name: 'graderFile'},{name: 'makefileFile'}]), v
  *         application/x-www-form-urlencoded:
  *           schema:
  *             $ref: '#/components/schemas/ContainerAutoGrader'
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               makefileFile:
- *                 type: string
- *                 format: binary
- *                 description: Swagger file upload currently not set up properly, expect an error
- *               graderFile:
- *                 type: string
- *                 format: binary
- *                 description: Swagger file upload currently not set up properly, expect an error
  */
 Router.put('/:id', asInt(), upload.fields([{name: 'graderFile'},{name: 'makefileFile'}]), validator, ContainerAutoGraderController.put);
 

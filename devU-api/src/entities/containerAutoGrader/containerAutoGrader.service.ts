@@ -66,10 +66,17 @@ export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
+//Currently only used in grader.service.ts, not yet defined in router
+export async function listByAssignmentId(assignmentId: number) {
+  if (!assignmentId) throw new Error('Missing AssignmentId')
+  return await connect().find({ assignmentId: assignmentId, deletedAt: IsNull() })
+}
+
 export default {
   create,
   retrieve,
   update,
   _delete,
   list,
+  listByAssignmentId,
 }
