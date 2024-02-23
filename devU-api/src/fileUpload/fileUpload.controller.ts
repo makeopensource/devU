@@ -2,10 +2,9 @@ import {NextFunction, Request, Response} from 'express'
 
 import FileUploadService from './fileUpload.service'
 import {serialize} from './fileUpload.serializer'
-import {mappingFieldWithBucket} from '../utils/fileUpload.utils'
 import {fileUploadTypes} from '../../devu-shared-modules'
 
-import {GenericResponse, NotFound, Updated} from '../utils/apiResponse.utils'
+import {GenericResponse, NotFound} from '../utils/apiResponse.utils'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
     try {
@@ -49,12 +48,12 @@ export async function post(req: Request, res: Response, next: NextFunction) {
         if (!files) return res.status(400).json(
             new GenericResponse('Must upload files as an object wih the filetype as keys')
         );
-
+        // Input field name needs to update to adjust new pattern of bucket names
         const inputFileField = fileUploadTypes.find(type => files[type])
         if (inputFileField === undefined) return res.status(403).json(new GenericResponse('File type not supported'))
-        const bucketName = mappingFieldWithBucket(inputFileField)
+        
 
-        const fileUpload = await FileUploadService.create(files[inputFileField], bucketName)
+        const fileUpload = await FileUploadService.create(files[inputFileField], inputFileField)
 
         const response = serialize(fileUpload)
 
@@ -64,34 +63,10 @@ export async function post(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-export async function put(req: Request, res: Response, next: NextFunction) {
-    try {
-        if (!req.files) return res.status(400).json(new GenericResponse('No file uploaded'))
-
-        const files = req.files as { [fileType: string]: Express.Multer.File[] };
-        if (!files) return res.status(400).json(new GenericResponse('Must upload files as an object wih the filetype as keys'));
-
-        const inputFileField = fileUploadTypes.find(type => files[type])
-
-        if (inputFileField === undefined) return res.status(403).json(new GenericResponse('File type not supported'))
-        const bucketName = req.params.bucketName
-        const inputBucketName = mappingFieldWithBucket(inputFileField)
-        if (bucketName !== inputBucketName) return res.status(403).json(new GenericResponse('Wrong type of file uploaded'))
-
-        const result = await FileUploadService.update(files[inputFileField], bucketName)
-
-        if (!result) return res.status(404).json(NotFound)
-
-        res.status(200).json(Updated)
-    } catch (err) {
-        next(err)
-    }
-}
 
 
 export default {
     get,
     detail,
     post,
-    put,
 }
