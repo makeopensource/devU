@@ -14,6 +14,7 @@ describe('NonContainerAutoGrader Serializer', () => {
     mockQuestion.question = 'The Answer to the Ultimate Question of Life, the Universe, and Everything'
     mockQuestion.correctString = '42'
     mockQuestion.score = 1
+    mockQuestion.isRegex = false
     mockQuestion.createdAt = new Date()
     mockQuestion.updatedAt = new Date()
   })
