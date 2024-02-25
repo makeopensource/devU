@@ -47,19 +47,24 @@ const refreshTokenExp = load('auth.jwt.refreshTokenValiditySeconds') || 864000
 const accessTokenExp = load('auth.jwt.accessTokenValiditySeconds') || 600
 const refreshTokenBuffer = load('auth.jwt.refreshTokenExpirationBufferSeconds') || 864000
 
+// if the dev env exists then file is running inside docker
+// if it is undefined it is running on dev machine
+const isDocker = !(process.env.dev === undefined)
+
+
 const environment = {
   port,
   apiUrl,
   clientUrl: (process.env.CLIENT_URL || load('api.clientUrl') || 'http://localhost:9000') as string,
 
   // Database settings
-  dbHost: (load('database.host') || 'localhost') as string,
+  dbHost: isDocker ? load('database.host') : 'localhost' as string,
   dbUsername: (load('database.username') || 'typescript_user') as string,
   dbPassword: (load('database.password') || 'password') as string,
   database: (load('database.name') || 'typescript_api') as string,
-  
+
   // the below one is for local migration, due to some issues with command will not running load function nor 'localhost'
-  
+
   // dbHost: ('localhost') as string,
   // dbUsername: ('typescript_user') as string,
   // dbPassword: ('password') as string,
@@ -67,7 +72,7 @@ const environment = {
 
 
   // MinIO setting
-  minioHost: (load('minio.host') || 'localhost') as string,
+  minioHost: isDocker ? load('minio.host') : 'localhost' as string,
   minioPort: (load('minio.port') || 9002) as number,
   minioUsername: (load('minio.username') || 'typescript_user') as string,
   minioPassword: (load('minio.password') || 'changeMe') as string,
