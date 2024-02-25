@@ -2,6 +2,8 @@
 
 This project exists as a shared resource between the DevU api and client projects
 
+For usage [see](/devu-shared/README.md#devu-shared-modules)
+
 ## Project Dependencies (install these)
 
 - [Node](https://nodejs.org/en/) - A javascript interpreter to run JS outside of the browser
