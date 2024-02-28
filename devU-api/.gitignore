@@ -2,6 +2,7 @@ node_modules/
 build/
 env/
 .idea/
+/devu-shared-modules
 
 config/*.yml
 !config/test.yml

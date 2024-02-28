@@ -3,7 +3,7 @@ import { User } from 'devu-shared-modules'
 
 import environment from '../../environment'
 
-import UserService from '../../user/user.service'
+import UserService from '../../entities/user/user.service'
 import AuthService from '../../auth/auth.service'
 
 import { samlStrategy } from '../../utils/passport/saml.passport'

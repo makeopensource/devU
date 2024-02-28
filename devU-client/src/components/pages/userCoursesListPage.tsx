@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+
 import { UserCourse, Course } from 'devu-shared-modules'
+import { useAppSelector } from 'redux/hooks'
 
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
@@ -11,6 +14,7 @@ import RequestService from 'services/request.service'
 import LocalStorageService from 'services/localStorage.service'
 
 import styles from './userCoursesListPage.scss'
+//import Button from 'components/shared/inputs/button'
 
 const FILTER_LOCAL_STORAGE_KEY = 'courses_filter'
 
@@ -24,6 +28,8 @@ const filterOptions: Option<Filter>[] = [
 ]
 
 const UserCoursesListPage = () => {
+  const userId = useAppSelector((store) => store.user.id)
+
   const defaultFilter = LocalStorageService.get<Filter>(FILTER_LOCAL_STORAGE_KEY) || 'active'
 
   const [loading, setLoading] = useState(true)
@@ -32,6 +38,9 @@ const UserCoursesListPage = () => {
   const [courses, setCourses] = useState<Record<string, Course>>({})
   const [filter, setFilter] = useState<Filter>(defaultFilter)
 
+  //Temporary place to store state for all courses
+  const [allCourses, setAllCourses] = useState(new Array<Course>())
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -39,13 +48,17 @@ const UserCoursesListPage = () => {
   const fetchData = async () => {
     try {
       // The filter isn't implemented by the API yet
-      const userCourses = await RequestService.get<UserCourse[]>(`/api/user-courses?filterBy=${filter}`)
+      // const userCourses = await RequestService.get<UserCourse[]>(`/api/user-courses?filterBy=${filter}`)
       const courseRequests = userCourses.map((u) => RequestService.get<Course>(`/api/courses/${u.courseId}`))
       const courses = await Promise.all(courseRequests)
 
       // Mapify course ids so we can look them up more easilly via their id
       const courseMap: Record<string, Course> = {}
       for (const course of courses) courseMap[course.id || ''] = course
+
+      // Temporary place to grab and display all courses
+      const allCourses = await RequestService.get('/api/courses')
+      setAllCourses(allCourses)
 
       setUserCourses(userCourses)
       setCourses(courseMap)
@@ -68,10 +81,18 @@ const UserCoursesListPage = () => {
 
   const defaultOption = filterOptions.find((o) => o.value === filter)
 
+
   return (
     <PageWrapper>
       <div className={styles.header}>
         <h1>My Courses</h1>
+
+        <div>
+          <Link className={styles.addCourseBtn} to={`/users/${userId}/courses/courseForm`}>
+            Add Courses
+          </Link>
+        </div>
+
         <div className={styles.filters}>
           <Dropdown
             label='Filter Courses'
@@ -89,6 +110,11 @@ const UserCoursesListPage = () => {
           course={courses[userCourse.courseId || '']} 
         />
       ))}
+      {allCourses.map(course => (
+          <div>
+            <Link className={styles.courseName} to={`/courses/${course.id}`}>{course.name}</Link>
+          </div>
+        ))}
     </PageWrapper>
   )
 }

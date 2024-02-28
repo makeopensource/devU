@@ -7,21 +7,23 @@ services:
       POSTGRES_DB: typescript_api
       POSTGRES_USER: typescript_user
       POSTGRES_PASSWORD: password
-    #    ports:
-    #      - '5432:5432'
+    ports:
+      - '5432:5432'
     expose:
-      - "5432"
-  # config:
-  #   # Generates a config file for the API
-  #   build:
-  #     context: devU-api/scripts
-  #   command: "./generateConfig.sh config/default.yml"
-  #   image: ubautograding/devtools
-  #   volumes:
-  #     - ./devU-api/config:/config
-  web:
+      - '5432'
+  config:
+#     Generates a config file for the API
+    build:
+      context: devU-api/scripts
+    command: "./generateConfig.sh config/default.yml"
+    image: ubautograding/devtools
+    volumes:
+      - ./devU-api/config:/config
+  api:
     # Runs the API
-    build: devU-api
+    build:
+      context: .
+      dockerfile: api.Dockerfile
     environment:
       WAIT_HOSTS: db:5432
     depends_on:
@@ -34,15 +36,15 @@ services:
   client:
     # Builds the front end and exports static files to ./dist
     build:
-      dockerfile: ../Dockerfile-client
-      context: devU-client
+      dockerfile: client.Dockerfile
+      context: .
     volumes:
       - ./dist:/out
   nginx:
     # Hosts the front end static files from ./dist/local thorough a web server
     build:
       context: .
-      dockerfile: Dockerfile-nginx
+      dockerfile: nginx.Dockerfile
     volumes:
       - ./dist/local:/usr/share/nginx/html
     ports:
