@@ -17,7 +17,6 @@ const EditAssignmentFormPage = () => {
     const [formData, setFormData] = useState({
         courseId: 0,
         name: '',
-        gradingType: '',
         categoryName: null,
         description: null,
         maxFileSize: 0,
@@ -40,10 +39,9 @@ const EditAssignmentFormPage = () => {
     const handleEndDateChange = (date : Date) => {setEndDate(date)}
     const handleDueDateChange = (date: Date) => {setDueDate(date)}
 
-
-
     const handleSubmit = () => {
         const finalFormData = {
+            courseId: formData.courseId,
             name: formData.name,
             startDate : startDate.toISOString(),
             dueDate: dueDate.toISOString(),
@@ -67,14 +65,13 @@ const EditAssignmentFormPage = () => {
             })
             .finally(() => setLoading(false))
 
-        
     }
 
     return(
         <PageWrapper>
             <h1>Assignment Form</h1>
             <TextField id = 'courseId' label = 'Course Id' onChange={handleChange}/>
-            <TextField id='name' label='Assignemnt Name' onChange={handleChange}/>
+            <TextField id='name' label='Assignment Name' onChange={handleChange}/>
             <DatePicker selected={startDate} onChange={handleStartDateChange} />
             <DatePicker selected={dueDate}  onChange={handleDueDateChange} />
             <DatePicker selected={endDate}  onChange={handleEndDateChange}/>

@@ -5,7 +5,7 @@ export type Assignment = {
   startDate: string
   dueDate: string
   endDate: string
-  gradingType?: GradingType
+  //gradingType?: GradingType
   categoryName: string
   description: string | null
   maxFileSize: number
