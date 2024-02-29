@@ -11,7 +11,7 @@ import Button from 'components/shared/inputs/button'
 
 import { SET_ALERT } from 'redux/types/active.types'
 
-const EditAssignmentFormPage = () => {
+const AssignmentCreatePage = () => {
     const [setAlert] = useActionless(SET_ALERT)
 
     const [formData, setFormData] = useState({
@@ -87,4 +87,4 @@ const EditAssignmentFormPage = () => {
     )
 }
 
-export default EditAssignmentFormPage
+export default AssignmentCreatePage

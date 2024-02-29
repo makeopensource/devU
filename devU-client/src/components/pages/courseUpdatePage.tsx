@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { useParams } from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
@@ -13,6 +14,10 @@ import TextField from 'components/shared/inputs/textField'
 import Button from 'components/shared/inputs/button'
 import { SET_ALERT } from 'redux/types/active.types'
 
+type UrlParams = {
+    courseId: string
+}
+
 const CourseUpdatePage = ({}) => {
 
     const [setAlert] = useActionless(SET_ALERT)
@@ -25,7 +30,8 @@ const CourseUpdatePage = ({}) => {
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [loading, setLoading] = useState(false)
-
+    
+    const { courseId } = useParams() as UrlParams
 
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
@@ -45,10 +51,8 @@ const CourseUpdatePage = ({}) => {
         
         setLoading(true)
 
-        RequestService.put('/api/courses/:courseId/update', finalFormData)
+        RequestService.put(`/api/courses/${courseId}`, finalFormData)
             .then(() => {
-                
-
                 setAlert({ autoDelete: true, type: 'success', message: 'Course Updated' })
             })
             .catch((err: ExpressValidationError[] | Error) => {
@@ -65,7 +69,7 @@ const CourseUpdatePage = ({}) => {
         <h1>Course Detail Update</h1>
         <TextField id='name' label='Course Name' onChange={handleChange}/>
         <TextField id='number' label='Course Number' onChange={handleChange}/>
-        <TextField id='semester' label='Semester' onChange={handleChange}  placeholder='Ex. f2022, w2023, s2024'/>
+        <TextField id='semester' label='Semester' onChange={handleChange}  placeholder='Ex. f2022, w2023, s2024, u2025'/>
         <DatePicker selected = {startDate} onChange={handleStartDateChange}/>
         <DatePicker selected = {endDate} onChange={handleEndDateChange}/>
     

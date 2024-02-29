@@ -1,7 +1,8 @@
-import React, {useState}from 'react'
+import React, {useState} from 'react'
 import { ExpressValidationError } from 'devu-shared-modules'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { useParams } from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
@@ -13,8 +14,10 @@ import Button from 'components/shared/inputs/button'
 
 import { SET_ALERT } from 'redux/types/active.types'
 
-
-
+type UrlParams = {
+    assignmentId: string
+}
+  
 const AssignmentUpdatePage = () => {
     const [setAlert] = useActionless(SET_ALERT)
 
@@ -31,6 +34,8 @@ const AssignmentUpdatePage = () => {
     const [endDate, setEndDate] = useState(new Date())
     const [dueDate, setDueDate] = useState(new Date())
     const [loading, setLoading] = useState(false)
+   
+    const { assignmentId } = useParams() as UrlParams
 
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
@@ -43,6 +48,7 @@ const AssignmentUpdatePage = () => {
 
     const handleAssignmentUpdate = () => {
         const finalFormData = {
+            courseId: formData.courseId,
             name: formData.name,
             startDate : startDate.toISOString(),
             dueDate: dueDate.toISOString(),
@@ -55,8 +61,8 @@ const AssignmentUpdatePage = () => {
 
         }
         setLoading(true)
-
-        RequestService.put('/api/assignments/:assignmentId/update', finalFormData)
+        
+        RequestService.put(`/api/assignments/${assignmentId}`, finalFormData)
             .then(() => {
                 
                 setAlert({ autoDelete: true, type: 'success', message: 'Assignment Updated' })
@@ -73,8 +79,8 @@ const AssignmentUpdatePage = () => {
     <PageWrapper>
         <h1>Assignment Detail Update</h1>
         
-        <TextField id = 'courseId' label = 'Course Id' onChange={handleChange}/>
-        <TextField id='name' label='Assignemnt Name' onChange={handleChange}/>
+        <TextField id='courseId' label='Course Id' onChange={handleChange}/>
+        <TextField id='name' label='Assignment Name' onChange={handleChange}/>
         <DatePicker selected={startDate} onChange={handleStartDateChange} />
         <DatePicker selected={dueDate}  onChange={handleDueDateChange} />
         <DatePicker selected={endDate}  onChange={handleEndDateChange}/>
