@@ -6,7 +6,7 @@ import Testing from '../../../utils/testing.utils'
 
 let mockQuestion: NonContainerAutoGrader
 
-describe('Category Serializer', () => {
+describe('NonContainerAutoGrader Serializer', () => {
   beforeEach(() => {
     mockQuestion = Testing.generateTypeOrm<NonContainerAutoGrader>(NonContainerAutoGrader)
 
@@ -14,11 +14,12 @@ describe('Category Serializer', () => {
     mockQuestion.question = 'The Answer to the Ultimate Question of Life, the Universe, and Everything'
     mockQuestion.correctString = '42'
     mockQuestion.score = 1
+    mockQuestion.isRegex = false
     mockQuestion.createdAt = new Date()
     mockQuestion.updatedAt = new Date()
   })
 
-  describe('Serializing category', () => {
+  describe('Serializing NonContainerAutoGrader', () => {
     test('NonContainerAutoGrader values exist in the response', () => {
       const expectedResult = serialize(mockQuestion)
 

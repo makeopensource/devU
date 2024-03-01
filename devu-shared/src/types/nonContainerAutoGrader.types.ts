@@ -4,6 +4,7 @@ export type NonContainerAutoGrader = {
     question: string
     score:number
     correctString: string
+    isRegex: boolean
     createdAt?: string
     updatedAt?: string
 }

@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm'
 
 export class entityFixUp1708215731032 implements MigrationInterface {
     name = 'entityFixUp1708215731032'
@@ -48,6 +48,8 @@ export class entityFixUp1708215731032 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "submission_scores" ADD CONSTRAINT "FK_60b6432533ce75c224598af6bf5" FOREIGN KEY ("submission_id") REFERENCES "submissions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "user_courses" ADD CONSTRAINT "FK_7ecb10d15b858768c36d37727f9" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "user_courses" ADD CONSTRAINT "FK_d65a2771413a10753d76937b3d6" FOREIGN KEY ("course_id") REFERENCES "courses"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "nonContainerAutoGrader"
+            ADD "is_regex" boolean NOT NULL;`)
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
