@@ -29,8 +29,8 @@ services:
     depends_on:
       db:
         condition: service_started
-      # config:
-      #   condition: service_completed_successfully
+      config:
+        condition: service_completed_successfully
     ports:
       - "3001:3001"
   client:
