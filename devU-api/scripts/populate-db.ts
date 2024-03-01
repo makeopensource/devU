@@ -31,11 +31,9 @@ async function SendPOST(path: string, requestBody: string) {
 /*
     -- Billy --
     Student in 302
-    has submitted two assignments, one is graded
 
     -- Bob --
     Student in 312
-    has submitted two assignments, one is graded
 
     -- Jones --
     Student in 302 & 312
@@ -234,22 +232,8 @@ async function RunRequests() {
       submittedBy: userBob,
     }))
 
-
-    //SubmissionProblemScores
-    SendPOST('/submission-problem-scores', JSON.stringify({
-      submissionId: submission_bob_312_quiz1,
-      assignmentProblemId: assign312_quiz_q1,
-      score: 5,
-      feedback: 'Good job!',
-      releasedAt: '2024-02-09T17:00:00-0500',
-    }))
-    SendPOST('/submission-problem-scores', JSON.stringify({
-      submissionId: submission_bob_312_quiz1,
-      assignmentProblemId: assign312_quiz_q2,
-      score: 0,
-      feedback: 'Incorrect, the correct answer was C.',
-      releasedAt: '2024-02-09T17:00:00-0500',
-    }))
+     //Grading (creates a SubmissionScore and SubmissionProblemScores)
+     await SendPOST("/grade/" + submission_bob_312_quiz1, JSON.stringify({}))
 
 
     //SubmissionScores
@@ -317,4 +301,3 @@ async function RunRequests() {
 }
 
 RunRequests()
-

@@ -15,6 +15,20 @@ For now the only reason we're including docker is to more easily control the dev
 
 Once you've got these installed, we can build our container and run it
 
+#### Note to run the postgres container locally using the command below
+
+You have to modify ``devU-api/src/environment.ts``
+
+change
+
+``dbHost: (load('database.host') || 'localhost') as string``
+
+to
+
+``dbHost: 'localhost'``
+
+This will probably be fixed in the future but for now the above steps are necessary
+
 ```
 docker run \
   --name typeorm-postgres \
@@ -145,29 +159,37 @@ The database models live outside of this control flow as they don't deal with an
 
 ### Shared Modules
 
-This project uses shared modules between it and it's client. What this means is that there exists code that operates in both this project and it's client. That project is being imported here as `devu-shared-modules`.
+This project uses shared modules to share types between the api and the client. What this means is that there exists
+code that operates in both this project and it's client. That project is being imported here as `devu-shared-modules`.
 
-The project can be found [here](https://github.com/UBAutograding/devu-shared).
+To generate types for local development run the following commands (all commands assume you are in project root)
 
-When developing if you need to update the modules, you can do so by updating the branch or SHA on the package url in the `package.json`. As an example, if you wanted to use shared modules from the `auth` branch, you could change the dependency line in the `package.json` to:
+1. ```bash
+   cd ./devu-shared
+   ``` 
+2. ```bash
+   npm install
+   ``` 
+3. ```bash
+   npm run build-local
+   ```
 
-```
-"devu-shared-modules": "github:UBAutograding/devu-shared#auth",
-```
+This will create a ``devu-shared-modules`` folder in ``devU-api`` and ``devU-client`` dir
 
-then rerun
+When developing if you need to create a new type,
 
-```
-npm install
-```
+1. create the type file in ``devu-shared/src/types/example.type.ts``
+2. export the new type in ``devu-shared/src/index.ts``
+3. rerun
+   ```bash
+   npm run build-local
+   ```
 
-to install the updated package
+This will update the types in ``devU-api`` and ``devU-client`` folders.
 
-If you were to make changes to your shared branch and push it to the remote, you can update what version your local files are looking at via
+**Note if the types are not being detected by your IDE**
 
-```
-npm update devu-shared-modules
-```
+**Go to the ``devU-api/`` and ``devU-client/`` and run ``npm install`` in each folder to update the shared modules.**
 
 ### Testing
 

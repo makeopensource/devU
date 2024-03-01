@@ -13,6 +13,32 @@ import AssignmentModel from '../assignment/assignment.model'
 
 @Entity('container_auto_grader')
 export default class ContainerAutoGraderModel {
+  /**
+   * @swagger
+   * tags:
+   *   - name: ContainerAutoGraders
+   *     description: 
+   * components:
+   *  schemas:
+   *    ContainerAutoGrader:
+   *      type: object
+   *      required: [assignmentId, graderFile, autogradingImage, timeout]
+   *      properties:
+   *        assignmentId:
+   *          type: integer
+   *        graderFile:
+   *          type: string
+   *          description: Filename of already uploaded grader file
+   *        makeFileFile:
+   *          type: string
+   *          description: Filename of already uploaded makefile
+   *        autogradingImage:
+   *          type: string
+   *        timeout:
+   *          type: integer
+   *          description: Must be a positive integer  
+   */
+
     @PrimaryGeneratedColumn()
     id: number
 

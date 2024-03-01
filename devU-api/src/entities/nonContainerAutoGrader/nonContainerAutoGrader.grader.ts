@@ -19,7 +19,6 @@ export function checkAnswer(studentAnswer: string, nonContainerAutoGrader: NonCo
       return nonContainerAutoGrader.score
     }
   }
-
   // default value to return if all conditions fail to execute
   // i.e. the answer is incorrect or improperly formatted
   return 0
