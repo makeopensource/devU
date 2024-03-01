@@ -12,4 +12,4 @@ export type FileUpload = {
 
   Marked for discussion.
  */
-export const fileUploadTypes = ['studentSubmission', 'graderFile', 'makefileFile'] as const
+export const fileUploadTypes = ['studentSubmission', 'graderFile', 'makefileFile','files'] as const

@@ -47,8 +47,8 @@ export default class FileModel {
     @Column({ name: 'filename', length: 128 })
     filename: string
     
-    @Column({ name: 'authorized', length: 64 })
-    authorized: string
+    @Column({ name: 'bucket', length: 64 })
+    bucket: string
     
 
 }

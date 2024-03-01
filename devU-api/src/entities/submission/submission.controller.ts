@@ -7,6 +7,7 @@ import { GenericResponse, NotFound } from '../../utils/apiResponse.utils'
 
 import { serialize } from './submission.serializer'
 
+import fileUploadController from '../../fileUpload/fileUpload.controller'
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
     const submissions = await SubmissionService.list()
@@ -42,6 +43,13 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
     requestBody.submitterIp = req.header('x-forwarded-for') || req.socket.remoteAddress
     requestBody.submittedBy = req.currentUser?.userId
+
+    if (req.files){
+      const something = req.files as { [fileType: string]: Express.Multer.File[] };
+      requestBody.content = '{ "files": ' + something['files'][0].filename + '}'
+
+      await fileUploadController.post(req, res, next)
+    }
 
     const submission = await SubmissionService.create(requestBody)
     const response = serialize(submission)

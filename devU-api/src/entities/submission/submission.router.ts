@@ -1,5 +1,6 @@
 // Libraries
 import express from 'express'
+import Multer from 'multer'
 
 // Middleware
 import validator from '../submission/submission.validator'
@@ -9,6 +10,7 @@ import { asInt } from '../../middleware/validator/generic.validator'
 import SubmissionController from '../submission/submission.controller'
 
 const Router = express.Router()
+const upload = Multer()
 
 /**
  * @swagger
@@ -58,7 +60,7 @@ Router.get('/:id', asInt(), SubmissionController.detail)
  *           schema:
  *             $ref: '#/components/schemas/Submission'
  */
-Router.post('/', validator, SubmissionController.post)
+Router.post('/',upload.fields([{name:"files"}]), validator, SubmissionController.post)
 
 /**
  * @swagger

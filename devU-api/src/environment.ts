@@ -53,24 +53,30 @@ const environment = {
   clientUrl: (process.env.CLIENT_URL || load('api.clientUrl') || 'http://localhost:9000') as string,
 
   // Database settings
-  dbHost: (load('database.host') || 'localhost') as string,
-  dbUsername: (load('database.username') || 'typescript_user') as string,
-  dbPassword: (load('database.password') || 'password') as string,
-  database: (load('database.name') || 'typescript_api') as string,
+  // dbHost: (load('database.host') || 'localhost') as string,
+  // dbUsername: (load('database.username') || 'typescript_user') as string,
+  // dbPassword: (load('database.password') || 'password') as string,
+  // database: (load('database.name') || 'typescript_api') as string,
   
   // the below one is for local migration, due to some issues with command will not running load function nor 'localhost'
   
-  // dbHost: ('localhost') as string,
-  // dbUsername: ('typescript_user') as string,
-  // dbPassword: ('password') as string,
-  // database: ('typescript_api') as string,
+  dbHost: ('localhost') as string,
+  dbUsername: ('typescript_user') as string,
+  dbPassword: ('password') as string,
+  database: ('typescript_api') as string,
 
 
   // MinIO setting
-  minioHost: (load('minio.host') || 'localhost') as string,
-  minioPort: (load('minio.port') || 9002) as number,
-  minioUsername: (load('minio.username') || 'typescript_user') as string,
-  minioPassword: (load('minio.password') || 'changeMe') as string,
+  // minioHost: (load('minio.host') || 'localhost') as string,
+  // minioPort: (load('minio.port') || 9002) as number,
+  // minioUsername: (load('minio.username') || 'typescript_user') as string,
+  // minioPassword: (load('minio.password') || 'changeMe') as string,
+
+  // the below one is for local migration, due to some issues with command will not running load function nor 'localhost'
+  minioHost: ( 'localhost') as string,
+  minioPort: ( 9002) as number,
+  minioUsername: ( 'typescript_user') as string,
+  minioPassword: ( 'changeMe') as string,
 
   // Logging
   logDB: (process.env.LOG_DB !== undefined || load('logging.db')) as boolean, // logs all sql commands for gut/fact checking endpoints

@@ -5,6 +5,7 @@ import {serialize} from './fileUpload.serializer'
 import {fileUploadTypes} from '../../devu-shared-modules'
 
 import {GenericResponse, NotFound} from '../utils/apiResponse.utils'
+import {mappingFieldWithBucket} from '../utils/fileUpload.utils'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
     try {
@@ -51,14 +52,14 @@ export async function post(req: Request, res: Response, next: NextFunction) {
         // Input field name needs to update to adjust new pattern of bucket names
         const inputFileField = fileUploadTypes.find(type => files[type])
         if (inputFileField === undefined) return res.status(403).json(new GenericResponse('File type not supported'))
-        
+        const bucketName = mappingFieldWithBucket(inputFileField)
 
-        const fileUpload = await FileUploadService.create(files[inputFileField], inputFileField)
+        const fileUpload = await FileUploadService.create(files[inputFileField], bucketName)
 
         const response = serialize(fileUpload)
 
         res.status(201).json(response)
-    } catch (err: Error | any) {
+    } catch (err: any) {
         res.status(400).json(new GenericResponse(err.message))
     }
 }
