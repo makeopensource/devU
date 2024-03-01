@@ -4,5 +4,5 @@ export async function checkAnswer(studentAnswer: string, nonContainerAutoGrader:
   if (studentAnswer === nonContainerAutoGrader.correctString) {
     return nonContainerAutoGrader.score
   }
-  return null
+  return 0
 }

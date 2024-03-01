@@ -18,6 +18,7 @@ export * from './types/categoryScore.types'
 export * from './types/submissionScore.types'
 export * from './types/fileUpload.types'
 export * from './types/nonContainerAutoGrader.types'
+export * from './types/grader.types'
 
 export * from './utils/object.utils'
 export * from './utils/string.utils'
