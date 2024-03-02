@@ -1,4 +1,4 @@
-export type DeadlineExtensionsTypes = {
+export type DeadlineExtensions = {
   id?: number
   creatorId: number
   userId: number
