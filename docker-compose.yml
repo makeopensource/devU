@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 services:
   db:
     # Runs the PostgreSQL database
@@ -32,7 +32,7 @@ services:
       config:
         condition: service_completed_successfully
     ports:
-      - "3001:3001"
+      - '3001:3001'
   client:
     # Builds the front end and exports static files to ./dist
     build:
@@ -48,14 +48,14 @@ services:
     volumes:
       - ./dist/local:/usr/share/nginx/html
     ports:
-      - "9000:80"
+      - '9000:80'
   minio:
     image: minio/minio
     #    ports:
     #      - '9002:9000'
     #      - '9001:9001'
     expose:
-      - "9000"
+      - '9000'
     #    volumes:
     #      - /tmp/data:/data
     environment:
