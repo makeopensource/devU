@@ -15,6 +15,7 @@ import submissionScore from '../entities/submissionScore/submissionScore.router'
 import containerAutoGrader from '../entities/containerAutoGrader/containerAutoGrader.router'
 import assignmentProblem from '../entities/assignmentProblem/assignmentProblem.router'
 import submissionProblemScore from '../entities/submissionProblemScore/submissionProblemScore.router'
+import deadlineExtensions from "../entities/deadlineExtensions/deadlineExtensions.router";
 import fileUpload from '../fileUpload/fileUpload.router'
 import grader from '../entities/grader/grader.router'
 
@@ -36,6 +37,7 @@ Router.use('/nonContainerAutoGrader', isAuthorized, nonContainerAutoGraderRouter
 Router.use('/container-auto-graders', isAuthorized, containerAutoGrader)
 Router.use('/submission-problem-scores', isAuthorized, submissionProblemScore)
 Router.use('/file-upload', isAuthorized, fileUpload)
+Router.use('/deadline-extensions', isAuthorized, deadlineExtensions)
 Router.use('/grade', isAuthorized, grader)
 
 Router.use('/login', login)
