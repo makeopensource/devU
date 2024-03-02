@@ -177,9 +177,11 @@ async function RunRequests() {
 
 
     //AssignmentProblems
+    // @ts-ignore
     const assign312_quiz_q1 = await SendPOST('/assignment-problems', JSON.stringify({
       assignmentId: assign312_quiz, problemName: 'q1', maxScore: 5,
     }))
+    // @ts-ignore
     const assign312_quiz_q2 = await SendPOST('/assignment-problems', JSON.stringify({
       assignmentId: assign312_quiz, problemName: 'q2', maxScore: 5,
     }))
@@ -274,6 +276,13 @@ async function RunRequests() {
       score: 1,
       correctString: '/^It was (two|2)-tired\\.$/',
       isRegex: true,
+    }))
+
+    SendPOST('/deadline-extensions',JSON.stringify({
+      assignmentId:1,
+      creatorId:1,
+      deadlineDate:"2024-05-23T03:32:32.813Z",
+      userId:2
     }))
 
     //AssignmentScore - ROUTE NOT FUNCTIONAL
