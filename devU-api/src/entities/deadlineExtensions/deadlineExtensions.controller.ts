@@ -20,11 +20,11 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
-    const assignment = await DeadlineService.retrieve(id)
+    const extension = await DeadlineService.retrieve(id)
 
-    if (!assignment) return res.status(404).json(NotFound)
+    if (!extension) return res.status(404).json(NotFound)
 
-    const response = serialize(assignment)
+    const response = serialize(extension)
 
     res.status(200).json(response)
   } catch (err) {
@@ -34,8 +34,8 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
-    const assignment = await DeadlineService.create(req.body)
-    const response = serialize(assignment)
+    const extension = await DeadlineService.create(req.body)
+    const response = serialize(extension)
 
     res.status(201).json(response)
   } catch (err) {
