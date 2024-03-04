@@ -44,3 +44,16 @@ export async function initializeMinio(inputBucketName?: string) {
     }
   }
 }
+
+
+export async function uploadFile(bucketName: string, file: Express.Multer.File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    minioClient.putObject(bucketName, file.originalname, file.buffer, (err, etag) => {
+      if (err) {
+        reject(new Error('File failed to upload'))
+      } else {
+        resolve(etag.etag)
+      }
+    })
+  })
+}

@@ -1,43 +1,28 @@
 import { FileUpload } from '../../devu-shared-modules'
 import { generateFilename } from '../utils/fileUpload.utils'
 
-import { minioClient } from '../fileStorage'
+import { minioClient, uploadFile } from '../fileStorage'
 
 export async function create(files: Express.Multer.File[], bucketName: string) {
-    let fileName: string[] = []
-    let originalName: string[] = []
-    let fieldName: string = files[0].fieldname
-    let etags: string[] = []
-    
-    const uploadPromises = files.map((file) => {
-        return new Promise((resolve, reject) => {
-            const filename = generateFilename(file.originalname)
-            fileName.push(filename)
-            originalName.push(file.originalname)
-            
-            minioClient.putObject(bucketName, filename, file.buffer, (err, etag) => {
-                if (err) {
-                    reject(new Error('File failed to upload'))
-                } else {
-                    resolve(etag.etag)
-                }
-            })
-            
-        })
-        
-    })
-    
     try {
-        //@ts-ignore
-        etags = await Promise.all(uploadPromises)
-        
-        let fileUpload: FileUpload = {
-            fieldName: fieldName,
-            originalName: originalName,
-            fileName: fileName,
-            etags: etags,
-        }
-        return fileUpload
+    let fileName: string = ""
+    let originalName: string = ""
+    let fieldName: string = files[0].fieldname
+    let etags: string = ""
+    
+    files.map(async (file) => {
+        etags = etags+', '+await uploadFile(bucketName, file)
+        fileName = fileName+', '+generateFilename(file.originalname)
+        originalName = originalName+', '+file.originalname
+    })
+
+    let fileUpload: FileUpload = {
+        fieldName: fieldName,
+        originalName: originalName,
+        filename: fileName,
+        etags: etags,
+    }
+    return fileUpload
     } catch (error: any) {
         throw new Error('Error uploading files: ' + error.message)
     }

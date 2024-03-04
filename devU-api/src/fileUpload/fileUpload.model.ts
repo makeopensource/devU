@@ -48,7 +48,7 @@ export default class FileModel {
     filename: string
     
     @Column({ name: 'bucket', length: 64 })
-    bucket: string
+    fieldName: string
     
 
 }

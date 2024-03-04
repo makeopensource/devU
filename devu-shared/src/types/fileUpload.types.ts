@@ -1,8 +1,15 @@
 export type FileUpload = {
+  id?: number
+  userId?: number
+  assignmentId?: number
+  courseId?: number
   fieldName: string
-  originalName: string[]
-  fileName: string[]
-  etags: string[]
+  originalName: string
+  filename: string
+  etags: string
+  createdAt?: string
+  updatedAt?: string
+  deletedAt?: string
 }
 
 /*
