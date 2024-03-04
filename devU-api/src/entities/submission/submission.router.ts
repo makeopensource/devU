@@ -60,7 +60,7 @@ Router.get('/:id', asInt(), SubmissionController.detail)
  *           schema:
  *             $ref: '#/components/schemas/Submission'
  */
-Router.post('/',upload.fields([{name:"files"}]), validator, SubmissionController.post)
+Router.post('/',upload.single("files"), validator, SubmissionController.post)
 
 /**
  * @swagger
