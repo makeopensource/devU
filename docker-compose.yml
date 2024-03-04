@@ -26,6 +26,7 @@ services:
       dockerfile: api.Dockerfile
     environment:
       WAIT_HOSTS: db:5432
+      dev: 0 # value here is irrelevant; just here to make sure dev env exists
     depends_on:
       db:
         condition: service_started

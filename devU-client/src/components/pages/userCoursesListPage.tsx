@@ -112,7 +112,7 @@ const UserCoursesListPage = () => {
       ))}
       {allCourses.map(course => (
           <div>
-            <Link className={styles.courseName} to={`/courses/${course.id}`}>{course.name}</Link>
+            <Link className={styles.courseName} to={{pathname:`/courses/${course.id}`,state:course}}>{course.name}</Link>
           </div>
         ))}
     </PageWrapper>

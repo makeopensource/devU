@@ -9,7 +9,7 @@ export default class CourseScoreModel {
      * @swagger
      * tags:
      *   - name: CourseScores
-     *     description: Route is currently non-functional, TS2305 error (Issue #34)
+     *     description: Route is currently non-functional, TS2305 error
      * components:
      *  schemas:
      *    CourseScore:

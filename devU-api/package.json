@@ -72,6 +72,7 @@
     "passport-saml": "^3.2.2",
     "pg": "^8.4.0",
     "reflect-metadata": "^0.1.10",
+    "regex-parser": "^2.3.0",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6",
     "typeorm": "0.2.32"

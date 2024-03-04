@@ -55,7 +55,7 @@ export async function post(req: Request, res: Response, next: NextFunction) {
     const response = serialize(submission)
 
     res.status(201).json(response)
-  } catch (err) {
+  } catch (err:any) {
     res.status(400).json(new GenericResponse(err.message))
   }
 }
