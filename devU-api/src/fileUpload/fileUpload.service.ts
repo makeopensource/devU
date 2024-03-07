@@ -9,12 +9,14 @@ export async function create(files: Express.Multer.File[], bucketName: string) {
     let originalName: string = ""
     let fieldName: string = files[0].fieldname
     let etags: string = ""
-    
-    files.map(async (file) => {
-        etags = etags+', '+await uploadFile(bucketName, file)
-        fileName = fileName+', '+generateFilename(file.originalname)
-        originalName = originalName+', '+file.originalname
-    })
+
+    await Promise.all(files.map(async (file) => {
+        const etag = await uploadFile(bucketName, file)
+        etags = etags ? etags + ', ' + etag : etag
+        const generatedFileName = generateFilename(file.originalname)
+        fileName = fileName ? fileName + ', ' + generatedFileName : generatedFileName
+        originalName = originalName ? originalName + ', ' + file.originalname : file.originalname
+    }))
 
     let fileUpload: FileUpload = {
         fieldName: fieldName,

@@ -41,10 +41,11 @@ export async function post(req: Request, res: Response, next: NextFunction) {
     if (!req.files || !('graderFile' in req.files)) {
       return res.status(400).json(new GenericResponse('Container Auto Grader requires file upload for grader'));
     }
-    const graderFile = req.files['graderFile'][0]?.buffer
-    const makefile = req.files['makefileFile'] ? req.files['makefileFile'][0]?.buffer : null
+    const graderFile = req.files['graderFile'][0]
+    const makefile = req.files?.['makefileFile'][0] ?? null
+    const requestBody = req.body
 
-    const containerAutoGrader = await ContainerAutoGraderService.create(req.body, graderFile, makefile)
+    const containerAutoGrader = await ContainerAutoGraderService.create(requestBody, graderFile, makefile)
     const response = serialize(containerAutoGrader)
 
     res.status(201).json(response)
@@ -54,20 +55,15 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 }
 
 
-/* 
-  * for the put method, I am not sure if the graderFilename is necessary, since there are two
-  * files that can be uploaded, the grader and the makefile. I am currently assuming that the
-  * graderFile is required(following the same logic as the post method), but it can be changed
-  * to make it optional if needed.
-*/
+
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
-    if (!req.files || !('graderFile' in req.files)) {
-      return res.status(400).json(new GenericResponse('Container Auto Grader requires file upload for grader'));
+    if (req.files && (!('graderFile' in req.files) && !('makefileFile' in req.files))) {
+      return res.status(400).json(new GenericResponse('Uploaded files must be grader or makefile'));
     }
 
-    const graderFile = req.files['graderFile'][0]?.buffer
-    const makefile = req.files['makefileFile'] ? req.files['makefileFile'][0]?.buffer : null
+    const graderFile = req.files?.['graderFile'][0]?? null
+    const makefile = req.files?.['makefileFile'][0] ?? null
 
     req.body.id = parseInt(req.params.id)
     const results = await ContainerAutoGraderService.update(req.body, graderFile, makefile)
