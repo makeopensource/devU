@@ -39,15 +39,10 @@ const CategoryAssignment = ({assignment}: AssignmentProps) => {
     
     const fetchData = async () => { 
         try {
-            // Currently displays the most recent score like autolab. Going forward we would like a way to change the function reduce uses,
-            // or just pass AssignmentScore to the gradebook in an entirely different way 
-            const scores = await RequestService.get<AssignmentScore[]>( `/api/assignment-scores/${assignment.id}/${USER_ID}` )
-            if (scores) {
-                const score = scores.reduce((prev, curr) => Date.parse(prev.createdAt ?? '') < Date.parse(curr.createdAt ?? '') ? prev : curr)
+            const score = await RequestService.get<AssignmentScore>( `/api/assignment-scores/${assignment.id}/${USER_ID}` )
+            if (score) {
                 setAssignmentScore(score)
-        } 
-        } catch {
-
+            } 
         } finally {
             setLoading(false)
         }

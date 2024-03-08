@@ -4,14 +4,16 @@ import submissionProblemScoreService from '../submissionProblemScore/submissionP
 import nonContainerAutograderService from '../nonContainerAutoGrader/nonContainerAutoGrader.service'
 import containerAutograderService from '../containerAutoGrader/containerAutoGrader.service'
 import assignmentProblemService from '../assignmentProblem/assignmentProblem.service'
+import assignmentScoreService from '../assignmentScore/assignmentScore.service'
 
-import { SubmissionScore, SubmissionProblemScore, ContainerAutoGrader } from 'devu-shared-modules'
+import { SubmissionScore, SubmissionProblemScore, ContainerAutoGrader, AssignmentScore } from 'devu-shared-modules'
 import { checkAnswer } from '../nonContainerAutoGrader/nonContainerAutoGrader.grader'
 import { serialize as serializeNonContainer } from '../nonContainerAutoGrader/nonContainerAutoGrader.serializer'
 import { serialize as serializeContainer } from '../containerAutoGrader/containerAutoGrader.serializer'
+import { serialize as serializeAssignmentScore } from '../assignmentScore/assignmentScore.serializer'
 
-export async function grade(id: number) {
-    const submission = await submissionService.retrieve(id)
+export async function grade(submissionId: number) {
+    const submission = await submissionService.retrieve(submissionId)
     if (!submission) return null
 
     const assignmentId = submission.assignmentId
@@ -40,7 +42,7 @@ export async function grade(id: number) {
             feedback += problemFeedback + '\n'
 
             const problemScoreObj: SubmissionProblemScore = {
-                submissionId: id,
+                submissionId: submissionId,
                 assignmentProblemId: assignmentProblem.id,
                 score: problemScore,
                 feedback: problemFeedback 
@@ -59,7 +61,7 @@ export async function grade(id: number) {
 
             for (const result of gradeResults) {
                 const problemScoreObj: SubmissionProblemScore = {
-                    submissionId: id,
+                    submissionId: submissionId,
                     assignmentProblemId: 1, //PLACEHOLDER, an assignmentProblem must exist in the db for this to work
                     score: result.score,
                     feedback: result.feedback,
@@ -71,12 +73,30 @@ export async function grade(id: number) {
         }
     } 
 
+    //Grading is finished. Create SubmissionScore and AssignmentScore and save to db.
     const scoreObj: SubmissionScore = {
-        submissionId: id,
+        submissionId: submissionId,
         score: score,       //Sum of all SubmissionProblemScore scores
         feedback: feedback  //Concatination of SubmissionProblemScore feedbacks
     }
     allScores.push(await submissionScoreService.create(scoreObj))
+
+    //PLACEHOLDER AssignmentScore logic. This should be customizable, but for now AssignmentScore will simply equal the latest SubmissionScore
+    const assignmentScoreModel = await assignmentScoreService.retrieveByUser(submission.assignmentId, submission.userId)
+    if (assignmentScoreModel) { //If assignmentScore already exists, update existing entity
+        const assignmentScore = serializeAssignmentScore(assignmentScoreModel)
+        assignmentScore.score = score
+        assignmentScoreService.update(assignmentScore)
+        
+    } else { //Otherwise make a new one
+        const assignmentScore: AssignmentScore = {
+            assignmentId: submission.assignmentId,
+            userId: submission.userId,
+            score: score,
+        }
+        assignmentScoreService.create(assignmentScore)
+    }
+
     return allScores
 }
 

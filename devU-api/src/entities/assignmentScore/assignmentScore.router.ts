@@ -32,32 +32,6 @@ Router.get('/:id', asInt(), AssignmentScoreController.get)
 
 /**
  * @swagger
- * /assignment-scores/{assignment-id}/{user-id}:
- *  get:
- *    summary: Retrieve a list of assignment scores belonging to a specific assignment and user
- *    tags:
- *      - AssignmentScore
- *    responses:
- *      '200':
- *        description: OK
- *    parameters:
- *      - name: assignment-id
- *        description: Enter Assignment Id
- *        in: path
- *        required: true
- *        schema:
- *          type: integer
- *      - name: user-id
- *        description: Enter User Id
- *        in: path
- *        required: true
- *        schema:
- *          type: integer
- */
-Router.get('/:id/:userId', asInt(), asInt('userId'), AssignmentScoreController.getByUser)
-
-/**
- * @swagger
  * /assignment-scores/detail/{id}:
  *  get:
  *    summary: Retrieve a single assignment score's details
@@ -80,6 +54,32 @@ Router.get('/:id/:userId', asInt(), asInt('userId'), AssignmentScoreController.g
  *            $ref: '#/components/schemas/AssignmentScore'
  */
 Router.get('/detail/:id', asInt(), AssignmentScoreController.detail)
+
+/**
+ * @swagger
+ * /assignment-scores/{assignment-id}/{user-id}:
+ *  get:
+ *    summary: Retrieve an assignment score belonging to a specific assignment and user
+ *    tags:
+ *      - AssignmentScore
+ *    responses:
+ *      '200':
+ *        description: OK
+ *    parameters:
+ *      - name: assignment-id
+ *        description: Enter Assignment Id
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: integer
+ *      - name: user-id
+ *        description: Enter User Id
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: integer
+ */
+Router.get('/:id/:userId', asInt(), asInt('userId'), AssignmentScoreController.getByUser)
 
 /**
  * @swagger
