@@ -36,11 +36,33 @@ Router.get('/', AssignmentsController.get)
  *     parameters:
  *       - name: id
  *         in: path
+ *         description: Enter assignment id
  *         required: true
  *         schema:
  *           type: integer    
  */
 Router.get('/:id', asInt(), AssignmentsController.detail)
+
+
+/**
+ * @swagger
+ * /assignments/course/{courseId}:
+ *   get:
+ *     summary: Retrieve a list of a course's assignments
+ *     tags:
+ *       - Assignments
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         description: Enter course id
+ *         required: true
+ *         schema:
+ *           type: integer    
+ */
+Router.get('/course/:courseId', asInt('courseId'), AssignmentsController.getByCourse)
 
 /**
  * @swagger

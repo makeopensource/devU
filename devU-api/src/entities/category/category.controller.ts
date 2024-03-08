@@ -37,8 +37,6 @@ export async function getByCourse(req: Request, res: Response, next: NextFunctio
     const courseId = parseInt(req.params.courseId)
     const category = await CategoryService.listByCourse(courseId)
 
-    if (!category) return res.status(404).json(NotFound)
-
     const response = category.map(serialize)
 
     res.status(200).json(response)
