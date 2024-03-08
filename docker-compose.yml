@@ -49,7 +49,7 @@ services:
     volumes:
       - ./dist/local:/usr/share/nginx/html
     ports:
-      - "9000:80"
+      - '9000:80'
   minio:
     image: minio/minio
     #    ports:
@@ -63,4 +63,3 @@ services:
       MINIO_ROOT_USER: typescript_user
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
-

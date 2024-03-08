@@ -13,6 +13,7 @@ import SubmissionScoreModel from '../entities/submissionScore/submissionScore.mo
 import UserModel from '../entities/user/user.model'
 import UserCourseModel from '../entities/userCourse/userCourse.model'
 import FileModel from '../fileUpload/fileUpload.model'
+import DeadlineExtensionsModel from "../entities/deadlineExtensions/deadlineExtensions.model";
 
 type Models =
     | AssignmentModel
@@ -31,5 +32,6 @@ type Models =
     | UserCourseModel
     | CategoryModel
     | FileModel
+    | DeadlineExtensionsModel
 
 export default Models
