@@ -1,0 +1,38 @@
+@import 'variables';
+
+.name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.subText {
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  width: 100%;
+}
+
+@media (max-width: $medium) {
+  .subText {
+    display: block;
+  }
+}
+
+.course {
+    font-size: 1.25rem;
+  
+    margin-bottom: 0.5rem;
+}
+  
+.assignment {
+    font-size: 1.125rem;
+  
+    margin-bottom: 1rem;
+}
+  
+.meta {
+    display: flex;
+    gap: 1rem;
+}
