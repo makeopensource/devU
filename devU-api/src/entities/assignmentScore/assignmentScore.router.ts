@@ -47,17 +47,32 @@ Router.get('/:id', asInt(), AssignmentScoreController.get)
  *        required: true
  *        schema:
  *          type: integer
- *    requestBody:
- *      content:
- *        application/x-www-form-urlencoded:
- *          schema:
- *            $ref: '#/components/schemas/AssignmentScore'
  */
 Router.get('/detail/:id', asInt(), AssignmentScoreController.detail)
 
 /**
  * @swagger
- * /assignment-scores/{assignment-id}/{user-id}:
+ * /assignment-scores/user/{user-id}:
+ *  get:
+ *    summary: Retrieve a list of assignment scores belonging to a user
+ *    tags:
+ *      - AssignmentScore
+ *    responses:
+ *      '200':
+ *        description: OK
+ *    parameters:
+ *      - name: user-id
+ *        description: Enter User Id
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: integer
+ */
+Router.get('/user/:userId', asInt('userId'), AssignmentScoreController.getByUser)
+
+/**
+ * @swagger
+ * /assignment-scores/detail/{assignment-id}/{user-id}:
  *  get:
  *    summary: Retrieve an assignment score belonging to a specific assignment and user
  *    tags:
@@ -79,7 +94,7 @@ Router.get('/detail/:id', asInt(), AssignmentScoreController.detail)
  *        schema:
  *          type: integer
  */
-Router.get('/:id/:userId', asInt(), asInt('userId'), AssignmentScoreController.getByUser)
+Router.get('/detail/:id/:userId', asInt(), asInt('userId'), AssignmentScoreController.detailByUser)
 
 /**
  * @swagger

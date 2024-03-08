@@ -19,46 +19,25 @@ type UrlParams = {
 type CategoryProps = {
     category: Category
     assignments: Assignment[]
+    assignmentScores: AssignmentScore[]
 }
 type AssignmentProps = {
     assignment: Assignment
+    assignmentScore?: AssignmentScore
 }
 
 
-const CategoryAssignment = ({assignment}: AssignmentProps) => {
-    
-    const [assignmentScore, setAssignmentScore] = useState({} as AssignmentScore)
-    const [loading, setLoading] = useState(true)
-
+const CategoryAssignment = ({assignment, assignmentScore}: AssignmentProps) => {
     const { courseId } = useParams() as UrlParams
-    const USER_ID = useAppSelector((store) => store.user.id)
-
-    useEffect(() => {
-        fetchData()
-      }, [])
-    
-    const fetchData = async () => { 
-        try {
-            const score = await RequestService.get<AssignmentScore>( `/api/assignment-scores/${assignment.id}/${USER_ID}` )
-            if (score) {
-                setAssignmentScore(score)
-            } 
-        } finally {
-            setLoading(false)
-        }
-        
-    }
-
-    if (loading) return <LoadingOverlay delay={250} />
 
     return (
         <div>
-            <Link className={styles.assignmentName} to={`/courses/${courseId}/assignments/${assignment.id}`}>{assignment.name} </Link> - Score: {assignmentScore.score ?? 'N/A'}
+            <Link className={styles.assignmentName} to={`/courses/${courseId}/assignments/${assignment.id}`}>{assignment.name} </Link> - Score: {assignmentScore?.score ?? 'N/A'}
         </div>
     )
 }
 
-const GradebookCategory = ({category, assignments}: CategoryProps) => {
+const GradebookCategory = ({category, assignments, assignmentScores}: CategoryProps) => {
     return (
         <div>
             <div className={styles.categoryName}>
@@ -70,6 +49,7 @@ const GradebookCategory = ({category, assignments}: CategoryProps) => {
                     <CategoryAssignment
                         key={a.id}
                         assignment={a}
+                        assignmentScore={assignmentScores.find(aScore => aScore.assignmentId === a.id)}
                     />
                 ))}
             </div>
@@ -84,8 +64,10 @@ const GradebookStudentPage = () => {
     const [error, setError] = useState(null)
     const [categories, setCategories] = useState(new Array<Category>())
     const [assignments, setAssignments] = useState(new Array<Assignment>())
+    const [assignmentScores, setAssignmentScores] = useState(new Array<AssignmentScore>())
 
     const { courseId } = useParams() as UrlParams
+    const userId = useAppSelector((store) => store.user.id)
     
     useEffect(() => {
         fetchData()
@@ -98,6 +80,9 @@ const GradebookStudentPage = () => {
 
             const assignments = await RequestService.get<Assignment[]>( `/api/assignments/course/${courseId}` )
             setAssignments(assignments)
+
+            const assignmentScores = await RequestService.get<AssignmentScore[]>( `/api/assignment-scores/user/${userId}` )
+            setAssignmentScores(assignmentScores)
 
         } catch (error) {
             setError(error)
@@ -120,6 +105,7 @@ const GradebookStudentPage = () => {
                         key={c.id}
                         category={c}
                         assignments={assignments}
+                        assignmentScores={assignmentScores}
                     />
                 ))}
             </div>
