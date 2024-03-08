@@ -18,7 +18,7 @@ export default class AssignmentScoreModel {
    * @swagger
    * tags:
    *   - name: AssignmentScore
-   *     description: Route is currently non-functional, TS2305 error
+   *     description: 
    * components:
    *  schemas:
    *    AssignmentScore:

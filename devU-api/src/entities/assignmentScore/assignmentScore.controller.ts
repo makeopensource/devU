@@ -18,6 +18,20 @@ export async function get(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+export async function getByUser(req: Request, res: Response, next: NextFunction) {
+    try {
+        const id = parseInt(req.params.id)
+        const userId = parseInt(req.params.userId)
+
+        const assignmentScores = await AssignmentScoreService.listByUser(id, userId)
+        const response = assignmentScores.map(serialize)
+
+        res.status(200).json(response)
+    } catch (err) {
+        next(err)
+    }
+}
+
 export async function detail(req: Request, res: Response, next: NextFunction) {
     try {
         const id = parseInt(req.params.id)
@@ -69,4 +83,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-export default { get, detail, post, put, _delete }
+export default { get, detail, post, put, _delete, getByUser }
