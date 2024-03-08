@@ -1,13 +1,33 @@
 const API_URL = 'http://localhost:3001'
 
-//Set to a valid refreshToken, which is set as a cookie after logging in at localhost:9000
-const TOKEN = ''
+
+// fetch token with login route automatically
+async function fetchToken() {
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: '{"email":"name@buffalo.edu","externalId":"101"}',
+  }
+
+  const rep = await fetch(API_URL + '/login/developer', options)
+  // get token in set-cookie header which will be in the format refreshToken='...'
+  const tmp = rep.headers.get('Set-Cookie')?.split('=')[1]
+
+  if (tmp === undefined) {
+    throw Error('Api token not found')
+  }
+  // remove ';Max-Age'
+  apiToken = tmp.split(';')[0]
+}
+
+let apiToken = ''
+
 //Returns the ID of the newly created entry
 async function SendPOST(path: string, requestBody: string) {
   let response = await fetch(API_URL + path, {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer ' + TOKEN,
+      'Authorization': 'Bearer ' + apiToken,
       'Content-Type': 'application/json',
     },
     body: requestBody,
@@ -41,6 +61,8 @@ async function SendPOST(path: string, requestBody: string) {
 */
 async function RunRequests() {
   try {
+    await fetchToken()
+
     //Users
     const userBilly = await SendPOST('/users', JSON.stringify({
       email: 'billy@buffalo.edu', externalId: 'billy', preferredName: 'Billiam',
