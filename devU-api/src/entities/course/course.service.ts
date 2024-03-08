@@ -3,11 +3,17 @@ import { getRepository, IsNull } from 'typeorm'
 import CourseModel from './course.model'
 
 import { Course } from 'devu-shared-modules'
+import { initializeMinio } from '../../fileStorage'
+
+
 
 const connect = () => getRepository(CourseModel)
 
 export async function create(course: Course) {
-  return await connect().save(course)
+  const output = await connect().save(course)
+  const bucketName = (course.name).toLowerCase()+course.number+course.semester+course.id
+  await initializeMinio(bucketName)
+  return output
 }
 
 export async function update(course: Course) {

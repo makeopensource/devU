@@ -5,7 +5,7 @@ import SubmissionService from '../submission/submission.service'
 
 import { GenericResponse, NotFound } from '../../utils/apiResponse.utils'
 
-import { serialize } from '../submission/submission.serializer'
+import { serialize } from './submission.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
@@ -43,12 +43,12 @@ export async function post(req: Request, res: Response, next: NextFunction) {
     requestBody.submitterIp = req.header('x-forwarded-for') || req.socket.remoteAddress
     requestBody.submittedBy = req.currentUser?.userId
 
-    const submission = await SubmissionService.create(requestBody)
+    const submission = await SubmissionService.create(requestBody, req.file)
     const response = serialize(submission)
 
     res.status(201).json(response)
-  } catch (err) {
-    res.status(400).json(new GenericResponse(err.message))
+  } catch (err:any) {
+    next(err)
   }
 }
 

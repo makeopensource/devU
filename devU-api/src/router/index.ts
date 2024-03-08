@@ -17,6 +17,7 @@ import assignmentProblem from '../entities/assignmentProblem/assignmentProblem.r
 import submissionProblemScore from '../entities/submissionProblemScore/submissionProblemScore.router'
 import deadlineExtensions from "../entities/deadlineExtensions/deadlineExtensions.router";
 import fileUpload from '../fileUpload/fileUpload.router'
+import category from '../entities/category/category.router'
 import grader from '../entities/grader/grader.router'
 
 import { isAuthorized } from '../auth/auth.middleware'
@@ -30,6 +31,7 @@ Router.use('/assignments', isAuthorized, assignments)
 Router.use('/assignment-problems', isAuthorized, assignmentProblem)
 Router.use('/users', isAuthorized, users)
 Router.use('/courses', isAuthorized, courses)
+Router.use('/categories', isAuthorized, category)
 Router.use('/user-courses', isAuthorized, userCourse)
 Router.use('/submissions', isAuthorized, submissions)
 Router.use('/submission-scores', isAuthorized, submissionScore)
