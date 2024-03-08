@@ -84,6 +84,16 @@ async function RunRequests() {
       userId: userJones, courseId: course312, level: 'student', dropped: false,
     }))
 
+    //Categories
+    SendPOST('/categories', JSON.stringify({
+      courseId: course312, name: 'Homework'
+    }))
+    SendPOST('/categories', JSON.stringify({
+      courseId: course312, name: 'Quizzes'
+    }))
+    SendPOST('/categories', JSON.stringify({
+      courseId: course302, name: 'Sprints'
+    }))
 
     //Assignments
     const assign312_1 = await SendPOST('/assignments', JSON.stringify({
@@ -300,7 +310,6 @@ async function RunRequests() {
     // }))
 
 
-    //Categories - ROUTE NOT FUNCTIONAL
 
 
     //CategoryScores - ROUTE NOT FUNCTIONAL

@@ -17,6 +17,7 @@ import assignmentProblem from '../entities/assignmentProblem/assignmentProblem.r
 import submissionProblemScore from '../entities/submissionProblemScore/submissionProblemScore.router'
 import fileUpload from '../fileUpload/fileUpload.router'
 import grader from '../entities/grader/grader.router'
+import categories from '../entities/category/category.router'
 
 import { isAuthorized } from '../auth/auth.middleware'
 
@@ -37,6 +38,7 @@ Router.use('/container-auto-graders', isAuthorized, containerAutoGrader)
 Router.use('/submission-problem-scores', isAuthorized, submissionProblemScore)
 Router.use('/file-upload', isAuthorized, fileUpload)
 Router.use('/grade', isAuthorized, grader)
+Router.use('/categories', isAuthorized, categories)
 
 Router.use('/login', login)
 Router.use('/logout', logout)
