@@ -99,6 +99,7 @@ const UserCoursesListPage = () => {
   const defaultOrderByOption = orderByOptions.find((o) => o.value === orderBy)
   const defaultGroupByOption = groupByOptions.find((o) => o.value === groupBy)
 
+
   return (
     <PageWrapper>
       <div className={styles.header}>

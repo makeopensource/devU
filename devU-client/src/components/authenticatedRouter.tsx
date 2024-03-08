@@ -17,6 +17,7 @@ import SubmissionDetailPage from 'components/pages/submissionDetailPage'
 import UserDetailPage from 'components/pages/userDetailPage'
 import UserCoursesListPage from 'components/pages/userCoursesListPage'
 import UserSubmissionsListPage from 'components/pages/userSubmissionsListPage'
+import NonContainerAutoGraderForm from './pages/nonContainerAutoGraderForm'
 
 const AuthenticatedRouter = () => (
   <Switch>
@@ -35,6 +36,8 @@ const AuthenticatedRouter = () => (
     <Route exact path='/courses/:courseId/assignments' component={CourseAssignmentsListPage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId' component={AssignmentDetailPage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId/update' component={AssignmentUpdatePage} />
+
+    <Route exact path='/ncagtest' component={NonContainerAutoGraderForm} />
     <Route component={NotFoundPage} />
   </Switch>
 )
