@@ -26,22 +26,24 @@ export async function grade(id: number) {
 
     
     var score = 0
+    var feedback = ''
     var allScores = [] //This is the return value, the serializer parses it into a GraderInfo object for the controller to return
 
     //Run Non-Container Autograders
     for (const question in form) { 
         const nonContainerGrader = nonContainerAutograders.find(grader => grader.question === question)
         const assignmentProblem = assignmentProblems.find(problem => problem.problemName === question)
-        
+
         if (nonContainerGrader && assignmentProblem) {
-            const problemScore = await checkAnswer(form[question], serializeNonContainer(nonContainerGrader)) //Should also return feedback in the future
+            const [problemScore, problemFeedback] = checkAnswer(form[question], serializeNonContainer(nonContainerGrader)) 
             score += problemScore
+            feedback += problemFeedback + '\n'
 
             const problemScoreObj: SubmissionProblemScore = {
                 submissionId: id,
                 assignmentProblemId: assignmentProblem.id,
                 score: problemScore,
-                feedback: '' //grader doesn't currently return feedback
+                feedback: problemFeedback 
             }
             allScores.push(await submissionProblemScoreService.create(problemScoreObj))
         }
@@ -64,14 +66,15 @@ export async function grade(id: number) {
                 }
                 allScores.push(await submissionProblemScoreService.create(problemScoreObj))
                 score += result.score
+                feedback += result.feedback + '\n'
             }
         }
     } 
 
     const scoreObj: SubmissionScore = {
         submissionId: id,
-        score: score,
-        feedback: '' //graders currently don't return feedback, will be the concatination of SubmissionProblemScore feedbacks
+        score: score,       //Sum of all SubmissionProblemScore scores
+        feedback: feedback  //Concatination of SubmissionProblemScore feedbacks
     }
     allScores.push(await submissionScoreService.create(scoreObj))
     return allScores
