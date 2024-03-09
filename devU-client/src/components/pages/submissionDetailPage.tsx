@@ -4,18 +4,18 @@ import PageWrapper from 'components/shared/layouts/pageWrapper'
 import RequestService from 'services/request.service'
 import { SubmissionScore } from 'devu-shared-modules'
 
-
 const SubmissionDetailPage = (props : any) => { 
     const { state } = props.location
-    const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
-
+    const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
 
     const fetchData = async () => {
         try {
-            const data = await RequestService.get<SubmissionScore[]>(
+            const data = await RequestService.get<SubmissionScore>(
                 `/api/submission-scores/${state.id}`
             )
-            setSubmissionScores(data)
+            console.log(data)
+            console.log(typeof(data))
+            setSubmissionScore(data)
         } catch (error) {
             console.log('Error fetching submission problem scores', error)
         }
@@ -28,14 +28,14 @@ const SubmissionDetailPage = (props : any) => {
     return(
         <PageWrapper>
             <h1>Submission Detail</h1>
-            {submissionScores.map(score => (
+            {submissionScore ? (
                 <div>
-                    <h1>{score.submissionId}</h1>
-                    <h2>{score.score}</h2>
-                    <h3>{score.feedback}</h3>
+                    <h1>{submissionScore.submissionId}</h1>
+                    <h2>{submissionScore.score}</h2>
+                    <h3>{submissionScore.feedback}</h3>
                     <br></br>
                 </div>
-            ))}
+            ) : null}
         </PageWrapper>
     )
 }

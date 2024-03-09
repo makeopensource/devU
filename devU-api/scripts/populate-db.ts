@@ -1,7 +1,7 @@
 const API_URL = 'http://localhost:3001'
 
 //Set to a valid refreshToken, which is set as a cookie after logging in at localhost:9000
-const TOKEN = ''
+const TOKEN = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNrMDcxMTIwMjEifQ.eyJ1c2VySWQiOjEsImlzUmVmcmVzaFRva2VuIjp0cnVlLCJpYXQiOjE3MDk5MjQ4MzAsImV4cCI6MTcxMDc4ODgzMCwiYXVkIjpbImRldlUtYXBpIiwiZGV2VS1jbGllbnQiXSwiaXNzIjoiZGV2VS1hdXRoIiwic3ViIjoiMSJ9.e3Tay4m45DFXlAEQQVwMyfKPlI68uLGP0DeBhJMYccgdOHDekPJeCLYuK9dKIlF4Yr2_4EajThSEfcKRv0Sy9qJYeQCBptSGzcJVzfIYjHiDOdw16kvJBFJbtPK-YvewoV4a5pYa9O66qkUjItCWdDsUPzVkxAdkkNgl770Fk36QwdUwKk8K7LpIXr-gtoKm6Mzi3vMA_L07iF61Ci9H3c6f5oQqgjyWmV7upmgzgrbrxASoblEOGaqXP4UMJGUAGSMCuVNGycEzzuP7eJvf0LQpyp-9EA0ARQxWEyqHX0X9mYpNhzvu7BCTHtNQXHb3oSQbozd6S5Rms9L6J3iALCMtRJwXnkmhKGmx7kubKveskwrlQt13K6R9GAoYWQ6E533HOjBLSxLkcM6TIpWArOLnBzpJnG3I-LzJByOY016wIHLYHJEQlY-RgesVSIO5XXoS0h02G_-tl7qnYfJ-J6CME-Uhn62-mVSMbay-j78h8MOGAKK6RdmYCUcTidYW'
 //Returns the ID of the newly created entry
 async function SendPOST(path: string, requestBody: string) {
   let response = await fetch(API_URL + path, {
