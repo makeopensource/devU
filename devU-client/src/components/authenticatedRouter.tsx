@@ -29,8 +29,6 @@ const AuthenticatedRouter = () => (
     <Route exact path='/users/:userId/submissions' component={UserSubmissionsListPage} />
     {/* Just reuse the homepage here, for now this is fine. we might want to change this in the future though which is why they exist as separate routes */}
     <Route exact path='/users/:userId/assignments' component={HomePage} />
-    <Route exact path='/users/:userId/assignments/createAssignment' component={AssignmentCreatePage}/>
-    <Route exact path='/users/:userId/assignments/updateAssignment/:assignmentId' component={AssignmentUpdatePage}/>
     <Route exact path='/users/:userId/courses' component={UserCoursesListPage} />
     <Route exact path='/users/:userId/courses/courseForm' component={EditCourseFormPage} />
     <Route exact path='/submissions/:submissionId' component={SubmissionDetailPage} />
@@ -39,6 +37,7 @@ const AuthenticatedRouter = () => (
     <Route exact path='/courses/:courseId/update' component={CourseUpdatePage} />
     <Route exact path='/courses/:courseId/users' component={CourseUsersListPage} />
     <Route exact path='/courses/:courseId/assignments' component={CourseAssignmentsListPage} />
+    <Route exact path='/courses/:courseId/assignments/create' component={AssignmentCreatePage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId' component={AssignmentDetailPage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId/update' component={AssignmentUpdatePage} />
 
