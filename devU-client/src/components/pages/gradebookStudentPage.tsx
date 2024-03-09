@@ -13,9 +13,6 @@ import RequestService from 'services/request.service'
 import styles from './gradebookPage.scss'
 import { useParams } from 'react-router-dom'
 
-type UrlParams = {
-    courseId: string
-}
 type CategoryProps = {
     category: Category
     assignments: Assignment[]
@@ -28,7 +25,7 @@ type AssignmentProps = {
 
 
 const CategoryAssignment = ({assignment, assignmentScore}: AssignmentProps) => {
-    const { courseId } = useParams() as UrlParams
+    const { courseId } = useParams<{courseId: string}>()
 
     return (
         <div>
@@ -66,7 +63,7 @@ const GradebookStudentPage = () => {
     const [assignments, setAssignments] = useState(new Array<Assignment>())
     const [assignmentScores, setAssignmentScores] = useState(new Array<AssignmentScore>())
 
-    const { courseId } = useParams() as UrlParams
+    const { courseId } = useParams<{courseId: string}>()
     const userId = useAppSelector((store) => store.user.id)
     
     useEffect(() => {
