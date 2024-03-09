@@ -1,8 +1,15 @@
 export type FileUpload = {
+  id?: number
+  userId?: number
+  assignmentId?: number
+  courseId?: number
   fieldName: string
-  originalName: string[]
-  fileName: string[]
-  etags: string[]
+  originalName: string
+  filename: string
+  etags: string
+  createdAt?: string
+  updatedAt?: string
+  deletedAt?: string
 }
 
 /*
@@ -12,4 +19,4 @@ export type FileUpload = {
 
   Marked for discussion.
  */
-export const fileUploadTypes = ['studentSubmission', 'graderFile', 'makefileFile'] as const
+export const fileUploadTypes = ['studentSubmission', 'graderFile', 'makefileFile','files'] as const

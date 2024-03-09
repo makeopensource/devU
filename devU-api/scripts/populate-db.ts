@@ -1,13 +1,33 @@
 const API_URL = 'http://localhost:3001'
 
-//Set to a valid refreshToken, which is set as a cookie after logging in at localhost:9000
-const TOKEN = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNrMDcxMTIwMjEifQ.eyJ1c2VySWQiOjEsImlzUmVmcmVzaFRva2VuIjp0cnVlLCJpYXQiOjE3MDk5MjQ4MzAsImV4cCI6MTcxMDc4ODgzMCwiYXVkIjpbImRldlUtYXBpIiwiZGV2VS1jbGllbnQiXSwiaXNzIjoiZGV2VS1hdXRoIiwic3ViIjoiMSJ9.e3Tay4m45DFXlAEQQVwMyfKPlI68uLGP0DeBhJMYccgdOHDekPJeCLYuK9dKIlF4Yr2_4EajThSEfcKRv0Sy9qJYeQCBptSGzcJVzfIYjHiDOdw16kvJBFJbtPK-YvewoV4a5pYa9O66qkUjItCWdDsUPzVkxAdkkNgl770Fk36QwdUwKk8K7LpIXr-gtoKm6Mzi3vMA_L07iF61Ci9H3c6f5oQqgjyWmV7upmgzgrbrxASoblEOGaqXP4UMJGUAGSMCuVNGycEzzuP7eJvf0LQpyp-9EA0ARQxWEyqHX0X9mYpNhzvu7BCTHtNQXHb3oSQbozd6S5Rms9L6J3iALCMtRJwXnkmhKGmx7kubKveskwrlQt13K6R9GAoYWQ6E533HOjBLSxLkcM6TIpWArOLnBzpJnG3I-LzJByOY016wIHLYHJEQlY-RgesVSIO5XXoS0h02G_-tl7qnYfJ-J6CME-Uhn62-mVSMbay-j78h8MOGAKK6RdmYCUcTidYW'
+
+// fetch token with login route automatically
+async function fetchToken() {
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: '{"email":"name@buffalo.edu","externalId":"101"}',
+  }
+
+  const rep = await fetch(API_URL + '/login/developer', options)
+  // get token in set-cookie header which will be in the format refreshToken='...'
+  const tmp = rep.headers.get('Set-Cookie')?.split('=')[1]
+
+  if (tmp === undefined) {
+    throw Error('Api token not found')
+  }
+  // remove ';Max-Age'
+  apiToken = tmp.split(';')[0]
+}
+
+let apiToken = ''
+
 //Returns the ID of the newly created entry
 async function SendPOST(path: string, requestBody: string) {
   let response = await fetch(API_URL + path, {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer ' + TOKEN,
+      'Authorization': 'Bearer ' + apiToken,
       'Content-Type': 'application/json',
     },
     body: requestBody,
@@ -41,6 +61,8 @@ async function SendPOST(path: string, requestBody: string) {
 */
 async function RunRequests() {
   try {
+    await fetchToken()
+
     //Users
     const userBilly = await SendPOST('/users', JSON.stringify({
       email: 'billy@buffalo.edu', externalId: 'billy', preferredName: 'Billiam',
@@ -177,9 +199,11 @@ async function RunRequests() {
 
 
     //AssignmentProblems
+    // @ts-ignore
     const assign312_quiz_q1 = await SendPOST('/assignment-problems', JSON.stringify({
       assignmentId: assign312_quiz, problemName: 'q1', maxScore: 5,
     }))
+    // @ts-ignore
     const assign312_quiz_q2 = await SendPOST('/assignment-problems', JSON.stringify({
       assignmentId: assign312_quiz, problemName: 'q2', maxScore: 5,
     }))
@@ -274,6 +298,13 @@ async function RunRequests() {
       score: 1,
       correctString: '/^It was (two|2)-tired\\.$/',
       isRegex: true,
+    }))
+
+    SendPOST('/deadline-extensions',JSON.stringify({
+      assignmentId:1,
+      creatorId:1,
+      deadlineDate:"2024-05-23T03:32:32.813Z",
+      userId:2
     }))
 
     //AssignmentScore - ROUTE NOT FUNCTIONAL

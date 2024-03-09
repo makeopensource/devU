@@ -27,8 +27,8 @@ const fields: Field[] = fileUploadTypes.map(name => ({name}))
  *   get:
  *     summary: Retrieve a list of all files in the bucket
  */
-
 Router.get('/:bucketName', FileUploadController.get);
+
 /**
  * @swagger
  * /file-upload/{bucketName}/{fileName}:
@@ -44,18 +44,6 @@ Router.get('/:bucketName/:fileName', FileUploadController.detail);
  *     summary: Upload a new file to the bucket
  */
 Router.post('/', upload.fields(fields), validator, FileUploadController.post);
-
-/**
- * @swagger
- * /file-upload/{bucketName}:
- *   put:
- *     summary: Update a file in the bucket
- *
- *
- * does not have idea whether the path should have the bucketName or not
- * leave for discussion
- */
-Router.put('/:bucketName', upload.fields(fields), validator, FileUploadController.put);
 
 
 export default Router;
