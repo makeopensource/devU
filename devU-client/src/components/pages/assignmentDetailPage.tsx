@@ -8,10 +8,13 @@ import TextField from 'components/shared/inputs/textField'
 import Button from 'components/shared/inputs/button'
 import { useAppSelector,useActionless } from 'redux/hooks'
 import { SET_ALERT } from 'redux/types/active.types'
+import { Link, useParams } from 'react-router-dom'
 
-const AssignmentDetailPage = (props: any) => {
+import styles from './assignmentDetailPage.scss'
+
+const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
-    const { state } = props.location
+    const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
     const userId = useAppSelector((store) => store.user.id)
 
     const [error, setError] = useState(null)
@@ -30,7 +33,7 @@ const AssignmentDetailPage = (props: any) => {
 
     const fetchData = async () => {
          try {
-             const data = await RequestService.get(`/api/assignment-problems/${state.id}`)
+             const data = await RequestService.get(`/api/assignment-problems/${assignmentId}`)
              setAssignmentProblems(data)
          }catch(error){
              setError(error)
@@ -55,8 +58,8 @@ const AssignmentDetailPage = (props: any) => {
 
         const submission = {
             userId : userId,
-            assignmentId : state.id,
-            courseId : state.courseId,
+            assignmentId : assignmentId,
+            courseId : courseId,
             content : JSON.stringify(contentField),
         }
 
@@ -80,7 +83,13 @@ const AssignmentDetailPage = (props: any) => {
 
     return(
         <PageWrapper>
-            <h1>Assignment Detail</h1>
+            <div className={styles.header}>
+                <h1>Assignment Detail</h1>
+                <div>
+                    <Link className={styles.button} to={`/courses/${courseId}/assignments/${assignmentId}/update`}>Edit Assignment</Link>
+                </div>
+            </div>
+
             {assignmentProblems.map(assignmentProblem => (
                 <div>
                     <h1>{assignmentProblem.problemName}</h1>

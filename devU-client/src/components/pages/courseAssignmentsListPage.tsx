@@ -5,13 +5,14 @@ import {Assignment} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from './errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import styles from './courseAssignmentsListPage.scss'
 
 
 const CourseAssignmentsListPage = () => {
 
+    const { courseId } = useParams<{courseId: string}>()
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
     const [assignments, setAssignments] = useState(new Array<Assignment>())
@@ -36,7 +37,15 @@ const CourseAssignmentsListPage = () => {
 
     return(
         <PageWrapper>
-            <h1>Course Assignments List Page</h1>
+            <div className={styles.header}>
+                <h1>Course Assignments List Page</h1>
+
+                <div>
+                    <Link className={styles.button} to={`/courses/${courseId}/assignments/create`}>Add Assignments</Link>
+                </div>
+            </div>
+            
+            
             {assignments.map(assignment => (
                 <div>
                     <Link 
