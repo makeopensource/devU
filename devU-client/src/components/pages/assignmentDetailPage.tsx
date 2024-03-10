@@ -8,9 +8,7 @@ import TextField from 'components/shared/inputs/textField'
 import Button from 'components/shared/inputs/button'
 import { useAppSelector,useActionless } from 'redux/hooks'
 import { SET_ALERT } from 'redux/types/active.types'
-import { Link, useParams } from 'react-router-dom'
-
-import styles from './assignmentDetailPage.scss'
+import { useParams } from 'react-router-dom'
 
 const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -83,13 +81,7 @@ const AssignmentDetailPage = () => {
 
     return(
         <PageWrapper>
-            <div className={styles.header}>
-                <h1>Assignment Detail</h1>
-                <div>
-                    <Link className={styles.button} to={`/courses/${courseId}/assignments/${assignmentId}/update`}>Edit Assignment</Link>
-                </div>
-            </div>
-
+            <h1>Assignment Detail</h1>
             {assignmentProblems.map(assignmentProblem => (
                 <div>
                     <h1>{assignmentProblem.problemName}</h1>

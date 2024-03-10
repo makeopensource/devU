@@ -26,7 +26,15 @@ export async function retrieve(id: number) {
 }
 
 export async function list(assignmentId: number) {
-    return await connect().find({ assignmentId: assignmentId, deletedAt: IsNull() })
+    return await connect().find({ assignmentId, deletedAt: IsNull() })
+}
+
+export async function retrieveByUser(assignmentId: number, userId: number) {
+  return await connect().findOne({ assignmentId, userId, deletedAt: IsNull() })
+}
+
+export async function listByUser(userId: number) {
+  return await connect().find({ userId, deletedAt: IsNull() })
 }
 
 export default {
@@ -35,5 +43,7 @@ export default {
     update,
     _delete,
     list,
+    retrieveByUser,
+    listByUser,
 }
 
