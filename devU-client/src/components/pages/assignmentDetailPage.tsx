@@ -11,6 +11,8 @@ import { useAppSelector,useActionless } from 'redux/hooks'
 import { SET_ALERT } from 'redux/types/active.types'
 import { useParams } from 'react-router-dom'
 
+import styles from './assignmentDetailPage.scss'
+
 const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
@@ -82,7 +84,9 @@ const AssignmentDetailPage = () => {
 
     return(
         <PageWrapper>
-            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/update`}>Add Problem</Link>
+            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/update`} className = {styles.button}>Update Assignment</Link>
+            <br></br><br></br><br></br><br></br>
+            <Link to = {`/ncagtest`} className = {styles.button}>Add Non-Container Auto-Graders</Link>
             <h1>Assignment Detail</h1>
             {assignmentProblems.map(assignmentProblem => (
                 <div>

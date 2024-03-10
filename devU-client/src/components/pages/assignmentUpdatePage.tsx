@@ -121,14 +121,15 @@ const AssignmentUpdatePage = () => {
     return (
     <PageWrapper>
         <h1>Assignment Detail Update</h1>
+        
 
         <Button onClick={toggleProblemForm}>Add Problem</Button>
         {toggleForm && (
             <div>
                 <br></br>
-                <TextField id='assignmentId' label='Assignment Id' onChange={handleProblemChange} defaultValue={problemFormData.assignmentId}/>
-                <TextField id='problemName' label='Problem Question' onChange={handleProblemChange} defaultValue={problemFormData.problemName}/>
-                <TextField id='maxScore' label='Max Score' onChange={handleProblemChange} defaultValue={problemFormData.maxScore}/>
+                <TextField id='assignmentId' label='Assignment Id' onChange={handleProblemChange} value={problemFormData.assignmentId}/>
+                <TextField id='problemName' label='Problem Question' onChange={handleProblemChange} value={problemFormData.problemName}/>
+                <TextField id='maxScore' label='Max Score' onChange={handleProblemChange} value={problemFormData.maxScore}/>
                 <Button onClick={handleSubmit} loading={loading}>Create Problem</Button>
             </div>
         )}
