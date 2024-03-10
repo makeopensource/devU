@@ -217,15 +217,6 @@ async function RunRequests() {
       assignmentId: assign312_quiz, problemName: "Of the following letters A-D, which is C?", maxScore: 5
     }))
 
-    // @ts-ignore
-    const assign312_quiz_q1 = await SendPOST('/assignment-problems', JSON.stringify({
-      assignmentId: assign312_quiz, problemName: 'q1', maxScore: 5,
-    }))
-    // @ts-ignore
-    const assign312_quiz_q2 = await SendPOST('/assignment-problems', JSON.stringify({
-      assignmentId: assign312_quiz, problemName: 'q2', maxScore: 5,
-    }))
-
 
     //Submissions
     const submission_billy_302_1 = await SendPOST('/submissions', JSON.stringify({
