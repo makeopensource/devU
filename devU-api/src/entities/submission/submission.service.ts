@@ -14,7 +14,7 @@ export async function create(submission: Submission, file?: Express.Multer.File|
   if (file) {
     const bucket : string = await getRepository(CourseModel).findOne({id: submission.courseId}).then((course) => {
       if (course) {
-        return (course.name).toLowerCase() + course.number + course.semester + course.id
+        return ((course.name).toLowerCase().replace(/ /g, '-') + course.number + course.semester + course.id).toLowerCase()
       }
       return 'submission'
     })
