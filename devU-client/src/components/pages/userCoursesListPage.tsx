@@ -107,12 +107,12 @@ const UserCoursesListPage = () => {
         <UserCourseListItem
           key={userCourse.courseId}
           userCourse={userCourse}
-          course={courses[userCourse.courseId || '']}
+          course={courses[userCourse.courseId || '']} 
         />
       ))}
       {allCourses.map(course => (
           <div>
-            <Link className={styles.courseName} to={`/courses/${course.id}`}>{course.name}</Link>
+            <Link className={styles.courseName} to={{pathname:`/courses/${course.id}`,state:course}}>{course.name}</Link>
           </div>
         ))}
     </PageWrapper>

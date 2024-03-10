@@ -12,6 +12,27 @@ This repo contains everything necessary to run the entirety of DevU in Docker:
 * A PostgreSQL database
 * A configuration builder for the back-end API
 
+## Contributors
+
+DevU is open-source and contributors are welcome. To contribute to the project, use the following steps:
+
+1. Look through the issue in the repo to find one that you'd like to work on
+   2. If there is an issue that doesn't exist, create the issue first
+3. Claim the issue to let the team know that you are working on it
+   4. If you are a contributor on the project, assign yourself ot the task
+   5. If you are not a contributor, leave a comment on the issue letting the team know of your intentions
+6. Create a feature branch off of develop for your work
+   7. Create a fork of the repo and push your contributions to a branch on that repo
+   8. If you are a contributor on the project, you may create a branch in this repo. In this case, your branch name should be related to the feature you are developing
+9. Complete and test your code
+   10. When committing, be sure to use meaningful commit messages that describe the code contributed in each commit. The first line should be a summary of the changes. If more description is needed, include these details in subsequent lines
+10. Create a PR from your feature branch into the develop branch of this repo
+    11. Please follow the PR template that is automatically created when you make the PR. Be sure to replace the default text with a description of your contribution and a link to the task(s) that it resolves
+11. Address any comments and change requests made on your PR during the code review
+    12. Push updates to your branch to update the PR
+13. Once the maintainers are satisfied with your PR, it wil be merged into the develop branch
+
+
 ## Getting Started
 
 This process might seem like a lot if you're new to many these technologies, but I promise it's at least 10 times

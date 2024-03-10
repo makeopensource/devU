@@ -1,53 +1,68 @@
 import { getRepository, IsNull } from 'typeorm'
 
-import { ContainerAutoGrader } from 'devu-shared-modules'
+import { ContainerAutoGrader, FileUpload } from 'devu-shared-modules'
 
 import ContainerAutoGraderModel from './containerAutoGrader.model'
-import { BucketNames, minioClient } from '../../fileStorage'
+import FileModel from "../../fileUpload/fileUpload.model";
+
+import { uploadFile } from '../../fileStorage'
+import {generateFilename} from "../../utils/fileUpload.utils";
 
 const connect = () => getRepository(ContainerAutoGraderModel)
+const fileConn = () => getRepository(FileModel)
 
-function assignmentGraderFileRecordName(containerAutoGrader: ContainerAutoGrader) {
-  if (!containerAutoGrader.id) throw new Error('Missing Id')
-  return containerAutoGrader.id.toString()
+async function filesUpload(bucket: string, file: Express.Multer.File, containerAutoGrader: ContainerAutoGrader,filename: string) {
+    const Etag: string = await uploadFile(bucket, file)
+    const assignmentId = containerAutoGrader.assignmentId
+
+    const fileModel: FileUpload = {
+        etags: Etag,
+        fieldName: bucket,
+        originalName: file.originalname,
+        filename: filename,
+        assignmentId: assignmentId,
+    }
+    //TODO: This is a temporary fix to get the function to pass. CourseId and UserId should be modified in the future
+    fileModel.courseId = 1
+    fileModel.userId = 1
+
+    await fileConn().save(fileModel)
+
+  return Etag
 }
 
-export async function create(containerAutoGrader: ContainerAutoGrader, graderInputFile: Buffer, makefileInputFile: Buffer | null = null) {
-    containerAutoGrader.graderFile = "Temp value. You'll see this if the file upload to MinIO fails"
-    const newContainerAutoGrader = await connect().save(containerAutoGrader)
-    const FileRecordName: string = assignmentGraderFileRecordName(newContainerAutoGrader)
 
-    /*
-      * For the minioClient.putObject method, I am not sure how the objectName is, but it seems like
-      * the objectName is the id of the containerAutoGrader.(inherits from the codeAssignment.service.ts file),
-      * but I am not sure if the makefile should also use the same objectName as the grader. Marking this 
-      * for review. Same with the update method.
-    */
-    await minioClient.putObject(BucketNames.GRADERS, FileRecordName, graderInputFile)
-    newContainerAutoGrader.graderFile = FileRecordName
+
+export async function create(containerAutoGrader: ContainerAutoGrader, graderInputFile: Express.Multer.File, makefileInputFile: Express.Multer.File | null = null) {
+    const bucket: string = 'graders'
+    const filename: string = generateFilename(graderInputFile.originalname)
+    await filesUpload(bucket, graderInputFile, containerAutoGrader, filename)
+    containerAutoGrader.graderFile = filename
 
     if (makefileInputFile) {
-        await minioClient.putObject(BucketNames.MAKEFILES, FileRecordName, makefileInputFile)
-        newContainerAutoGrader.makefileFile = FileRecordName
+        const makefileFilename: string = generateFilename(makefileInputFile.originalname)
+        await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename)
+        containerAutoGrader.makefileFile = makefileFilename
     }
 
-    const { id, assignmentId, graderFile, makefileFile, autogradingImage, timeout } = newContainerAutoGrader
-
-    await connect().update(id, { assignmentId, graderFile, makefileFile, autogradingImage, timeout })
-
-    return newContainerAutoGrader
+    const { id, assignmentId, graderFile, makefileFile, autogradingImage, timeout } = containerAutoGrader
+    return await connect().save({ id, assignmentId, graderFile, makefileFile, autogradingImage, timeout })
 }
 
-export async function update(containerAutoGrader: ContainerAutoGrader, graderInputFile: Buffer, makefileInputFile: Buffer | null = null) {
+export async function update(containerAutoGrader: ContainerAutoGrader, graderInputFile: Express.Multer.File | null = null, makefileInputFile: Express.Multer.File | null = null) {
     if (!containerAutoGrader.id) throw new Error('Missing Id')
-    const FileRecordName: string = assignmentGraderFileRecordName(containerAutoGrader)
-
-    await minioClient.putObject(BucketNames.GRADERS, FileRecordName, graderInputFile)
-    containerAutoGrader.graderFile = FileRecordName
+    if (graderInputFile) {
+        const bucket: string = 'graders'
+        const filename: string = generateFilename(graderInputFile.originalname)
+        await filesUpload(bucket, graderInputFile, containerAutoGrader, filename)
+        containerAutoGrader.graderFile = filename
+    }
 
     if (makefileInputFile) {
-        await minioClient.putObject(BucketNames.MAKEFILES, FileRecordName, makefileInputFile)
-        containerAutoGrader.makefileFile = FileRecordName
+        const bucket: string = 'makefiles'
+        const makefileFilename: string = generateFilename(makefileInputFile.originalname)
+        await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename)
+        containerAutoGrader.makefileFile = makefileFilename
     }
 
     const { id, assignmentId, graderFile, makefileFile, autogradingImage, timeout } = containerAutoGrader
@@ -66,10 +81,17 @@ export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
+//Currently only used in grader.service.ts, not yet defined in router
+export async function listByAssignmentId(assignmentId: number) {
+  if (!assignmentId) throw new Error('Missing AssignmentId')
+  return await connect().find({ assignmentId: assignmentId, deletedAt: IsNull() })
+}
+
 export default {
   create,
   retrieve,
   update,
   _delete,
   list,
+  listByAssignmentId,
 }

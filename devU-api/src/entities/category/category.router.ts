@@ -33,11 +33,32 @@ Router.get('/', CategoryController.get)
  *      parameters:
  *        - name: id
  *          in: path
+ *          description: Enter category id
  *          required: true
  *          schema:
  *           type: integer
  */
 Router.get('/:id', asInt(), CategoryController.detail)
+
+/**
+ * @swagger
+ * /categories/course/{courseId}:
+ *    get:
+ *      summary: Retrieve a list of categories by courseId
+ *      tags:
+ *        - Categories
+ *      responses:
+ *        '200':
+ *          description: OK
+ *      parameters:
+ *        - name: courseId
+ *          in: path
+ *          description: Enter course id
+ *          required: true
+ *          schema:
+ *           type: integer
+ */
+Router.get('/course/:courseId', asInt('courseId'), CategoryController.getByCourse)
 
 /**
  * @swagger

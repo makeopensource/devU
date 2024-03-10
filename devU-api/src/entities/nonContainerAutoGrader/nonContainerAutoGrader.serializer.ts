@@ -9,6 +9,7 @@ export function serialize(nonContainerAutoGrader: NonContainerAutoGraderModel): 
     question: nonContainerAutoGrader.question,
     score: nonContainerAutoGrader.score,
     correctString: nonContainerAutoGrader.correctString,
+    isRegex: nonContainerAutoGrader.isRegex,
     createdAt: nonContainerAutoGrader.createdAt.toISOString(),
     updatedAt: nonContainerAutoGrader.updatedAt.toISOString(),
   }

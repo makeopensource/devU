@@ -61,7 +61,7 @@ Router.post('/', validator, UserController.post)
  * @swagger
  * /users/{id}:
  *   put:
- *     summary: Update a user
+ *     summary: Update a user, all fields required but only preferredName is updated
  *     tags:
  *       - Users
  *     responses:

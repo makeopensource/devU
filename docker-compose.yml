@@ -26,6 +26,7 @@ services:
       dockerfile: api.Dockerfile
     environment:
       WAIT_HOSTS: db:5432
+      dev: 0 # value here is irrelevant; just here to make sure dev env exists
     depends_on:
       db:
         condition: service_started
@@ -48,7 +49,7 @@ services:
     volumes:
       - ./dist/local:/usr/share/nginx/html
     ports:
-      - "9000:80"
+      - '9000:80'
   minio:
     image: minio/minio
     #    ports:
@@ -62,4 +63,3 @@ services:
       MINIO_ROOT_USER: typescript_user
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
-

@@ -32,6 +32,19 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function getByCourse(req: Request, res: Response, next: NextFunction) {
+  try {
+    const courseId = parseInt(req.params.courseId)
+    const assignments = await AssignmentService.listByCourse(courseId)
+    
+    const response = assignments.map(serialize)
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
     const assignment = await AssignmentService.create(req.body)
@@ -69,4 +82,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, detail, post, put, _delete }
+export default { get, detail, post, put, _delete, getByCourse }

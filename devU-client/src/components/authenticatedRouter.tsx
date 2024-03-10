@@ -2,7 +2,10 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import AssignmentDetailPage from 'components/pages/assignmentDetailPage'
+
+import AssignmentCreatePage from 'components/pages/assignmentFormPage'
 import AssignmentUpdatePage from 'components/pages/assignmentUpdatePage'
+
 import CourseAssignmentsListPage from 'components/pages/courseAssignmentsListPage'
 import CourseDetailPage from 'components/pages/courseDetailPage'
 
@@ -17,6 +20,9 @@ import SubmissionDetailPage from 'components/pages/submissionDetailPage'
 import UserDetailPage from 'components/pages/userDetailPage'
 import UserCoursesListPage from 'components/pages/userCoursesListPage'
 import UserSubmissionsListPage from 'components/pages/userSubmissionsListPage'
+import NonContainerAutoGraderForm from './pages/nonContainerAutoGraderForm'
+import GradebookStudentPage from './pages/gradebookStudentPage'
+import GradebookInstructorPage from './pages/gradebookInstructorPage'
 
 const AuthenticatedRouter = () => (
   <Switch>
@@ -33,8 +39,12 @@ const AuthenticatedRouter = () => (
     <Route exact path='/courses/:courseId/update' component={CourseUpdatePage} />
     <Route exact path='/courses/:courseId/users' component={CourseUsersListPage} />
     <Route exact path='/courses/:courseId/assignments' component={CourseAssignmentsListPage} />
+    <Route exact path='/courses/:courseId/assignments/create' component={AssignmentCreatePage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId' component={AssignmentDetailPage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId/update' component={AssignmentUpdatePage} />
+    <Route exact path='/ncagtest' component={NonContainerAutoGraderForm} />
+    <Route exact path='/courses/:courseId/gradebook' component={GradebookStudentPage} />
+    <Route exact path='/courses/:courseId/gradebook/instructor' component={GradebookInstructorPage} />
     <Route component={NotFoundPage} />
   </Switch>
 )

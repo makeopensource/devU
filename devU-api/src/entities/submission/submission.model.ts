@@ -1,4 +1,3 @@
-
 import {
   JoinColumn,
   ManyToOne,
@@ -35,9 +34,6 @@ export default class SubmissionModel {
    *          type: integer
    *        content:
    *          type: string
-   *        type:
-   *          type: string
-   *          description: Must be either "filepath", "json", or "text"
    *        submitterIp:
    *          type: string
    *        submittedBy:
