@@ -1,6 +1,6 @@
 import React,{ useState, useEffect } from 'react'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import { AssignmentProblem, ExpressValidationError } from 'devu-shared-modules'
+import { AssignmentProblem /*, ExpressValidationError*/ } from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from './errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -19,10 +19,15 @@ const AssignmentDetailPage = () => {
     const [loading, setLoading] = useState(true)
     const [formData, setFormData] = useState({})
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
+
     
     useEffect(() => {
           fetchData()
-    }, [])
+    }, []);
+
+    // useEffect(() => {
+    //     console.log(submissionResponse);
+    // }, [submissionResponse]);
 
     const fetchData = async () => {
          try {
@@ -43,7 +48,7 @@ const AssignmentDetailPage = () => {
         setFormData(prevState => ({...prevState,[key] : value}))
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const contentField = {
             filepaths : [],
             form : formData,
@@ -58,16 +63,20 @@ const AssignmentDetailPage = () => {
 
         setLoading(true)
 
-        RequestService.post('/api/submissions', submission)
-            .then(() => {
-                setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
-            })
-            .catch((err: ExpressValidationError[] | Error) => {
-                const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+        try {
+            const response = await RequestService.post('/api/submissions', submission)
+            setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
+    
+            // Now you can use submissionResponse.id here
+            await RequestService.post(`/api/grade/${response.id}`, {} )
+            setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
+        } catch (err) {
+            const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+            setAlert({ autoDelete: false, type: 'error', message })
+        } finally {
+            setLoading(false)
+        }
 
-                setAlert({ autoDelete: false, type: 'error', message })
-            })
-            .finally(() => setLoading(false))
     }
 
     return(

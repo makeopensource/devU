@@ -14,9 +14,11 @@ type Props = {
   course?: Course
 }
 
+
 const SubmissionListItem = ({ submission, assignment, course }: Props) => (
   <ListItemWrapper
-    to={`/submissions/${submission.id}`}
+    //to={`/submissions/${submission.id}`}
+    to = {{pathname: `/submissions/${submission.id}`, state: submission}}
     tag={`${submission.id}-${submission.assignmentId}-${submission.courseId}`}>
     {course && (
       <div className={styles.course}>
