@@ -5,7 +5,7 @@ export function serialize(file: FileUpload): FileUpload {
     return {
         fieldName: file.fieldName,
         originalName: file.originalName,
-        fileName: file.fileName,
+        filename: file.filename,
         etags: file.etags
     }
 }

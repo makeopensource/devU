@@ -1,13 +1,33 @@
 const API_URL = 'http://localhost:3001'
 
-//Set to a valid refreshToken, which is set as a cookie after logging in at localhost:9000
-const TOKEN = ''
+
+// fetch token with login route automatically
+async function fetchToken() {
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: '{"email":"name@buffalo.edu","externalId":"101"}',
+  }
+
+  const rep = await fetch(API_URL + '/login/developer', options)
+  // get token in set-cookie header which will be in the format refreshToken='...'
+  const tmp = rep.headers.get('Set-Cookie')?.split('=')[1]
+
+  if (tmp === undefined) {
+    throw Error('Api token not found')
+  }
+  // remove ';Max-Age'
+  apiToken = tmp.split(';')[0]
+}
+
+let apiToken = ''
+
 //Returns the ID of the newly created entry
 async function SendPOST(path: string, requestBody: string) {
   let response = await fetch(API_URL + path, {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer ' + TOKEN,
+      'Authorization': 'Bearer ' + apiToken,
       'Content-Type': 'application/json',
     },
     body: requestBody,
@@ -41,6 +61,8 @@ async function SendPOST(path: string, requestBody: string) {
 */
 async function RunRequests() {
   try {
+    await fetchToken()
+
     //Users
     const userBilly = await SendPOST('/users', JSON.stringify({
       email: 'billy@buffalo.edu', externalId: 'billy', preferredName: 'Billiam',
@@ -187,11 +209,20 @@ async function RunRequests() {
 
 
     //AssignmentProblems
+
     SendPOST("/assignment-problems", JSON.stringify({
       assignmentId: assign312_quiz, problemName: "Of the following letters A-D, which is B?", maxScore: 5
     }))
     SendPOST("/assignment-problems", JSON.stringify({
       assignmentId: assign312_quiz, problemName: "Of the following letters A-D, which is C?", maxScore: 5
+
+    // @ts-ignore
+    const assign312_quiz_q1 = await SendPOST('/assignment-problems', JSON.stringify({
+      assignmentId: assign312_quiz, problemName: 'q1', maxScore: 5,
+    }))
+    // @ts-ignore
+    const assign312_quiz_q2 = await SendPOST('/assignment-problems', JSON.stringify({
+      assignmentId: assign312_quiz, problemName: 'q2', maxScore: 5,
     }))
 
 
@@ -300,6 +331,13 @@ async function RunRequests() {
 
     //Grading (creates a SubmissionScore and SubmissionProblemScores)
     SendPOST("/grade/" + submission_bob_312_quiz1, JSON.stringify({}))
+
+    SendPOST('/deadline-extensions',JSON.stringify({
+      assignmentId:1,
+      creatorId:1,
+      deadlineDate:"2024-05-23T03:32:32.813Z",
+      userId:2
+    }))
 
     //AssignmentScore - ROUTE NOT FUNCTIONAL
     // SendPOST("/assignment-score", JSON.stringify({

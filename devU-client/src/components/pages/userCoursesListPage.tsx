@@ -107,7 +107,7 @@ const UserCoursesListPage = () => {
         <UserCourseListItem
           key={userCourse.courseId}
           userCourse={userCourse}
-          course={courses[userCourse.courseId || '']}
+          course={courses[userCourse.courseId || '']} 
         />
       ))}
       {allCourses.map(course => (

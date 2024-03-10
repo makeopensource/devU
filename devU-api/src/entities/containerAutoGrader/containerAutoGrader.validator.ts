@@ -6,9 +6,23 @@ import validate from '../../middleware/validator/generic.validator'
 
 const assignmentId = check('assignmentId').isNumeric()
 
-const graderFile = check('graderFile').isString()
+const graderFile = check('graderFile').optional({ nullable: true }).custom(({ req }) => {
+    const file = req.files['grader']
+    if (file !== null) {
+        if (file.size <= 0) {
+            throw new Error('File is empty')
+        }
+    }
+})
 
-const makefileFile = check('makefileFile').isString().optional({ nullable: true })
+const makefileFile = check('makefileFile').optional({ nullable: true }).custom(({ req }) => {
+    const file = req.files['makefile']
+    if (file !== null) {
+        if (file.size <= 0) {
+            throw new Error('File is empty')
+        }
+    }
+})
 
 
 const autogradingImage = check('autogradingImage').isString()

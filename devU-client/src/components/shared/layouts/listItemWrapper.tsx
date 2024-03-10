@@ -10,6 +10,7 @@ type Props = {
   children: React.ReactNode
   tag?: string
   className?: string
+  
 }
 
 const colorHash = (input: string) => {
@@ -19,7 +20,7 @@ const colorHash = (input: string) => {
 }
 
 const ListItemWrapper = ({ to, children, tag, className = '' }: Props) => (
-  <Link to={to} className={styles.container}>
+  <Link to={to} className={styles.container} >
     {tag && <div className={styles.tag} style={{ backgroundColor: colorHash(tag) }}></div>}
     <div className={className}>{children}</div>
   </Link>
