@@ -20,6 +20,8 @@ import SubmissionDetailPage from 'components/pages/submissionDetailPage'
 import UserDetailPage from 'components/pages/userDetailPage'
 import UserCoursesListPage from 'components/pages/userCoursesListPage'
 import UserSubmissionsListPage from 'components/pages/userSubmissionsListPage'
+import GradebookStudentPage from './pages/gradebookStudentPage'
+import GradebookInstructorPage from './pages/gradebookInstructorPage'
 
 const AuthenticatedRouter = () => (
   <Switch>
@@ -40,6 +42,8 @@ const AuthenticatedRouter = () => (
     <Route exact path='/courses/:courseId/assignments' component={CourseAssignmentsListPage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId' component={AssignmentDetailPage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId/update' component={AssignmentUpdatePage} />
+    <Route exact path='/courses/:courseId/gradebook' component={GradebookStudentPage} />
+    <Route exact path='/courses/:courseId/gradebook/instructor' component={GradebookInstructorPage} />
     <Route component={NotFoundPage} />
   </Switch>
 )

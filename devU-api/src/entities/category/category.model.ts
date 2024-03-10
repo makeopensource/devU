@@ -15,13 +15,15 @@ export default class CategoryModel {
    * @swagger
    * tags:
    *   - name: Categories
-   *     description: Route is currently non-functional, TS2305 error
+   *     description: 
    * components:
    *  schemas:
    *    Category:
    *      type: object
-   *      required: [name]
+   *      required: [courseId, name]
    *      properties:
+   *        courseId: 
+   *          type: integer
    *        name:
    *          type: string
    */

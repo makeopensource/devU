@@ -12,7 +12,7 @@ const Router = express.Router()
 
 /**
  * @swagger
- * /assignment-score/{assigment-id}:
+ * /assignment-scores/{assignment-id}:
  *  get:
  *    summary: Retrieve a list of assignment scores belonging to an assignment by assignment id
  *    tags:
@@ -32,7 +32,7 @@ Router.get('/:id', asInt(), AssignmentScoreController.get)
 
 /**
  * @swagger
- * /assigment-score/detail/{id}:
+ * /assignment-scores/detail/{id}:
  *  get:
  *    summary: Retrieve a single assignment score's details
  *    tags:
@@ -47,17 +47,58 @@ Router.get('/:id', asInt(), AssignmentScoreController.get)
  *        required: true
  *        schema:
  *          type: integer
- *    requestBody:
- *      content:
- *        application/x-www-form-urlencoded:
- *          schema:
- *            $ref: '#/components/schemas/AssignmentScore'
  */
 Router.get('/detail/:id', asInt(), AssignmentScoreController.detail)
 
 /**
  * @swagger
- * /assignment-score:
+ * /assignment-scores/user/{user-id}:
+ *  get:
+ *    summary: Retrieve a list of assignment scores belonging to a user
+ *    tags:
+ *      - AssignmentScore
+ *    responses:
+ *      '200':
+ *        description: OK
+ *    parameters:
+ *      - name: user-id
+ *        description: Enter User Id
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: integer
+ */
+Router.get('/user/:userId', asInt('userId'), AssignmentScoreController.getByUser)
+
+/**
+ * @swagger
+ * /assignment-scores/detail/{assignment-id}/{user-id}:
+ *  get:
+ *    summary: Retrieve an assignment score belonging to a specific assignment and user
+ *    tags:
+ *      - AssignmentScore
+ *    responses:
+ *      '200':
+ *        description: OK
+ *    parameters:
+ *      - name: assignment-id
+ *        description: Enter Assignment Id
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: integer
+ *      - name: user-id
+ *        description: Enter User Id
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: integer
+ */
+Router.get('/detail/:id/:userId', asInt(), asInt('userId'), AssignmentScoreController.detailByUser)
+
+/**
+ * @swagger
+ * /assignment-scores:
  *  post:
  *    summary: Create an assignment score
  *    tags:
@@ -75,7 +116,7 @@ Router.post('/', validator, AssignmentScoreController.post)
 
 /**
  * @swagger
- * /assignment-score/{id}:
+ * /assignment-scores/{id}:
  *  put:
  *    summary: Update an assignment score
  *    tags:
@@ -99,7 +140,7 @@ Router.put('/:id', asInt(), validator, AssignmentScoreController.put)
 
 /**
  * @swagger
- * /assignment-score/{id}:
+ * /assignment-scores/{id}:
  *  delete:
  *    summary: Delete an assignment score
  *    tags:

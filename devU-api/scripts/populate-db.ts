@@ -106,6 +106,16 @@ async function RunRequests() {
       userId: userJones, courseId: course312, level: 'student', dropped: false,
     }))
 
+    //Categories
+    SendPOST('/categories', JSON.stringify({
+      courseId: course312, name: 'Homework'
+    }))
+    SendPOST('/categories', JSON.stringify({
+      courseId: course312, name: 'Quizzes'
+    }))
+    SendPOST('/categories', JSON.stringify({
+      courseId: course302, name: 'Sprints'
+    }))
 
     //Assignments
     const assign312_1 = await SendPOST('/assignments', JSON.stringify({
@@ -199,6 +209,13 @@ async function RunRequests() {
 
 
     //AssignmentProblems
+
+    SendPOST("/assignment-problems", JSON.stringify({
+      assignmentId: assign312_quiz, problemName: "Of the following letters A-D, which is B?", maxScore: 5
+    }))
+    SendPOST("/assignment-problems", JSON.stringify({
+      assignmentId: assign312_quiz, problemName: "Of the following letters A-D, which is C?", maxScore: 5
+
     // @ts-ignore
     const assign312_quiz_q1 = await SendPOST('/assignment-problems', JSON.stringify({
       assignmentId: assign312_quiz, problemName: 'q1', maxScore: 5,
@@ -250,14 +267,12 @@ async function RunRequests() {
       courseId: course312,
       assignmentId: assign312_quiz,
       userId: userBob,
-      content: 'B, D',
-      type: 'text',
+      content: '{"form":{"Of the following letters A-D, which is B?":"B","Of the following letters A-D, which is C?":"D"},"filepaths":""}',
+      type: 'json',
       submitterIp: '127.0.0.1',
       submittedBy: userBob,
     }))
 
-     //Grading (creates a SubmissionScore and SubmissionProblemScores)
-     await SendPOST("/grade/" + submission_bob_312_quiz1, JSON.stringify({}))
 
 
     //SubmissionScores
@@ -299,6 +314,23 @@ async function RunRequests() {
       correctString: '/^It was (two|2)-tired\\.$/',
       isRegex: true,
     }))
+    SendPOST("/nonContainerAutoGrader", JSON.stringify({
+      assignmentId: assign312_quiz, 
+      question: "Of the following letters A-D, which is B?", 
+      score: 5, 
+      correctString: "B",
+      isRegex: false
+  }))
+    SendPOST("/nonContainerAutoGrader", JSON.stringify({
+      assignmentId: assign312_quiz,
+      question: "Of the following letters A-D, which is C?",
+      score: 5,
+      correctString: "C",
+      isRegex: false,
+  }))
+
+    //Grading (creates a SubmissionScore and SubmissionProblemScores)
+    SendPOST("/grade/" + submission_bob_312_quiz1, JSON.stringify({}))
 
     SendPOST('/deadline-extensions',JSON.stringify({
       assignmentId:1,
@@ -316,7 +348,6 @@ async function RunRequests() {
     // }))
 
 
-    //Categories - ROUTE NOT FUNCTIONAL
 
 
     //CategoryScores - ROUTE NOT FUNCTIONAL
