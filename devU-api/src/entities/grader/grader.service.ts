@@ -4,14 +4,16 @@ import submissionProblemScoreService from '../submissionProblemScore/submissionP
 import nonContainerAutograderService from '../nonContainerAutoGrader/nonContainerAutoGrader.service'
 import containerAutograderService from '../containerAutoGrader/containerAutoGrader.service'
 import assignmentProblemService from '../assignmentProblem/assignmentProblem.service'
+import assignmentScoreService from '../assignmentScore/assignmentScore.service'
 
-import { SubmissionScore, SubmissionProblemScore, ContainerAutoGrader } from 'devu-shared-modules'
+import { SubmissionScore, SubmissionProblemScore, ContainerAutoGrader, AssignmentScore } from 'devu-shared-modules'
 import { checkAnswer } from '../nonContainerAutoGrader/nonContainerAutoGrader.grader'
 import { serialize as serializeNonContainer } from '../nonContainerAutoGrader/nonContainerAutoGrader.serializer'
 import { serialize as serializeContainer } from '../containerAutoGrader/containerAutoGrader.serializer'
+import { serialize as serializeAssignmentScore } from '../assignmentScore/assignmentScore.serializer'
 
-export async function grade(id: number) {
-    const submission = await submissionService.retrieve(id)
+export async function grade(submissionId: number) {
+    const submission = await submissionService.retrieve(submissionId)
     if (!submission) return null
 
     const assignmentId = submission.assignmentId
@@ -26,22 +28,24 @@ export async function grade(id: number) {
 
     
     var score = 0
+    var feedback = ''
     var allScores = [] //This is the return value, the serializer parses it into a GraderInfo object for the controller to return
 
     //Run Non-Container Autograders
     for (const question in form) { 
         const nonContainerGrader = nonContainerAutograders.find(grader => grader.question === question)
         const assignmentProblem = assignmentProblems.find(problem => problem.problemName === question)
-        
+
         if (nonContainerGrader && assignmentProblem) {
-            const problemScore = await checkAnswer(form[question], serializeNonContainer(nonContainerGrader)) //Should also return feedback in the future
+            const [problemScore, problemFeedback] = checkAnswer(form[question], serializeNonContainer(nonContainerGrader)) 
             score += problemScore
+            feedback += problemFeedback + '\n'
 
             const problemScoreObj: SubmissionProblemScore = {
-                submissionId: id,
+                submissionId: submissionId,
                 assignmentProblemId: assignmentProblem.id,
                 score: problemScore,
-                feedback: '' //grader doesn't currently return feedback
+                feedback: problemFeedback 
             }
             allScores.push(await submissionProblemScoreService.create(problemScoreObj))
         }
@@ -57,23 +61,42 @@ export async function grade(id: number) {
 
             for (const result of gradeResults) {
                 const problemScoreObj: SubmissionProblemScore = {
-                    submissionId: id,
+                    submissionId: submissionId,
                     assignmentProblemId: 1, //PLACEHOLDER, an assignmentProblem must exist in the db for this to work
                     score: result.score,
                     feedback: result.feedback,
                 }
                 allScores.push(await submissionProblemScoreService.create(problemScoreObj))
                 score += result.score
+                feedback += result.feedback + '\n'
             }
         }
     } 
 
+    //Grading is finished. Create SubmissionScore and AssignmentScore and save to db.
     const scoreObj: SubmissionScore = {
-        submissionId: id,
-        score: score,
-        feedback: '' //graders currently don't return feedback, will be the concatination of SubmissionProblemScore feedbacks
+        submissionId: submissionId,
+        score: score,       //Sum of all SubmissionProblemScore scores
+        feedback: feedback  //Concatination of SubmissionProblemScore feedbacks
     }
     allScores.push(await submissionScoreService.create(scoreObj))
+
+    //PLACEHOLDER AssignmentScore logic. This should be customizable, but for now AssignmentScore will simply equal the latest SubmissionScore
+    const assignmentScoreModel = await assignmentScoreService.retrieveByUser(submission.assignmentId, submission.userId)
+    if (assignmentScoreModel) { //If assignmentScore already exists, update existing entity
+        const assignmentScore = serializeAssignmentScore(assignmentScoreModel)
+        assignmentScore.score = score
+        assignmentScoreService.update(assignmentScore)
+        
+    } else { //Otherwise make a new one
+        const assignmentScore: AssignmentScore = {
+            assignmentId: submission.assignmentId,
+            userId: submission.userId,
+            score: score,
+        }
+        assignmentScoreService.create(assignmentScore)
+    }
+
     return allScores
 }
 

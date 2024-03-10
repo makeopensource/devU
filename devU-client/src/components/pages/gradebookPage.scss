@@ -1,0 +1,16 @@
+@import 'variables';
+
+.header {
+    color: $text-color;
+    display: flex;
+    justify-content: space-between;
+}
+
+.categoryName {
+    color: $text-color;
+    font-size: 1.25rem;
+}
+
+.assignmentName {
+    color: $text-color
+}

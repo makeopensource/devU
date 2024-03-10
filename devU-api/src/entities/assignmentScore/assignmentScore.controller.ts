@@ -33,6 +33,35 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+export async function getByUser(req: Request, res: Response, next: NextFunction) {
+    try {
+        const userId = parseInt(req.params.userId)
+        const assignmentScores = await AssignmentScoreService.listByUser(userId)
+
+        const response = assignmentScores.map(serialize)
+
+        res.status(200).json(response)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export async function detailByUser(req: Request, res: Response, next: NextFunction) {
+    try {
+        const id = parseInt(req.params.id)
+        const userId = parseInt(req.params.userId)
+        const assignmentScore = await AssignmentScoreService.retrieveByUser(id, userId)
+
+        if (!assignmentScore) return res.status(404).json(NotFound)
+
+        const response = serialize(assignmentScore)
+
+        res.status(200).json(response)
+    } catch (err) {
+        next(err)
+    }
+}
+
 export async function post(req: Request, res: Response, next: NextFunction) {
     try {
         const assignmentScore = await AssignmentScoreService.create(req.body)
@@ -69,4 +98,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-export default { get, detail, post, put, _delete }
+export default { get, detail, post, put, _delete, getByUser, detailByUser }

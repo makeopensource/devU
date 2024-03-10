@@ -51,10 +51,15 @@ export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
+export async function listByCourse(courseId: number) {
+  return await connect().find({ courseId, deletedAt: IsNull() })
+}
+
 export default {
   create,
   retrieve,
   update,
   _delete,
   list,
+  listByCourse,
 }
