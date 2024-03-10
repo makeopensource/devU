@@ -23,7 +23,7 @@ const CourseAssignmentsListPage = () => {
 
     const fetchData = async () => {
         try {
-            const assignments = await RequestService.get('/api/assignments')
+            const assignments = await RequestService.get(`/api/assignments/course/${courseId}`)
             setAssignments(assignments)
         }catch(error){
             setError(error)
