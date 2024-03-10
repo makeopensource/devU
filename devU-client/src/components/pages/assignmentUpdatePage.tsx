@@ -19,6 +19,49 @@ type UrlParams = {
 }
   
 const AssignmentUpdatePage = () => {
+
+    const [toggleForm,setToggleForm] = useState(false)
+    const [problemFormData,setProblemFormData] = useState({
+        assignmentId: '',
+        problemName: '',
+        maxScore: '',
+    })
+    
+    const toggleProblemForm = () => { setToggleForm(!toggleForm) }
+
+    const handleSubmit = () => {
+        setLoading(true)
+        const finalProblemFormData = {
+            assignmentId: parseInt(problemFormData.assignmentId),
+            problemName: problemFormData.problemName,
+            maxScore: parseInt(problemFormData.maxScore),
+        }         
+        
+        RequestService.post('/api/assignment-problems/', finalProblemFormData)
+        .then(() => {
+            setAlert({ autoDelete: true, type: 'success', message: 'Assignment Problem Added' })
+        })
+        .catch((err: ExpressValidationError[] | Error) => {
+            const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+
+            setAlert({ autoDelete: false, type: 'error', message })
+        })
+        .finally(() => {
+            setLoading(false)
+            setProblemFormData({
+                assignmentId: '',
+                problemName: '',
+                maxScore: '',
+            })
+        })
+    }
+    
+    const handleProblemChange = (value : String, e : React.ChangeEvent<HTMLInputElement>) => {
+        const key = e.target.id
+        setProblemFormData(prevState => ({...prevState,[key] : value}))
+    }
+
+
     const [setAlert] = useActionless(SET_ALERT)
 
     const [formData, setFormData] = useState({
@@ -78,7 +121,19 @@ const AssignmentUpdatePage = () => {
     return (
     <PageWrapper>
         <h1>Assignment Detail Update</h1>
+
+        <Button onClick={toggleProblemForm}>Add Problem</Button>
+        {toggleForm && (
+            <div>
+                <br></br>
+                <TextField id='assignmentId' label='Assignment Id' onChange={handleProblemChange} defaultValue={problemFormData.assignmentId}/>
+                <TextField id='problemName' label='Problem Question' onChange={handleProblemChange} defaultValue={problemFormData.problemName}/>
+                <TextField id='maxScore' label='Max Score' onChange={handleProblemChange} defaultValue={problemFormData.maxScore}/>
+                <Button onClick={handleSubmit} loading={loading}>Create Problem</Button>
+            </div>
+        )}
         
+        <br></br><br></br>
         <TextField id='courseId' label='Course Id' onChange={handleChange}/>
         <TextField id='name' label='Assignment Name' onChange={handleChange}/>
         <DatePicker selected={startDate} onChange={handleStartDateChange} />

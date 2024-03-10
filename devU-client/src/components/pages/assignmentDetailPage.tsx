@@ -1,4 +1,5 @@
 import React,{ useState, useEffect } from 'react'
+import {Link} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import { AssignmentProblem /*, ExpressValidationError*/ } from 'devu-shared-modules'
 import RequestService from 'services/request.service'
@@ -81,6 +82,7 @@ const AssignmentDetailPage = () => {
 
     return(
         <PageWrapper>
+            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/update`}>Add Problem</Link>
             <h1>Assignment Detail</h1>
             {assignmentProblems.map(assignmentProblem => (
                 <div>
