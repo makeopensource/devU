@@ -20,7 +20,7 @@ export default class UserCourseModel {
    * @swagger
    * tags:
    *   - name: UserCourses
-   *     description: GET /user/{user-id} does not function properly, only returns empty set []
+   *     description: 
    * components:
    *  schemas:
    *    UserCourse:

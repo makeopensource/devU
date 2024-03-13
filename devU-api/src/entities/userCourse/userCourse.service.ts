@@ -33,6 +33,10 @@ export async function listAll() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
+export async function listByCourse(courseId: number) {
+  return await connect().find({ deletedAt: IsNull(), courseId })
+}
+
 export default {
   create,
   retrieve,
@@ -40,4 +44,5 @@ export default {
   _delete,
   list,
   listAll,
+  listByCourse,
 }
