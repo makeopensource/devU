@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-//import { Link } from 'react-router-dom'
 
 import { User, UserCourse, Assignment, AssignmentScore } from 'devu-shared-modules'
 
@@ -19,24 +18,49 @@ type TableProps = {
     assignmentScores: AssignmentScore[]
 }
 type RowProps = {
-    
+    index: Number
+    user: User
+    userCourse: UserCourse
+    assignments: Assignment[]
+    assignmentScores: AssignmentScore[]
 }
 
-const TableRow = ({}: RowProps) => {
+const TableRow = ({index, user, userCourse, assignments, assignmentScores}: RowProps) => {
     return (
-        <div>
-            hi
-        </div>
+        <tr>
+            <td>{index}</td>
+            <td>{user.email}</td>
+            <td>{user.externalId}</td>
+            <td>{user.preferredName}</td>
+            <td>{userCourse.dropped.toString()}</td>
+            {assignments.map(a => (
+                <td>{assignmentScores.find(as => as.assignmentId === a.id)?.score ?? 'N/A'}</td>
+            ))}
+        </tr>
     )
 }
 
 const GradebookTable = ({users, userCourses, assignments, assignmentScores}: TableProps) => {
-    
     return (
-        <div>
-            {users}
-            <TableRow/>
-        </div>
+        <table>
+            <th>#</th> 
+            <th>Email</th>
+            <th>External ID</th>
+            <th>Preferred Name</th>
+            <th>Dropped?</th>
+            {assignments.map((a) => {
+                return ( <th>{a.name}</th> )
+            })}
+            {users.map((u, index) => (
+                <TableRow
+                    index={index + 1}
+                    user={u}
+                    userCourse={userCourses.find(uc => uc.userId === u.id) as UserCourse}
+                    assignments={assignments}
+                    assignmentScores={assignmentScores.filter(as => as.userId === u.id)}
+                />
+            ))}
+        </table>
     )
 }
 
@@ -57,25 +81,17 @@ const GradebookInstructorPage = () => {
     
     const fetchData = async () => {
         try {
-            const users = new Array<User>()
-            const assignmentScores = new Array<AssignmentScore>()
-
             const userCourses = await RequestService.get<UserCourse[]>( `/api/user-courses/course/${courseId}` )
             setUserCourses(userCourses)
 
-            userCourses.map(async (uc) => {
-                if (uc.level === 'student') {
-                     users.push(await RequestService.get<User>( `/api/users/${uc.userId}`))
-                }
-            })
+            const users = await RequestService.get<User[]>( `/api/users/course/${courseId}?level=student` )
             setUsers(users)
-
+            
             const assignments = await RequestService.get<Assignment[]>( `/api/assignments/course/${courseId}` )
+            assignments.sort((a, b) => (Date.parse(a.startDate) - Date.parse(b.startDate))) //Sort by assignment's start date
             setAssignments(assignments)
 
-            assignments.map(async (a) => {
-                assignmentScores.push(... await RequestService.get<AssignmentScore[]>( `/api/assignment-scores/${a.id}`))
-            })
+            const assignmentScores = await RequestService.get<AssignmentScore[]>( `/api/assignment-scores/course/${courseId}` )
             setAssignmentScores(assignmentScores)
 
         } catch (error) {
@@ -101,7 +117,6 @@ const GradebookInstructorPage = () => {
                     assignmentScores={assignmentScores}
                 />
             </div>
-            
         </PageWrapper>
     )
 }
