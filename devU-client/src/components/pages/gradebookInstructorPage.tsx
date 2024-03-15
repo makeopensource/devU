@@ -47,7 +47,7 @@ const GradebookTable = ({users, userCourses, assignments, assignmentScores}: Tab
             <th>Email</th>
             <th>External ID</th>
             <th>Preferred Name</th>
-            <th>Dropped?</th>
+            <th>Dropped</th>
             {assignments.map((a) => {
                 return ( <th>{a.name}</th> )
             })}
@@ -107,7 +107,7 @@ const GradebookInstructorPage = () => {
     return (
         <PageWrapper>
             <div className={styles.header}>
-                Instructor Gradebook
+                <h1>Instructor Gradebook</h1>
             </div>
             <div>
                 <GradebookTable 
