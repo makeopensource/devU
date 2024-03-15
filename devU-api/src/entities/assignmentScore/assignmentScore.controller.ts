@@ -35,7 +35,7 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
 export async function getByUser(req: Request, res: Response, next: NextFunction) {
     try {
-        const userId = parseInt(req.params.userId)
+        const userId = parseInt(req.params.id)
         const assignmentScores = await AssignmentScoreService.listByUser(userId)
 
         const response = assignmentScores.map(serialize)
@@ -55,6 +55,19 @@ export async function detailByUser(req: Request, res: Response, next: NextFuncti
         if (!assignmentScore) return res.status(404).json(NotFound)
 
         const response = serialize(assignmentScore)
+
+        res.status(200).json(response)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export async function getByCourse(req: Request, res: Response, next: NextFunction) {
+    try {
+        const userId = parseInt(req.params.id)
+        const assignmentScores = await AssignmentScoreService.listByCourse(userId)
+
+        const response = assignmentScores.map(as => { if (as) return serialize(as) })
 
         res.status(200).json(response)
     } catch (err) {
@@ -98,4 +111,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-export default { get, detail, post, put, _delete, getByUser, detailByUser }
+export default { get, detail, post, put, _delete, getByUser, detailByUser, getByCourse }

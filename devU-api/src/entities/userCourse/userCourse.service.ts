@@ -27,14 +27,14 @@ export async function retrieve(id: number) {
 }
 
 export async function list(userId: number) {
-  return await connect().find({ deletedAt: IsNull(), userId })
+  return await connect().find({ userId, deletedAt: IsNull() })
 }
 export async function listAll() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
 export async function listByCourse(courseId: number) {
-  return await connect().find({ deletedAt: IsNull(), courseId })
+  return await connect().find({ courseId, deletedAt: IsNull() })
 }
 
 export default {

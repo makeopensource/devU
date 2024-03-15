@@ -34,6 +34,8 @@ export default class UserCourseModel {
    *        level:
    *          type: string
    *          description: Must be either "student", "ta", or "instructor"
+   *        dropped:
+   *          type: boolean
    */
   @PrimaryGeneratedColumn()
   id: number
