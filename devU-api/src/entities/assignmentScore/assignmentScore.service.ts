@@ -4,6 +4,8 @@ import AssignmentScoreModel from './assignmentScore.model'
 
 import { AssignmentScore } from 'devu-shared-modules'
 
+import AssignmentService from "../assignment/assignment.service";
+
 const connect = () => getRepository(AssignmentScoreModel)
 
 export async function create(assignmentScore: AssignmentScore) {
@@ -37,6 +39,14 @@ export async function listByUser(userId: number) {
   return await connect().find({ userId, deletedAt: IsNull() })
 }
 
+export async function listByCourse(courseId: number) {
+  const assignments = await AssignmentService.listByCourse(courseId)
+  const assignmentScorePromises = assignments.map(a => (
+    connect().find({ assignmentId: a.id, deletedAt: IsNull()})
+  ))
+  return (await Promise.all(assignmentScorePromises)).reduce((a, b) => a.concat(b), []) //Must flatten 2D array resulting from array promises
+}
+
 export default {
     create,
     retrieve,
@@ -45,5 +55,6 @@ export default {
     list,
     retrieveByUser,
     listByUser,
+    listByCourse,
 }
 
