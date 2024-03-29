@@ -2,7 +2,7 @@ import { AccessToken, RefreshToken } from 'devu-shared-modules'
 
 import environment from '../../environment'
 
-import { isAuthorized, isValidRefreshToken, isRefreshNearingExpiration } from '../auth.middleware'
+import { isAuthenticated, isValidRefreshToken, isRefreshNearingExpiration } from '../auth.middleware'
 
 import AuthService from '../auth.service'
 
@@ -32,7 +32,7 @@ describe('AuthMiddleware', () => {
       beforeEach(async () => {
         AuthService.validateJwt = jest.fn().mockImplementation(<AccessToken>() => expectedAccessToken)
 
-        await isAuthorized(req, res, next)
+        await isAuthenticated(req, res, next)
       })
 
       test('Expect access token to be added to req', () => expect(req.currentUser).toEqual(expectedAccessToken))
@@ -44,7 +44,7 @@ describe('AuthMiddleware', () => {
     describe('Authorization Failure', () => {
       test('Missing authorization header', async () => {
         delete req.headers.authorization
-        await isAuthorized(req, res, next)
+        await isAuthenticated(req, res, next)
 
         expect(res.status).toBeCalledWith(401)
         expect(next).toHaveBeenCalledTimes(0)
@@ -52,7 +52,7 @@ describe('AuthMiddleware', () => {
 
       test('Missing Bearer', async () => {
         req.headers.authorization = 'NotBearer and.a.fake.token'
-        await isAuthorized(req, res, next)
+        await isAuthenticated(req, res, next)
 
         expect(res.status).toBeCalledWith(401)
         expect(next).toHaveBeenCalledTimes(0)
@@ -60,14 +60,14 @@ describe('AuthMiddleware', () => {
 
       test('Missing Token', async () => {
         req.headers.authorization = 'Bearer' // missing token
-        await isAuthorized(req, res, next)
+        await isAuthenticated(req, res, next)
 
         expect(res.status).toBeCalledWith(401)
         expect(next).toHaveBeenCalledTimes(0)
       })
       test('Invalid token', async () => {
         AuthService.validateJwt = jest.fn().mockImplementation(<AccessToken>() => null)
-        await isAuthorized(req, res, next)
+        await isAuthenticated(req, res, next)
 
         expect(res.status).toHaveBeenCalledWith(401)
         expect(next).toHaveBeenCalledTimes(0)

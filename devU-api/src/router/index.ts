@@ -22,29 +22,29 @@ import grader from '../entities/grader/grader.router'
 import categories from '../entities/category/category.router'
 import assignmentScore from '../entities/assignmentScore/assignmentScore.router'
 
-import { isAuthorized } from '../authentication/auth.middleware'
+import { isAuthenticated } from '../authentication/auth.middleware'
 
 import { NotFound } from '../utils/apiResponse.utils'
 import nonContainerAutoGraderRouter from "../entities/nonContainerAutoGrader/nonContainerAutoGrader.router";
 
 const Router = express.Router()
 
-Router.use('/assignments', isAuthorized, assignments)
-Router.use('/assignment-problems', isAuthorized, assignmentProblem)
-Router.use('/users', isAuthorized, users)
-Router.use('/courses', isAuthorized, courses)
-Router.use('/categories', isAuthorized, category)
-Router.use('/user-courses', isAuthorized, userCourse)
-Router.use('/submissions', isAuthorized, submissions)
-Router.use('/submission-scores', isAuthorized, submissionScore)
-Router.use('/nonContainerAutoGrader', isAuthorized, nonContainerAutoGraderRouter)
-Router.use('/container-auto-graders', isAuthorized, containerAutoGrader)
-Router.use('/submission-problem-scores', isAuthorized, submissionProblemScore)
-Router.use('/file-upload', isAuthorized, fileUpload)
-Router.use('/deadline-extensions', isAuthorized, deadlineExtensions)
-Router.use('/grade', isAuthorized, grader)
-Router.use('/categories', isAuthorized, categories)
-Router.use('/assignment-scores', isAuthorized, assignmentScore)
+Router.use('/assignments', isAuthenticated, assignments)
+Router.use('/assignment-problems', isAuthenticated, assignmentProblem)
+Router.use('/users', isAuthenticated, users)
+Router.use('/courses', isAuthenticated, courses)
+Router.use('/categories', isAuthenticated, category)
+Router.use('/user-courses', isAuthenticated, userCourse)
+Router.use('/submissions', isAuthenticated, submissions)
+Router.use('/submission-scores', isAuthenticated, submissionScore)
+Router.use('/nonContainerAutoGrader', isAuthenticated, nonContainerAutoGraderRouter)
+Router.use('/container-auto-graders', isAuthenticated, containerAutoGrader)
+Router.use('/submission-problem-scores', isAuthenticated, submissionProblemScore)
+Router.use('/file-upload', isAuthenticated, fileUpload)
+Router.use('/deadline-extensions', isAuthenticated, deadlineExtensions)
+Router.use('/grade', isAuthenticated, grader)
+Router.use('/categories', isAuthenticated, categories)
+Router.use('/assignment-scores', isAuthenticated, assignmentScore)
 
 Router.use('/login', login)
 Router.use('/logout', logout)

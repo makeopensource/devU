@@ -9,7 +9,7 @@ import AuthService from './auth.service'
 
 import { GenericResponse, Unauthorized } from '../utils/apiResponse.utils'
 
-function checkAuth<TokenType>(req: Request): [TokenType | null, GenericResponse | null] {
+function checkAuthentication<TokenType>(req: Request): [TokenType | null, GenericResponse | null] {
   const authorization = req.headers.authorization
 
   if (!authorization) return [null, new GenericResponse('Missing authentication headers')]
@@ -26,8 +26,8 @@ function checkAuth<TokenType>(req: Request): [TokenType | null, GenericResponse 
   return [deserializedToken, null]
 }
 
-export async function isAuthorized(req: Request, res: Response, next: NextFunction) {
-  const [currentUser, error] = checkAuth<AccessToken>(req)
+export async function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+  const [currentUser, error] = checkAuthentication<AccessToken>(req)
 
   if (!currentUser) return res.status(401).json(error)
 
@@ -39,7 +39,7 @@ export async function isAuthorized(req: Request, res: Response, next: NextFuncti
 export async function isValidRefreshToken(req: Request, res: Response, next: NextFunction) {
   // If authorization header exists DON'T CHECK COOKIE AT ALL
   if (req.headers.authorization) {
-    const [refreshToken, error] = checkAuth<RefreshToken>(req)
+    const [refreshToken, error] = checkAuthentication<RefreshToken>(req)
 
     if (!refreshToken) return res.status(401).json(error)
     // Because the refresh token and access token are signed the same way the access token
@@ -80,7 +80,7 @@ export async function isRefreshNearingExpiration(req: Request, res: Response, ne
 export const saml = passport.authenticate('saml', { session: false })
 
 export default {
-  isAuthorized,
+  isAuthorized: isAuthenticated,
   isValidRefreshToken,
   isRefreshNearingExpiration,
 }
