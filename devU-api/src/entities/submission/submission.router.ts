@@ -22,6 +22,18 @@ const upload = Multer()
  *     responses:
  *       '200':
  *         description: OK
+ *     parameters:
+ *       - name: user
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
+ *       - name: assignment
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
+ * 
  */
 Router.get('/', SubmissionController.get)
 
