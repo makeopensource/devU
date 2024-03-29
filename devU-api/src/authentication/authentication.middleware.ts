@@ -5,7 +5,7 @@ import environment from '../environment'
 
 import { AccessToken, RefreshToken } from 'devu-shared-modules'
 
-import AuthService from './auth.service'
+import AuthService from './authentication.service'
 
 import { GenericResponse, Unauthorized } from '../utils/apiResponse.utils'
 

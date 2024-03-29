@@ -22,7 +22,7 @@ import grader from '../entities/grader/grader.router'
 import categories from '../entities/category/category.router'
 import assignmentScore from '../entities/assignmentScore/assignmentScore.router'
 
-import { isAuthenticated } from '../authentication/auth.middleware'
+import { isAuthenticated } from '../authentication/authentication.middleware'
 
 import { NotFound } from '../utils/apiResponse.utils'
 import nonContainerAutoGraderRouter from "../entities/nonContainerAutoGrader/nonContainerAutoGrader.router";

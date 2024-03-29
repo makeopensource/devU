@@ -2,9 +2,9 @@ import { AccessToken, RefreshToken } from 'devu-shared-modules'
 
 import environment from '../../environment'
 
-import { isAuthenticated, isValidRefreshToken, isRefreshNearingExpiration } from '../auth.middleware'
+import { isAuthenticated, isValidRefreshToken, isRefreshNearingExpiration } from '../authentication.middleware'
 
-import AuthService from '../auth.service'
+import AuthService from '../authentication.service'
 
 import Testing from '../../utils/testing.utils'
 import { Unauthorized } from '../../utils/apiResponse.utils'

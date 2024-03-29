@@ -25,7 +25,7 @@ const swaggerOptioner = {
     './src/router/*.ts', 
     './src/entities/*/*.router.ts', './src/entities/*/*.model.ts',
     './src/fileUpload/*.router.ts', './src/fileUpload/*.model.ts',
-    './src/auth/*/*.router.ts', './src/auth/*/*.model.ts'],
+    './src/authentication/*/*.router.ts', './src/authentication/*/*.model.ts'],
 }
 
 const swaggerSpec = swaggerJSDoc(swaggerOptioner)
