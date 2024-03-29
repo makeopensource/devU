@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 
 import UserService from '../../entities/user/user.service'
-import AuthService from '../../auth/auth.service'
+import AuthService from '../auth.service'
 import ProviderService from '../../provider/provider.service'
 
 import { Unauthorized } from '../../utils/apiResponse.utils'

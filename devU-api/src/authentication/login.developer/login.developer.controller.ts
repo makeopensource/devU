@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 
 import UserService from '../../entities/user/user.service'
-import AuthService from '../../auth/auth.service'
+import AuthService from '../auth.service'
 
 import { GenericResponse } from '../../utils/apiResponse.utils'
 import { refreshCookieOptions } from '../../utils/cookie.utils'

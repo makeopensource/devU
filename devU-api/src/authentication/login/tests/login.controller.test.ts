@@ -5,7 +5,7 @@ import controller from '../login.controller'
 import UserModel from '../../../entities/user/user.model'
 
 import UserService from '../../../entities/user/user.service'
-import AuthService from '../../../auth/auth.service'
+import AuthService from '../../auth.service'
 import ProviderService from '../../../provider/provider.service'
 
 import Testing from '../../../utils/testing.utils'

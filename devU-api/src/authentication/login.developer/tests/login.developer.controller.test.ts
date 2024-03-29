@@ -3,7 +3,7 @@ import controller from '../login.developer.controller'
 import UserModel from '../../../entities/user/user.model'
 
 import UserService from '../../../entities/user/user.service'
-import AuthService from '../../../auth/auth.service'
+import AuthService from '../../auth.service'
 
 import Testing from '../../../utils/testing.utils'
 import { refreshCookieOptions } from '../../../utils/cookie.utils'
