@@ -49,7 +49,9 @@ export async function list(req: any) {
 
   const id = (req.currentUser?.userId)
 
-  return await groupBy<SubmissionModel>(submissionConn(), OrderByMappings, req, { index: 'submittedBy', value: id })
+  const query = req.query
+
+  return await groupBy<SubmissionModel>(submissionConn(), OrderByMappings, query, { index: 'submittedBy', value: id })
 }
 
 export default {

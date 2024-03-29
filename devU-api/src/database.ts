@@ -29,13 +29,12 @@ export default typeORMConfiguration
   This function is used to group the data by the specified column
   @param connection: the specific connection to the database
   @param columnList: the list of columns to be used to group the data
-  @param req: the request object
+  @param query: the query object
   @param filter: the filter object
   @returns the grouped data
 */
-export async function groupBy<T>( connection: Repository<T>, columnList:string[], req: any, filter: { index: string, value: string }){
-  let orders = req.query
-
+export async function groupBy<T>( connection: Repository<T>, columnList:string[], query: any, filter: { index: string, value: string }){
+  let orders = query
   // The filteredOrders currently only filters the orders by the columnList, any other orders are removed
   // and only set to 'ASC' since no input is provided for the order
   const filteredOrders = Object.entries(orders)
