@@ -1,21 +1,19 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from './errorPage'
+import { Assignment, AssignmentProblem, Submission, SubmissionProblemScore, SubmissionScore } from 'devu-shared-modules'
 import RequestService from 'services/request.service'
-import { SubmissionScore, SubmissionProblemScore, Submission, Assignment, AssignmentProblem } from 'devu-shared-modules'
-import { useParams } from 'react-router-dom'
 
-
-const SubmissionDetailPage = () => { 
+const SubmissionFeedbackPage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    
+
     const { submissionId } = useParams<{submissionId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
-    const [submission, setSubmission] = useState<Submission>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [assignment, setAssignment] = useState<Assignment>()
 
@@ -28,8 +26,6 @@ const SubmissionDetailPage = () => {
             setSubmissionProblemScores(submissionProblemScores)
 
             const submission = await RequestService.get<Submission>( `/api/submissions/${submissionId}` )
-            setSubmission(submission)
-
             const assignment = await RequestService.get<Assignment>( `/api/assignments/${submission.assignmentId}` )
             setAssignment(assignment)
 
@@ -52,24 +48,23 @@ const SubmissionDetailPage = () => {
 
     return(
         <PageWrapper>
-            <h1>Submission Detail for {assignment?.name}</h1>
-            <h2>Submission Scores:</h2>
-            <table>
-                {assignmentProblems.map(ap => (
-                    <th>{ap.problemName} ({ap.maxScore})</th>
-                ))}
-                <th>Total Score</th>
-                <tr>
-                    {assignmentProblems.map(ap => (
-                        <td>{submissionProblemScores.find(sps => sps.assignmentProblemId === ap.id)?.score ?? "N/A"}</td>
-                    ))}
-                    <td>{submissionScore?.score ?? "N/A"}</td>
-                </tr>
-            </table> <br/>
-            <h2>Submission Content:</h2>
-            <pre>{submission?.content}</pre>
+            {console.log(assignment)}
+            {console.log(assignmentProblems)}
+            <h1>Feedback for {assignment?.name}</h1>
+            {submissionScore?.feedback ? (
+                <div>
+                    <h2>Overall Feedback:</h2>
+                    <pre>{submissionScore.feedback}</pre>
+                </div>
+            ) : null} <br/>
+            {submissionProblemScores.map(sps => (
+                <div>
+                    <h2>Feedback for {assignmentProblems.find(ap => ap.id === sps.assignmentProblemId)?.problemName}:</h2>
+                    <pre>{sps.feedback}</pre>
+                </div>
+            ))}
         </PageWrapper>
     )
 }
 
-export default SubmissionDetailPage
+export default SubmissionFeedbackPage
