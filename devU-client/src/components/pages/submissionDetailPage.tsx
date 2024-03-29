@@ -5,7 +5,7 @@ import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from './errorPage'
 import RequestService from 'services/request.service'
 import { SubmissionScore, SubmissionProblemScore, Submission, Assignment, AssignmentProblem } from 'devu-shared-modules'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 
 const SubmissionDetailPage = () => { 
@@ -53,7 +53,7 @@ const SubmissionDetailPage = () => {
     return(
         <PageWrapper>
             <h1>Submission Detail for {assignment?.name}</h1>
-            <h2>Submission Scores:</h2>
+            <h2>Submission Grades:</h2>
             <table>
                 {assignmentProblems.map(ap => (
                     <th>{ap.problemName} ({ap.maxScore})</th>
@@ -65,7 +65,10 @@ const SubmissionDetailPage = () => {
                     ))}
                     <td>{submissionScore?.score ?? "N/A"}</td>
                 </tr>
-            </table> <br/>
+            </table> 
+            <Link to = {`/submissions/${submission?.id}/feedback`}>View Feedback</Link> 
+            <br/>
+            
             <h2>Submission Content:</h2>
             <pre>{submission?.content}</pre>
         </PageWrapper>

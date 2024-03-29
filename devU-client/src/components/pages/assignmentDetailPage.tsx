@@ -1,7 +1,7 @@
 import React,{ useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import { AssignmentProblem, Submission, SubmissionScore, SubmissionProblemScore } from 'devu-shared-modules' 
+import { AssignmentProblem, Submission, SubmissionScore, SubmissionProblemScore, Assignment } from 'devu-shared-modules' 
 import RequestService from 'services/request.service'
 import ErrorPage from './errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -25,7 +25,7 @@ const AssignmentDetailPage = () => {
     const [submissions, setSubmissions] = useState(new Array<Submission>())
     const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
-
+    const [assignment, setAssignment] = useState<Assignment>()
     
     useEffect(() => {
           fetchData()
@@ -34,6 +34,9 @@ const AssignmentDetailPage = () => {
 
     const fetchData = async () => {
          try {
+             const assignment = await RequestService.get<Assignment>( `/api/assignments/${assignmentId}` )
+             setAssignment(assignment) 
+
              const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/assignment-problems/${assignmentId}`)
              setAssignmentProblems(assignmentProblemsReq)
 
@@ -52,12 +55,10 @@ const AssignmentDetailPage = () => {
              })
              const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
              setSubmissionProblemScores(submissionProblemScoresReq)
-
-                
              
-         }catch(error){
+         } catch(error) {
              setError(error)
-         }finally{
+         } finally {
              setLoading(false)
          }
     }
@@ -98,15 +99,17 @@ const AssignmentDetailPage = () => {
         } finally {
             setLoading(false)
         }
-
     }
 
     return(
         <PageWrapper>
+            <h1>{assignment?.name}</h1>
+
             <Link to = {`/courses/${courseId}/assignments/${assignmentId}/update`} className = {styles.button}>Update Assignment</Link>
             <br/><br/><br/>
             <Link to = {`/ncagtest`} className = {styles.button}>Add Non-Container Auto-Graders</Link>
-            <h1>Assignment Detail</h1>
+
+            {/**Assignment Problems & Submission */}
             {assignmentProblems.map(assignmentProblem => (
                 <div>
                     <h2>{assignmentProblem.problemName}</h2>
@@ -115,28 +118,49 @@ const AssignmentDetailPage = () => {
             ))}
             <Button onClick={handleSubmit}>Submit</Button>
             <br/>
-            {console.log(submissionProblemScores)}
-            {console.log(submissionScores)}
+
+            {/**Submissions List */}
             {submissions.map((s, index) => (
-                <div>
-                    <h2>Submission {submissions.length - (index)}:</h2>
-                    <Link to = {`/submissions/${s.id}`} className = {styles.button}>View Submission Details</Link>
-                    <br/><br/>
-                    <table>
-                        {assignmentProblems.map(ap => (
-                            <th>{ap.problemName} ({ap.maxScore})</th>
-                        ))}
-                        <th>Total Score</th>
-                        <tr>
-                            {assignmentProblems.map(ap => (
-                                <td>{submissionProblemScores.find(sps => (sps.assignmentProblemId === ap.id && sps.submissionId === s.id))?.score ?? "N/A"}</td>
-                            ))}
-                            <td>{submissionScores.find(ss => ss.submissionId === s.id)?.score ?? "N/A"}</td>
-                        </tr>
-                    </table> <br/>
-                </div>
+                <SubmissionComponent
+                    index={submissions.length - (index)}
+                    submission={s}
+                    submissionScore={submissionScores.find(ss => ss.submissionId === s.id)}
+                    submissionProblemScores={submissionProblemScores.filter(sps => sps.submissionId === s.id)}
+                    assignmentProblems={assignmentProblems}
+                />
             ))}
         </PageWrapper>
+    )
+}
+
+type SubmissionProps = {
+    index: number, 
+    submission: Submission, 
+    submissionScore?: SubmissionScore, 
+    submissionProblemScores: SubmissionProblemScore[],
+    assignmentProblems: AssignmentProblem[],
+}
+const SubmissionComponent = ({index, submission, submissionScore, submissionProblemScores, assignmentProblems}: SubmissionProps) => {
+    return (
+        <div>
+            <h2>Submission {index}:</h2>
+            <table>
+                {assignmentProblems.map(ap => (
+                    <th>{ap.problemName} ({ap.maxScore})</th>
+                ))}
+                <th>Total Score</th>
+                <tr>
+                    {assignmentProblems.map(ap => (
+                        <td>{submissionProblemScores.find(sps => sps.assignmentProblemId === ap.id)?.score ?? "N/A"}</td>
+                    ))}
+                    <td>{submissionScore?.score ?? "N/A"}</td>
+                </tr>
+            </table> 
+            <br/>
+            <Link to = {`/submissions/${submission.id}`} className = {styles.button}>Submission Details</Link>
+            <Link to = {`/submissions/${submission.id}/feedback`} className = {styles.button}>Submission Feedback</Link>
+            <br/><br/><br/>
+        </div>
     )
 }
 export default AssignmentDetailPage
