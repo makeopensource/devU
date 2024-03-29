@@ -9,7 +9,7 @@ import { serialize } from './submission.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const submissions = await SubmissionService.list()
+    const submissions = await SubmissionService.list(req)
     const response = submissions.map(serialize)
 
     res.status(200).json(response)

@@ -51,7 +51,7 @@ const UserCoursesListPage = () => {
   const fetchData = async (orderBy: OrderBy, groupBy: GroupBy) => {
     try {
       const submissions = await RequestService.get<Submission[]>(
-        `/api/submissions?orderBy=${orderBy}?groupBy=${groupBy}`,
+        `/api/submissions?orderBy=${orderBy}&groupBy=${groupBy}`,
       )
 
       const courseRequests = submissions.map((s) => RequestService.get<Course>(`/api/courses/${s.courseId}`))
