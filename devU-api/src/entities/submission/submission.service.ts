@@ -44,12 +44,8 @@ export async function retrieve(id: number) {
   return await submissionConn().findOne({ id, deletedAt: IsNull() })
 }
 
-export async function list(req: any) {
+export async function list(query: any, id: number) {
   const OrderByMappings = ['id', 'createdAt', 'updatedAt', 'courseId', 'assignmentId', 'submittedBy']
-
-  const id = (req.currentUser?.userId)
-
-  const query = req.query
 
   return await groupBy<SubmissionModel>(submissionConn(), OrderByMappings, query, { index: 'submittedBy', value: id })
 }

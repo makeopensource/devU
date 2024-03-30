@@ -33,7 +33,7 @@ export default typeORMConfiguration
   @param filter: the filter object
   @returns the grouped data
 */
-export async function groupBy<T>( connection: Repository<T>, columnList:string[], query: any, filter: { index: string, value: string }){
+export async function groupBy<T>( connection: Repository<T>, columnList:string[], query: any, filter: { index: string, value: number }){
   let orders = query
   // The filteredOrders currently only filters the orders by the columnList, any other orders are removed
   // and only set to 'ASC' since no input is provided for the order
