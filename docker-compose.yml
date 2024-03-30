@@ -12,7 +12,7 @@ services:
     expose:
       - '5432'
   config:
-#     Generates a config file for the API
+    #     Generates a config file for the API
     build:
       context: devU-api/scripts
     command: "./generateConfig.sh config/default.yml"
@@ -25,6 +25,7 @@ services:
       context: .
       dockerfile: api.Dockerfile
     environment:
+      TANGO_KEY: test # todo load in from env file. for now this is default key in tango.config.py
       WAIT_HOSTS: db:5432
       dev: 0 # value here is irrelevant; just here to make sure dev env exists
     depends_on:
@@ -63,3 +64,26 @@ services:
       MINIO_ROOT_USER: typescript_user
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
+  # tango stuff
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - '127.0.0.1:6379:6379'
+    deploy:
+      replicas: 1
+    restart: unless-stopped
+  tango:
+    # todo envs and volumes also docker sockets
+    container_name: tango
+    ports:
+      - '127.0.0.1:3000:3000'
+    build:
+      context: ./Tango
+    environment:
+      - DOCKER_REDIS_HOSTNAME=redis
+    depends_on:
+      - redis
+    volumes:
+      - ./tango.config.py:/opt/TangoService/Tango/config.py
+    restart: unless-stopped
