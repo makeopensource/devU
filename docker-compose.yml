@@ -79,7 +79,7 @@ services:
     ports:
       - '127.0.0.1:3000:3000'
     build:
-      context: ./Tango
+      context: ./tango
     environment:
       - DOCKER_REDIS_HOSTNAME=redis
     depends_on:

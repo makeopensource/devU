@@ -1,0 +1,6 @@
+# Configure line ending normalisation for this repository.
+# See http://schacon.github.io/git/gitattributes.html for more information.
+# or https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
+
+# Shell scripts require LF
+*.sh    text eol=lf
