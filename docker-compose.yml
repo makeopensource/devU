@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: api.Dockerfile
     environment:
-      TANGO_KEY: test # todo load in from env file. for now this is default key in tango.config.py
+      TANGO_KEY: devutangokey # todo load in from env file. for now this is defined in tango section below
       WAIT_HOSTS: db:5432
       dev: 0 # value here is irrelevant; just here to make sure dev env exists
     depends_on:
@@ -74,7 +74,6 @@ services:
       replicas: 1
     restart: unless-stopped
   tango:
-    # todo envs and volumes also docker sockets
     container_name: tango
     ports:
       - '127.0.0.1:3000:3000'
@@ -82,8 +81,26 @@ services:
       context: ./tango
     environment:
       - DOCKER_REDIS_HOSTNAME=redis
+      - RESTFUL_KEY=devutangokey
+#      - DOCKER_DEPLOYMENT
+      # Path to volumes within the Tango container. Does not need to be modified.
+#      - DOCKER_VOLUME_PATH
+      # Modify the below to be the path to volumes on your host machine
+#      - DOCKER_TANGO_HOST_VOLUME_PATH
+
     depends_on:
       - redis
     volumes:
       - ./tango.config.py:/opt/TangoService/Tango/config.py
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./logs/tango/:/var/log/tango/
+      - ./logs/tangonginx:/var/log/nginx
+#      - ./Tango/volumes:/opt/TangoService/Tango/volumes
+
+#  certbot:
+#    container_name: certbot
+#    image: certbot/certbot
+#    volumes:
+#      - ./ssl/certbot/conf:/etc/letsencrypt
+#      - ./ssl/certbot/www:/var/www/certbot
     restart: unless-stopped
