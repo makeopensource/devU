@@ -31,6 +31,10 @@ export async function create(submission: Submission, file?: Express.Multer.File|
       filename : bucket,
 
     }
+    const content = JSON.parse(submission.content)
+    content.filepaths.push(filename)
+    submission.content = JSON.stringify(content)
+
     await fileConn().save(fileModel)
   }
   return await submissionConn().save(submission)
