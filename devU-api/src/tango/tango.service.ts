@@ -18,13 +18,14 @@ export async function openDirectory(courselab: string): Promise<OpenResponse | n
 /**
  * Uploads a file to the server for a given course and lab.
  * @param courselab - The combination of the course name and the lab name.
+ * @param fileName - The file name, used to identify the file when uploaded
  * @param file - The file to be uploaded.
  */
-export async function uploadFile(courselab: string, file: File): Promise<UploadResponse | null> {
+export async function uploadFile(courselab: string, file: File, fileName: string): Promise<UploadResponse | null> {
   const url = `${tangoHost}/upload/${tangoKey}/${courselab}/`
   const formData = new FormData()
   formData.append('file', file)
-  const response = await fetch(url, { method: 'POST', body: formData })
+  const response = await fetch(url, { method: 'POST', body: formData, headers: { 'filename': fileName } })
   return response.ok ? await response.json() : null
 }
 
@@ -70,7 +71,7 @@ export async function getInfo(): Promise<InfoResponse | null> {
  * Retrieves information about the pool of instances for a given image.
  * @param image - The name of the image.
  */
-export async function getPoolInfo(image: string): Promise<PoolResponse | null> {
+export async function getPoolInfo(image: string): Promise<Object | null> {
   const url = `${tangoHost}/pool/${tangoKey}/${image}/`
   const response = await fetch(url, { method: 'GET' })
   return response.ok ? await response.json() : null

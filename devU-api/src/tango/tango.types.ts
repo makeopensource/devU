@@ -49,7 +49,7 @@ interface AddJobResponse {
  * Represents the response body for the `/poll` request when the job is completed.
  */
 interface PollSuccessResponse {
-  // The autograder output file content
+  // The autograder output file content ???
 }
 
 /**
@@ -79,12 +79,6 @@ interface InfoResponse {
   statusId: number;
 }
 
-/**
- * Represents the response body for the `/pool` request.
- */
-interface PoolResponse {
-  // Define the structure of the pool response
-}
 
 /**
  * Represents the request body for the `/prealloc` request.
@@ -107,11 +101,4 @@ interface PreallocResponse {
  */
 interface JobsRequest {
   deadjobs: number;
-}
-
-/**
- * Represents the response body for the `/jobs` request.
- */
-interface JobsResponse {
-  // Define the structure of the jobs response
 }
