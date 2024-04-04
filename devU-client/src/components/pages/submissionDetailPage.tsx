@@ -8,12 +8,17 @@ import { SubmissionScore, SubmissionProblemScore, Submission, Assignment, Assign
 import { Link, useParams } from 'react-router-dom'
 import Button from '../shared/inputs/button'
 import TextField from '../shared/inputs/textField'
+import { useActionless } from 'redux/hooks'
+import { SET_ALERT } from 'redux/types/active.types'
 
 
 
-const SubmissionDetailPage = () => { 
+const SubmissionDetailPage = (props : any) => { 
+    const { state } = props.location
+
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [setAlert] = useActionless(SET_ALERT)
     
     const { submissionId } = useParams<{submissionId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
@@ -21,6 +26,14 @@ const SubmissionDetailPage = () => {
     const [submission, setSubmission] = useState<Submission>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [assignment, setAssignment] = useState<Assignment>()
+
+    const [showManualGrade, setToggleManualGrade] = useState(false)
+    const [formData, setFormData] = useState({
+        submissionId: state.id,
+        score: 0,
+        feedback: '',
+        releasedAt: "2024-10-05T14:48:00.00Z"
+    })
 
     const fetchData = async () => {
         try {
