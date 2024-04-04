@@ -83,7 +83,12 @@ export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
-
+//The grader has not changed to the new function, so the fake function keep here for now to avoid error
+//But need to be deleted when the grader entity changed to the getGraderByAssignmentId
+export async function listByAssignmentId(assignmentId: number) {
+    if (!assignmentId) throw new Error('Missing AssignmentId')
+    return await connect().find({ assignmentId: assignmentId, deletedAt: IsNull() })
+}
 
 export async function getGraderByAssignmentId(assignmentId: number){
     const containerAutoGraders = await connect().findOne({ assignmentId: assignmentId, deletedAt: IsNull() })
