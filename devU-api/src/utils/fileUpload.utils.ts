@@ -7,10 +7,10 @@ import  crypto from 'crypto'
   * This can be updated to use a different hashing algorithm in the future
   * Marking for discussion
  */
-export function generateFilename(originalName: string): string {
+export function generateFilename(originalName: string,id: number): string {
   const hash = crypto.createHash('sha256')
   const timestamp = Date.now();
-  hash.update(originalName+timestamp)
+  hash.update(originalName+id+timestamp)
   return hash.digest('hex')
 }
 
