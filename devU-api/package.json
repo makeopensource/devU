@@ -13,7 +13,8 @@
     "format": "prettier --write \"./**/*.{js,ts,json,md}\"",
     "pre-commit": "lint-staged",
     "generate-config": "docker run --pull always -v $(pwd)/config:/config --user $(id -u):$(id -g) --rm ubautograding/devtools /generateConfig.sh config/default.yml",
-    "populate-db": "ts-node-dev ./scripts/populate-db.ts"
+    "populate-db": "ts-node-dev ./scripts/populate-db.ts",
+    "tango":  "ts-node-dev ./src/tango/tests/tango.endpoint.test.ts"
   },
   "lint-staged": {
     "./**/*.{js,ts,json,md}": [
