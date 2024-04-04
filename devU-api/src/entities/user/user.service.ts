@@ -4,6 +4,8 @@ import UserModel from './user.model'
 
 import { User } from 'devu-shared-modules'
 
+import UserCourseService from '../userCourse/userCourse.service'
+
 const connect = () => getRepository(UserModel)
 
 export async function create(user: User) {
@@ -30,6 +32,16 @@ export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
+export async function listByCourse(courseId: number, userLevel?: string) {
+  const userCourses = await UserCourseService.listByCourse(courseId)
+  const userPromises = userCourses
+    .filter(uc => !(userLevel) || uc.level === userLevel)
+    .map(uc => (
+      connect().findOne({ id: uc.userId, deletedAt: IsNull()})
+   ))
+  return await Promise.all(userPromises)
+}
+
 export async function ensure(userInfo: User) {
   const { externalId, email } = userInfo
 
@@ -49,4 +61,5 @@ export default {
   _delete,
   list,
   ensure,
+  listByCourse,
 }

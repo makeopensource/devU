@@ -9,7 +9,9 @@ import { serialize } from './submissionScore.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const submissionScores = await SubmissionScoreService.list()
+    const submissionId = req.query.submission as number | undefined
+
+    const submissionScores = await SubmissionScoreService.list(submissionId)
     const response = submissionScores.map(serialize)
 
     res.status(200).json(response)

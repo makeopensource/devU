@@ -15,6 +15,10 @@ export async function get(req: Request, res: Response, next: NextFunction) {
     if (!userId) return res.status(400).json(new GenericResponse('Request requires auth'))
 
     const submissions = await SubmissionService.list(query, userId)
+    const assignmentId = req.query.assignment as number | undefined
+    const userId = req.query.user as number | undefined
+    
+    const submissions = await SubmissionService.list(assignmentId, userId)
     const response = submissions.map(serialize)
 
     res.status(200).json(response)

@@ -1,4 +1,4 @@
-import { getRepository, IsNull } from 'typeorm'
+import { FindManyOptions, getRepository, IsNull } from 'typeorm'
 
 import SubmissionModel from '../submission/submission.model'
 import FileModel from '../../fileUpload/fileUpload.model'
@@ -43,6 +43,8 @@ export async function _delete(id: number) {
 export async function retrieve(id: number) {
   return await submissionConn().findOne({ id, deletedAt: IsNull() })
 }
+
+
 
 export async function list(query: any, id: number) {
   const OrderByMappings = ['id', 'createdAt', 'updatedAt', 'courseId', 'assignmentId', 'submittedBy']
