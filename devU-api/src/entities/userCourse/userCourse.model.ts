@@ -20,7 +20,7 @@ export default class UserCourseModel {
    * @swagger
    * tags:
    *   - name: UserCourses
-   *     description: GET /user/{user-id} does not function properly, only returns empty set []
+   *     description: 
    * components:
    *  schemas:
    *    UserCourse:
@@ -34,6 +34,8 @@ export default class UserCourseModel {
    *        level:
    *          type: string
    *          description: Must be either "student", "ta", or "instructor"
+   *        dropped:
+   *          type: boolean
    */
   @PrimaryGeneratedColumn()
   id: number

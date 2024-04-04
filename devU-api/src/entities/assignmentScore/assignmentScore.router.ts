@@ -68,7 +68,7 @@ Router.get('/detail/:id', asInt(), AssignmentScoreController.detail)
  *        schema:
  *          type: integer
  */
-Router.get('/user/:userId', asInt('userId'), AssignmentScoreController.getByUser)
+Router.get('/user/:id', asInt(), AssignmentScoreController.getByUser)
 
 /**
  * @swagger
@@ -95,6 +95,26 @@ Router.get('/user/:userId', asInt('userId'), AssignmentScoreController.getByUser
  *          type: integer
  */
 Router.get('/detail/:id/:userId', asInt(), asInt('userId'), AssignmentScoreController.detailByUser)
+
+/**
+ * @swagger
+ * /assignment-scores/course/{course-id}:
+ *  get:
+ *    summary: Retrieve a list of assignment scores belonging to a user
+ *    tags:
+ *      - AssignmentScore
+ *    responses:
+ *      '200':
+ *        description: OK
+ *    parameters:
+ *      - name: course-id
+ *        description: Enter Course Id
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: integer
+ */
+Router.get('/course/:id', asInt(), AssignmentScoreController.getByCourse)
 
 /**
  * @swagger
