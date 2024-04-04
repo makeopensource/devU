@@ -46,14 +46,34 @@ export async function initializeMinio(inputBucketName?: string) {
 }
 
 
-export async function uploadFile(bucketName: string, file: Express.Multer.File): Promise<string> {
+export async function uploadFile(bucketName: string, file: Express.Multer.File, filename:string): Promise<string> {
   return new Promise((resolve, reject) => {
-    minioClient.putObject(bucketName, file.originalname, file.buffer, (err, etag) => {
+    minioClient.putObject(bucketName, filename, file.buffer, (err, etag) => {
       if (err) {
-        reject(new Error('File failed to upload'))
+        reject(new Error('File failed to upload because'+err.message))
       } else {
         resolve(etag.etag)
       }
+    })
+  })
+}
+
+export async function downloadFile(bucketName: string, filename: string): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const fileData: Buffer[] = []
+
+    minioClient.getObject(bucketName, filename, (err, dataStream) => {
+      if (err) {
+        reject(new Error('File failed to download from MinIO because'+err.message))
+      }
+
+      dataStream.on('data', (chunk:any) => {
+        fileData.push(chunk)
+      })
+
+      dataStream.on('end', () => {
+        resolve(Buffer.concat(fileData))
+      })
     })
   })
 }

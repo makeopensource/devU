@@ -38,14 +38,16 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 */
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
+    if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
     if (!req.files || !('graderFile' in req.files)) {
       return res.status(400).json(new GenericResponse('Container Auto Grader requires file upload for grader'));
     }
     const graderFile = req.files['graderFile'][0]
-    const makefile = req.files?.['makefileFile'][0] ?? null
+    const makefile = req.files['makefileFile']?.[0] ?? null
     const requestBody = req.body
+    const userId = req.currentUser?.userId
 
-    const containerAutoGrader = await ContainerAutoGraderService.create(requestBody, graderFile, makefile)
+    const containerAutoGrader = await ContainerAutoGraderService.create(requestBody, graderFile, makefile, userId)
     const response = serialize(containerAutoGrader)
 
     res.status(201).json(response)
@@ -58,15 +60,17 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
+    if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
     if (req.files && (!('graderFile' in req.files) && !('makefileFile' in req.files))) {
       return res.status(400).json(new GenericResponse('Uploaded files must be grader or makefile'));
     }
 
-    const graderFile = req.files?.['graderFile'][0]?? null
-    const makefile = req.files?.['makefileFile'][0] ?? null
-
+    const graderFile = req.files?.['graderFile']?.[0] ?? null
+    const makefile = req.files?.['makefileFile']?.[0] ?? null
     req.body.id = parseInt(req.params.id)
-    const results = await ContainerAutoGraderService.update(req.body, graderFile, makefile)
+    const userId = req.currentUser?.userId
+
+    const results = await ContainerAutoGraderService.update(req.body, graderFile, makefile, userId)
 
     if (!results.affected) return res.status(404).json(NotFound)
 

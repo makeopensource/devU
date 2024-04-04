@@ -1,4 +1,4 @@
-import { FindManyOptions, getRepository, IsNull } from 'typeorm'
+import { getRepository, IsNull } from 'typeorm'
 
 import SubmissionModel from '../submission/submission.model'
 import FileModel from '../../fileUpload/fileUpload.model'
@@ -11,26 +11,30 @@ import { groupBy } from '../../database'
 const submissionConn = () => getRepository(SubmissionModel)
 const fileConn = () => getRepository(FileModel)
 
-export async function create(submission: Submission, file?: Express.Multer.File|undefined) {
+export async function create(submission: Submission, file?: Express.Multer.File | undefined) {
   if (file) {
-    const bucket : string = await getRepository(CourseModel).findOne({id: submission.courseId}).then((course) => {
+    const bucket: string = await getRepository(CourseModel).findOne({ id: submission.courseId }).then((course) => {
       if (course) {
-        return ((course.name).toLowerCase().replace(/ /g, '-') + course.number + course.semester + course.id).toLowerCase()
+        return (course.number + course.semester + course.id).toLowerCase()
       }
       return 'submission'
     })
 
-    const Etag : string = await uploadFile(bucket, file)
-    const fileModel : FileUpload = {
-      userId : submission.userId,
-      assignmentId : submission.assignmentId,
-      courseId : submission.courseId,
-      etags : Etag,
-      fieldName : file.fieldname,
-      originalName : file.originalname,
-      filename : bucket,
-
+    const filename: string = file.originalname
+    const Etag: string = await uploadFile(bucket, file, filename)
+    const fileModel: FileUpload = {
+      userId: submission.userId,
+      assignmentId: submission.assignmentId,
+      courseId: submission.courseId,
+      etags: Etag,
+      fieldName: bucket,
+      originalName: file.originalname,
+      filename: filename,
     }
+    const content = JSON.parse(submission.content)
+    content.filepaths.push(filename)
+    submission.content = JSON.stringify(content)
+
     await fileConn().save(fileModel)
   }
   return await submissionConn().save(submission)
