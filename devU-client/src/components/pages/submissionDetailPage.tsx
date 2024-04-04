@@ -6,11 +6,19 @@ import ErrorPage from './errorPage'
 import RequestService from 'services/request.service'
 import { SubmissionScore, SubmissionProblemScore, Submission, Assignment, AssignmentProblem } from 'devu-shared-modules'
 import { Link, useParams } from 'react-router-dom'
+import Button from '../shared/inputs/button'
+import TextField from '../shared/inputs/textField'
+import { useActionless } from 'redux/hooks'
+import { SET_ALERT } from 'redux/types/active.types'
 
 
-const SubmissionDetailPage = () => { 
+
+const SubmissionDetailPage = (props : any) => { 
+    const { state } = props.location
+
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [setAlert] = useActionless(SET_ALERT)
     
     const { submissionId } = useParams<{submissionId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
@@ -18,6 +26,14 @@ const SubmissionDetailPage = () => {
     const [submission, setSubmission] = useState<Submission>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [assignment, setAssignment] = useState<Assignment>()
+
+    const [showManualGrade, setToggleManualGrade] = useState(false)
+    const [formData, setFormData] = useState({
+        submissionId: state.id,
+        score: 0,
+        feedback: '',
+        releasedAt: "2024-10-05T14:48:00.00Z"
+    })
 
     const fetchData = async () => {
         try {
@@ -47,11 +63,50 @@ const SubmissionDetailPage = () => {
         fetchData()
     }, [])
 
+    const handleClick = () => {
+        setToggleManualGrade(!showManualGrade)
+    }
+
+    const handleChange = (value : string, e : React.ChangeEvent<HTMLInputElement>) => {
+        const key = e.target.id
+        setFormData(prevState => ({...prevState,[key] : value}))
+    }
+
+    const handleManualGrade = async () => {
+        if (submissionScore) {
+            // Update the submission score
+            console.log('Submission Exists')
+            await RequestService.put( `/api/submission-scores/${submissionScore.id}`, formData)
+            .then(() => {
+                setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Updated' })
+            
+            })
+        }
+        else {
+            // Create a new submission score
+            console.log('No Submission')
+            await RequestService.post( `/api/submission-scores`, formData)
+            .then(() => {
+                setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Created' })
+            })
+        }
+    }
+
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
 
     return(
         <PageWrapper>
+            <Button onClick={handleClick}>Manually Grade</Button>
+
+            {showManualGrade && (
+                <div>
+                    <TextField id="score" placeholder="Score" onChange={handleChange}/>
+                    <TextField id="feedback" placeholder="Feedback" onChange={handleChange}/>
+                    <Button onClick={handleManualGrade}>Submit</Button>
+                </div>
+            )}
+            
             <h1>Submission Detail for {assignment?.name}</h1>
             <h2>Submission Grades:</h2>
             <table>
