@@ -114,4 +114,5 @@ export default {
     _delete,
     list,
     getGraderByAssignmentId,
+    listByAssignmentId
 }
