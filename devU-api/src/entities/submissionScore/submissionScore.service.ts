@@ -1,4 +1,4 @@
-import { getRepository, IsNull } from 'typeorm'
+import { FindManyOptions, getRepository, IsNull } from 'typeorm'
 
 import SubmissionScoreModel from '../submissionScore/submissionScore.model'
 
@@ -37,8 +37,14 @@ export async function retrieve(id: number) {
   return await connect().findOne({ id, deletedAt: IsNull() })
 }
 
-export async function list() {
-  return await connect().find({ deletedAt: IsNull() })
+export async function list(submissionId?: number) {
+  const options: FindManyOptions = {
+    where: {
+      deletedAt: IsNull(),
+      ...(submissionId !== undefined && {submissionId}),
+    }
+  }
+  return await connect().find(options)
 }
 
 export default {

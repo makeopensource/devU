@@ -1,4 +1,4 @@
-import { getRepository, IsNull } from 'typeorm'
+import { FindManyOptions, getRepository, IsNull } from 'typeorm'
 
 import SubmissionModel from '../submission/submission.model'
 import FileModel from '../../fileUpload/fileUpload.model'
@@ -43,8 +43,15 @@ export async function retrieve(id: number) {
   return await submissionConn().findOne({ id, deletedAt: IsNull() })
 }
 
-export async function list() {
-  return await submissionConn().find({ deletedAt: IsNull() })
+export async function list(assignmentId?: number, userId?: number) {
+  const options: FindManyOptions = {
+    where: {
+      deletedAt: IsNull(),
+      ...(assignmentId !== undefined && {assignmentId}),
+      ...(userId !== undefined && {userId})
+    }
+  }
+  return await submissionConn().find(options)
 }
 
 export default {
