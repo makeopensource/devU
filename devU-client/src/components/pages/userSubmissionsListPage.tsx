@@ -11,6 +11,7 @@ import RequestService from 'services/request.service'
 import LocalStorageService from 'services/localStorage.service'
 
 import styles from './userSubmissionsListPage.scss'
+import { useAppSelector } from 'redux/hooks'
 
 const ORDER_BY_STORAGE_KEY = 'submissions_order_by'
 const GROUP_BY_STORAGE_KEY = 'submissions_group_by'
@@ -44,6 +45,8 @@ const UserCoursesListPage = () => {
   const [orderBy, setOrderBy] = useState<OrderBy>(defaultOrderBy)
   const [groupBy, setGroupBy] = useState<GroupBy>(defaultGroupBy)
 
+  const userId = useAppSelector((store) => store.user.id)
+
   useEffect(() => {
     fetchData(orderBy, groupBy)
   }, [])
@@ -51,7 +54,7 @@ const UserCoursesListPage = () => {
   const fetchData = async (orderBy: OrderBy, groupBy: GroupBy) => {
     try {
       const submissions = await RequestService.get<Submission[]>(
-        `/api/submissions?orderBy=${orderBy}?groupBy=${groupBy}`,
+        `/api/submissions?orderBy=${orderBy}&groupBy=${groupBy}&user=${userId}`,
       )
 
       const courseRequests = submissions.map((s) => RequestService.get<Course>(`/api/courses/${s.courseId}`))

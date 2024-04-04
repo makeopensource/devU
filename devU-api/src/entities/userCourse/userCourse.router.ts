@@ -21,7 +21,7 @@ const Router = express.Router()
  *       '200':
  *         description: OK
  */
-Router.get('/user', UserCourseController.getAll)
+Router.get('/', UserCourseController.getAll)
 
 
 /**
@@ -43,6 +43,26 @@ Router.get('/user', UserCourseController.getAll)
  *           type: integer
  */
 Router.get('/user/:id', asInt(), UserCourseController.get)
+
+/**
+ * @swagger
+ * /user-courses/course/{course-id}:
+ *   get:
+ *     summary: Retrieve a list of all of a course's user-course associations.
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: course-id
+ *         description: Enter Course Id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ */
+Router.get('/course/:id', asInt(), UserCourseController.getByCourse)
 
 /**
  * @swagger

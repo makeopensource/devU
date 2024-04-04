@@ -23,6 +23,7 @@ import UserSubmissionsListPage from 'components/pages/userSubmissionsListPage'
 import NonContainerAutoGraderForm from './pages/nonContainerAutoGraderForm'
 import GradebookStudentPage from './pages/gradebookStudentPage'
 import GradebookInstructorPage from './pages/gradebookInstructorPage'
+import SubmissionFeedbackPage from './pages/submissionFeedbackPage'
 
 const AuthenticatedRouter = () => (
   <Switch>
@@ -34,6 +35,7 @@ const AuthenticatedRouter = () => (
     <Route exact path='/users/:userId/courses' component={UserCoursesListPage} />
     <Route exact path='/users/:userId/courses/courseForm' component={EditCourseFormPage} />
     <Route exact path='/submissions/:submissionId' component={SubmissionDetailPage} />
+    <Route exact path='/submissions/:submissionId/feedback' component={SubmissionFeedbackPage} />
     <Route exact path='/courses/' component={CoursesListPage} />
     <Route exact path='/courses/:courseId' component={CourseDetailPage} />
     <Route exact path='/courses/:courseId/update' component={CourseUpdatePage} />
