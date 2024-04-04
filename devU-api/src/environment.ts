@@ -76,7 +76,7 @@ const environment = {
 
   // MinIO setting
   minioHost: isDocker ? load('minio.host') : 'localhost' as string,
-  minioPort: (load('minio.port') || 9002) as number,
+  minioPort: isDocker ? load('minio.port') : 9002 as number,
   minioUsername: (load('minio.username') || 'typescript_user') as string,
   minioPassword: (load('minio.password') || 'changeMe') as string,
 
