@@ -5,12 +5,16 @@ import nonContainerAutograderService from '../nonContainerAutoGrader/nonContaine
 import containerAutograderService from '../containerAutoGrader/containerAutoGrader.service'
 import assignmentProblemService from '../assignmentProblem/assignmentProblem.service'
 import assignmentScoreService from '../assignmentScore/assignmentScore.service'
+import courseService from '../course/course.service'
+import { addJob, openDirectory, uploadFile } from '../../tango/tango.service'
 
 import { SubmissionScore, SubmissionProblemScore, ContainerAutoGrader, AssignmentScore } from 'devu-shared-modules'
 import { checkAnswer } from '../nonContainerAutoGrader/nonContainerAutoGrader.grader'
 import { serialize as serializeNonContainer } from '../nonContainerAutoGrader/nonContainerAutoGrader.serializer'
-import { serialize as serializeContainer } from '../containerAutoGrader/containerAutoGrader.serializer'
 import { serialize as serializeAssignmentScore } from '../assignmentScore/assignmentScore.serializer'
+import { downloadFile } from '../../fileStorage'
+
+import crypto from 'crypto'
 
 export async function grade(submissionId: number) {
     const submission = await submissionService.retrieve(submissionId)
@@ -20,10 +24,10 @@ export async function grade(submissionId: number) {
 
     const content = JSON.parse(submission.content)
     const form = content.form
-    const filepaths = content.filepaths //Using the field name that was written on the whiteboard for now
+    const filepaths: string[] = content.filepaths //Using the field name that was written on the whiteboard for now
 
     const nonContainerAutograders = await nonContainerAutograderService.listByAssignmentId(assignmentId)
-    const containerAutograders = await containerAutograderService.listByAssignmentId(assignmentId)
+    //const containerAutograders = await containerAutograderService.listByAssignmentId(assignmentId)
     const assignmentProblems = await assignmentProblemService.list(assignmentId)
 
     
@@ -52,26 +56,49 @@ export async function grade(submissionId: number) {
     }
 
     //Run Container Autograders
-    //Mock functionality, this is not finalized!!!!
-    for (const filepath of filepaths) {
-        const containerGrader = containerAutograders.find(grader => grader.autogradingImage === filepath) //PLACEHOLDER, I'm just using autogradingImage temporarily to associate graders to files
+    try {
+        const {graderData, makefileData, autogradingImage, timeout} = await containerAutograderService.getGraderByAssignmentId(assignmentId)
+        const bucketName = await courseService.retrieve(submission.courseId).then((course) => {
+            return course ? ((course.name).toLowerCase().replace(/ /g, '-') + course.number + course.semester + course.id).toLowerCase() : 'submission'
+        })
 
-        if (containerGrader) {
-            const gradeResults = await mockContainerCheckAnswer(filepath, serializeContainer(containerGrader))
-
-            for (const result of gradeResults) {
-                const problemScoreObj: SubmissionProblemScore = {
-                    submissionId: submissionId,
-                    assignmentProblemId: 1, //PLACEHOLDER, an assignmentProblem must exist in the db for this to work
-                    score: result.score,
-                    feedback: result.feedback,
-                }
-                allScores.push(await submissionProblemScoreService.create(problemScoreObj))
-                score += result.score
-                feedback += result.feedback + '\n'
+        const labName = bucketName + '-' + submission.assignmentId
+        const optionFiles = []
+        const openResponse = await openDirectory(labName)
+        var response = null
+        if (openResponse) {
+            if (!(openResponse.files["Graderfile"]) || openResponse.files["Graderfile"] !== crypto.createHash('md5').update(graderData).digest('hex')) {
+                const graderFile = new File([new Blob([graderData])], "Graderfile")
+                await uploadFile(labName, graderFile, "Graderfile")
             }
+            if (!(openResponse.files["Makefile"]) || openResponse.files["Makefile"] !== crypto.createHash('md5').update(makefileData).digest('hex')) {
+                const makefile = new File([new Blob([makefileData])], "Makefile")
+                await uploadFile(labName, makefile, "Makefile")
+            }
+            for (const filepath of filepaths){
+                const buffer = await downloadFile(bucketName, filepath)
+                const file = new File([new Blob([buffer])], filepath)
+                if (await uploadFile(labName, file, filepath)) {
+                    optionFiles.push({localFile: filepath, destFile: filepath})
+                }
+            }
+
+            const jobOptions = {
+                image: autogradingImage,
+                files: [{localFile: "Graderfile", destFile: "Graderfile"}, 
+                        {localFile: "Makefile", destFile: "Makefile"},]
+                        .concat(optionFiles),
+                jobName: labName,
+                output_file: labName,
+                timeout: timeout,
+                callback_url: ""
+            }
+            response = await addJob(labName, jobOptions)
         }
-    } 
+    } catch (e) {
+        throw e
+    }
+    //remember, immediate callback is made when job has been added to queue, not sure how we're handling the rest of it yet though lmao
 
     //Grading is finished. Create SubmissionScore and AssignmentScore and save to db.
     const scoreObj: SubmissionScore = {
@@ -87,7 +114,7 @@ export async function grade(submissionId: number) {
         const assignmentScore = serializeAssignmentScore(assignmentScoreModel)
         assignmentScore.score = score
         assignmentScoreService.update(assignmentScore)
-        
+
     } else { //Otherwise make a new one
         const assignmentScore: AssignmentScore = {
             assignmentId: submission.assignmentId,
@@ -97,7 +124,7 @@ export async function grade(submissionId: number) {
         assignmentScoreService.create(assignmentScore)
     }
 
-    return allScores
+    return response
 }
 
 //Temporary mock function, delete when the container autograder grading function is written

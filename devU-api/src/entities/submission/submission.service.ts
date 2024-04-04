@@ -32,7 +32,7 @@ export async function create(submission: Submission, file?: Express.Multer.File 
       filename: filename,
     }
     const content = JSON.parse(submission.content)
-    content.filepaths.push(filename)
+    content.filepaths.push(fileModel.filename)
     submission.content = JSON.stringify(content)
 
     await fileConn().save(fileModel)
