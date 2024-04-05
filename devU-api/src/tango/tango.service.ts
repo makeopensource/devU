@@ -1,4 +1,5 @@
 import './tango.types'
+import fetch from 'node-fetch'
 
 const tangoHost = `http://${(process.env.TANGO_KEY ?? 'localhost:3000')}`
 const tangoKey = process.env.TANGO_KEY ?? 'test'
@@ -25,7 +26,7 @@ export async function uploadFile(courselab: string, file: File, fileName: string
   const url = `${tangoHost}/upload/${tangoKey}/${courselab}/`
   const formData = new FormData()
   formData.append('file', file)
-  const response = await fetch(url, { method: 'POST', body: formData, headers: { 'filename': fileName } })
+  const response = await fetch(url, { method: 'POST', body: formData as any, headers: { 'filename': fileName } })
   return response.ok ? await response.json() : null
 }
 

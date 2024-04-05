@@ -14,7 +14,7 @@ export async function grade(req: Request, res: Response, next: NextFunction) {
 
         //const response = serialize(grade)
 
-        res.status(200).json(response)
+        res.status(200).json({message: response?.jobId + ", " + response?.statusId + ", " + response?.statusMsg})
     } catch (err) {
         res.status(400).json(new GenericResponse(err.message))
     }

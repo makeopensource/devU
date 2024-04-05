@@ -14,7 +14,7 @@
     "pre-commit": "lint-staged",
     "generate-config": "docker run --pull always -v $(pwd)/config:/config --user $(id -u):$(id -g) --rm ubautograding/devtools /generateConfig.sh config/default.yml",
     "populate-db": "ts-node-dev ./scripts/populate-db.ts",
-    "tango":  "ts-node-dev ./src/tango/tests/tango.endpoint.test.ts"
+    "tango": "ts-node-dev ./src/tango/tests/tango.endpoint.test.ts"
   },
   "lint-staged": {
     "./**/*.{js,ts,json,md}": [
@@ -40,6 +40,7 @@
     "@types/morgan": "^1.9.2",
     "@types/multer": "^1.4.7",
     "@types/node": "^15.12.2",
+    "@types/node-fetch": "^2.6.11",
     "@types/passport": "^1.0.6",
     "@types/passport-strategy": "^0.2.35",
     "@types/swagger-jsdoc": "^6.0.0",
@@ -69,6 +70,7 @@
     "minio": "^7.0.18",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
+    "node-fetch": "^2.7.0",
     "passport": "^0.6.0",
     "passport-saml": "^3.2.2",
     "pg": "^8.4.0",

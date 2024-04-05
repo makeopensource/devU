@@ -42,6 +42,7 @@ export async function create(containerAutoGrader: ContainerAutoGrader, graderInp
     containerAutoGrader.graderFile = filename
 
     if (makefileInputFile) {
+        const bucket: string = 'makefiles'
         const makefileFilename: string = generateFilename(makefileInputFile.originalname, userId)
         await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename)
         containerAutoGrader.makefileFile = makefileFilename

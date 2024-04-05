@@ -96,7 +96,7 @@ export async function grade(submissionId: number) {
             response = await addJob(labName, jobOptions)
         }
     } catch (e) {
-        throw e
+        console.log(e)
     }
     //remember, immediate callback is made when job has been added to queue, not sure how we're handling the rest of it yet though lmao
 
