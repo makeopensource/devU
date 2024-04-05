@@ -50,7 +50,7 @@ export async function uploadFile(bucketName: string, file: Express.Multer.File, 
   return new Promise((resolve, reject) => {
     minioClient.putObject(bucketName, filename, file.buffer, (err, etag) => {
       if (err) {
-        reject(new Error('File failed to upload because'+err.message))
+        reject(new Error('File failed to upload because '+err.message))
       } else {
         resolve(etag.etag)
       }
@@ -62,10 +62,9 @@ export async function downloadFile(bucketName: string, filename: string): Promis
   return new Promise((resolve, reject) => {
     const fileData: Buffer[] = []
 
-    console.log(bucketName, filename)
     minioClient.getObject(bucketName, filename, (err, dataStream) => {
       if (err) {
-        reject(new Error('File failed to download from MinIO because'+err.message))
+        reject(new Error('File failed to download from MinIO because '+err.message))
       }
       dataStream.on('data', (chunk:any) => {
         fileData.push(chunk)

@@ -12,7 +12,7 @@ import { SubmissionScore, SubmissionProblemScore, ContainerAutoGrader, Assignmen
 import { checkAnswer } from '../nonContainerAutoGrader/nonContainerAutoGrader.grader'
 import { serialize as serializeNonContainer } from '../nonContainerAutoGrader/nonContainerAutoGrader.serializer'
 import { serialize as serializeAssignmentScore } from '../assignmentScore/assignmentScore.serializer'
-import { downloadFile } from '../../fileStorage'
+import { downloadFile, initializeMinio } from '../../fileStorage'
 
 import crypto from 'crypto'
 
@@ -59,30 +59,27 @@ export async function grade(submissionId: number) {
     try {
         const {graderData, makefileData, autogradingImage, timeout} = await containerAutograderService.getGraderByAssignmentId(assignmentId)
         const bucketName = await courseService.retrieve(submission.courseId).then((course) => {
-            return course ? ((course.name).toLowerCase().replace(/ /g, '-') + course.number + course.semester + course.id).toLowerCase() : 'submission'
+            return course ? (course.number + course.semester + course.id).toLowerCase() : 'submission'
         })
+        initializeMinio(bucketName)
 
+        var response = null
         const labName = bucketName + '-' + submission.assignmentId
         const optionFiles = []
         const openResponse = await openDirectory(labName)
-        var response = null
         if (openResponse) {
             if (!(openResponse.files["Graderfile"]) || openResponse.files["Graderfile"] !== crypto.createHash('md5').update(graderData).digest('hex')) {
-                const graderFile = new File([new Blob([graderData])], "Graderfile")
-                await uploadFile(labName, graderFile, "Graderfile")
+                await uploadFile(labName, graderData, "Graderfile")
             }
             if (!(openResponse.files["Makefile"]) || openResponse.files["Makefile"] !== crypto.createHash('md5').update(makefileData).digest('hex')) {
-                const makefile = new File([new Blob([makefileData])], "Makefile")
-                await uploadFile(labName, makefile, "Makefile")
+                await uploadFile(labName, makefileData, "Makefile")
             }
             for (const filepath of filepaths){
                 const buffer = await downloadFile(bucketName, filepath)
-                const file = new File([new Blob([buffer])], filepath)
-                if (await uploadFile(labName, file, filepath)) {
+                if (await uploadFile(labName, buffer, filepath)) {
                     optionFiles.push({localFile: filepath, destFile: filepath})
                 }
             }
-
             const jobOptions = {
                 image: autogradingImage,
                 files: [{localFile: "Graderfile", destFile: "Graderfile"}, 
