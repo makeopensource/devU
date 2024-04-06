@@ -88,7 +88,7 @@ const UserCoursesListPage = () => {
         <h1>My Courses</h1>
 
         <div>
-          <Link className={styles.addCourseBtn} to={`/users/${userId}/courses/courseForm`}>
+          <Link className={styles.addCourseBtn} to={`/users/${userId}/addCoursesForm`}>
             Add Courses
           </Link>
         </div>
