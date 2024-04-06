@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
+import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
+import ErrorPage from './errorPage'
 import styles from './homePage.scss'
 
 
@@ -15,53 +17,40 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 
-
-
-
 import { useAppSelector } from 'redux/hooks'
+import RequestService from 'services/request.service'
+import { Course, UserCourse } from 'devu-shared-modules'
 
 
 const HomePage = () => {
     const history = useHistory()
     const userId = useAppSelector((store) => store.user.id)
 
-    const demoCourses = [
-        {
-            name : 'Test Course 1',
-            semester : 'Fall 2021',
-            number : 'CSCI 101',
-            startDate : '2021-08-23',
-            endDate : '2021-12-10'
-        },
-        {
-            name : 'Test Course 2',
-            semester : 'Fall 2022',
-            number : 'CSCI 102',
-            startDate : '2022-08-23',
-            endDate : '2022-12-10'
-        },
-        {
-            name : 'Test Course 3',
-            semester : 'Fall 2023',
-            number : 'CSCI 103',
-            startDate : '2023-08-23',
-            endDate : '2023-12-10'
-        },
-        {
-            name : 'Test Course 4',
-            semester : 'Fall 2024',
-            number : 'CSCI 104',
-            startDate : '2024-08-23',
-            endDate : '2024-12-10'
-        },
-        {
-            name : 'Test Course 5',
-            semester : 'Fall 2025',
-            number : 'CSCI 105',
-            startDate : '2025-08-23',
-            endDate : '2025-12-10'
-        },
-    ]
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const [courses, setCourses] = useState(new Array<Course>())
+
+    useEffect(() => {
+        fetchData()
+      }, [])
+
+    const fetchData = async () => {
+        try {
+            const userCourses = await RequestService.get<UserCourse[]>( `/api/user-courses/user/${userId}` )
+            const coursePromises = userCourses.map(uc => (
+                RequestService.get<Course>( `/api/courses/${uc.courseId}` )
+            ))
+            setCourses(await Promise.all(coursePromises))
+
+        } catch (error) {
+            setError(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    if (loading) return <LoadingOverlay delay={250} />
+    if (error) return <ErrorPage error={error} />
 
     return(
         <PageWrapper>
@@ -76,7 +65,7 @@ const HomePage = () => {
             </div>
 
             <div className={styles.coursesContainer}>
-                {demoCourses.map((course, index) => (
+                {courses.map((course, index) => (
                     <Card sx={{maxWidth: 345}} key={index}>
                     <CardActionArea>
                         <CardContent>
