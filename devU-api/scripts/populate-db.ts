@@ -43,22 +43,89 @@ async function SendPOST(path: string, requestBody: string) {
     console.log(responseBody)
     throw new Error('400/500 Level HTTP Response Received: ' + response.status)
   } else {
-    const responseBody = await response.json()
-    return responseBody.id
+    return await response.json()
   }
 }
 
-/*
-    -- Billy --
-    Student in 302
 
-    -- Bob --
-    Student in 312
+async function CreateCourse(name:string, number:string, semester:string) {
+  const courseData = {
+    name: name,
+    semester: semester,
+    number: number,
+    startDate: '2024-01-24T00:00:00-0500',
+    endDate: '2024-05-10T23:59:59-0500',
+  };
+  return await SendPOST('/courses', JSON.stringify(courseData), 'admin');
+}
 
-    -- Jones --
-    Student in 302 & 312
-    hasn't submitted anything
-*/
+
+async function createAssignment(courseId:number, name:string, categoryName:string) {
+    const time = new Date().getTime();
+    const startDate = new Date(time + 60 * 1000).toISOString();
+    const dueDate = new Date(time + 7 * 24 * 60 * 60 * 1000).toISOString();
+    const endDate = new Date(time + 14 * 24 * 60 * 60 * 1000).toISOString();
+
+  const assignmentData = {
+    courseId: courseId,
+    name: name,
+    startDate: startDate,
+    dueDate: dueDate,
+    endDate: endDate,
+    categoryName: categoryName,
+    description: "This is a test assignment for course Id:."+courseId,
+    maxFileSize: 1024*20,
+    disableHandins: false
+  };
+  return await SendPOST('/assignments', JSON.stringify(assignmentData), 'admin');
+}
+
+
+async function createNonContainerAutoGrader(assignmentId:number, problemName:string, Score:number, Regex:string, isRegex:boolean){
+  const problemData = {
+    assignmentId: assignmentId,
+    question: problemName,
+    score: Score,
+    correctString: Regex,
+    isRegex: isRegex
+    };
+return await SendPOST('/nonContainerAutoGrader', JSON.stringify(problemData), 'admin');
+}
+
+
+async function createSubmission(courseId:number, assignmentId:number, userId:number, externalId:string, content?:string, file?:File) {
+  const time = new Date().toISOString();
+
+  content = content || `This is a test submission for assignment Id: ${assignmentId}`;
+  const fullContent = `{"filepath":"${file ? file.name : ''}","form":${JSON.stringify(content)}}`;
+
+  const submissionData = {
+    createdAt: time,
+    updatedAt: time,
+    courseId: courseId,
+    assignmentId: assignmentId,
+    userId: userId,
+    content: fullContent
+  };
+
+  return await SendPOST('/submissions', JSON.stringify(submissionData), externalId);
+}
+
+
+async function createAssignmentProblem(assignmentId:number, problemName:string, maxScore:number){
+  const problemData = {
+    assignmentId: assignmentId,
+    problemName: problemName,
+    maxScore: maxScore
+    };
+return await SendPOST('/assignment-problems', JSON.stringify(problemData), 'admin');
+}
+
+
+async function gradeSubmission(submissionId:number){
+  return await SendPOST(`/grade/${submissionId}`, '', 'admin')
+}
+
 async function RunRequests() {
   try {
     await fetchToken()
@@ -351,7 +418,6 @@ async function RunRequests() {
   } catch (e) {
     console.error(e)
   }
-
 }
 
 RunRequests()
