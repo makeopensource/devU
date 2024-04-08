@@ -93,6 +93,8 @@ const AssignmentDetailPage = () => {
             // Now you can use submissionResponse.id here
             await RequestService.post(`/api/grade/${response.id}`, {} )
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
+
+            fetchData()
         } catch (err) {
             const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
             setAlert({ autoDelete: false, type: 'error', message })

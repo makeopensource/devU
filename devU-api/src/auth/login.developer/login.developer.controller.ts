@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 import UserService from '../../entities/user/user.service'
 import AuthService from '../../auth/auth.service'
 
-import { GenericResponse } from '../../utils/apiResponse.utils'
+// import { GenericResponse } from '../../utils/apiResponse.utils'
 import { refreshCookieOptions } from '../../utils/cookie.utils'
 
 export async function callback(req: Request, res: Response, next: NextFunction) {
@@ -14,7 +14,8 @@ export async function callback(req: Request, res: Response, next: NextFunction) 
     const refreshToken = AuthService.createRefreshToken(user)
 
     res.cookie('refreshToken', refreshToken, refreshCookieOptions)
-    res.status(200).json(new GenericResponse('Login successful'))
+    //res.status(200).json(new GenericResponse('Login successful'))
+    res.status(200).json({ message: 'Login successful', userId: user.id })
   } catch (err) {
     next(err)
   }

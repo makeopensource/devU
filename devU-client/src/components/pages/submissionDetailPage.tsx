@@ -13,8 +13,7 @@ import { SET_ALERT } from 'redux/types/active.types'
 
 
 
-const SubmissionDetailPage = (props : any) => { 
-    const { state } = props.location
+const SubmissionDetailPage = () => { 
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -29,7 +28,7 @@ const SubmissionDetailPage = (props : any) => {
 
     const [showManualGrade, setToggleManualGrade] = useState(false)
     const [formData, setFormData] = useState({
-        submissionId: state.id,
+        submissionId: submissionId,
         score: 0,
         feedback: '',
         releasedAt: "2024-10-05T14:48:00.00Z"
@@ -37,7 +36,7 @@ const SubmissionDetailPage = (props : any) => {
 
     const fetchData = async () => {
         try {
-            const submissionScore = await RequestService.get<SubmissionScore>( `/api/submission-scores/${submissionId}` )
+            const submissionScore = (await RequestService.get<SubmissionScore[]>( `/api/submission-scores?submission=${submissionId}` )).pop() ?? null
             setSubmissionScore(submissionScore)
 
             const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>( `/api/submission-problem-scores/${submissionId}` )

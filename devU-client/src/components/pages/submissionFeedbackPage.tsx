@@ -19,7 +19,7 @@ const SubmissionFeedbackPage = () => {
 
     const fetchData = async () => {
         try {
-            const submissionScore = await RequestService.get<SubmissionScore>( `/api/submission-scores/${submissionId}` )
+            const submissionScore = (await RequestService.get<SubmissionScore[]>( `/api/submission-scores?submission=${submissionId}` )).pop() ?? null
             setSubmissionScore(submissionScore)
 
             const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>( `/api/submission-problem-scores/${submissionId}` )
@@ -48,8 +48,6 @@ const SubmissionFeedbackPage = () => {
 
     return(
         <PageWrapper>
-            {console.log(assignment)}
-            {console.log(assignmentProblems)}
             <h1>Feedback for {assignment?.name}</h1>
             {submissionScore?.feedback ? (
                 <div>
