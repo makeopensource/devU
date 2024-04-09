@@ -3,10 +3,11 @@ import express from 'express'
 
 // Middleware
 import validator from './assignment.validator'
-import { asInt } from '../../middleware/validator/generic.validator'
+import {asInt} from '../../middleware/validator/generic.validator'
 
 // Controller
 import AssignmentsController from './assignment.controller'
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 const Router = express.Router()
 
@@ -21,7 +22,11 @@ const Router = express.Router()
  *       '200':
  *         description: OK
  */
-Router.get('/', AssignmentsController.get)
+Router.get('/', isAuthorized, AssignmentsController.get)
+
+// TODO: What endpoints to have?
+Router.get('/released', isAuthorized, AssignmentsController.get)
+Router.get('/unreleased', isAuthorized, AssignmentsController.get)
 
 /**
  * @swagger
@@ -39,9 +44,9 @@ Router.get('/', AssignmentsController.get)
  *         description: Enter assignment id
  *         required: true
  *         schema:
- *           type: integer    
+ *           type: integer
  */
-Router.get('/:id', asInt(), AssignmentsController.detail)
+Router.get('/:id', isAuthorized, asInt(), AssignmentsController.detail)
 
 
 /**
@@ -60,9 +65,9 @@ Router.get('/:id', asInt(), AssignmentsController.detail)
  *         description: Enter course id
  *         required: true
  *         schema:
- *           type: integer    
+ *           type: integer
  */
-Router.get('/course/:courseId', asInt('courseId'), AssignmentsController.getByCourse)
+Router.get('/course/:courseId', isAuthorized, asInt('courseId'), AssignmentsController.getByCourse)
 
 /**
  * @swagger
@@ -80,7 +85,7 @@ Router.get('/course/:courseId', asInt('courseId'), AssignmentsController.getByCo
  *           schema:
  *             $ref: '#/components/schemas/Assignment'
  */
-Router.post('/', validator, AssignmentsController.post)
+Router.post('/', isAuthorized, validator, AssignmentsController.post)
 
 /**
  * @swagger
@@ -97,14 +102,14 @@ Router.post('/', validator, AssignmentsController.post)
  *         in: path
  *         required: true
  *         schema:
- *           type: integer   
+ *           type: integer
  *     requestBody:
  *       content:
  *         application/x-www-form-urlencoded:
  *           schema:
  *             $ref: '#/components/schemas/Assignment'
  */
-Router.put('/:id', asInt(), validator, AssignmentsController.put)
+Router.put('/:id', isAuthorized, asInt(), validator, AssignmentsController.put)
 
 /**
  * @swagger
@@ -121,8 +126,8 @@ Router.put('/:id', asInt(), validator, AssignmentsController.put)
  *         in: path
  *         required: true
  *         schema:
- *           type: integer   
+ *           type: integer
  */
-Router.delete('/:id', asInt(), AssignmentsController._delete)
+Router.delete('/:id', isAuthorized, asInt(), AssignmentsController._delete)
 
 export default Router

@@ -19,7 +19,9 @@ export async function getByAssignmentId(req: Request, res: Response, next: NextF
     const nonContainerAutoGraders = await NonContainerAutoGraderService.listByAssignmentId(assignmentId)
     if (!nonContainerAutoGraders) return res.status(404).json(NotFound)
 
+
     res.status(200).json(nonContainerAutoGraders.map(serialize))
+    webhook()
   } catch (err) {
     next(err)
   }

@@ -4,6 +4,7 @@ import express from 'express'
 //validators
 import validator from './courseScore.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
+import { isAuthorized } from "../../authorization/authorization.middleware";
 
 //Controller
 import CourseScoreController from './courseScore.controller'
@@ -21,7 +22,7 @@ const Router = express.Router()
  *        '200':
  *          description: OK
  */
-Router.get('/', CourseScoreController.get)
+Router.get('/', isAuthorized, CourseScoreController.get)
 
 
 /**

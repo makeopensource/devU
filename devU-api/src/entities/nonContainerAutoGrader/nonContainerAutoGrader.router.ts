@@ -12,7 +12,7 @@ const Router = express.Router()
 
 /**
  * @swagger
- * /nonContainerAutoGrader:
+ * /nonContainerAutoGraders:
  *   get:
  *     summary: Retrieve a list of all nonContainerAutoGraders
  *     tags:
@@ -25,7 +25,7 @@ Router.get('/', nonContainerQuestions.get)
 
 /**
  * @swagger
- * /nonContainerAutoGrader/byAssignmentId/{assignmentId}:
+ * /nonContainerAutoGraders/byAssignmentId/{assignmentId}:
  *   get:
  *     summary: Retrieve a list of all nonContainerAutoGrader with the assignment ID
  *     tags:
@@ -44,7 +44,7 @@ Router.get('/byAssignmentId/:assignmentId', asInt("assignmentId"), nonContainerQ
 
 /**
  * @swagger
- * /nonContainerAutoGrader/byId/{id}:
+ * /nonContainerAutoGraders/byId/{id}:
  *   get:
  *     summary: Retrieve a single question
  *     tags:
@@ -63,7 +63,7 @@ Router.get('/byId/:id', asInt(), nonContainerQuestions.detail)
 
 /**
  * @swagger
- * /nonContainerAutoGrader:
+ * /nonContainerAutoGraders:
  *   post:
  *     summary: Create a question
  *     tags:
@@ -81,7 +81,7 @@ Router.post('/', validator, nonContainerQuestions.post)
 
 /**
  * @swagger
- * /nonContainerAutoGrader:
+ * /nonContainerAutoGraders:
  *   put:
  *     summary: Update a question
  *     tags:
@@ -105,7 +105,7 @@ Router.put('/:id', asInt(), validator, nonContainerQuestions.put)
 
 /**
  * @swagger
- * /nonContainerAutoGrader/{id}:
+ * /nonContainerAutoGraders/{id}:
  *   delete:
  *     summary: Delete a question
  *     tags:

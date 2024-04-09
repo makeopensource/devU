@@ -7,6 +7,7 @@ import { asInt } from '../../middleware/validator/generic.validator'
 
 // Controller
 import SubmissionScoreController from './submissionScore.controller'
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 const Router = express.Router()
 
@@ -22,6 +23,9 @@ const Router = express.Router()
  *         description: OK
  */
 Router.get('/', SubmissionScoreController.get)
+
+Router.get('/user/:userId', isAuthorized, SubmissionScoreController.getByUser)
+
 
 /**
  * @swagger
