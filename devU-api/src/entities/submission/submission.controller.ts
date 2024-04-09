@@ -9,7 +9,12 @@ import { serialize } from './submission.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const submissions = await SubmissionService.list()
+    const userId = req.currentUser?.userId
+    const query = req.query
+
+    if (!userId) return res.status(400).json(new GenericResponse('Request requires auth'))
+
+    const submissions = await SubmissionService.list(query, userId)
     const response = submissions.map(serialize)
 
     res.status(200).json(response)

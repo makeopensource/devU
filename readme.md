@@ -45,6 +45,18 @@ systems or tool versions. The installation varies depending on your operating sy
 their website.
 
 ### 2. Clone this repo to your computer.
+
+*Note for Windows users*
+
+You have to run the following commands, this repo contains shell scripts that have LF line endings. 
+By default, git will convert them CRLF on windows this will cause the script to not run
+
+The command below will configure git to not change line endings for the files in the repo
+
+```
+ git config --global core.autocrlf input 
+```
+
 Open a terminal.
 * On Windows, press `Windows + R` to open a run prompt, type "`cmd`", and press enter.
 * On MacOS, open the Launchpad (on your Dock) and launch "Terminal".

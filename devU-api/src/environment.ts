@@ -51,6 +51,9 @@ const refreshTokenBuffer = load('auth.jwt.refreshTokenExpirationBufferSeconds') 
 // if it is undefined it is running on dev machine
 const isDocker = !(process.env.dev === undefined)
 
+if (process.env.TANGO_KEY === undefined){
+  throw Error('Tango key not found.\nMake sure to set environment variable TANGO_KEY in the api service in docker-compose')
+}
 
 const environment = {
   port,
@@ -73,7 +76,7 @@ const environment = {
 
   // MinIO setting
   minioHost: isDocker ? load('minio.host') : 'localhost' as string,
-  minioPort: (load('minio.port') || 9002) as number,
+  minioPort: isDocker ? load('minio.port') : 9002 as number,
   minioUsername: (load('minio.username') || 'typescript_user') as string,
   minioPassword: (load('minio.password') || 'changeMe') as string,
 

@@ -43,6 +43,7 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
  */
 export async function post(req: Request, res: Response, next: NextFunction) {
     try {
+        if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
         if (!req.files) return res.status(400).json(new GenericResponse('No file uploaded'));
 
         const files = req.files as { [fileType: string]: Express.Multer.File[] };
@@ -53,8 +54,9 @@ export async function post(req: Request, res: Response, next: NextFunction) {
         const inputFileField = fileUploadTypes.find(type => files[type])
         if (inputFileField === undefined) return res.status(403).json(new GenericResponse('File type not supported'))
         const bucketName = mappingFieldWithBucket(inputFileField)
+        const userId = req.currentUser?.userId
 
-        const fileUpload = await FileUploadService.create(files[inputFileField], bucketName)
+        const fileUpload = await FileUploadService.create(files[inputFileField], bucketName, userId)
 
         const response = serialize(fileUpload)
 

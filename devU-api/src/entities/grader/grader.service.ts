@@ -27,9 +27,9 @@ export async function grade(submissionId: number) {
     const assignmentProblems = await assignmentProblemService.list(assignmentId)
 
     
-    var score = 0
-    var feedback = ''
-    var allScores = [] //This is the return value, the serializer parses it into a GraderInfo object for the controller to return
+    let score = 0
+    let feedback = ''
+    let allScores = [] //This is the return value, the serializer parses it into a GraderInfo object for the controller to return
 
     //Run Non-Container Autograders
     for (const question in form) { 
@@ -53,25 +53,27 @@ export async function grade(submissionId: number) {
 
     //Run Container Autograders
     //Mock functionality, this is not finalized!!!!
-    for (const filepath of filepaths) {
-        const containerGrader = containerAutograders.find(grader => grader.autogradingImage === filepath) //PLACEHOLDER, I'm just using autogradingImage temporarily to associate graders to files
+    if (filepaths){
+        for (const filepath of filepaths) {
+            const containerGrader = containerAutograders.find(grader => grader.autogradingImage === filepath) //PLACEHOLDER, I'm just using autogradingImage temporarily to associate graders to files
 
-        if (containerGrader) {
-            const gradeResults = await mockContainerCheckAnswer(filepath, serializeContainer(containerGrader))
+            if (containerGrader) {
+                const gradeResults = await mockContainerCheckAnswer(filepath, serializeContainer(containerGrader))
 
-            for (const result of gradeResults) {
-                const problemScoreObj: SubmissionProblemScore = {
-                    submissionId: submissionId,
-                    assignmentProblemId: 1, //PLACEHOLDER, an assignmentProblem must exist in the db for this to work
-                    score: result.score,
-                    feedback: result.feedback,
+                for (const result of gradeResults) {
+                    const problemScoreObj: SubmissionProblemScore = {
+                        submissionId: submissionId,
+                        assignmentProblemId: 1, //PLACEHOLDER, an assignmentProblem must exist in the db for this to work
+                        score: result.score,
+                        feedback: result.feedback,
+                    }
+                    allScores.push(await submissionProblemScoreService.create(problemScoreObj))
+                    score += result.score
+                    feedback += result.feedback + '\n'
                 }
-                allScores.push(await submissionProblemScoreService.create(problemScoreObj))
-                score += result.score
-                feedback += result.feedback + '\n'
             }
         }
-    } 
+    }
 
     //Grading is finished. Create SubmissionScore and AssignmentScore and save to db.
     const scoreObj: SubmissionScore = {
@@ -86,7 +88,7 @@ export async function grade(submissionId: number) {
     if (assignmentScoreModel) { //If assignmentScore already exists, update existing entity
         const assignmentScore = serializeAssignmentScore(assignmentScoreModel)
         assignmentScore.score = score
-        assignmentScoreService.update(assignmentScore)
+        await assignmentScoreService.update(assignmentScore)
         
     } else { //Otherwise make a new one
         const assignmentScore: AssignmentScore = {
@@ -94,7 +96,7 @@ export async function grade(submissionId: number) {
             userId: submission.userId,
             score: score,
         }
-        assignmentScoreService.create(assignmentScore)
+        await assignmentScoreService.create(assignmentScore)
     }
 
     return allScores
