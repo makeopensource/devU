@@ -1,20 +1,29 @@
 @import 'variables';
 
-.assignmentName {
-    color: $text-color;
-    text-decoration: none;
-    font-size: 14px;
+.categoriesContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; /* adjust this value to set the space between the cards */
 }
 
-.button {
-    justify-content: center;
-	background-color: $primary;
-	color: $text-color;
-	border: 0px;
-	padding: 10px 40px;
-	border-radius: 50px;
-	font-size: 14px;
-	font-weight: 700;
-    text-decoration: none;
-	cursor: pointer;
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.smallLine {
+    width: 50px; /* adjust this value to set the length of the small line */
+    border-top: 3px solid white; /* adjust this value to set the color and thickness of the line */
+    margin-right: 10px; /* adjust this value to set the space between the line and the text */
+}
+
+.largeLine {
+    flex-grow: 1;
+    border-top: 3px solid white; /* adjust this value to set the color and thickness of the line */
+    margin-left: 10px; /* adjust this value to set the space between the line and the text */
+    margin-right: 10px; /* add this line to create some space between the line and the button */
+}
+
+.buttons {
+	margin : 0 10px;
 }
