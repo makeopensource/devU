@@ -21,6 +21,12 @@ const Router = express.Router()
  *     responses:
  *       '200':
  *         description: OK
+ *     parameters:
+ *       - name: submission
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
  */
 Router.get('/', SubmissionScoreController.get)
 

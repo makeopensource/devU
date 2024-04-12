@@ -3,7 +3,7 @@ import { generateFilename } from '../utils/fileUpload.utils'
 
 import { minioClient, uploadFile } from '../fileStorage'
 
-export async function create(files: Express.Multer.File[], bucketName: string) {
+export async function create(files: Express.Multer.File[], bucketName: string, userId: number) {
     try {
     let fileName: string = ""
     let originalName: string = ""
@@ -11,9 +11,9 @@ export async function create(files: Express.Multer.File[], bucketName: string) {
     let etags: string = ""
 
     await Promise.all(files.map(async (file) => {
-        const etag = await uploadFile(bucketName, file)
+        const generatedFileName = generateFilename(file.originalname, userId)
+        const etag = await uploadFile(bucketName, file, generatedFileName)
         etags = etags ? etags + ', ' + etag : etag
-        const generatedFileName = generateFilename(file.originalname)
         fileName = fileName ? fileName + ', ' + generatedFileName : generatedFileName
         originalName = originalName ? originalName + ', ' + file.originalname : file.originalname
     }))

@@ -15,13 +15,26 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
     next(err)
   }
 }
+
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
-
-    const userCourses = await UserCourseService.list(req.currentUser.userId)
+    const id = parseInt(req.params.id)
+    const userCourses = await UserCourseService.list(id)
 
     res.status(200).json(userCourses.map(serialize))
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function getByCourse(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = parseInt(req.params.id)
+    const userCourses = await UserCourseService.listByCourse(id)
+
+    const response = userCourses.map(serialize)
+
+    res.status(200).json(response)
   } catch (err) {
     next(err)
   }
@@ -79,4 +92,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, getAll, detail, post, put, _delete }
+export default { get, getByCourse, getAll, detail, post, put, _delete }

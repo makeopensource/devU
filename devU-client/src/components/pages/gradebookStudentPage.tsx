@@ -96,6 +96,9 @@ const GradebookStudentPage = () => {
         <PageWrapper>
             <div className={styles.header}>
                 <h1>Student Gradebook</h1>
+                <div>
+                    <Link className={styles.button} to={`/courses/${courseId}/gradebook/instructor`}>Instructor View</Link>
+                </div>
             </div>
             <div>
                 {categories.map((c) => (

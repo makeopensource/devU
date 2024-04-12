@@ -41,6 +41,30 @@ Router.get('/:id', asInt(), UserController.detail)
 
 /**
  * @swagger
+ * /users/course/{course-id}:
+ *   get:
+ *     summary: Retrieve all users associated with a course
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: course-id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: level
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ */
+Router.get('/course/:id', asInt(), UserController.getByCourse)
+
+/**
+ * @swagger
  * /users:
  *   post:
  *     summary: Create a user
