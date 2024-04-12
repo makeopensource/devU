@@ -107,6 +107,10 @@ export async function getGraderByAssignmentId(assignmentId: number){
     return {graderData, makefileData, autogradingImage, timeout}
 }
 
+export async function getGraderEntityByAssignmentId(assignmentId: number) {
+    return await connect().findOne({ assignmentId, deletedAt: IsNull() })
+  }
+
 export default {
     create,
     retrieve,
@@ -114,5 +118,6 @@ export default {
     _delete,
     list,
     getGraderByAssignmentId,
-    listByAssignmentId
+    listByAssignmentId,
+    getGraderEntityByAssignmentId,
 }

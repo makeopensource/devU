@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -61,6 +61,7 @@ const SubmissionFeedbackPage = () => {
                     <pre>{sps.feedback}</pre>
                 </div>
             ))}
+            <Link to = {`/submissions/${submissionId}`}>View Submission Details</Link> 
         </PageWrapper>
     )
 }

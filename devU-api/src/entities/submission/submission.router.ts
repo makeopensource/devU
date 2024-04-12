@@ -68,7 +68,7 @@ Router.get('/:id', asInt(), SubmissionController.detail)
  *         description: OK
  *     requestBody:
  *       content:
- *         application/x-www-form-urlencoded:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/Submission'
  */
