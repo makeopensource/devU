@@ -83,7 +83,7 @@ const CourseDetailPage = () => {
                             <List sx = {{maxHeight : 300, overflow : 'auto', '& ul' : {padding : 0} }}>
                             {categoryMap[category].map((assignment, index) => (
                                 <ListItem disablePadding key={index}>
-                                    <ListItemButton>
+                                    <ListItemButton onClick={() => {history.push(`/courses/${courseId}/assignments/${assignment.id}`)}}>
                                         <ListItemText primary={assignment.name} />
                                     </ListItemButton>
                                 </ListItem>
