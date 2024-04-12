@@ -8,7 +8,6 @@ import PageWrapper from 'components/shared/layouts/pageWrapper'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
-import { CardActionArea } from '@mui/material'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -71,20 +70,17 @@ const CourseDetailPage = () => {
                                 history.push(`/courses/${courseId}/update`)
                             }}>Edit Course</Button>
                         </Stack>
-
                     </div>
                     
                     <div className = {styles.categoriesContainer}>
                     {Object.keys(categoryMap).map((category, index) => (
                         <Card sx={{maxWidth : 345}} key={index}>
-                            <CardActionArea>
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        {category}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                            <List>
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="div">
+                                    {category}
+                                </Typography>
+                            </CardContent>
+                            <List sx = {{maxHeight : 300, overflow : 'auto', '& ul' : {padding : 0} }}>
                             {categoryMap[category].map((assignment, index) => (
                                 <ListItem disablePadding key={index}>
                                     <ListItemButton>
