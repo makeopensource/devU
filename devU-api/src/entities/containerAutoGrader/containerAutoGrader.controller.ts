@@ -33,13 +33,9 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 export async function getByAssignment(req: Request, res: Response, next: NextFunction) {
   try {
     const assignmentId = parseInt(req.params.id)
-    const containerAutoGrader = await ContainerAutoGraderService.getGraderEntityByAssignmentId(assignmentId)
+    const containerAutoGrader = await ContainerAutoGraderService.listByAssignmentId(assignmentId)
 
-    if (!containerAutoGrader) return containerAutoGrader
-
-    const response = serialize(containerAutoGrader)
-
-    res.status(200).json(response)
+    res.status(200).json(containerAutoGrader.map(serialize))
   } catch (err) {
     next(err)
   }

@@ -27,7 +27,7 @@ const AssignmentDetailPage = () => {
     const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
-    const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader>()
+    const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
 
     useEffect(() => {
           fetchData()
@@ -42,7 +42,7 @@ const AssignmentDetailPage = () => {
              const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/assignment-problems/${assignmentId}`)
              setAssignmentProblems(assignmentProblemsReq)
 
-             const submissionsReq = await RequestService.get<Submission[]>(`/api/submissions?assignment=${assignmentId}&user=${userId}`)
+             const submissionsReq = await RequestService.get<Submission[]>(`/api/submissions?assignmentId=${assignmentId}&userId=${userId}`)
              submissionsReq.sort((a, b) => (Date.parse(b.createdAt ?? '') - Date.parse(a.createdAt ?? '')))
              setSubmissions(submissionsReq)
 
@@ -58,7 +58,7 @@ const AssignmentDetailPage = () => {
              const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
              setSubmissionProblemScores(submissionProblemScoresReq)
 
-             const containerAutograder = await RequestService.get<ContainerAutoGrader>(`/api/container-auto-graders/assignment/${assignmentId}`)
+             const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/container-auto-graders/assignment/${assignmentId}`)).pop() ?? null
              setContainerAutograder(containerAutograder)
              
          } catch(error) {
@@ -94,17 +94,16 @@ const AssignmentDetailPage = () => {
         setLoading(true)
 
         try {
-            if (containerAutograder) {
+            if (file) {
                 const submission = new FormData
                 submission.append('userId', String(userId))
                 submission.append('assignmentId', assignmentId)
                 submission.append('courseId', courseId)
                 submission.append('content', JSON.stringify(contentField))
-                if (file) submission.append('files', file)
+                submission.append('files', file)
 
                 var response = await RequestService.postMultipart('/api/submissions', submission)
             } else {
-                
                 var response = await RequestService.post('/api/submissions', submission)
             }
             
@@ -130,6 +129,8 @@ const AssignmentDetailPage = () => {
             <Link to = {`/courses/${courseId}/assignments/${assignmentId}/update`} className = {styles.button}>Update Assignment</Link>
             <br/><br/><br/>
             <Link to = {`/ncagtest`} className = {styles.button}>Add Non-Container Auto-Graders</Link>
+            <br/><br/><br/>
+            <Link to = {`/cagtest`} className = {styles.button}>Add Container Auto-Grader</Link>
 
             {/**Assignment Problems & Submission */}
             {assignmentProblems.map(assignmentProblem => (
