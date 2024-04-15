@@ -7,51 +7,35 @@ import {asInt} from '../../middleware/validator/generic.validator'
 
 // Controller
 import AssignmentsController from './assignment.controller'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import {isAuthorized, isAuthorizedByAssignmentStatus} from "../../authorization/authorization.middleware";
 
 const Router = express.Router()
 
-/**
- * @swagger
- * /assignments:
- *   get:
- *     summary: Retrieve a list of assignments
- *     tags:
- *       - Assignments
- *     responses:
- *       '200':
- *         description: OK
- */
-Router.get('/', isAuthorized, AssignmentsController.get)
-
-// TODO: What endpoints to have?
-Router.get('/released', isAuthorized, AssignmentsController.get)
-Router.get('/unreleased', isAuthorized, AssignmentsController.get)
 
 /**
  * @swagger
- * /assignments/{id}:
+ * /course/:courseId/assignments/released:
  *   get:
- *     summary: Retrieve a single assignment
+ *     summary: Retrieve a list of a course's assignments that have been released (Start date prior to current time)
  *     tags:
  *       - Assignments
  *     responses:
  *       '200':
  *         description: OK
  *     parameters:
- *       - name: id
+ *       - name: courseId
  *         in: path
- *         description: Enter assignment id
+ *         description: Enter course id
  *         required: true
  *         schema:
  *           type: integer
  */
-Router.get('/:id', isAuthorized, asInt(), AssignmentsController.detail)
+Router.get('/released', isAuthorized('assignmentViewReleased'), AssignmentsController.getReleased)
 
 
 /**
  * @swagger
- * /assignments/course/{courseId}:
+ * /course/:courseId/assignments:
  *   get:
  *     summary: Retrieve a list of a course's assignments
  *     tags:
@@ -67,11 +51,41 @@ Router.get('/:id', isAuthorized, asInt(), AssignmentsController.detail)
  *         schema:
  *           type: integer
  */
-Router.get('/course/:courseId', isAuthorized, asInt('courseId'), AssignmentsController.getByCourse)
+Router.get('/', isAuthorized('assignmentViewAll'), AssignmentsController.getByCourse)
+
 
 /**
  * @swagger
- * /assignments:
+ * /course/:courseId/assignments/{id}:
+ *   get:
+ *     summary: Retrieve a single assignment
+ *     tags:
+ *       - Assignments
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         description: Enter course id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: id
+ *         in: path
+ *         description: Enter assignment id
+ *         required: true
+ *         schema:
+ *           type: integer
+ */
+Router.get('/:id', asInt(), isAuthorizedByAssignmentStatus, AssignmentsController.detail)
+
+
+
+
+/**
+ * @swagger
+ * /course/:courseId/assignments
  *   post:
  *     summary: Create an assignment
  *     tags:
@@ -79,17 +93,24 @@ Router.get('/course/:courseId', isAuthorized, asInt('courseId'), AssignmentsCont
  *     responses:
  *       '200':
  *         description: OK
+ *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         description: Enter course id
+ *         required: true
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       content:
  *         application/x-www-form-urlencoded:
  *           schema:
  *             $ref: '#/components/schemas/Assignment'
  */
-Router.post('/', isAuthorized, validator, AssignmentsController.post)
+Router.post('/', isAuthorized('assignmentEditAll'), validator, AssignmentsController.post)
 
 /**
  * @swagger
- * /assignments/{id}:
+ * /course/:courseId/assignments/{id}:
  *   put:
  *     summary: Update an assignment
  *     tags:
@@ -98,6 +119,12 @@ Router.post('/', isAuthorized, validator, AssignmentsController.post)
  *       '200':
  *         description: OK
  *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         description: Enter course id
+ *         required: true
+ *         schema:
+ *           type: integer
  *       - name: id
  *         in: path
  *         required: true
@@ -109,11 +136,11 @@ Router.post('/', isAuthorized, validator, AssignmentsController.post)
  *           schema:
  *             $ref: '#/components/schemas/Assignment'
  */
-Router.put('/:id', isAuthorized, asInt(), validator, AssignmentsController.put)
+Router.put('/:id', isAuthorized('assignmentEditAll'), asInt(), validator, AssignmentsController.put)
 
 /**
  * @swagger
- * /assignments/{id}:
+ * /course/:courseId/assignments/{id}:
  *   delete:
  *     summary: Delete an assignment
  *     tags:
@@ -122,12 +149,18 @@ Router.put('/:id', isAuthorized, asInt(), validator, AssignmentsController.put)
  *       '200':
  *         description: OK
  *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         description: Enter course id
+ *         required: true
+ *         schema:
+ *           type: integer
  *       - name: id
  *         in: path
  *         required: true
  *         schema:
  *           type: integer
  */
-Router.delete('/:id', isAuthorized, asInt(), AssignmentsController._delete)
+Router.delete('/:id', isAuthorized('assignmentEditAll'), asInt(), AssignmentsController._delete)
 
 export default Router

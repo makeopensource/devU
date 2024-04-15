@@ -10,7 +10,6 @@ import {
 } from 'typeorm'
 
 import CourseModel from '../course/course.model'
-import UserModel from '../user/user.model'
 
 @Entity('courseScore')
 export default class CourseScoreModel {
@@ -35,26 +34,10 @@ export default class CourseScoreModel {
     @ManyToOne(() => CourseModel)
     courseId: number
 
-
-    @Column({name: 'user_id'})
-    @JoinColumn({name: 'user_id'})
-    @ManyToOne(() => UserModel)
-    userId: number
-
-    @Column({name: 'name'})
-    score: string
-
-    @Column({name: 'grades-view'})
-    grades_view: boolean
-
-    @Column({name: 'grades-edit'})
-    grades_edit: boolean
-
-    @Column({name: 'grades-view-self'})
-    grades_viewSelf: boolean
-
-    @Column({name: 'grades-edit-self'})
-    grades_editSelf: boolean
+    // @Column({name: 'user_id'})
+    // @JoinColumn({name: 'user_id'})
+    // @ManyToOne(() => UserModel)
+    // userId: number
 
     @CreateDateColumn({name: 'created_at'})
     createdAt: Date
@@ -64,6 +47,75 @@ export default class CourseScoreModel {
 
     @DeleteDateColumn({name: 'deleted_at'})
     deletedAt?: Date
+
+    @Column({name: 'name'})
+    name: string
+
+
+    // All the permission options //
+
+    // For default permission that everyone in the course should have
+    @Column({name: 'enrolled'})
+    enrolled: boolean
+
+    @Column({name: 'course_edit'})
+    courseEdit: boolean
+
+    @Column({name: 'course_view'})
+    courseView: boolean
+
+    @Column({name: 'assignment_view_all'})
+    assignmentViewAll: boolean
+
+    @Column({name: 'assignment_edit_all'}) // includes category_edit + autograders_edit_all
+    assignmentEditAll: boolean
+
+    // student perm
+    @Column({name: 'assignment_view_release'})
+    assignmentViewReleased: boolean
+
+    @Column({name: 'scores_view_all'})
+    scoresViewAll: boolean
+
+    @Column({name: 'scores_edit_all'})
+    scoresEditAll: boolean
+
+    // student perm
+    @Column({name: 'scores_view_self_released'})
+    scoresViewSelfReleased: boolean
+
+    @Column({name: 'role_edit_all'}) // TODO: can only delete a role if no one has that role. Some way of preventing the course from being soft-locked
+    roleEditAll: boolean
+
+    @Column({name: 'role_view_all'})
+    roleViewAll: boolean
+
+    @Column({name: 'role_view_self'}) // everyone can do this so the front end knows what to render
+    roleViewSelf: boolean
+
+
+    @Column({name: 'submission_change_state'}) // For soft-soft delete. Marked as "doesn't count" but can still be viewed by the student
+    submissionChangeState: boolean
+
+    @Column({name: 'submission_create_all'})
+    submissionCreateAll: boolean
+
+    // student perm
+    @Column({name: 'submission_create_self'})
+    submissionCreateSelf: boolean
+
+    @Column({name: 'submission_view_all'})
+    submissionViewAll: boolean
+
+    @Column({name: 'user_course_edit_all'}) // TODO: Don't let the last instructor change their role
+    userCourseEditAll: boolean
+
+
+    // TODO: Add the special roles
+    //       -Student has the default permissions
+    //       -Instructor has all permissions
+    //       -TA.. choose the defaults for the TA role
+
 
 }
 

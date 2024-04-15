@@ -2,27 +2,16 @@ import express from 'express'
 
 import validator from './category.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 import CategoryController from './category.controller'
 
 const Router = express.Router()
 
-/**
- * @swagger
- * /categories:
- *    get:
- *      summary: Retrieve a list of categories
- *      tags:
- *        - Categories
- *      responses:
- *        '200':
- *          description: OK
- */
-Router.get('/', CategoryController.get)
 
 /**
  * @swagger
- * /categories/{id}:
+ * /course/:courseId/categories/{id}:
  *    get:
  *      summary: Retrieve a single category
  *      tags:
@@ -38,11 +27,11 @@ Router.get('/', CategoryController.get)
  *          schema:
  *           type: integer
  */
-Router.get('/:id', asInt(), CategoryController.detail)
+Router.get('/:id', isAuthorized('enrolled'), asInt(), CategoryController.detail)
 
 /**
  * @swagger
- * /categories/course/{courseId}:
+ * /course/:courseId/categories/:
  *    get:
  *      summary: Retrieve a list of categories by courseId
  *      tags:
@@ -58,11 +47,11 @@ Router.get('/:id', asInt(), CategoryController.detail)
  *          schema:
  *           type: integer
  */
-Router.get('/course/:courseId', asInt('courseId'), CategoryController.getByCourse)
+Router.get('/', isAuthorized('enrolled'), CategoryController.getByCourse)
 
 /**
  * @swagger
- * /categories:
+ * /course/:courseId/categories:
  *   post:
  *     summary: Create a category
  *     tags:
@@ -76,11 +65,11 @@ Router.get('/course/:courseId', asInt('courseId'), CategoryController.getByCours
  *           schema:
  *             $ref: '#/components/schemas/Category'
  */ 
-Router.post('/', validator, CategoryController.post)
+Router.post('/', isAuthorized('courseEdit'), validator, CategoryController.post)
 
 /**
  * @swagger
- * /categories:
+ * /course/:courseId/categories:
  *   put:
  *     summary: Update a category
  *     tags:
@@ -100,11 +89,11 @@ Router.post('/', validator, CategoryController.post)
  *           schema:
  *             $ref: '#/components/schemas/Category'
  */
-Router.put('/:id', asInt(), validator, CategoryController.put)
+Router.put('/:id', isAuthorized('courseEdit'), asInt(), validator, CategoryController.put)
 
 /**
  * @swagger
- * /categories/{id}:
+ * /course/:courseId/categories/{id}:
  *   delete:
  *     summary: Delete a category
  *     tags:
@@ -119,6 +108,6 @@ Router.put('/:id', asInt(), validator, CategoryController.put)
  *         schema:
  *           type: integer
  */ 
-Router.delete('/:id', asInt(), CategoryController._delete)
+Router.delete('/:id', isAuthorized('courseEdit'), asInt(), CategoryController._delete)
 
 export default Router

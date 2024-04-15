@@ -3,17 +3,18 @@ import express from 'express'
 
 // Middleware
 import validator from './submissionScore.validator'
-import { asInt } from '../../middleware/validator/generic.validator'
+import {asInt} from '../../middleware/validator/generic.validator'
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 // Controller
 import SubmissionScoreController from './submissionScore.controller'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import {isInt} from "validator";
 
 const Router = express.Router()
 
 /**
  * @swagger
- * /submission-scores:
+ * /course/:courseId/assignment/:assignmentId/submission-scores:
  *   get:
  *     summary: Retrieve a list of submission score
  *     tags:
@@ -21,21 +22,32 @@ const Router = express.Router()
  *     responses:
  *       '200':
  *         description: OK
+ */
+Router.get('/', isAuthorized('scoresViewAll'), SubmissionScoreController.get)
+
+/**
+ * @swagger
+ * /course/:courseId/assignment/:assignmentId/submission-scores/user/:userId:
+ *   get:
+ *     summary: Retrieve a list of the released submission scores by user
+ *     tags:
+ *       - SubmissionScores
+ *     responses:
+ *       '200':
+ *         description: OK
  *     parameters:
- *       - name: submission
- *         in: query
+ *       - name: userId
+ *         in: path
  *         required: false
  *         schema:
  *           type: integer
  */
-Router.get('/', SubmissionScoreController.get)
-
-Router.get('/user/:userId', isAuthorized, SubmissionScoreController.getByUser)
+Router.get('/user/:userId', isInt('userId'), isAuthorized(''), SubmissionScoreController.getByUser)
 
 
 /**
  * @swagger
- * /submission-scores/{id}:
+ * /course/:courseId/assignment/:assignmentId/submission-scores/{id}:
  *   get:
  *     summary: Retrieve a single submission score
  *     tags:
@@ -50,11 +62,12 @@ Router.get('/user/:userId', isAuthorized, SubmissionScoreController.getByUser)
  *         schema:
  *           type: integer
  */
-Router.get('/:id', asInt(), SubmissionScoreController.detail)
+Router.get('/:id', isAuthorized(''), asInt(), SubmissionScoreController.detail)
+// TODO:.. self or all
 
 /**
  * @swagger
- * /submission-scores:
+ * /course/:courseId/assignment/:assignmentId/submission-scores:
  *   post:
  *     summary: Create a submission score
  *     tags:
@@ -68,11 +81,11 @@ Router.get('/:id', asInt(), SubmissionScoreController.detail)
  *           schema:
  *             $ref: '#/components/schemas/SubmissionScore'
  */
-Router.post('/', validator, SubmissionScoreController.post)
+Router.post('/', isAuthorized('scoresEditAll'), validator, SubmissionScoreController.post)
 
 /**
  * @swagger
- * /submission-scores:
+ * /course/:courseId/assignment/:assignmentId/submission-scores:
  *   put:
  *     summary: Update a submission score
  *     tags:
@@ -92,11 +105,11 @@ Router.post('/', validator, SubmissionScoreController.post)
  *           schema:
  *             $ref: '#/components/schemas/SubmissionScore'
  */
-Router.put('/:id', asInt(), validator, SubmissionScoreController.put)
+Router.put('/:id', isAuthorized('scoresEditAll'), asInt(), validator, SubmissionScoreController.put)
 
 /**
  * @swagger
- * /submission-scores/{id}:
+ * /course/:courseId/assignment/:assignmentId/submission-scores/{id}:
  *   delete:
  *     summary: Delete a submission score
  *     tags:
@@ -111,6 +124,6 @@ Router.put('/:id', asInt(), validator, SubmissionScoreController.put)
  *         schema:
  *           type: integer
  */
-Router.delete('/:id', asInt(), SubmissionScoreController._delete)
+Router.delete('/:id', isAuthorized('scoresEditAll'), asInt(), SubmissionScoreController._delete)
 
 export default Router

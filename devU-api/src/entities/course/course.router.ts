@@ -4,6 +4,7 @@ import express from 'express'
 // Middleware
 import validator from './course.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 // Controller
 import CourseController from './course.controller'
@@ -21,11 +22,24 @@ const Router = express.Router()
  *       '200':
  *         description: OK
  */
-Router.get('/', CourseController.get)
+Router.get('/', isAuthorized(''), CourseController.get)
 
 /**
  * @swagger
- * /courses/{id}:
+ * /courses/user/{userId}:
+ *   get:
+ *     summary: Retrieve a list of courses by user
+ *     tags:
+ *       - Courses
+ *     responses:
+ *       '200':
+ *         description: OK
+ */
+Router.get('/user/:userId', isAuthorized(''), CourseController.getByUser) // TODO
+
+/**
+ * @swagger
+ * /courses/{courseId}:
  *   get:
  *     summary: Retrieve a single course
  *     tags:
@@ -40,7 +54,7 @@ Router.get('/', CourseController.get)
  *         schema:
  *           type: integer    
  */
-Router.get('/:id', asInt(), CourseController.detail)
+Router.get('/:courseId', isAuthorized('enrolled'), asInt('courseId'), CourseController.detail)
 
 /**
  * @swagger
@@ -58,11 +72,31 @@ Router.get('/:id', asInt(), CourseController.detail)
  *           schema:
  *             $ref: '#/components/schemas/Course'
  */
-Router.post('/', validator, CourseController.post)
+Router.post('/', /*isAuthorized('admin..'),*/ validator, CourseController.post)
+// TODO: Eventually, only admins can create courses. For now, anyone can create their own courses and they gain all permissions for that course
 
 /**
  * @swagger
- * /courses/{id}:
+ * /courses:
+ *   post:
+ *     summary: Creates a course and adds the requester as an instructor in the course. Intended to be used during
+ *              development only. Production will have an admin who can create courses and add the first instructor
+ *     tags:
+ *       - Courses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             $ref: '#/components/schemas/Course'
+ */
+Router.post('/instructor', validator, CourseController.postAddInstructor)
+
+/**
+ * @swagger
+ * /courses/{courseId}:
  *   put:
  *     summary: Update a course
  *     tags:
@@ -71,7 +105,7 @@ Router.post('/', validator, CourseController.post)
  *       '200':
  *         description: OK
  *     parameters:
- *       - name: id
+ *       - name: courseId
  *         in: path
  *         required: true
  *         schema:
@@ -82,11 +116,11 @@ Router.post('/', validator, CourseController.post)
  *           schema:
  *             $ref: '#/components/schemas/Course'
  */
-Router.put('/:id', asInt(), validator, CourseController.put)
+Router.put('/:courseId', isAuthorized('courseEdit'), asInt('courseId'), validator, CourseController.put)
 
 /**
  * @swagger
- * /courses/{id}:
+ * /courses/{courseId}:
  *   delete:
  *     summary: Delete a course
  *     tags:
@@ -95,12 +129,12 @@ Router.put('/:id', asInt(), validator, CourseController.put)
  *       '200':
  *         description: OK
  *     parameters:
- *       - name: id
+ *       - name: courseId
  *         in: path
  *         required: true
  *         schema:
  *           type: integer
  */
-Router.delete('/:id', asInt(), CourseController._delete)
+Router.delete('/:courseId', isAuthorized('courseEdit'), asInt('courseId'), CourseController._delete)
 
 export default Router

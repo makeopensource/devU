@@ -1,16 +1,9 @@
-import express, { Request, Response, NextFunction } from 'express'
-import swaggerUi from 'swagger-ui-express'
+import express from 'express'
 
-import swagger from '../utils/swagger.utils'
 
 import userCourse from '../entities/userCourse/userCourse.router'
 import assignments from '../entities/assignment/assignment.router'
-import courses from '../entities/course/course.router'
-import login from '../authentication/login/login.router'
-import logout from '../authentication/logout/logout.router'
-import status from '../status/status.router'
 import submissions from '../entities/submission/submission.router'
-import users from '../entities/user/user.router'
 import submissionScore from '../entities/submissionScore/submissionScore.router'
 import containerAutoGrader from '../entities/containerAutoGrader/containerAutoGrader.router'
 import assignmentProblem from '../entities/assignmentProblem/assignmentProblem.router'
@@ -19,32 +12,39 @@ import deadlineExtensions from "../entities/deadlineExtensions/deadlineExtension
 import fileUpload from '../fileUpload/fileUpload.router'
 import grader from '../entities/grader/grader.router'
 import categories from '../entities/category/category.router'
+import categoryScores from '../entities/categoryScore/categoryScore.router'
+import courseScores from '../entities/courseScore/courseScore.router'
 import assignmentScore from '../entities/assignmentScore/assignmentScore.router'
+import role from '../entities/role/role.router'
 
 
 import nonContainerAutoGraderRouter from "../entities/nonContainerAutoGrader/nonContainerAutoGrader.router";
 
-import {isAuthorized} from "../authorization/authorization.middleware";
 import {asInt} from "../middleware/validator/generic.validator";
 
+const assignmentRouter = express.Router();
+assignmentRouter.use('/assignment-problems', assignmentProblem)
+assignmentRouter.use('/container-auto-graders', containerAutoGrader)
+assignmentRouter.use('/deadline-extensions', deadlineExtensions)
+assignmentRouter.use('/non-container-auto-graders', nonContainerAutoGraderRouter)
+assignmentRouter.use('/submissions', submissions)
+assignmentRouter.use('/submission-problem-scores', submissionProblemScore)
+assignmentRouter.use('/submission-scores', submissionScore)
+
+
 const Router = express.Router()
-
-Router.use('/file-upload', isAuthorized, fileUpload)
-
-Router.use('/user-courses', isAuthorized, userCourse)
-Router.use('/categories', isAuthorized, categories)
+Router.use('/assignment/:assignmentId/', asInt('assignmentId'), assignmentRouter)
+Router.use('/a/:assignmentId/', asInt('assignmentId'), assignmentRouter)
 
 Router.use('/assignments', assignments)
-Router.use('/assignment-scores', isAuthorized, assignmentScore)
-Router.use('/assignment/:assignmentId/assignment-problems', asInt('assignmentId'), assignmentProblem)
-// Router.use('/submissions', isAuthorized, submissions)
-Router.use('/assignment/:assignmentId/submissions/', isAuthorized, submissions)
-Router.use('/assignment/:assignmentId/submission-scores', isAuthorized, submissionScore)
-Router.use('/assignment/:assignmentId/nonContainerAutoGraders', isAuthorized, nonContainerAutoGraderRouter, isAuthorized)
-Router.use('/assignment/:assignmentId/container-auto-graders', isAuthorized, containerAutoGrader)
-Router.use('/assignment/:assignmentId/submission-problem-scores', isAuthorized, submissionProblemScore)
-Router.use('/assignment/:assignmentId/deadline-extensions', isAuthorized, deadlineExtensions)
+Router.use('/assignment-scores', assignmentScore)
+Router.use('/categories', categories)
+Router.use('/category-scores', categoryScores)
+Router.use('/course-scores', courseScores)
+Router.use('/file-upload', fileUpload)
+Router.use('/grade', grader)
+Router.use('/roles', role)
+Router.use('/user-courses', userCourse)
 
-Router.use('/grade', isAuthorized, grader)
 
 export default Router

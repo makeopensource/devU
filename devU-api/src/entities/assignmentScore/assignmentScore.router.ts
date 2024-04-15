@@ -4,6 +4,7 @@ import express from 'express'
 //Middleware
 import validator from './assignmentScore.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 //Controller
 import AssignmentScoreController from './assignmentScore.controller'
@@ -12,27 +13,27 @@ const Router = express.Router()
 
 /**
  * @swagger
- * /assignment-scores/{assignment-id}:
+ * /course/:courseId/assignment-scores:
  *  get:
- *    summary: Retrieve a list of assignment scores belonging to an assignment by assignment id
+ *    summary: Retrieve a list of assignment scores belonging to a course
  *    tags:
  *      - AssignmentScore
  *    responses:
  *      '200':
  *        description: OK
  *    parameters:
- *      - name: assignment-id
+ *      - name: assignmentId TODO
  *        description: Enter Assignment Id
  *        in: path
  *        required: true
  *        schema:
  *          type: integer
  */
-Router.get('/:id', asInt(), AssignmentScoreController.get)
+Router.get('/:id', isAuthorized('scoresViewAll'), asInt(), AssignmentScoreController.getByCourse)
 
 /**
  * @swagger
- * /assignment-scores/detail/{id}:
+ * /course/:courseId/assignment-scores/{id}:
  *  get:
  *    summary: Retrieve a single assignment score's details
  *    tags:
@@ -48,11 +49,11 @@ Router.get('/:id', asInt(), AssignmentScoreController.get)
  *        schema:
  *          type: integer
  */
-Router.get('/detail/:id', asInt(), AssignmentScoreController.detail)
+Router.get('/:id', isAuthorizedIfSelf(''), asInt(), AssignmentScoreController.detail)
 
 /**
  * @swagger
- * /assignment-scores/user/{user-id}:
+ * /course/:courseId/assignment-scores/user/{userId}:
  *  get:
  *    summary: Retrieve a list of assignment scores belonging to a user
  *    tags:
@@ -61,18 +62,18 @@ Router.get('/detail/:id', asInt(), AssignmentScoreController.detail)
  *      '200':
  *        description: OK
  *    parameters:
- *      - name: user-id
+ *      - name: userId
  *        description: Enter User Id
  *        in: path
  *        required: true
  *        schema:
  *          type: integer
  */
-Router.get('/user/:id', asInt(), AssignmentScoreController.getByUser)
+Router.get('/user/:id', isAuthorizedIfSelf(''), asInt(), AssignmentScoreController.getByUser)
 
 /**
  * @swagger
- * /assignment-scores/detail/{assignment-id}/{user-id}:
+ * /course/:courseId/assignment-scores/detail/{assignment-id}/{user-id}:
  *  get:
  *    summary: Retrieve an assignment score belonging to a specific assignment and user
  *    tags:
@@ -94,31 +95,12 @@ Router.get('/user/:id', asInt(), AssignmentScoreController.getByUser)
  *        schema:
  *          type: integer
  */
-Router.get('/detail/:id/:userId', asInt(), asInt('userId'), AssignmentScoreController.detailByUser)
+Router.get('/detail/:id/:userId', isAuthorized(''), asInt(), asInt('userId'), AssignmentScoreController.detailByUser)
+
 
 /**
  * @swagger
- * /assignment-scores/course/{course-id}:
- *  get:
- *    summary: Retrieve a list of assignment scores belonging to a user
- *    tags:
- *      - AssignmentScore
- *    responses:
- *      '200':
- *        description: OK
- *    parameters:
- *      - name: course-id
- *        description: Enter Course Id
- *        in: path
- *        required: true
- *        schema:
- *          type: integer
- */
-Router.get('/course/:id', asInt(), AssignmentScoreController.getByCourse)
-
-/**
- * @swagger
- * /assignment-scores:
+ * /course/:courseId/assignment-scores:
  *  post:
  *    summary: Create an assignment score
  *    tags:
@@ -132,11 +114,11 @@ Router.get('/course/:id', asInt(), AssignmentScoreController.getByCourse)
  *          schema:
  *            $ref: '#/components/schemas/AssignmentScore'
  */
-Router.post('/', validator, AssignmentScoreController.post)
+Router.post('/', isAuthorized('scoresEditAll'), validator, AssignmentScoreController.post)
 
 /**
  * @swagger
- * /assignment-scores/{id}:
+ * /course/:courseId/assignment-scores/{id}:
  *  put:
  *    summary: Update an assignment score
  *    tags:
@@ -156,11 +138,11 @@ Router.post('/', validator, AssignmentScoreController.post)
  *          schema:
  *            $ref: '#/components/schemas/AssignmentScore'
  */
-Router.put('/:id', asInt(), validator, AssignmentScoreController.put)
+Router.put('/:id', isAuthorized('scoresEditAll'), asInt(), validator, AssignmentScoreController.put)
 
 /**
  * @swagger
- * /assignment-scores/{id}:
+ * /course/:courseId/assignment-scores/{id}:
  *  delete:
  *    summary: Delete an assignment score
  *    tags:
@@ -175,6 +157,6 @@ Router.put('/:id', asInt(), validator, AssignmentScoreController.put)
  *        schema:
  *          type: integer
  */
-Router.delete('/:id', asInt(), AssignmentScoreController._delete)
+Router.delete('/:id', isAuthorized('scoresEditAll'), asInt(), AssignmentScoreController._delete)
 
 export default Router

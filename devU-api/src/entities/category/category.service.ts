@@ -28,7 +28,7 @@ export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
-export async function listByCourse(courseId: number) {
+export async function listByCourse(courseId: number) { // TODO?
   return await connect().find({ courseId, deletedAt: IsNull() })
 }
 

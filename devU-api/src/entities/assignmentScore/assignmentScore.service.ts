@@ -27,11 +27,11 @@ export async function retrieve(id: number) {
   return await connect().findOne({ id, deletedAt: IsNull() })
 }
 
-export async function list(assignmentId: number) {
+export async function list(assignmentId: number) { // TODO: There's no way this is right. Test to verify that it should be 'assignmentId': assignmentId
     return await connect().find({ assignmentId, deletedAt: IsNull() })
 }
 
-export async function retrieveByUser(assignmentId: number, userId: number) {
+export async function retrieveByUser(assignmentId: number, userId: number) { //TODO: This can't be right.. can it?
   return await connect().findOne({ assignmentId, userId, deletedAt: IsNull() })
 }
 

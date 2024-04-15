@@ -19,34 +19,19 @@ const Router = express.Router()
 
 
 
+// TODO: Decide if we want to pull the course object (And return a 404 if not found) in middleware here or let it
+//  happen later... do this check in isAuthorized
+
 Router.use('/course/:courseId', isAuthenticated, asInt('courseId'), courseRoutes)
 Router.use('/c/:courseId', isAuthenticated, asInt('courseId'), courseRoutes)
 
-// TODO: Decide if we want to pull the course object (And return a 404 if not found) in middleware here or let it
-//  happen later... probably do this check in isAuthorized
 // Router.use('/course/:courseId', isAuthenticated, asInt('courseId'), getCourse, courseRoutes)
 // Router.use('/c/:courseId', isAuthenticated, asInt('courseId'), getCourse, courseRoutes)
 
-
-// Router.use('/c/:courseid/assignments', isAuthenticated, assignments)
-// Router.use('/assignment-problems', isAuthenticated, assignmentProblem)
 Router.use('/users', isAuthenticated, users)
 Router.use('/courses', isAuthenticated, courses)
 // TODO: Courses by user
 
-// Router.use('/categories', isAuthenticated, category)
-// Router.use('/user-courses', isAuthenticated, userCourse)
-// Router.use('/submissions', isAuthenticated, submissions)
-// Router.use('/course/:courseid/assignment/:assignmentid/submissions/', isAuthenticated, submissions)
-// Router.use('/submission-scores', isAuthenticated, submissionScore)
-// Router.use('/nonContainerAutoGrader', isAuthenticated, nonContainerAutoGraderRouter)
-// Router.use('/container-auto-graders', isAuthenticated, containerAutoGrader)
-// Router.use('/submission-problem-scores', isAuthenticated, submissionProblemScore)
-// Router.use('/file-upload', isAuthenticated, fileUpload)
-// Router.use('/deadline-extensions', isAuthenticated, deadlineExtensions)
-// Router.use('/grade', isAuthenticated, grader)
-// Router.use('/categories', isAuthenticated, categories)
-// Router.use('/assignment-scores', isAuthenticated, assignmentScore)
 
 Router.use('/login', login)
 Router.use('/logout', logout)
@@ -55,6 +40,7 @@ Router.use('/logout', logout)
 Router.use('/docs', swaggerUi.serve, swaggerUi.setup(swagger))
 
 Router.use('/status', status)
+
 Router.use('/', (req: Request, res: Response, next: NextFunction) => res.status(404).send(NotFound))
 
 export default Router

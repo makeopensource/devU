@@ -2,6 +2,7 @@ import express from 'express'
 
 import validator from './user.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 import UserController from './user.controller'
 
@@ -18,7 +19,7 @@ const Router = express.Router()
  *       '200':
  *         description: OK
  */
-Router.get('/', UserController.get)
+Router.get('/', isAuthorized('admin'), UserController.get)
 
 /**
  * @swagger
@@ -37,7 +38,33 @@ Router.get('/', UserController.get)
  *         schema:
  *           type: integer
  */
-Router.get('/:id', asInt(), UserController.detail)
+Router.get('/:id', isAuthorized(''), asInt(), UserController.detail)
+// self or admin
+
+
+/**
+ * @swagger
+ * /users/{userId}/courses:
+ *   get:
+ *     summary: Retrieve all courses associated with a user
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: course-id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: level
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ */
+Router.get('/course/:id', isAuthorized(''), asInt(), UserController.getCoursesByUser)
 
 /**
  * @swagger
@@ -61,7 +88,7 @@ Router.get('/:id', asInt(), UserController.detail)
  *         schema:
  *           type: string
  */
-Router.get('/course/:id', asInt(), UserController.getByCourse)
+Router.get('/course/:id', isAuthorized(''), asInt(), UserController.getByCourse)
 
 /**
  * @swagger
@@ -80,6 +107,7 @@ Router.get('/course/:id', asInt(), UserController.getByCourse)
  *             $ref: '#/components/schemas/User'
  */
 Router.post('/', validator, UserController.post)
+// TODO: do we need authorizer for this?
 
 /**
  * @swagger
@@ -103,7 +131,8 @@ Router.post('/', validator, UserController.post)
  *           schema:
  *             $ref: '#/components/schemas/User'
  */
-Router.put('/:id', asInt(), validator, UserController.put)
+Router.put('/:id', isAuthorized(''), asInt(), validator, UserController.put)
+// TODO: self or admin
 
 /**
  * @swagger
@@ -122,6 +151,6 @@ Router.put('/:id', asInt(), validator, UserController.put)
  *         schema:
  *           type: integer
  */
-Router.delete('/:id', asInt(), UserController._delete)
+Router.delete('/:id', isAuthorized('no one. Eventually admin only'), asInt(), UserController._delete)
 
 export default Router

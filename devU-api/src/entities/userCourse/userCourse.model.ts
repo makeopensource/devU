@@ -59,6 +59,7 @@ export default class UserCourseModel {
   @ManyToOne(() => CourseModel)
   courseId: number
 
+  // TODO: Change to role
   @Column({ name: 'type', type: 'enum', enum: userCourseLevels })
   level: UserCourseLevel
 

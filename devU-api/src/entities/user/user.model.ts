@@ -35,7 +35,6 @@ export default class UserModel {
   @Column({ length: 320, unique: true, nullable: false })
   email: string
 
-  // TODO:
   @Column({ name: 'external_id', length: 320, unique: true, nullable: false })
   externalId: string
 

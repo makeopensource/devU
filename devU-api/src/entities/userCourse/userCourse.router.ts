@@ -4,49 +4,17 @@ import express from 'express'
 // Middleware
 import validator from './userCourse.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 // Controller
 import UserCourseController from './userCourse.controller'
 
 const Router = express.Router()
 
-/**
- * @swagger
- * /user-courses/:
- *   get:
- *     summary: List of all user-course.
- *     tags:
- *       - UserCourses
- *     responses:
- *       '200':
- *         description: OK
- */
-Router.get('/', UserCourseController.getAll)
-
 
 /**
  * @swagger
- * /user-courses/user/{user-id}:
- *   get:
- *     summary: Retrieve a list of all of a user's user-course associations.
- *     tags:
- *       - UserCourses
- *     responses:
- *       '200':
- *         description: OK
- *     parameters:
- *       - name: user-id
- *         description: Enter User Id
- *         in: path
- *         required: true
- *         schema:
- *           type: integer
- */
-Router.get('/user/:id', asInt(), UserCourseController.get)
-
-/**
- * @swagger
- * /user-courses/course/{course-id}:
+ * /course/:courseId/user-courses/:
  *   get:
  *     summary: Retrieve a list of all of a course's user-course associations.
  *     tags:
@@ -62,11 +30,11 @@ Router.get('/user/:id', asInt(), UserCourseController.get)
  *         schema:
  *           type: integer
  */
-Router.get('/course/:id', asInt(), UserCourseController.getByCourse)
+Router.get('/course/:id', isAuthorized(''), asInt(), UserCourseController.getByCourse)
 
 /**
  * @swagger
- * /user-courses/{id}:
+ * /course/:courseId/user-courses/{id}:
  *   get:
  *     summary: Retrieve a single user-course association
  *     tags:
@@ -82,11 +50,34 @@ Router.get('/course/:id', asInt(), UserCourseController.getByCourse)
  *         schema:
  *           type: integer
  */
-Router.get('/:id', asInt(), UserCourseController.detail)
+Router.get('/:id', isAuthorized(''), asInt(), UserCourseController.detail)
+// TODO: self or all
 
 /**
  * @swagger
- * /user-courses:
+ * /course/:courseId/user-courses/user/{userId}:
+ *   get:
+ *     summary: Retrieve a single user-course by course and user
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         description: Enter User-Course Id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ */
+Router.get('/user/:userId', isAuthorized(''), asInt('userId'), UserCourseController.detailByUser)
+// TODO: self or all
+
+
+/**
+ * @swagger
+ * /course/:courseId/user-courses:
  *   post:
  *     summary: Create a new user-course association
  *     tags:
@@ -100,11 +91,11 @@ Router.get('/:id', asInt(), UserCourseController.detail)
  *           schema:
  *             $ref: '#/components/schemas/UserCourse'
  */
-Router.post('/', validator, UserCourseController.post)
+Router.post('/', isAuthorized('userCourseEditAll'), validator, UserCourseController.post)
 
 /**
  * @swagger
- * /users-courses/{id}:
+ * /course/:courseId/users-courses/{id}:
  *   put:
  *     summary: Update a user-course association
  *     tags:
@@ -124,11 +115,11 @@ Router.post('/', validator, UserCourseController.post)
  *           schema:
  *             $ref: '#/components/schemas/UserCourse'
  */
-Router.put('/:id', asInt(), validator, UserCourseController.put)
+Router.put('/:id', isAuthorized('userCourseEditAll'), asInt(), validator, UserCourseController.put)
 
 /**
  * @swagger
- * /user-courses/{id}:
+ * /course/:courseId/user-courses/{id}:
  *   delete:
  *     summary: Delete a user-course association
  *     tags:
@@ -143,6 +134,6 @@ Router.put('/:id', asInt(), validator, UserCourseController.put)
  *         schema:
  *           type: integer
  */
-Router.delete('/:id', asInt(), UserCourseController._delete)
+Router.delete('/:id', isAuthorized('userCourseEditAll'), asInt(), UserCourseController._delete)
 
 export default Router

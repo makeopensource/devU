@@ -6,21 +6,11 @@ import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.util
 
 import { serialize } from './assignment.serializer'
 
-export async function get(req: Request, res: Response, next: NextFunction) {
-  try {
-    const assignments = await AssignmentService.list()
-    const response = assignments.map(serialize)
-
-    res.status(200).json(response)
-  } catch (err) {
-    next(err)
-  }
-}
-
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
-    const assignment = await AssignmentService.retrieve(id)
+    const courseId = parseInt(req.params.courseId)
+    const assignment = await AssignmentService.retrieve(id, courseId)
 
     if (!assignment) return res.status(404).json(NotFound)
 
@@ -37,6 +27,18 @@ export async function getByCourse(req: Request, res: Response, next: NextFunctio
     const courseId = parseInt(req.params.courseId)
     const assignments = await AssignmentService.listByCourse(courseId)
     
+    const response = assignments.map(serialize)
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
+export async function getReleased(req: Request, res: Response, next: NextFunction) {
+  try {
+    const courseId = parseInt(req.params.courseId)
+    const assignments = await AssignmentService.listReleased(courseId)
+
     const response = assignments.map(serialize)
 
     res.status(200).json(response)
@@ -82,4 +84,5 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, detail, post, put, _delete, getByCourse }
+
+export default { detail, post, put, _delete, getByCourse, getReleased}

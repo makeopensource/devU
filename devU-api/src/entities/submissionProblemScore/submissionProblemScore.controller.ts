@@ -9,7 +9,7 @@ import { serialize } from './submissionProblemScore.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const submissionId = parseInt(req.params.id)
+    const submissionId = parseInt(req.params.submissionId)
     const submissionProblemScores = await SubmissionProblemScoreService.list(submissionId)
     const response = submissionProblemScores.map(serialize)
 

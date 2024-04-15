@@ -5,6 +5,7 @@ import validator from './fileUpload.validator';
 
 import FileUploadController from './fileUpload.controller';
 import {fileUploadTypes} from '../../devu-shared-modules';
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 const Router = express.Router();
 const upload = multer();
@@ -23,27 +24,27 @@ const upload = multer();
 const fields: Field[] = fileUploadTypes.map(name => ({name}))
 /**
  * @swagger
- * /file-upload/{bucketName}:
+ * /course/:courseId/file-upload/{bucketName}:
  *   get:
  *     summary: Retrieve a list of all files in the bucket
  */
-Router.get('/:bucketName', FileUploadController.get);
+Router.get('/:bucketName', isAuthorized('courseView'), FileUploadController.get);
 
 /**
  * @swagger
- * /file-upload/{bucketName}/{fileName}:
+ * /course/:courseId/file-upload/{bucketName}/{fileName}:
  *   get:
  *     summary: Retrieve a single file from the bucket
  */
-Router.get('/:bucketName/:fileName', FileUploadController.detail);
+Router.get('/:bucketName/:fileName', isAuthorized('courseView'), FileUploadController.detail);
 
 /**
  * @swagger
- * /file-upload/:
+ * /course/:courseId/file-upload/:
  *   post:
  *     summary: Upload a new file to the bucket
  */
-Router.post('/', upload.fields(fields), validator, FileUploadController.post);
+Router.post('/', isAuthorized('enrolled'), upload.fields(fields), validator, FileUploadController.post);
 
 
 export default Router;

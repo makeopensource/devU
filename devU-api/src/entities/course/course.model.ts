@@ -33,6 +33,8 @@ export default class CourseModel {
   @PrimaryGeneratedColumn()
   id: number
 
+  // TODO: Do we add OG instructor here so creator can have all permissions and also can't be removed from the course?
+
   @Column({ length: 128 })
   name: string
 

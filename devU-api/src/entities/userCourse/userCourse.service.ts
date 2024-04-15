@@ -26,20 +26,25 @@ export async function retrieve(id: number) {
   return await connect().findOne({ id, deletedAt: IsNull() })
 }
 
-export async function list(userId: number) {
+export async function retrieveByCourseAndUser(courseId: number, userId: number) {
+  return await connect().findOne({ 'courseId': courseId, 'userId': userId, deletedAt: IsNull() })
+}
+
+export async function list(userId: number) { // TODO: look into/test this
   return await connect().find({ userId, deletedAt: IsNull() })
 }
 export async function listAll() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
-export async function listByCourse(courseId: number) {
+export async function listByCourse(courseId: number) { // TODO: look into/test this
   return await connect().find({ courseId, deletedAt: IsNull() })
 }
 
 export default {
   create,
   retrieve,
+  retrieveByCourseAndUser,
   update,
   _delete,
   list,
