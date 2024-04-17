@@ -7,7 +7,7 @@ export type Role = {
   assignmentEditAll: boolean
   assignmentViewReleased: boolean
   courseEdit: boolean
-  courseView: boolean
+  courseViewAll: boolean
   enrolled: boolean
   roleEditAll: boolean
   roleViewAll: boolean

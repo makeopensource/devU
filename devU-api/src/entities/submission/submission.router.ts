@@ -56,7 +56,7 @@ Router.get('/', isAuthorized('submissionViewAll'), SubmissionController.get)
  *         schema:
  *           type: integer
  */
-Router.get('/:id', isAuthorized(''), asInt(), SubmissionController.detail)
+Router.get('/:id', isAuthorized('enrolled'), asInt(), SubmissionController.detail)
 // TODO: submissionViewAll or enrolled/self
 
 /**
@@ -75,7 +75,7 @@ Router.get('/:id', isAuthorized(''), asInt(), SubmissionController.detail)
  *           schema:
  *             $ref: '#/components/schemas/Submission'
  */
-Router.post('/', isAuthorized(''), upload.single("files"), validator, SubmissionController.post)
+Router.post('/', isAuthorized('enrolled'), upload.single("files"), validator, SubmissionController.post)
 // TODO: submissionCreateSelf or submissionCreateAll
 
 

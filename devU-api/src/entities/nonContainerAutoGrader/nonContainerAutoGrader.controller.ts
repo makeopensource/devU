@@ -21,7 +21,6 @@ export async function getByAssignmentId(req: Request, res: Response, next: NextF
 
 
     res.status(200).json(nonContainerAutoGraders.map(serialize))
-    webhook()
   } catch (err) {
     next(err)
   }

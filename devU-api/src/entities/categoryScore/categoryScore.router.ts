@@ -43,6 +43,7 @@ Router.get('/', isAuthorized('scoresViewAll'), CategoryScoreController.getByCour
  *            type: integer
  */
 Router.get('/:id', isAuthorized('scoresViewSelfReleased'), asInt(), CategoryScoreController.detail)
+// TODO: They can see everyone's scores... chance to self or all
 
 /**
  * @swagger

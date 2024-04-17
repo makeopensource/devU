@@ -82,7 +82,6 @@ Router.get('/:id', asInt(), isAuthorizedByAssignmentStatus, AssignmentsControlle
 
 
 
-
 /**
  * @swagger
  * /course/:courseId/assignments

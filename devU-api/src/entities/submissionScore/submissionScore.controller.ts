@@ -19,6 +19,19 @@ export async function get(req: Request, res: Response, next: NextFunction) {
     next(err)
   }
 }
+export async function getByUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = parseInt(req.params.userId)
+    const assignmentId = parseInt(req.params.assignmentId)
+
+    const submissionScores = await SubmissionScoreService.listByUser(userId, assignmentId)
+    const response = submissionScores.map(serialize)
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
 
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
@@ -72,4 +85,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, detail, post, put, _delete }
+export default { get, getByUser, detail, post, put, _delete }

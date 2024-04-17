@@ -42,7 +42,8 @@ Router.get('/', isAuthorized('scoresViewAll'), CourseScoreController.get)
  *          schema:
  *            type: integer
  */
-Router.get('/:id', isAuthorized(''), asInt(), CourseScoreController.detail)
+Router.get('/:id', isAuthorized('scoresViewAll'), asInt(), CourseScoreController.detail)
+// TODO: view self
 
 /**
  * @swagger

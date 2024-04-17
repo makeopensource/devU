@@ -11,7 +11,7 @@ export function serialize(role: RoleModel): Role {
 
     enrolled: role.enrolled,
     courseEdit: role.courseEdit,
-    courseView: role.courseView,
+    courseViewAll: role.courseViewAll,
     assignmentViewAll: role.assignmentViewAll,
     assignmentEditAll: role.assignmentEditAll,
     assignmentViewReleased: role.assignmentViewReleased,
@@ -28,23 +28,3 @@ export function serialize(role: RoleModel): Role {
     userCourseEditAll: role.userCourseEditAll,
   }
 }
-
-// courseEdit: boolean
-// assignmentViewAll: boolean
-// assignmentEditAll: boolean
-// assignmentViewReleased: boolean
-// scoresViewAll: boolean
-// scoresEditAll: boolean
-// scoresViewSelfReleased: boolean
-// roleEditAll: boolean
-// roleViewAll: boolean
-// roleViewSelf: boolean
-// submissionCreateAll: boolean
-// submissionChangeState: boolean
-// submissionCreateSelf: boolean
-// usercourseEditAll: boolean
-//
-// const x = 'name'
-// const y = ['course_edit','assignment_view_all','assignment_edit_all','assignment_view_release','scores_view_all','scores_edit_all','scores_view_self_released','role_edit_all','role_view_all','role_view_self','submission_create_all','submission_change_state','submission_create_self', 'usercourse_edit_all']
-//
-// console.log(x, y)

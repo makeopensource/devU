@@ -1,4 +1,4 @@
-import { GraderInfo, SubmissionScore, SubmissionProblemScore } from '../../../devu-shared-modules'
+import { GraderInfo, SubmissionScore, SubmissionProblemScore } from 'devu-shared-modules'
 import SubmissionModel from '../../submission/submission.model'
 
 import controller from '../grader.controller'
@@ -7,9 +7,9 @@ import GraderService from '../grader.service'
 
 import { serialize } from '../grader.serializer'
 
-import Testing from '../../utils/testing.utils'
+import Testing from '../../../utils/testing.utils'
 
-import { GenericResponse } from '../../utils/apiResponse.utils'
+import { GenericResponse } from '../../../utils/apiResponse.utils'
 
 //THIS TEST FAILS, 
 

@@ -8,31 +8,9 @@ import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.util
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
 
-    const userCourses = await RoleService.listAll()
+    const roles = await RoleService.listAll()
 
-    res.status(200).json(userCourses.map(serialize))
-  } catch (err) {
-    next(err)
-  }
-}
-
-export async function get(req: Request, res: Response, next: NextFunction) {
-  try {
-    const id = parseInt(req.params.id)
-    const userCourses = await RoleService.list(id)
-
-    res.status(200).json(userCourses.map(serialize))
-  } catch (err) {
-    next(err)
-  }
-}
-
-export async function getByUser(req: Request, res: Response, next: NextFunction) {
-  try {
-    const id = parseInt(req.params.id)
-    const userCourses = await RoleService.list(id)
-
-    res.status(200).json(userCourses.map(serialize))
+    res.status(200).json(roles.map(serialize))
   } catch (err) {
     next(err)
   }
@@ -40,10 +18,10 @@ export async function getByUser(req: Request, res: Response, next: NextFunction)
 
 export async function getByCourse(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
-    const userCourses = await RoleService.listByCourse(id)
+    const courseId = parseInt(req.params.courseId)
+    const roles = await RoleService.listByCourse(courseId)
 
-    const response = userCourses.map(serialize)
+    const response = roles.map(serialize)
 
     res.status(200).json(response)
   } catch (err) {
@@ -54,11 +32,11 @@ export async function getByCourse(req: Request, res: Response, next: NextFunctio
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
-    const userCourse = await RoleService.retrieve(id)
+    const role = await RoleService.retrieve(id)
 
-    if (!userCourse) return res.status(404).json(NotFound)
+    if (!role) return res.status(404).json(NotFound)
 
-    const response = serialize(userCourse)
+    const response = serialize(role)
 
     res.status(200).json(response)
   } catch (err) {
@@ -68,8 +46,8 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
-    const userCourse = await RoleService.create(req.body)
-    const response = serialize(userCourse)
+    const role = await RoleService.create(req.body)
+    const response = serialize(role)
 
     res.status(201).json(response)
   } catch (err) {
@@ -103,4 +81,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, getByCourse, getByUser, getAll, detail, post, put, _delete }
+export default { getByCourse, getAll, detail, post, put, _delete }

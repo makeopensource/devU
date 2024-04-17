@@ -7,15 +7,18 @@ let fakeFileUpload: FileUpload
 describe('fileUpload.serializer', () => {
     beforeEach(() => {
         let fieldName: string = "submissions"
-        const originalNames: string[] = ["test1.txt", "test2.txt", "test3.txt"]
-        const fileNames: string[] = ["modified1.txt", "modified2.txt", "modified3.txt"]
-        const etags: string[] = ["etag1", "etag2", "etag3"]
+        // const originalNames: string[] = ["test1.txt", "test2.txt", "test3.txt"]
+        // const fileNames: string[] = ["modified1.txt", "modified2.txt", "modified3.txt"]
+        // const etags: string[] = ["etag1", "etag2", "etag3"]
+        const originalName: string = "test1.txt"
+        const filename: string = "modified1.txt"
+        const etag: string = "etag1"
 
         fakeFileUpload = {
             fieldName: fieldName,
-            originalName: originalNames,
-            fileName: fileNames,
-            etags: etags
+            originalName: originalName,
+            filename: filename,
+            etags: etag
         }
     });
     describe('Serializing fileUpload', () => {
@@ -24,7 +27,7 @@ describe('fileUpload.serializer', () => {
             expect(actualResult).toBeDefined()
             expect(actualResult.fieldName).toEqual(fakeFileUpload.fieldName)
             expect(actualResult.originalName).toEqual(fakeFileUpload.originalName)
-            expect(actualResult.fileName).toEqual(fakeFileUpload.fileName)
+            expect(actualResult.filename).toEqual(fakeFileUpload.filename)
             expect(actualResult.etags).toEqual(fakeFileUpload.etags)
         })
 

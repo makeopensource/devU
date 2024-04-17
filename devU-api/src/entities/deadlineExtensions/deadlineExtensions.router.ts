@@ -41,7 +41,7 @@ Router.get('/', isAuthorized('assignmentViewAll'), DeadlineExtensionsController.
  *         schema:
  *           type: integer
  */
-Router.get('/:id', isAuthorized(''), asInt(), DeadlineExtensionsController.detail)
+Router.get('/:id', isAuthorized('assignmentViewAll'), asInt(), DeadlineExtensionsController.detail)
 // TODO: self or assignmentViewAll
 
 /**

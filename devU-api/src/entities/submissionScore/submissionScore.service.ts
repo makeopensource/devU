@@ -47,10 +47,22 @@ export async function list(submissionId?: number) {
   return await connect().find(options)
 }
 
+export async function listByUser(userId: number, assignmentId: number) {
+  const options: FindManyOptions = {
+    where: {
+      userId: userId,
+      assignmentId: assignmentId,
+      deletedAt: IsNull(),
+    }
+  }
+  return await connect().find(options)
+}
+
 export default {
   create,
   retrieve,
   update,
   _delete,
   list,
+  listByUser,
 }

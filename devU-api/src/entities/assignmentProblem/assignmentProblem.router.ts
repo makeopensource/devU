@@ -4,7 +4,7 @@ import express from 'express'
 // Middleware
 import validator from './assignmentProblem.validator'
 import {asInt} from '../../middleware/validator/generic.validator'
-import {isAuthorized, isAuthorizedByAssignmentStatus} from "../../authorization/authorization.middleware";
+import {isAuthorized} from "../../authorization/authorization.middleware";
 
 
 // Controller
@@ -30,7 +30,9 @@ const Router = express.Router()
  *         schema:
  *           type: integer
  */
-Router.get('/', isAuthorizedByAssignmentStatus, asInt(), AssignmentProblemController.get)
+Router.get('/', isAuthorized('enrolled'), asInt(), AssignmentProblemController.get)
+// Router.get('/', isAuthorizedByAssignmentStatus, asInt(), AssignmentProblemController.get)
+// TODO: assignment released status
 
 /**
  * @swagger
@@ -50,7 +52,9 @@ Router.get('/', isAuthorizedByAssignmentStatus, asInt(), AssignmentProblemContro
  *         schema:
  *           type: integer
  */
-Router.get('/:id', isAuthorizedByAssignmentStatus, asInt(), AssignmentProblemController.detail)
+Router.get('/:id', isAuthorized('assignmentEditAll'), asInt(), AssignmentProblemController.detail)
+// Router.get('/:id', isAuthorizedByAssignmentStatus, asInt(), AssignmentProblemController.detail)
+// TODO: assignment released status
 
 /**
  * @swagger

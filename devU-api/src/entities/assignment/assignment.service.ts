@@ -3,7 +3,6 @@ import {getRepository, IsNull} from 'typeorm'
 import AssignmentModel from './assignment.model'
 
 import {Assignment} from 'devu-shared-modules'
-import {start} from "node:repl";
 
 const connect = () => getRepository(AssignmentModel)
 
@@ -45,7 +44,7 @@ export async function _delete(id: number) {
 }
 
 export async function retrieve(id: number, courseId: number) {
-    return await connect().findOne({id, deletedAt: IsNull()})
+    return await connect().findOne({"id": id, "courseId": courseId, deletedAt: IsNull()})
 }
 
 export async function list() {
@@ -56,7 +55,7 @@ export async function listByCourse(courseId: number) {
     return await connect().find({'courseId': courseId, deletedAt: IsNull()})
 }
 
-export async function listReleased(courseId: number) {
+export async function listByCourseReleased(courseId: number) {
     // TODO: filter by start date after current time
     return await connect().find({'courseId': courseId, deletedAt: IsNull()})
 }
@@ -82,5 +81,6 @@ export default {
     _delete,
     list,
     listByCourse,
+    listByCourseReleased,
     isReleased,
 }

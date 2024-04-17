@@ -3,11 +3,12 @@ import express from 'express'
 
 // Middleware
 import validator from '../submissionProblemScore/submissionProblemScore.validator'
-import { asInt } from '../../middleware/validator/generic.validator'
+import {asInt} from '../../middleware/validator/generic.validator'
 import {isAuthorized} from "../../authorization/authorization.middleware";
 
 // Controller
 import SubmissionProblemScoreController from '../submissionProblemScore/submissionProblemScore.controller'
+
 
 const Router = express.Router()
 
@@ -29,7 +30,7 @@ const Router = express.Router()
  *        schema:
  *          type: integer
  */
-Router.get('/submission/:submissionId', isAuthorized(''), asInt('submissionId'), SubmissionProblemScoreController.get)
+Router.get('/submission/:submissionId', asInt('submissionId'), isAuthorized('enrolled'), SubmissionProblemScoreController.get)
 // TODO: scoresViewAll or scoresViewSelfReleased by the submission owner
 
 
@@ -51,7 +52,7 @@ Router.get('/submission/:submissionId', isAuthorized(''), asInt('submissionId'),
  *         schema:
  *           type: integer
  */
-Router.get('/detail/:id', isAuthorized(''), asInt(), SubmissionProblemScoreController.detail)
+Router.get('/detail/:id', isAuthorized('enrolled'), asInt(), SubmissionProblemScoreController.detail)
 // TODO: scoresViewAll or scoresViewSelfReleased by the submission problem score
 
 /**

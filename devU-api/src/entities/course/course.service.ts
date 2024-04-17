@@ -33,6 +33,10 @@ export async function retrieve(id: number) {
 export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
+export async function listByUser(userId: number) {
+  // TODO: lookup using UserCourses
+  return await connect().find({ deletedAt: IsNull() })
+}
 
 export default {
   create,
@@ -40,4 +44,5 @@ export default {
   update,
   _delete,
   list,
+  listByUser,
 }

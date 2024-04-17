@@ -3,7 +3,7 @@ import { serialize } from '../grader.serializer'
 import SubmissionScoreModel from '../../submissionScore/submissionScore.model'
 import SubmissionProblemScoreModel from '../../submissionProblemScore/submissionProblemScore.model'
 
-import Testing from '../../utils/testing.utils'
+import Testing from '../../../utils/testing.utils'
 
 let mockSubmissionScore: SubmissionScoreModel
 let mockSubmissionProblemScore1: SubmissionProblemScoreModel

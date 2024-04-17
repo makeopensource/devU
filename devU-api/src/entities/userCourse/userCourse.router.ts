@@ -3,8 +3,8 @@ import express from 'express'
 
 // Middleware
 import validator from './userCourse.validator'
-import { asInt } from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import {asInt} from '../../middleware/validator/generic.validator'
+import {extractOwnerByPathParam, isAuthorized} from "../../authorization/authorization.middleware";
 
 // Controller
 import UserCourseController from './userCourse.controller'
@@ -30,7 +30,7 @@ const Router = express.Router()
  *         schema:
  *           type: integer
  */
-Router.get('/course/:id', isAuthorized(''), asInt(), UserCourseController.getByCourse)
+Router.get('/course/:id', isAuthorized('courseViewAll'), asInt(), UserCourseController.getByCourse)
 
 /**
  * @swagger
@@ -50,7 +50,7 @@ Router.get('/course/:id', isAuthorized(''), asInt(), UserCourseController.getByC
  *         schema:
  *           type: integer
  */
-Router.get('/:id', isAuthorized(''), asInt(), UserCourseController.detail)
+Router.get('/:id', isAuthorized('courseViewAll'), asInt(), UserCourseController.detail)
 // TODO: self or all
 
 /**
@@ -71,8 +71,7 @@ Router.get('/:id', isAuthorized(''), asInt(), UserCourseController.detail)
  *         schema:
  *           type: integer
  */
-Router.get('/user/:userId', isAuthorized(''), asInt('userId'), UserCourseController.detailByUser)
-// TODO: self or all
+Router.get('/user/:userId', extractOwnerByPathParam('userId'), isAuthorized('courseViewAll', 'enrolled'), asInt('userId'), UserCourseController.detailByUser)
 
 
 /**

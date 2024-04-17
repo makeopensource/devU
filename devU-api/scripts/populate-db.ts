@@ -176,10 +176,10 @@ async function runCourseAndSubmission() {
         const courseId2 = (await CreateCourse('Testing Course Name2', 'CSE102', 's2024')).id
 
         //Create enroll students
-        await SendPOST('/user-courses', `{userId:${billy}, courseId:${courseId1}, level:student, dropped:false}`, 'admin')
-        await SendPOST('/user-courses', `{userId:${billy}, courseId:${courseId2}, level:student, dropped:false}`, 'admin')
-        await SendPOST('/user-courses', `{userId:${bob}, courseId:${courseId1}, level:student, dropped:false}`, 'admin')
-        await SendPOST('/user-courses', `{userId:${bob}, courseId:${courseId2}, level:student, dropped:false}`, 'admin')
+        await SendPOST('/user-courses', `{userId:${billy}, courseId:${courseId1}, role:student, dropped:false}`, 'admin')
+        await SendPOST('/user-courses', `{userId:${billy}, courseId:${courseId2}, role:student, dropped:false}`, 'admin')
+        await SendPOST('/user-courses', `{userId:${bob}, courseId:${courseId1}, role:student, dropped:false}`, 'admin')
+        await SendPOST('/user-courses', `{userId:${bob}, courseId:${courseId2}, role:student, dropped:false}`, 'admin')
 
         //Create assignments
         const assignmentId1 = (await createAssignment(courseId1, 'Course1 Assignment 1', 'Quiz')).id

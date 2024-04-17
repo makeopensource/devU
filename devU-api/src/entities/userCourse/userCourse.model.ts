@@ -9,7 +9,6 @@ import {
   DeleteDateColumn,
 } from 'typeorm'
 
-import { UserCourseLevel, userCourseLevels } from 'devu-shared-modules'
 
 import UserModel from '../user/user.model'
 import CourseModel from '../course/course.model'
@@ -25,13 +24,13 @@ export default class UserCourseModel {
    *  schemas:
    *    UserCourse:
    *      type: object
-   *      required: [userId, courseId, level]
+   *      required: [userId, courseId, role]
    *      properties:
    *        userId:
    *          type: integer
    *        courseId:
    *          type: integer
-   *        level:
+   *        role:
    *          type: string
    *          description: Must be either "student", "ta", or "instructor"
    *        dropped:
@@ -59,9 +58,8 @@ export default class UserCourseModel {
   @ManyToOne(() => CourseModel)
   courseId: number
 
-  // TODO: Change to role
-  @Column({ name: 'type', type: 'enum', enum: userCourseLevels })
-  level: UserCourseLevel
+  @Column({ name: 'role' })
+  role: string
 
   @Column()
   dropped: boolean

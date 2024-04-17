@@ -25,26 +25,6 @@ const Router = express.Router()
 Router.get('/', isAuthorized('roleViewAll'), RoleController.getAll)
 
 
-/**
- * @swagger
- * /course/:courseId/roles/user/{userId}:
- *   get:
- *     summary: Retrieve the role of a given user
- *     tags:
- *       - Roles
- *     responses:
- *       '200':
- *         description: OK
- *     parameters:
- *       - name: userId
- *         description: Enter User Id
- *         in: path
- *         required: true
- *         schema:
- *           type: integer
- */
-Router.get('/user/:userId', asInt('userId'), isAuthorized(''), RoleController.getByUser)
-// TODO: roleViewSelf or roleViewAll
 
 /**
  * @swagger

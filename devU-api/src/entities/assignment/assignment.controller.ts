@@ -37,7 +37,7 @@ export async function getByCourse(req: Request, res: Response, next: NextFunctio
 export async function getReleased(req: Request, res: Response, next: NextFunction) {
   try {
     const courseId = parseInt(req.params.courseId)
-    const assignments = await AssignmentService.listReleased(courseId)
+    const assignments = await AssignmentService.listByCourseReleased(courseId)
 
     const response = assignments.map(serialize)
 

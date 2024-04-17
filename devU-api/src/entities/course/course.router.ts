@@ -22,7 +22,10 @@ const Router = express.Router()
  *       '200':
  *         description: OK
  */
-Router.get('/', isAuthorized(''), CourseController.get)
+// Router.get('/', isAuthorized(''), CourseController.get)
+Router.get('/', CourseController.get)
+// TODO: Top-level authorization
+
 
 /**
  * @swagger
@@ -35,7 +38,8 @@ Router.get('/', isAuthorized(''), CourseController.get)
  *       '200':
  *         description: OK
  */
-Router.get('/user/:userId', isAuthorized(''), CourseController.getByUser) // TODO
+Router.get('/user/:userId', asInt('userId'), CourseController.getByUser)
+// TODO: Top-level authorization
 
 /**
  * @swagger
@@ -55,6 +59,7 @@ Router.get('/user/:userId', isAuthorized(''), CourseController.getByUser) // TOD
  *           type: integer    
  */
 Router.get('/:courseId', isAuthorized('enrolled'), asInt('courseId'), CourseController.detail)
+
 
 /**
  * @swagger

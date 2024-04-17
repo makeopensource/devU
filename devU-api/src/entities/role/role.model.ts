@@ -11,8 +11,8 @@ import {
 
 import CourseModel from '../course/course.model'
 
-@Entity('courseScore')
-export default class CourseScoreModel {
+@Entity('role')
+export default class RoleModel {
     /**
      * @swagger
      * tags:
@@ -54,15 +54,15 @@ export default class CourseScoreModel {
 
     // All the permission options //
 
-    // For default permission that everyone in the course should have
+    // For default permission that everyone in the course should always have
     @Column({name: 'enrolled'})
     enrolled: boolean
 
     @Column({name: 'course_edit'})
     courseEdit: boolean
 
-    @Column({name: 'course_view'})
-    courseView: boolean
+    @Column({name: 'course_view_all'})
+    courseViewAll: boolean
 
     @Column({name: 'assignment_view_all'})
     assignmentViewAll: boolean
@@ -109,13 +109,6 @@ export default class CourseScoreModel {
 
     @Column({name: 'user_course_edit_all'}) // TODO: Don't let the last instructor change their role
     userCourseEditAll: boolean
-
-
-    // TODO: Add the special roles
-    //       -Student has the default permissions
-    //       -Instructor has all permissions
-    //       -TA.. choose the defaults for the TA role
-
 
 }
 

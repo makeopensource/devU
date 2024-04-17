@@ -22,7 +22,7 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
-    const submissionProblemScore = await SubmissionProblemScoreService.retrieve(id)
+    const submissionProblemScore = await SubmissionProblemScoreService.retrieve(id, -1) // TODO: what to do about course id
 
     if (!submissionProblemScore) return res.status(404).json(NotFound)
 
