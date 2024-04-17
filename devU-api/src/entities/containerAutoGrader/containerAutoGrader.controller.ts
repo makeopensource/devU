@@ -30,6 +30,17 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function getByAssignment(req: Request, res: Response, next: NextFunction) {
+  try {
+    const assignmentId = parseInt(req.params.id)
+    const containerAutoGrader = await ContainerAutoGraderService.listByAssignmentId(assignmentId)
+
+    res.status(200).json(containerAutoGrader.map(serialize))
+  } catch (err) {
+    next(err)
+  }
+}
+
 /*
   * for the post method, I changed how the upload is handled. I am now using fields instead of
   * single(for the purpose of uploading grader file and makefile). But I set the makefile to be
@@ -99,4 +110,5 @@ export default {
   post,
   put,
   _delete,
+  getByAssignment,
 }

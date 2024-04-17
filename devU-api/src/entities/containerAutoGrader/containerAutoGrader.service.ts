@@ -107,6 +107,7 @@ export async function getGraderByAssignmentId(assignmentId: number){
     return {graderData, makefileData, autogradingImage, timeout}
 }
 
+
 export default {
     create,
     retrieve,
@@ -114,5 +115,5 @@ export default {
     _delete,
     list,
     getGraderByAssignmentId,
-    listByAssignmentId
+    listByAssignmentId,
 }
