@@ -54,7 +54,7 @@ Router.get('/:id',isAuthorized('assignmentViewAll'),  asInt(), ContainerAutoGrad
  *         description: OK
  *     requestBody:
  *       content:
- *         application/x-www-form-urlencoded:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/ContainerAutoGrader'
  */
@@ -78,7 +78,7 @@ Router.post('/', isAuthorized('assignmentEditAll'), upload.fields([{name: 'grade
  *           type: integer
  *     requestBody:
  *       content:
- *         application/x-www-form-urlencoded:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/ContainerAutoGrader'
  */

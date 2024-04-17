@@ -120,7 +120,7 @@ const SubmissionDetailPage = () => {
                     <td>{submissionScore?.score ?? "N/A"}</td>
                 </tr>
             </table> 
-            <Link to = {`/submissions/${submission?.id}/feedback`}>View Feedback</Link> 
+            <Link to = {`/submissions/${submissionId}/feedback`}>View Feedback</Link> 
             <br/>
             
             <h2>Submission Content:</h2>

@@ -1,7 +1,7 @@
 import React,{ useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import { AssignmentProblem, Submission, SubmissionScore, SubmissionProblemScore, Assignment } from 'devu-shared-modules' 
+import { AssignmentProblem, Submission, SubmissionScore, SubmissionProblemScore, Assignment, ContainerAutoGrader } from 'devu-shared-modules' 
 import RequestService from 'services/request.service'
 import ErrorPage from './errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -21,12 +21,14 @@ const AssignmentDetailPage = () => {
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
     const [formData, setFormData] = useState({})
+    const [file, setFile] = useState<File | null>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [submissions, setSubmissions] = useState(new Array<Submission>())
     const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
-    
+    const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
+
     useEffect(() => {
           fetchData()
     }, []);
@@ -40,7 +42,7 @@ const AssignmentDetailPage = () => {
              const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/assignment-problems/${assignmentId}`)
              setAssignmentProblems(assignmentProblemsReq)
 
-             const submissionsReq = await RequestService.get<Submission[]>(`/api/submissions?assignment=${assignmentId}&user=${userId}`)
+             const submissionsReq = await RequestService.get<Submission[]>(`/api/submissions?assignmentId=${assignmentId}&userId=${userId}`)
              submissionsReq.sort((a, b) => (Date.parse(b.createdAt ?? '') - Date.parse(a.createdAt ?? '')))
              setSubmissions(submissionsReq)
 
@@ -55,6 +57,9 @@ const AssignmentDetailPage = () => {
              })
              const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
              setSubmissionProblemScores(submissionProblemScoresReq)
+
+             const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/container-auto-graders/assignment/${assignmentId}`)).pop() ?? null
+             setContainerAutograder(containerAutograder)
              
          } catch(error) {
              setError(error)
@@ -70,13 +75,15 @@ const AssignmentDetailPage = () => {
         const key = e.target.id
         setFormData(prevState => ({...prevState,[key] : value}))
     }
+    const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+        setFile(e.target.files?.item(0))
+    }
 
     const handleSubmit = async () => {
         const contentField = {
             filepaths : [],
             form : formData,
         }
-
         const submission = {
             userId : userId,
             assignmentId : assignmentId,
@@ -87,9 +94,21 @@ const AssignmentDetailPage = () => {
         setLoading(true)
 
         try {
-            const response = await RequestService.post('/api/submissions', submission)
+            if (file) {
+                const submission = new FormData
+                submission.append('userId', String(userId))
+                submission.append('assignmentId', assignmentId)
+                submission.append('courseId', courseId)
+                submission.append('content', JSON.stringify(contentField))
+                submission.append('files', file)
+
+                var response = await RequestService.postMultipart('/api/submissions', submission)
+            } else {
+                var response = await RequestService.post('/api/submissions', submission)
+            }
+            
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
-    
+
             // Now you can use submissionResponse.id here
             await RequestService.post(`/api/grade/${response.id}`, {} )
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
@@ -110,6 +129,8 @@ const AssignmentDetailPage = () => {
             <Link to = {`/courses/${courseId}/assignments/${assignmentId}/update`} className = {styles.button}>Update Assignment</Link>
             <br/><br/><br/>
             <Link to = {`/ncagtest`} className = {styles.button}>Add Non-Container Auto-Graders</Link>
+            <br/><br/><br/>
+            <Link to = {`/cagtest`} className = {styles.button}>Add Container Auto-Grader</Link>
 
             {/**Assignment Problems & Submission */}
             {assignmentProblems.map(assignmentProblem => (
@@ -118,6 +139,7 @@ const AssignmentDetailPage = () => {
                     <TextField id={assignmentProblem.problemName} label='Answer' onChange={handleChange} />
                 </div>
             ))}
+            {containerAutograder && (<input type="file" onChange={handleFileChange} />)}
             <Button onClick={handleSubmit}>Submit</Button>
             <br/>
 
