@@ -24,6 +24,7 @@ import NonContainerAutoGraderForm from './pages/nonContainerAutoGraderForm'
 import GradebookStudentPage from './pages/gradebookStudentPage'
 import GradebookInstructorPage from './pages/gradebookInstructorPage'
 import SubmissionFeedbackPage from './pages/submissionFeedbackPage'
+import ContainerAutoGraderForm from './pages/containerAutoGraderForm'
 
 const AuthenticatedRouter = () => (
   <Switch>
@@ -45,6 +46,7 @@ const AuthenticatedRouter = () => (
     <Route exact path='/courses/:courseId/assignments/:assignmentId' component={AssignmentDetailPage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId/update' component={AssignmentUpdatePage} />
     <Route exact path='/ncagtest' component={NonContainerAutoGraderForm} />
+    <Route exact path='/cagtest' component={ContainerAutoGraderForm} />
     <Route exact path='/courses/:courseId/gradebook' component={GradebookStudentPage} />
     <Route exact path='/courses/:courseId/gradebook/instructor' component={GradebookInstructorPage} />
     <Route component={NotFoundPage} />
