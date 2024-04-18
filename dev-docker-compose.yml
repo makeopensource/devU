@@ -1,3 +1,13 @@
+##################################################
+##################################################
+# For development use only
+# sets up the full backend stack for frontend development
+# Usage:
+# cd devU-client
+# npm run dev-backend
+##################################################
+##################################################
+
 name: dev-backend
 services:
   db:
@@ -35,15 +45,6 @@ services:
         condition: service_completed_successfully
     ports:
       - '3001:3001'
-#  nginx:
-#    # Hosts the front end static files from ./dist/local thorough a web server
-#    build:
-#      context: .
-#      dockerfile: nginx.Dockerfile
-#    volumes:
-#      - ./dist/local:/usr/share/nginx/html
-#    ports:
-#      - '9000:80'
   minio:
     image: minio/minio
     ports:
