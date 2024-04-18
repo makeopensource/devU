@@ -1,9 +1,9 @@
 import React from 'react'
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
 import { Link } from 'react-router-dom'
-import styles from './breadcrumbsToolbar.scss'
+import styles from './navbar.scss'
 
-const BreadcrumbsToolbar = ({breadcrumbs}: any) => {
+const Navbar = ({breadcrumbs}: any) => {
 
     return (
         <div>
@@ -18,4 +18,4 @@ const BreadcrumbsToolbar = ({breadcrumbs}: any) => {
         
 }
 
-export default withBreadcrumbs()(BreadcrumbsToolbar)
+export default withBreadcrumbs()(Navbar)
