@@ -1,11 +1,14 @@
-import React,{useState} from 'react'
+import React, {useState} from 'react'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import styles from './nonContainerAutoGraderForm.scss'
 import TextField from 'components/shared/inputs/textField'
 import Button from 'components/shared/inputs/button'
-import { useActionless } from 'redux/hooks'
-import { SET_ALERT } from 'redux/types/active.types'
+import {useActionless} from 'redux/hooks'
+import {SET_ALERT} from 'redux/types/active.types'
 import RequestService from 'services/request.service'
+import {ExpressValidationError} from "../../../devu-shared-modules";
+import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
+import textStyles from "../shared/inputs/textField.scss";
 
 const ContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -17,9 +20,12 @@ const ContainerAutoGraderForm = () => {
         autogradingImage: '',
         timeout: '',
     })
+    const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
+        const newInvalidFields = removeClassFromField(invalidFields, key)
+        setInvalidFields(newInvalidFields)
         setFormData(prevState => ({...prevState,[key] : value}))
     }
     //This is janky but it works and I'm too tired to come up with a better solution
@@ -44,10 +50,13 @@ const ContainerAutoGraderForm = () => {
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Container Auto-Grader Added' })
             })
-            .catch((err: Error) => {
-                console.log(err.message)
-                setAlert({ autoDelete: false, type: 'error', message: err.message })
-            })
+        .catch((err: ExpressValidationError[] | Error) => {
+            const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+            const newFields = applyStylesToErrorFields(err, formData, textStyles.errorField)
+            setInvalidFields(newFields)
+
+            setAlert({autoDelete: false, type: 'error', message: message})
+        })
 
 
         setFormData({
@@ -62,9 +71,13 @@ const ContainerAutoGraderForm = () => {
             <h1>Non Container Auto Grader Form</h1>
             <div className = {styles.leftColumn}>
                 <h1>Add a Non-Container Auto Grader</h1>
-                <TextField id= 'assignmentId' label='Assignment ID' onChange={handleChange} value={formData.assignmentId}></TextField>
-                <TextField id= 'autogradingImage' label='Autograding Image' onChange={handleChange} value={formData.autogradingImage}></TextField>
-                <TextField id= 'timeout' label='Timeout' onChange={handleChange} value={formData.timeout}></TextField>
+                <TextField id='assignmentId' label='Assignment ID' onChange={handleChange} value={formData.assignmentId}
+                           className={invalidFields.get('assignmentId')}></TextField>
+                <TextField id='autogradingImage' label='Autograding Image' onChange={handleChange}
+                           value={formData.autogradingImage}
+                           className={invalidFields.get('autogradingImage')}></TextField>
+                <TextField id='timeout' label='Timeout' onChange={handleChange} value={formData.timeout}
+                           className={invalidFields.get('timeout')}></TextField>
                 <label htmlFor="graderFile">Graderfile</label>
                 <input type="file" id='graderFile'  onChange={handleGraderfileChange} /> <br/>
                 <label htmlFor="makefileFile">Makefile</label>

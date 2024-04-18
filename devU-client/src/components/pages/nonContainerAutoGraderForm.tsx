@@ -1,14 +1,19 @@
-import React,{useState} from 'react'
+import React, {useState} from 'react'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import styles from './nonContainerAutoGraderForm.scss'
 import TextField from 'components/shared/inputs/textField'
 import Button from 'components/shared/inputs/button'
-import { useActionless } from 'redux/hooks'
-import { SET_ALERT } from 'redux/types/active.types'
+import {useActionless} from 'redux/hooks'
+import {SET_ALERT} from 'redux/types/active.types'
 import RequestService from 'services/request.service'
+import textStyles from '../shared/inputs/textField.scss'
+import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
+import {ExpressValidationError} from "../../../devu-shared-modules";
+
 
 const NonContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
+    const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const [formData,setFormData] = useState({
         assignmentId: '',
@@ -26,6 +31,9 @@ const NonContainerAutoGraderForm = () => {
 
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
+
+        const newInvalidFields = removeClassFromField(invalidFields, key)
+        setInvalidFields(newInvalidFields)
         setFormData(prevState => ({...prevState,[key] : value}))
     }
 
@@ -51,9 +59,12 @@ const NonContainerAutoGraderForm = () => {
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Non-Container Auto-Grader Added' })
             })
-            .catch((err: Error) => {
-                console.log(err.message)
-                setAlert({ autoDelete: false, type: 'error', message: err.message })
+        .catch((err: ExpressValidationError[] | Error) => {
+            const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+            const newFields = applyStylesToErrorFields(err, formData, textStyles.errorField)
+            setInvalidFields(newFields)
+
+            setAlert({autoDelete: false, type: 'error', message: message})
             })
 
 
@@ -71,10 +82,14 @@ const NonContainerAutoGraderForm = () => {
             <h1>Non Container Auto Grader Form</h1>
             <div className = {styles.leftColumn}>
                 <h1>Add a Non-Container Auto Grader</h1>
-                <TextField id= 'assignmentId' label='Assignment ID' onChange={handleChange} value={formData.assignmentId}></TextField>
-                <TextField id= 'question' label='Question' onChange={handleChange} value={formData.question}></TextField>
-                <TextField id= 'correctString' label='Answer' onChange={handleChange} value={formData.correctString}></TextField>
-                <TextField id= 'score' label='Score' onChange={handleChange} value={formData.score}></TextField>
+                <TextField id='assignmentId' label='Assignment ID' onChange={handleChange} value={formData.assignmentId}
+                           className={invalidFields.get('assignmentId')}></TextField>
+                <TextField id='question' label='Question' onChange={handleChange} value={formData.question}
+                           className={invalidFields.get('question')}></TextField>
+                <TextField id='correctString' label='Answer' onChange={handleChange} value={formData.correctString}
+                           className={invalidFields.get('correctString')}></TextField>
+                <TextField id='score' label='Score' onChange={handleChange} value={formData.score}
+                           className={invalidFields.get('score')}></TextField>
                 <label htmlFor='regex'>Regex</label>
                 <input  id= 'regex' type='checkbox' checked={formData.isRegex} onChange={toggleRegex}></input>
                 <br></br><br></br>
