@@ -54,6 +54,7 @@ const routes = [
     { path: '/', breadcrumb: 'Home' },
     { path: '/users/:userId', breadcrumb: UserBreadcrumb},
     { path: '/courses/:courseId', breadcrumb: CourseBreadcrumb},
+    { path: '/courses/:courseId/gradebook', breadcrumb: 'Gradebook'},
     { path: '/courses/:courseId/assignments/:assignmentId', breadcrumb: AssignmentBreadcrumb},
 ]
 
