@@ -11,7 +11,7 @@ const connect = () => getRepository(CourseModel)
 
 export async function create(course: Course) {
   const output = await connect().save(course)
-  const bucketName = (course.number + course.semester + course.id).toLowerCase()
+  const bucketName = (course.number + course.semester + course.id).replace(/ /g, '-').toLowerCase()
   await initializeMinio(bucketName)
   return output
 }
