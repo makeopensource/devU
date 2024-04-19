@@ -22,14 +22,14 @@ describe('NonContainerAutoGrader grader', () => {
       const studentAnswer = '42'
       const expectedResult = checkAnswer(studentAnswer, mockQuestionWithoutRegex)
 
-      expect(expectedResult).toEqual(mockQuestionWithoutRegex.score)
+      expect(expectedResult[0]).toEqual(mockQuestionWithoutRegex.score)
     })
 
     test('Student messed up', () => {
       const studentAnswer = '69'
       const expectedResult = checkAnswer(studentAnswer, mockQuestionWithoutRegex)
 
-      expect(expectedResult).toEqual(0)
+      expect(expectedResult[0]).toEqual(0)
     })
   })
 
@@ -52,21 +52,21 @@ describe('NonContainerAutoGrader grader', () => {
       const studentAnswer = 'So long, and thanks for all the fish.'
       const expectedResult = checkAnswer(studentAnswer, mockQuestionWithRegex)
 
-      expect(expectedResult).toEqual(mockQuestionWithRegex.score)
+      expect(expectedResult[0]).toEqual(mockQuestionWithRegex.score)
     })
 
     test('Incorrect answer', () => {
       const studentAnswer = '~~dolphin noises~~'
       const expectedResult = checkAnswer(studentAnswer, mockQuestionWithRegex)
 
-      expect(expectedResult).toEqual(0)
+      expect(expectedResult[0]).toEqual(0)
     })
 
     test('correct answer but incorrect formatting', () => {
       const studentAnswer = 'So long, and thanks for all the fish.'.toUpperCase()
       const expectedResult = checkAnswer(studentAnswer, mockQuestionWithRegex)
 
-      expect(expectedResult).toEqual(0)
+      expect(expectedResult[0]).toEqual(0)
     })
   })
 })

@@ -29,7 +29,7 @@ export function isAuthorized(permission: string, permissionIfSelf?: string) {
 
         // If the course doesn't exist or the user is not enrolled, return the same error, so we don't leak information
         // about what courses exist
-        if (!userCourse) {
+        if (!userCourse || userCourse.dropped) {
             return res.status(404).json(NotFound)
         }
 

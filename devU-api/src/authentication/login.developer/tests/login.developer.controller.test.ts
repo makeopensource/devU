@@ -42,7 +42,7 @@ describe('LoginDeveloperController', () => {
       test('Returns refreshToken as cookie', () =>
         expect(res.cookie).toBeCalledWith('refreshToken', refreshToken, refreshCookieOptions))
       test('Status code is 200', () => expect(res.status).toBeCalledWith(200))
-      test('Generic response returned ', () => expect(res.json).toBeCalledWith({ message: 'Login successful' }))
+      test('Generic response returned ', () => expect(res.json).toBeCalledWith({ message: 'Login successful', 'userId': 1 }))
     })
 
     describe('400 - Bad Request', () => {
