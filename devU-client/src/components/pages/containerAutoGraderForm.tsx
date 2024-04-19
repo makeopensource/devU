@@ -6,14 +6,16 @@ import Button from 'components/shared/inputs/button'
 import { useActionless } from 'redux/hooks'
 import { SET_ALERT } from 'redux/types/active.types'
 import RequestService from 'services/request.service'
+import { useParams } from 'react-router-dom'
 
 const ContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
+    const { assignmentId } = useParams<{ assignmentId: string }>()
 
     const [graderFile, setGraderFile] = useState<File | null>()
     const [makefile, setMakefile] = useState<File | null>()
     const [formData,setFormData] = useState({
-        assignmentId: '',
+        assignmentId: assignmentId,
         autogradingImage: '',
         timeout: '',
     })
@@ -45,13 +47,12 @@ const ContainerAutoGraderForm = () => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Container Auto-Grader Added' })
             })
             .catch((err: Error) => {
-                console.log(err.message)
                 setAlert({ autoDelete: false, type: 'error', message: err.message })
             })
 
 
         setFormData({
-            assignmentId: '',
+            assignmentId: assignmentId,
             autogradingImage: '',
             timeout: '',
         })
@@ -62,7 +63,6 @@ const ContainerAutoGraderForm = () => {
             <h1>Non Container Auto Grader Form</h1>
             <div className = {styles.leftColumn}>
                 <h1>Add a Non-Container Auto Grader</h1>
-                <TextField id= 'assignmentId' label='Assignment ID' onChange={handleChange} value={formData.assignmentId}></TextField>
                 <TextField id= 'autogradingImage' label='Autograding Image' onChange={handleChange} value={formData.autogradingImage}></TextField>
                 <TextField id= 'timeout' label='Timeout' onChange={handleChange} value={formData.timeout}></TextField>
                 <label htmlFor="graderFile">Graderfile</label>
