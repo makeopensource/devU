@@ -58,7 +58,7 @@ Router.get('/:id', asInt(), ContainerAutoGraderController.detail);
  *         schema:
  *           type: integer
  */
-Router.get('/assignment/:id', asInt(), ContainerAutoGraderController.getByAssignment);
+Router.get('/assignment/:id', asInt(), ContainerAutoGraderController.getObjectByAssignment);
 
 /**
  * @swagger
