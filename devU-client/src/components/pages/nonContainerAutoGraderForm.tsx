@@ -7,11 +7,14 @@ import { useActionless } from 'redux/hooks'
 import { SET_ALERT } from 'redux/types/active.types'
 import RequestService from 'services/request.service'
 
+import { useParams } from 'react-router-dom'
+
 const NonContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
+    const { assignmentId } = useParams<{ assignmentId: string }>()
 
     const [formData,setFormData] = useState({
-        assignmentId: '',
+        assignmentId: assignmentId,
         question: '',
         correctString: '',
         score: '',
@@ -58,7 +61,7 @@ const NonContainerAutoGraderForm = () => {
 
 
         setFormData({
-            assignmentId: '',
+            assignmentId: assignmentId,
             question: '',
             correctString: '',
             score: '',
@@ -71,7 +74,6 @@ const NonContainerAutoGraderForm = () => {
             <h1>Non Container Auto Grader Form</h1>
             <div className = {styles.leftColumn}>
                 <h1>Add a Non-Container Auto Grader</h1>
-                <TextField id= 'assignmentId' label='Assignment ID' onChange={handleChange} value={formData.assignmentId}></TextField>
                 <TextField id= 'question' label='Question' onChange={handleChange} value={formData.question}></TextField>
                 <TextField id= 'correctString' label='Answer' onChange={handleChange} value={formData.correctString}></TextField>
                 <TextField id= 'score' label='Score' onChange={handleChange} value={formData.score}></TextField>

@@ -52,7 +52,8 @@ $font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
 
 $medium: 1000px;
 $small: 600px;
-$extreme: 320px;
+// $extreme: 320px;
+$extreme: 700px;
 
 @mixin ellipsis {
   overflow: hidden;

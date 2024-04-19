@@ -109,7 +109,7 @@ const AssignmentDetailPage = () => {
 
             <Link to = {`/courses/${courseId}/assignments/${assignmentId}/update`} className = {styles.button}>Update Assignment</Link>
             <br/><br/><br/>
-            <Link to = {`/ncagtest`} className = {styles.button}>Add Non-Container Auto-Graders</Link>
+            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/ncag`} className = {styles.button}>Add Non-Container Auto-Graders</Link>
 
             {/**Assignment Problems & Submission */}
             {assignmentProblems.map(assignmentProblem => (
