@@ -29,6 +29,34 @@ to
 
 This will probably be fixed in the future but for now the above steps are necessary
 
+#### Using docker compose
+
+We use [docker compose profiles](https://docs.docker.com/compose/profiles/) to selectively start services in the main docker-compose when developing.
+
+Assuming you are in api dir ```devU-api```, To start all api services except the api run 
+
+```
+npm run api-services
+```
+
+To stop the services
+
+```
+npm run api-services-stop
+```
+
+Then install dependencies using
+```
+npm install
+```
+
+Once you've got all the dependencies installed you can run the project via
+```
+npm start
+```
+
+#### Manually:
+
 ```
 docker run \
   --name typeorm-postgres \
