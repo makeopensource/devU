@@ -84,7 +84,7 @@ Router.get('/:id', asInt(), isAuthorizedByAssignmentStatus, AssignmentsControlle
 
 /**
  * @swagger
- * /course/:courseId/assignments
+ * /course/:courseId/assignments:
  *   post:
  *     summary: Create an assignment
  *     tags:

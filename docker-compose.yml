@@ -62,9 +62,9 @@ services:
       - 'dev-api' # start when developing api not when developing client
   minio:
     image: minio/minio
-    #    ports:
-    #      - '9002:9000'
-    #      - '9001:9001'
+    ports:
+      - '9002:9000'
+      - '9001:9001'
     expose:
       - '9000'
     #    volumes:
