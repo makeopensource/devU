@@ -82,7 +82,7 @@ Router.post('/', /*isAuthorized('admin..'),*/ validator, CourseController.post)
 
 /**
  * @swagger
- * /courses:
+ * /courses/instructor:
  *   post:
  *     summary: Creates a course and adds the requester as an instructor in the course. Intended to be used during
  *              development only. Production will have an admin who can create courses and add the first instructor

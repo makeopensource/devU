@@ -43,6 +43,21 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
     next(err)
   }
 }
+export async function detailByName(req: Request, res: Response, next: NextFunction) {
+  try {
+    const courseId = parseInt(req.params.courseId)
+    const roleName = req.params.roleName
+    const role = await RoleService.retrieveByCourseAndName(courseId, roleName)
+
+    if (!role) return res.status(404).json(NotFound)
+
+    const response = serialize(role)
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
 
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
@@ -81,4 +96,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { getByCourse, getAll, detail, post, put, _delete }
+export default { getByCourse, getAll, detail, detailByName, post, put, _delete }

@@ -12,6 +12,8 @@ import SubmissionProblemScoreController from '../submissionProblemScore/submissi
 
 const Router = express.Router()
 
+// TODO: get by assignment and user
+
 /**
  * @swagger
  * /course/:courseId/assignment/:assignmentId/submission/:{submissionId}/submission-problem-scores:

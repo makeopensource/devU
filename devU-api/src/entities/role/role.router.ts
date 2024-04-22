@@ -70,6 +70,27 @@ Router.get('/:id', isAuthorized('roleViewAll'), asInt(), RoleController.detail)
 
 /**
  * @swagger
+ * /course/:courseId/roles/{name}:
+ *   get:
+ *     summary: Retrieve a single role by name
+ *     tags:
+ *       - Roles
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         description: Enter role id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ */
+Router.get('/:roleName', isAuthorized('enrolled'), RoleController.detailByName)
+
+
+/**
+ * @swagger
  * /course/:courseId/roles:
  *   post:
  *     summary: Create a new role

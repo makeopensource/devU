@@ -90,7 +90,9 @@ Router.get('/user/:userId', extractOwnerByPathParam('userId'), isAuthorized('cou
  *           schema:
  *             $ref: '#/components/schemas/UserCourse'
  */
-Router.post('/', isAuthorized('userCourseEditAll'), validator, UserCourseController.post)
+Router.post('/', validator, UserCourseController.post)
+// TODO: userCourseEditAll eventually. For now, allow self enroll
+
 
 /**
  * @swagger
@@ -133,6 +135,6 @@ Router.put('/:id', isAuthorized('userCourseEditAll'), asInt(), validator, UserCo
  *         schema:
  *           type: integer
  */
-Router.delete('/:id', isAuthorized('userCourseEditAll'), asInt(), UserCourseController._delete)
-
+Router.delete('/:id', asInt(), UserCourseController._delete)
+// TODO: eventually add authorization to this. For now, everyone can remove anyone
 export default Router

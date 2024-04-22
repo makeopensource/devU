@@ -2,7 +2,6 @@ import {Role} from 'devu-shared-modules'
 
 
 const student: Role = {
-
     name: 'student',
     assignmentViewAll: false,
     assignmentEditAll: false,
@@ -24,7 +23,6 @@ const student: Role = {
 }
 
 const instructor: Role = {
-
     name: 'instructor',
     assignmentViewAll: true,
     assignmentEditAll: true,
