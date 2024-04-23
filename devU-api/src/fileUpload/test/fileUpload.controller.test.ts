@@ -1,7 +1,7 @@
-import {FileUpload} from '../../../devu-shared-modules'
 import controller from '../fileUpload.controller'
 import FileUploadService from '../fileUpload.service'
 import Testing from '../../utils/testing.utils'
+import FileModel from '../fileUpload.model'
 
 // Testing Globals
 let req: any
@@ -9,7 +9,7 @@ let res: any
 let next: any
 let mockFile: any
 
-let mockedFileUpload: FileUpload
+let mockedFileUpload: FileModel
 let expectedError: Error
 
 
@@ -30,6 +30,7 @@ describe('FileUploadController', () => {
                 }
             ]
         };
+        mockedFileUpload = Testing.generateTypeOrm(FileModel)
         expectedError = new Error('Expected Error')
     })
     describe('GET - /file-upload/:bucketName', () => {
@@ -55,6 +56,7 @@ describe('FileUploadController', () => {
         describe('201 - Created', () => {
             beforeEach(async () => {
                 req.files = mockFile
+                FileUploadService.create = jest.fn().mockImplementation(() => Promise.resolve(mockedFileUpload))
                 await controller.post(req, res, next)
             })
             test('Status code is 201', () => {
