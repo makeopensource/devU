@@ -42,7 +42,7 @@ const AssignmentDetailPage = () => {
              const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/assignment-problems/${assignmentId}`)
              setAssignmentProblems(assignmentProblemsReq)
 
-             const submissionsReq = await RequestService.get<Submission[]>(`/api/submissions?assignmentId=${assignmentId}&userId=${userId}`)
+             const submissionsReq = await RequestService.get<Submission[]>(`/api/submissions/assignments/${assignmentId}`)
              submissionsReq.sort((a, b) => (Date.parse(b.createdAt ?? '') - Date.parse(a.createdAt ?? '')))
              setSubmissions(submissionsReq)
 
@@ -163,8 +163,18 @@ type SubmissionProps = {
     submissionScore?: SubmissionScore, 
     submissionProblemScores: SubmissionProblemScore[],
     assignmentProblems: AssignmentProblem[],
+    courseId: string
+    assignmentId: string
 }
-const SubmissionComponent = ({index, submission, submissionScore, submissionProblemScores, assignmentProblems}: SubmissionProps) => {
+const SubmissionComponent = ({
+                                 index,
+                                 submission,
+                                 submissionScore,
+                                 submissionProblemScores,
+                                 assignmentProblems,
+                                 courseId,
+                                 assignmentId
+                             }: SubmissionProps) => {
     return (
         <div>
             <h2>Submission {index}:</h2>
