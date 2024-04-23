@@ -2,7 +2,6 @@ import { NonContainerAutoGrader } from 'devu-shared-modules'
 
 import { checkAnswer } from '../nonContainerAutoGrader.grader'
 
-
 describe('NonContainerAutoGrader grader', () => {
   let mockQuestionWithoutRegex: NonContainerAutoGrader
 
@@ -41,7 +40,7 @@ describe('NonContainerAutoGrader grader', () => {
         id: 23,
         question: 'What was the last ever Dolphin message',
         // regex to match this exact sentence and is case-sensitive
-        correctString: '/So long, and thanks for all the fish\./gm',
+        correctString: '/So long, and thanks for all the fish./gm',
         score: 1,
         assignmentId: 8,
         isRegex: true,

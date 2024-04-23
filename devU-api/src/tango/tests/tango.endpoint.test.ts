@@ -1,6 +1,6 @@
 import { getInfo, preallocateInstances } from '../tango.service'
 
-async function main(){
+async function main() {
   const res = await getInfo()
   const pre = preallocateInstances()
   console.log(res)

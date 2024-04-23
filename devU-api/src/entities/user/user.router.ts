@@ -1,8 +1,8 @@
 import express from 'express'
 
 import validator from './user.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { asInt } from '../../middleware/validator/generic.validator'
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 import UserController from './user.controller'
 
@@ -42,7 +42,6 @@ Router.get('/', isAuthorized('admin'), UserController.get)
 Router.get('/:id', asInt(), UserController.detail)
 // self or admin
 // TODO: Add top level authorization. Currently, all authorization is at the course level
-
 
 /**
  * @swagger

@@ -51,8 +51,10 @@ const refreshTokenBuffer = load('auth.jwt.refreshTokenExpirationBufferSeconds') 
 // if it is undefined it is running on dev machine
 const isDocker = !(process.env.dev === undefined)
 
-if (isDocker && process.env.TANGO_KEY === undefined){
-  throw Error('Tango key not found.\nMake sure to set environment variable TANGO_KEY in the api service in docker-compose')
+if (isDocker && process.env.TANGO_KEY === undefined) {
+  throw Error(
+    'Tango key not found.\nMake sure to set environment variable TANGO_KEY in the api service in docker-compose'
+  )
 }
 
 const environment = {
@@ -61,7 +63,7 @@ const environment = {
   clientUrl: (process.env.CLIENT_URL || load('api.clientUrl') || 'http://localhost:9000') as string,
 
   // Database settings
-  dbHost: isDocker ? load('database.host') : 'localhost' as string,
+  dbHost: isDocker ? load('database.host') : ('localhost' as string),
   dbUsername: (load('database.username') || 'typescript_user') as string,
   dbPassword: (load('database.password') || 'password') as string,
   database: (load('database.name') || 'typescript_api') as string,
@@ -73,10 +75,9 @@ const environment = {
   // dbPassword: ('password') as string,
   // database: ('typescript_api') as string,
 
-
   // MinIO setting
-  minioHost: isDocker ? load('minio.host') : 'localhost' as string,
-  minioPort: isDocker ? load('minio.port') : 9002 as number,
+  minioHost: isDocker ? load('minio.host') : ('localhost' as string),
+  minioPort: isDocker ? load('minio.port') : (9002 as number),
   minioUsername: (load('minio.username') || 'typescript_user') as string,
   minioPassword: (load('minio.password') || 'changeMe') as string,
 

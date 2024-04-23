@@ -3,14 +3,13 @@ import express from 'express'
 
 // Middleware
 import validator from './userCourse.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
-import {extractOwnerByPathParam, isAuthorized} from "../../authorization/authorization.middleware";
+import { asInt } from '../../middleware/validator/generic.validator'
+import { extractOwnerByPathParam, isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import UserCourseController from './userCourse.controller'
 
 const Router = express.Router()
-
 
 /**
  * @swagger
@@ -71,8 +70,13 @@ Router.get('/:id', isAuthorized('courseViewAll'), asInt(), UserCourseController.
  *         schema:
  *           type: integer
  */
-Router.get('/user/:userId', extractOwnerByPathParam('userId'), isAuthorized('courseViewAll', 'enrolled'), asInt('userId'), UserCourseController.detailByUser)
-
+Router.get(
+  '/user/:userId',
+  extractOwnerByPathParam('userId'),
+  isAuthorized('courseViewAll', 'enrolled'),
+  asInt('userId'),
+  UserCourseController.detailByUser
+)
 
 /**
  * @swagger
@@ -92,7 +96,6 @@ Router.get('/user/:userId', extractOwnerByPathParam('userId'), isAuthorized('cou
  */
 Router.post('/', validator, UserCourseController.post)
 // TODO: userCourseEditAll eventually. For now, allow self enroll
-
 
 /**
  * @swagger

@@ -38,14 +38,15 @@ export async function getByCourse(req: Request, res: Response, next: NextFunctio
     const userRole = req.query.role
 
     const users = await UserService.listByCourse(courseId, userRole as string)
-    const response = users.map(u => { if (u) return serialize(u) })
+    const response = users.map(u => {
+      if (u) return serialize(u)
+    })
 
     res.status(200).json(response)
   } catch (err) {
     next(err)
   }
 }
-
 
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {

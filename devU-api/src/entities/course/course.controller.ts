@@ -5,7 +5,7 @@ import CourseService from './course.service'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 import { serialize } from './course.serializer'
-import UserCourseService from "../userCourse/userCourse.service";
+import UserCourseService from '../userCourse/userCourse.service'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
@@ -60,12 +60,12 @@ export async function postAddInstructor(req: Request, res: Response, next: NextF
     const course = await CourseService.create(req.body)
     const response = serialize(course)
 
-    if(req.currentUser?.userId) {
+    if (req.currentUser?.userId) {
       await UserCourseService.create({
         userId: req.currentUser?.userId,
         courseId: course.id,
         dropped: false,
-        role: 'instructor'
+        role: 'instructor',
       })
     }
 

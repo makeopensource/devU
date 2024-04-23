@@ -1,4 +1,4 @@
-import {check} from 'express-validator'
+import { check } from 'express-validator'
 
 import validate from '../../middleware/validator/generic.validator'
 
@@ -21,10 +21,26 @@ const submissionCreateSelf = check('submissionCreateSelf').isBoolean()
 const submissionViewAll = check('submissionViewAll').isBoolean()
 const userCourseEditAll = check('userCourseEditAll').isBoolean()
 
-
-const validator = [name, assignmentViewAll, assignmentEditAll, assignmentViewReleased, courseEdit, courseViewAll,
-    enrolled, roleEditAll, roleViewAll, roleViewSelf, scoresEditAll, scoresViewAll, scoresViewSelfReleased,
-    submissionChangeState, submissionCreateAll, submissionCreateSelf, submissionViewAll, userCourseEditAll, validate]
-
+const validator = [
+  name,
+  assignmentViewAll,
+  assignmentEditAll,
+  assignmentViewReleased,
+  courseEdit,
+  courseViewAll,
+  enrolled,
+  roleEditAll,
+  roleViewAll,
+  roleViewSelf,
+  scoresEditAll,
+  scoresViewAll,
+  scoresViewSelfReleased,
+  submissionChangeState,
+  submissionCreateAll,
+  submissionCreateSelf,
+  submissionViewAll,
+  userCourseEditAll,
+  validate,
+]
 
 export default validator

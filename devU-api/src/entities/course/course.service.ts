@@ -5,8 +5,6 @@ import CourseModel from './course.model'
 import { Course } from 'devu-shared-modules'
 import { initializeMinio } from '../../fileStorage'
 
-
-
 const connect = () => getRepository(CourseModel)
 
 export async function create(course: Course) {

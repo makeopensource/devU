@@ -13,12 +13,14 @@ const fileConn = () => getRepository(FileModel)
 
 export async function create(submission: Submission, file?: Express.Multer.File | undefined) {
   if (file) {
-    const bucket: string = await getRepository(CourseModel).findOne({ id: submission.courseId }).then((course) => {
-      if (course) {
-        return (course.number + course.semester + course.id).replace(/ /g, '-').toLowerCase()
-      }
-      return 'submission'
-    })
+    const bucket: string = await getRepository(CourseModel)
+      .findOne({ id: submission.courseId })
+      .then(course => {
+        if (course) {
+          return (course.number + course.semester + course.id).replace(/ /g, '-').toLowerCase()
+        }
+        return 'submission'
+      })
 
     const filename: string = file.originalname
     const Etag: string = await uploadFile(bucket, file, filename)
@@ -50,8 +52,6 @@ export async function _delete(id: number) {
 export async function retrieve(id: number) {
   return await submissionConn().findOne({ id, deletedAt: IsNull() })
 }
-
-
 
 export async function list(query: any, id: number) {
   const OrderByMappings = ['id', 'createdAt', 'updatedAt', 'courseId', 'assignmentId', 'submittedBy']

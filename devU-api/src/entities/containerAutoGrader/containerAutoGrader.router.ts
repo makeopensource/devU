@@ -1,14 +1,14 @@
-import express from 'express';
-import multer from 'multer';
+import express from 'express'
+import multer from 'multer'
 
-import validator from './containerAutoGrader.validator';
-import { asInt } from '../../middleware/validator/generic.validator';
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import validator from './containerAutoGrader.validator'
+import { asInt } from '../../middleware/validator/generic.validator'
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
-import ContainerAutoGraderController from './containerAutoGrader.controller';
+import ContainerAutoGraderController from './containerAutoGrader.controller'
 
-const Router = express.Router();
-const upload = multer();
+const Router = express.Router()
+const upload = multer()
 
 /**
  * @swagger
@@ -21,7 +21,7 @@ const upload = multer();
  *       '200':
  *         description: OK
  */
-Router.get('/', isAuthorized('assignmentViewAll'), ContainerAutoGraderController.get);
+Router.get('/', isAuthorized('assignmentViewAll'), ContainerAutoGraderController.get)
 
 /**
  * @swagger
@@ -40,7 +40,7 @@ Router.get('/', isAuthorized('assignmentViewAll'), ContainerAutoGraderController
  *         schema:
  *           type: integer
  */
-Router.get('/:id',isAuthorized('assignmentViewAll'),  asInt(), ContainerAutoGraderController.detail);
+Router.get('/:id', isAuthorized('assignmentViewAll'), asInt(), ContainerAutoGraderController.detail)
 
 /**
  * @swagger
@@ -58,7 +58,13 @@ Router.get('/:id',isAuthorized('assignmentViewAll'),  asInt(), ContainerAutoGrad
  *           schema:
  *             $ref: '#/components/schemas/ContainerAutoGrader'
  */
-Router.post('/', isAuthorized('assignmentEditAll'), upload.fields([{name: 'graderFile'},{name: 'makefileFile'}]), validator, ContainerAutoGraderController.post);
+Router.post(
+  '/',
+  isAuthorized('assignmentEditAll'),
+  upload.fields([{ name: 'graderFile' }, { name: 'makefileFile' }]),
+  validator,
+  ContainerAutoGraderController.post
+)
 
 /**
  * @swagger
@@ -82,7 +88,14 @@ Router.post('/', isAuthorized('assignmentEditAll'), upload.fields([{name: 'grade
  *           schema:
  *             $ref: '#/components/schemas/ContainerAutoGrader'
  */
-Router.put('/:id', isAuthorized('assignmentEditAll'), asInt(), upload.fields([{name: 'graderFile'},{name: 'makefileFile'}]), validator, ContainerAutoGraderController.put);
+Router.put(
+  '/:id',
+  isAuthorized('assignmentEditAll'),
+  asInt(),
+  upload.fields([{ name: 'graderFile' }, { name: 'makefileFile' }]),
+  validator,
+  ContainerAutoGraderController.put
+)
 
 /**
  * @swagger
@@ -101,6 +114,6 @@ Router.put('/:id', isAuthorized('assignmentEditAll'), asInt(), upload.fields([{n
  *         schema:
  *           type: integer
  */
-Router.delete('/:id', isAuthorized('assignmentEditAll'), asInt(), ContainerAutoGraderController._delete);
+Router.delete('/:id', isAuthorized('assignmentEditAll'), asInt(), ContainerAutoGraderController._delete)
 
-export default Router;
+export default Router

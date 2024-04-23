@@ -3,8 +3,8 @@ import express from 'express'
 
 // Middleware
 import validator from './submissionScore.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
-import {extractOwnerByPathParam, isAuthorized} from "../../authorization/authorization.middleware";
+import { asInt } from '../../middleware/validator/generic.validator'
+import { extractOwnerByPathParam, isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import SubmissionScoreController from './submissionScore.controller'
@@ -41,8 +41,13 @@ Router.get('/', isAuthorized('scoresViewAll'), SubmissionScoreController.get)
  *         schema:
  *           type: integer
  */
-Router.get('/user/:userId', asInt('userId'), extractOwnerByPathParam('userId'), isAuthorized('scoresViewAll', 'scoresViewSelfReleased'), SubmissionScoreController.getByUser)
-
+Router.get(
+  '/user/:userId',
+  asInt('userId'),
+  extractOwnerByPathParam('userId'),
+  isAuthorized('scoresViewAll', 'scoresViewSelfReleased'),
+  SubmissionScoreController.getByUser
+)
 
 /**
  * @swagger

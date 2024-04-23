@@ -4,7 +4,7 @@ import express from 'express'
 //validators
 import validator from './categoryScore.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 //Controller
 import CategoryScoreController from './categoryScore.controller'
@@ -21,9 +21,8 @@ const Router = express.Router()
  *      responses:
  *        '200':
  *          description: OK
- */ 
+ */
 Router.get('/', isAuthorized('scoresViewAll'), CategoryScoreController.getByCourse)
-
 
 /**
  * @swagger

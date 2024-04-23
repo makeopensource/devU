@@ -4,8 +4,8 @@ import Multer from 'multer'
 
 // Middleware
 import validator from '../submission/submission.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { asInt } from '../../middleware/validator/generic.validator'
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import SubmissionController from '../submission/submission.controller'
@@ -75,9 +75,8 @@ Router.get('/:id', isAuthorized('enrolled'), asInt(), SubmissionController.detai
  *           schema:
  *             $ref: '#/components/schemas/Submission'
  */
-Router.post('/', isAuthorized('enrolled'), upload.single("files"), validator, SubmissionController.post)
+Router.post('/', isAuthorized('enrolled'), upload.single('files'), validator, SubmissionController.post)
 // TODO: submissionCreateSelf or submissionCreateAll
-
 
 /**
  * @swagger
@@ -99,7 +98,6 @@ Router.post('/', isAuthorized('enrolled'), upload.single("files"), validator, Su
  */
 Router.put('/:id/revoke', isAuthorized('submissionChangeState'), asInt(), SubmissionController.revoke)
 
-
 /**
  * @swagger
  * /course/:courseId/assignment/:assignmentId/submissions/{id}/unrevoke:
@@ -118,7 +116,6 @@ Router.put('/:id/revoke', isAuthorized('submissionChangeState'), asInt(), Submis
  *           type: integer
  */
 Router.put('/:id/unrevoke', isAuthorized('submissionChangeState'), asInt(), SubmissionController.unrevoke)
-
 
 /**
  * @swagger

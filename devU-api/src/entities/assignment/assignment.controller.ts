@@ -26,7 +26,7 @@ export async function getByCourse(req: Request, res: Response, next: NextFunctio
   try {
     const courseId = parseInt(req.params.courseId)
     const assignments = await AssignmentService.listByCourse(courseId)
-    
+
     const response = assignments.map(serialize)
 
     res.status(200).json(response)
@@ -84,5 +84,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-
-export default { detail, post, put, _delete, getByCourse, getReleased}
+export default { detail, post, put, _delete, getByCourse, getReleased }

@@ -3,12 +3,11 @@ import express from 'express'
 
 // Middleware
 import validator from '../submissionProblemScore/submissionProblemScore.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { asInt } from '../../middleware/validator/generic.validator'
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import SubmissionProblemScoreController from '../submissionProblemScore/submissionProblemScore.controller'
-
 
 const Router = express.Router()
 
@@ -32,9 +31,13 @@ const Router = express.Router()
  *        schema:
  *          type: integer
  */
-Router.get('/submission/:submissionId', asInt('submissionId'), isAuthorized('enrolled'), SubmissionProblemScoreController.get)
+Router.get(
+  '/submission/:submissionId',
+  asInt('submissionId'),
+  isAuthorized('enrolled'),
+  SubmissionProblemScoreController.get
+)
 // TODO: scoresViewAll or scoresViewSelfReleased by the submission owner
-
 
 /**
  * @swagger

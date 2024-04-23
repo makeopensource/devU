@@ -2,12 +2,11 @@ import express from 'express'
 
 import validator from './category.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 import CategoryController from './category.controller'
 
 const Router = express.Router()
-
 
 /**
  * @swagger
@@ -64,7 +63,7 @@ Router.get('/', isAuthorized('enrolled'), CategoryController.getByCourse)
  *         application/x-www-form-urlencoded:
  *           schema:
  *             $ref: '#/components/schemas/Category'
- */ 
+ */
 Router.post('/', isAuthorized('courseEdit'), validator, CategoryController.post)
 
 /**
@@ -107,7 +106,7 @@ Router.put('/:id', isAuthorized('courseEdit'), asInt(), validator, CategoryContr
  *         required: true
  *         schema:
  *           type: integer
- */ 
+ */
 Router.delete('/:id', isAuthorized('courseEdit'), asInt(), CategoryController._delete)
 
 export default Router

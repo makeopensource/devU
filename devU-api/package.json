@@ -14,7 +14,7 @@
     "pre-commit": "lint-staged",
     "generate-config": "docker run --pull always -v $(pwd)/config:/config --user $(id -u):$(id -g) --rm ubautograding/devtools /generateConfig.sh config/default.yml",
     "populate-db": "ts-node-dev ./scripts/populate-db.ts",
-    "tango":  "ts-node-dev ./src/tango/tests/tango.endpoint.test.ts",
+    "tango": "ts-node-dev ./src/tango/tests/tango.endpoint.test.ts",
     "api-services": "docker compose -f ../docker-compose.yml --profile dev-api up -d",
     "api-services-stop": "docker compose -f ../docker-compose.yml --profile dev-api stop"
   },
@@ -27,7 +27,7 @@
     "devu-shared-modules": "file:/devu-shared-modules"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "devDependencies": {
     "@types/config": "^0.0.38",

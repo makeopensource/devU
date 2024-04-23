@@ -4,7 +4,7 @@ import express from 'express'
 // Middleware
 import validator from './course.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import CourseController from './course.controller'
@@ -25,7 +25,6 @@ const Router = express.Router()
 // Router.get('/', isAuthorized(''), CourseController.get)
 Router.get('/', CourseController.get)
 // TODO: Top-level authorization
-
 
 /**
  * @swagger
@@ -56,10 +55,9 @@ Router.get('/user/:userId', asInt('userId'), CourseController.getByUser)
  *         in: path
  *         required: true
  *         schema:
- *           type: integer    
+ *           type: integer
  */
 Router.get('/:courseId', isAuthorized('enrolled'), asInt('courseId'), CourseController.detail)
-
 
 /**
  * @swagger

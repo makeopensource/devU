@@ -13,11 +13,9 @@ import courseRoutes from './courseData.router'
 import { isAuthenticated } from '../authentication/authentication.middleware'
 
 import { NotFound } from '../utils/apiResponse.utils'
-import {asInt} from "../middleware/validator/generic.validator";
+import { asInt } from '../middleware/validator/generic.validator'
 
 const Router = express.Router()
-
-
 
 // TODO: Decide if we want to pull the course object (And return a 404 if not found) in middleware here or let it
 //  happen later... do this check in isAuthorized
@@ -31,7 +29,6 @@ Router.use('/c/:courseId', isAuthenticated, asInt('courseId'), courseRoutes)
 Router.use('/users', isAuthenticated, users)
 Router.use('/courses', isAuthenticated, courses)
 // TODO: Courses by user
-
 
 Router.use('/login', login)
 Router.use('/logout', logout)

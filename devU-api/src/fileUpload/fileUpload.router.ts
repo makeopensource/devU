@@ -1,14 +1,14 @@
-import express from 'express';
-import multer, {Field} from 'multer'
+import express from 'express'
+import multer, { Field } from 'multer'
 
-import validator from './fileUpload.validator';
+import validator from './fileUpload.validator'
 
-import FileUploadController from './fileUpload.controller';
-import {fileUploadTypes} from '../../devu-shared-modules';
-import {isAuthorized} from "../authorization/authorization.middleware";
+import FileUploadController from './fileUpload.controller'
+import { fileUploadTypes } from '../../devu-shared-modules'
+import { isAuthorized } from '../authorization/authorization.middleware'
 
-const Router = express.Router();
-const upload = multer();
+const Router = express.Router()
+const upload = multer()
 
 /*
   * This is a list of all the fields that can be uploaded
@@ -21,14 +21,14 @@ const upload = multer();
    return {name}
    })
  */
-const fields: Field[] = fileUploadTypes.map(name => ({name}))
+const fields: Field[] = fileUploadTypes.map(name => ({ name }))
 /**
  * @swagger
  * /course/:courseId/file-upload/{bucketName}:
  *   get:
  *     summary: Retrieve a list of all files in the bucket
  */
-Router.get('/:bucketName', isAuthorized('courseViewAll'), FileUploadController.get);
+Router.get('/:bucketName', isAuthorized('courseViewAll'), FileUploadController.get)
 
 /**
  * @swagger
@@ -36,7 +36,7 @@ Router.get('/:bucketName', isAuthorized('courseViewAll'), FileUploadController.g
  *   get:
  *     summary: Retrieve a single file from the bucket
  */
-Router.get('/:bucketName/:fileName', isAuthorized('courseViewAll'), FileUploadController.detail);
+Router.get('/:bucketName/:fileName', isAuthorized('courseViewAll'), FileUploadController.detail)
 
 /**
  * @swagger
@@ -44,7 +44,6 @@ Router.get('/:bucketName/:fileName', isAuthorized('courseViewAll'), FileUploadCo
  *   post:
  *     summary: Upload a new file to the bucket
  */
-Router.post('/', isAuthorized('enrolled'), upload.fields(fields), validator, FileUploadController.post);
+Router.post('/', isAuthorized('enrolled'), upload.fields(fields), validator, FileUploadController.post)
 
-
-export default Router;
+export default Router

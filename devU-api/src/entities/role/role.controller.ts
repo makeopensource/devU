@@ -7,7 +7,6 @@ import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.util
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-
     const roles = await RoleService.listAll()
 
     res.status(200).json(roles.map(serialize))

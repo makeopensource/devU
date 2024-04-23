@@ -3,14 +3,13 @@ import express from 'express'
 
 // Middleware
 import validator from './nonContainerAutoGrader.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { asInt } from '../../middleware/validator/generic.validator'
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import nonContainerQuestions from './nonContainerAutoGrader.controller'
 
 const Router = express.Router()
-
 
 /**
  * @swagger

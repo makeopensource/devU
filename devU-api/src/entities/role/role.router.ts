@@ -3,8 +3,8 @@ import express from 'express'
 
 // Middleware
 import validator from './role.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { asInt } from '../../middleware/validator/generic.validator'
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import RoleController from './role.controller'
@@ -23,8 +23,6 @@ const Router = express.Router()
  *         description: OK
  */
 Router.get('/', isAuthorized('roleViewAll'), RoleController.getAll)
-
-
 
 /**
  * @swagger
@@ -67,7 +65,6 @@ Router.get('/', isAuthorized('roleViewAll'), RoleController.getByCourse)
 Router.get('/:id', isAuthorized('roleViewAll'), asInt(), RoleController.detail)
 // TODO: make sure all details are checking the courseId. Add matching 'detailByCourse' for each and only admin can hit 'detail'?
 
-
 /**
  * @swagger
  * /course/:courseId/roles/{name}:
@@ -87,7 +84,6 @@ Router.get('/:id', isAuthorized('roleViewAll'), asInt(), RoleController.detail)
  *           type: integer
  */
 Router.get('/:roleName', isAuthorized('enrolled'), RoleController.detailByName)
-
 
 /**
  * @swagger

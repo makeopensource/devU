@@ -3,8 +3,8 @@ import express from 'express'
 
 //Middleware
 import validator from './assignmentScore.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
-import {extractOwnerByPathParam, isAuthorized} from "../../authorization/authorization.middleware";
+import { asInt } from '../../middleware/validator/generic.validator'
+import { extractOwnerByPathParam, isAuthorized } from '../../authorization/authorization.middleware'
 
 //Controller
 import AssignmentScoreController from './assignmentScore.controller'
@@ -69,7 +69,13 @@ Router.get('/:id', isAuthorized('scoresViewAll'), asInt(), AssignmentScoreContro
  *        schema:
  *          type: integer
  */
-Router.get('/user/:id', extractOwnerByPathParam('userId'), isAuthorized('scoresViewAll', 'scoresViewSelfReleased'), asInt(), AssignmentScoreController.getByUser)
+Router.get(
+  '/user/:id',
+  extractOwnerByPathParam('userId'),
+  isAuthorized('scoresViewAll', 'scoresViewSelfReleased'),
+  asInt(),
+  AssignmentScoreController.getByUser
+)
 
 /**
  * @swagger
@@ -95,8 +101,14 @@ Router.get('/user/:id', extractOwnerByPathParam('userId'), isAuthorized('scoresV
  *        schema:
  *          type: integer
  */
-Router.get('/detail/:id/:userId', asInt(), asInt('userId'), extractOwnerByPathParam('userId'), isAuthorized('scoresViewAll', 'scoresViewSelfReleased'), AssignmentScoreController.detailByUser)
-
+Router.get(
+  '/detail/:id/:userId',
+  asInt(),
+  asInt('userId'),
+  extractOwnerByPathParam('userId'),
+  isAuthorized('scoresViewAll', 'scoresViewSelfReleased'),
+  AssignmentScoreController.detailByUser
+)
 
 /**
  * @swagger

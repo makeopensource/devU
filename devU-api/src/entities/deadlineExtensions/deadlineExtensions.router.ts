@@ -4,7 +4,7 @@ import express from 'express'
 // Middleware
 import validator from './deadlineExtensions.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import DeadlineExtensionsController from './deadlineExtensions.controller'

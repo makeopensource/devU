@@ -4,7 +4,7 @@ import express from 'express'
 // Middleware
 //import validator from './grader.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
-import {isAuthorized} from "../../authorization/authorization.middleware";
+import { isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import GraderController from './grader.controller'
@@ -15,7 +15,7 @@ const Router = express.Router()
  * @swagger
  * tags:
  *    - name: Grader
- *      description: 
+ *      description:
  * /course/:courseId/grade/{id}:
  *   post:
  *     summary: Grade a submission, currently only with non-container autograders

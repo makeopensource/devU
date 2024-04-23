@@ -3,14 +3,13 @@ import express from 'express'
 
 // Middleware
 import validator from './assignment.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
+import { asInt } from '../../middleware/validator/generic.validator'
 
 // Controller
 import AssignmentsController from './assignment.controller'
-import {isAuthorized, isAuthorizedByAssignmentStatus} from "../../authorization/authorization.middleware";
+import { isAuthorized, isAuthorizedByAssignmentStatus } from '../../authorization/authorization.middleware'
 
 const Router = express.Router()
-
 
 /**
  * @swagger
@@ -32,7 +31,6 @@ const Router = express.Router()
  */
 Router.get('/released', isAuthorized('assignmentViewReleased'), AssignmentsController.getReleased)
 
-
 /**
  * @swagger
  * /course/:courseId/assignments:
@@ -52,7 +50,6 @@ Router.get('/released', isAuthorized('assignmentViewReleased'), AssignmentsContr
  *           type: integer
  */
 Router.get('/', isAuthorized('assignmentViewAll'), AssignmentsController.getByCourse)
-
 
 /**
  * @swagger
@@ -79,8 +76,6 @@ Router.get('/', isAuthorized('assignmentViewAll'), AssignmentsController.getByCo
  *           type: integer
  */
 Router.get('/:id', asInt(), isAuthorizedByAssignmentStatus, AssignmentsController.detail)
-
-
 
 /**
  * @swagger

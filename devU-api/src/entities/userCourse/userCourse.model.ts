@@ -9,7 +9,6 @@ import {
   DeleteDateColumn,
 } from 'typeorm'
 
-
 import UserModel from '../user/user.model'
 import CourseModel from '../course/course.model'
 
@@ -19,7 +18,7 @@ export default class UserCourseModel {
    * @swagger
    * tags:
    *   - name: UserCourses
-   *     description: 
+   *     description:
    * components:
    *  schemas:
    *    UserCourse:

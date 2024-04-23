@@ -6,7 +6,7 @@ export default class CourseModel {
    * @swagger
    * tags:
    *   - name: Courses
-   *     description: 
+   *     description:
    * components:
    *  schemas:
    *    Course:
