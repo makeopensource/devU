@@ -9,7 +9,7 @@ import { isAuthorized } from '../../authorization/authorization.middleware'
 // Controller
 import RoleController from './role.controller'
 
-const Router = express.Router({mergeParams: true})
+const Router = express.Router({ mergeParams: true })
 
 /**
  * @swagger

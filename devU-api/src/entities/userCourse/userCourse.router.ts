@@ -9,7 +9,7 @@ import { extractOwnerByPathParam, isAuthorized } from '../../authorization/autho
 // Controller
 import UserCourseController from './userCourse.controller'
 
-const Router = express.Router({mergeParams: true})
+const Router = express.Router({ mergeParams: true })
 
 /**
  * @swagger

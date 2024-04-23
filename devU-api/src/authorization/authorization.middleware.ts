@@ -39,24 +39,26 @@ export function isAuthorized(permission: string, permissionIfSelf?: string) {
     if (!roleModel) {
       role = RoleService.retrieveDefaultByName(userCourse.role)
     } else {
-      role = serialize(roleModel)
+      role = serialize(roleModel) as Role
     }
 
     if (!role) {
       return res.status(403).json(new GenericResponse('Invalid role: ' + userCourse.role))
     }
 
+    const x = role[permission as keyof typeof role]
+    console.log(x)
     // check for permission
     if (role[permission as keyof typeof role]) {
       // authorized!
-      next()
+      return next()
     }
 
     if (permissionIfSelf && req.ownerId && role[permissionIfSelf as keyof typeof role]) {
       // can access if they are the owner
       if (req.currentUser?.userId && req.currentUser?.userId === parseInt(req.ownerId)) {
         // authorized to access their own content
-        next()
+        return next()
       }
     }
 

@@ -34,8 +34,8 @@ async function initAdmin() {
 
 //Returns the ID of the newly created entry
 async function SendPOST(path: string, requestBody: string | FormData, requesterExternalId: string) {
-    console.log(path)
-    console.log(requestBody)
+  console.log(path)
+  console.log(requestBody)
   const headers = new Headers()
   headers.append('Authorization', `Bearer ${apiToken[requesterExternalId]}`)
   headers.append('Content-Type', 'application/json')
@@ -50,8 +50,8 @@ async function SendPOST(path: string, requestBody: string | FormData, requesterE
     headers: headers,
     body: requestBody,
   })
-    const responseBody = await response.json()
-    console.log(responseBody)
+  const responseBody = await response.json()
+  console.log(responseBody)
   return responseBody
 }
 
@@ -191,104 +191,102 @@ async function gradeSubmission(courseId: number, submissionId: number) {
 
 async function runCourseAndSubmission() {
   // try {
-    //Create users
-    const billy = await fetchToken('billy@buffalo.edu', 'billy')
-    const bob = await fetchToken('bob@buffalo.edu', 'bob')
+  //Create users
+  const billy = await fetchToken('billy@buffalo.edu', 'billy')
+  const bob = await fetchToken('bob@buffalo.edu', 'bob')
 
-    //Create courses
-    const courseId1 = (await CreateCourse('Testing Course Name1', 'CSE101', 's2024')).id
-    const courseId2 = (await CreateCourse('Testing Course Name2', 'CSE102', 's2024')).id
+  //Create courses
+  const courseId1 = (await CreateCourse('Testing Course Name1', 'CSE101', 's2024')).id
+  const courseId2 = (await CreateCourse('Testing Course Name2', 'CSE102', 's2024')).id
 
-    //Create enroll students
-    const response = await SendPOST(
-      `/course/${courseId1}/user-courses`,
-      JSON.stringify({userId:billy, courseId:courseId1, role:"student", dropped:false}),
-      'admin'
-    )
-    console.log(response)
-    await SendPOST(
-      `/course/${courseId2}/user-courses`,
-      JSON.stringify({userId:billy, courseId:courseId2, role:"student", dropped:false}),
-      'admin'
-    )
-    await SendPOST(
-      `/course/${courseId1}/user-courses`,
-      JSON.stringify({userId:bob, courseId:courseId1, role:"student", dropped:false}),
-      'admin'
-    )
-    await SendPOST(
-      `/course/${courseId2}/user-courses`,
-      JSON.stringify({userId:bob, courseId:courseId2, role:"student", dropped:false}),
-      'admin'
-    )
+  //Create enroll students
+  const response = await SendPOST(
+    `/course/${courseId1}/user-courses`,
+    JSON.stringify({ userId: billy, courseId: courseId1, role: 'student', dropped: false }),
+    'admin'
+  )
+  console.log(response)
+  await SendPOST(
+    `/course/${courseId2}/user-courses`,
+    JSON.stringify({ userId: billy, courseId: courseId2, role: 'student', dropped: false }),
+    'admin'
+  )
+  await SendPOST(
+    `/course/${courseId1}/user-courses`,
+    JSON.stringify({ userId: bob, courseId: courseId1, role: 'student', dropped: false }),
+    'admin'
+  )
+  await SendPOST(
+    `/course/${courseId2}/user-courses`,
+    JSON.stringify({ userId: bob, courseId: courseId2, role: 'student', dropped: false }),
+    'admin'
+  )
 
-    //Create assignments
-    const assignment1 = await createAssignment(courseId1, 'Course1 Assignment 1', 'Quiz')
-    const assignmentId1 = assignment1.id
-    const assignmentId2 = (await createAssignment(courseId1, 'Course1 Assignment 2', 'Homework')).id
+  //Create assignments
+  const assignment1 = await createAssignment(courseId1, 'Course1 Assignment 1', 'Quiz')
+  const assignmentId1 = assignment1.id
+  const assignmentId2 = (await createAssignment(courseId1, 'Course1 Assignment 2', 'Homework')).id
 
-    const assignmentId3 = (await createAssignment(courseId2, 'Course2 Assignment 1', 'Quiz')).id
-    const assignmentId4 = (await createAssignment(courseId2, 'Course2 Assignment 2', 'Homework')).id
+  const assignmentId3 = (await createAssignment(courseId2, 'Course2 Assignment 1', 'Quiz')).id
+  const assignmentId4 = (await createAssignment(courseId2, 'Course2 Assignment 2', 'Homework')).id
 
-    const problemName1 = (await createAssignmentProblem(courseId1, assignmentId1, 'Please answer A', 10)).problemName
-    const problemName2 = (await createAssignmentProblem(courseId1, assignmentId1, 'Please answer B', 10)).problemName
+  const problemName1 = (await createAssignmentProblem(courseId1, assignmentId1, 'Please answer A', 10)).problemName
+  const problemName2 = (await createAssignmentProblem(courseId1, assignmentId1, 'Please answer B', 10)).problemName
 
-    const problemName3 = (await createAssignmentProblem(courseId2, assignmentId3, 'Please NOT answer A', 10))
-      .problemName
-    const problemName4 = (await createAssignmentProblem(courseId2, assignmentId3, 'Please NOT answer B', 10))
-      .problemName
+  const problemName3 = (await createAssignmentProblem(courseId2, assignmentId3, 'Please NOT answer A', 10)).problemName
+  const problemName4 = (await createAssignmentProblem(courseId2, assignmentId3, 'Please NOT answer B', 10)).problemName
 
-    //NonContainerAutoGrader
-    await createNonContainerAutoGrader(courseId1, assignmentId1, problemName1, 10, 'A', false)
-    await createNonContainerAutoGrader(courseId1, assignmentId1, problemName2, 10, 'B', false)
-    await createNonContainerAutoGrader(courseId2, assignmentId3, problemName1, 10, '/^[^Aa]+$/', true)
-    await createNonContainerAutoGrader(courseId2, assignmentId3, problemName2, 10, '/^[^Bb]+$/', true)
+  //NonContainerAutoGrader
+  await createNonContainerAutoGrader(courseId1, assignmentId1, problemName1, 10, 'A', false)
+  await createNonContainerAutoGrader(courseId1, assignmentId1, problemName2, 10, 'B', false)
+  await createNonContainerAutoGrader(courseId2, assignmentId3, problemName1, 10, '/^[^Aa]+$/', true)
+  await createNonContainerAutoGrader(courseId2, assignmentId3, problemName2, 10, '/^[^Bb]+$/', true)
 
-    //ContainerAutoGrader
-    file = new File(['This is a test grader file'], 'grader.code')
-    await createContainerAutoGrader(courseId1, assignmentId2, 'NewestImageInTheWorld', 300, file)
+  //ContainerAutoGrader
+  file = new File(['This is a test grader file'], 'grader.code')
+  await createContainerAutoGrader(courseId1, assignmentId2, 'NewestImageInTheWorld', 300, file)
 
-    file = new File(['This is another test grader file'], 'grader.code')
-    makefile = new File(['This is a test makefile'], 'makefile')
-    await createContainerAutoGrader(courseId2, assignmentId4, 'OldestImageInTheWorld', 300, file, makefile)
+  file = new File(['This is another test grader file'], 'grader.code')
+  makefile = new File(['This is a test makefile'], 'makefile')
+  await createContainerAutoGrader(courseId2, assignmentId4, 'OldestImageInTheWorld', 300, file, makefile)
 
-    //Create submissions
-    content = `{"${problemName1}": "A", "${problemName2}": "B"}`
-    const submission1 = await createSubmission(courseId1, assignmentId1, billy, 'billy', content)
+  //Create submissions
+  content = `{"${problemName1}": "A", "${problemName2}": "B"}`
+  const submission1 = await createSubmission(courseId1, assignmentId1, billy, 'billy', content)
 
-    content = `{"${problemName1}": "C", "${problemName2}": "D"}`
-    const submission2 = await createSubmission(courseId1, assignmentId1, bob, 'bob', content)
+  content = `{"${problemName1}": "C", "${problemName2}": "D"}`
+  const submission2 = await createSubmission(courseId1, assignmentId1, bob, 'bob', content)
 
-    content = `{"${problemName3}": "A", "${problemName4}": "B"}`
-    const submission3 = await createSubmission(courseId2, assignmentId3, billy, 'billy', content)
+  content = `{"${problemName3}": "A", "${problemName4}": "B"}`
+  const submission3 = await createSubmission(courseId2, assignmentId3, billy, 'billy', content)
 
-    content = `{"${problemName3}": "C", "${problemName4}": "D"}`
-    const submission4 = await createSubmission(courseId2, assignmentId3, bob, 'bob', content)
+  content = `{"${problemName3}": "C", "${problemName4}": "D"}`
+  const submission4 = await createSubmission(courseId2, assignmentId3, bob, 'bob', content)
 
-    file = new File(['This is a test file1'], 'test.txt')
-    const submission5 = await createSubmission(courseId1, assignmentId2, billy, 'billy', undefined, file)
-    const submission6 = await createSubmission(courseId1, assignmentId2, bob, 'bob', undefined, file)
+  file = new File(['This is a test file1'], 'test.txt')
+  const submission5 = await createSubmission(courseId1, assignmentId2, billy, 'billy', undefined, file)
+  const submission6 = await createSubmission(courseId1, assignmentId2, bob, 'bob', undefined, file)
 
-    file = new File(['These are lines of codes'], 'code.code')
-    const submission7 = await createSubmission(courseId1, assignmentId4, billy, 'billy', undefined, file)
-    const submission8 = await createSubmission(courseId1, assignmentId4, bob, 'bob', undefined, file)
+  file = new File(['These are lines of codes'], 'code.code')
+  const submission7 = await createSubmission(courseId1, assignmentId4, billy, 'billy', undefined, file)
+  const submission8 = await createSubmission(courseId1, assignmentId4, bob, 'bob', undefined, file)
 
-    //Grade the submissions
-    for (const submission of [
-      submission1,
-      submission2,
-      submission3,
-      submission4,
-      submission5,
-      submission6,
-      submission7,
-      submission8,
-    ]) {
-      console.log('Grading submission: ', submission)
-      await gradeSubmission(submission.courseId, submission.id)
-    }
+  //Grade the submissions
+  for (const submission of [
+    submission1,
+    submission2,
+    submission3,
+    submission4,
+    submission5,
+    submission6,
+    submission7,
+    submission8,
+  ]) {
+    console.log('Grading submission: ', submission)
+    await gradeSubmission(submission.courseId, submission.id)
+  }
 
-    console.log('Script completed successfully!')
+  console.log('Script completed successfully!')
   // } catch (e) {
   //   console.error(e)
   // }
