@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
+import {Link, useParams} from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from './errorPage'
-import { Assignment, AssignmentProblem, Submission, SubmissionProblemScore, SubmissionScore } from 'devu-shared-modules'
+import {Assignment, AssignmentProblem, Submission, SubmissionProblemScore, SubmissionScore} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 
 const SubmissionFeedbackPage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const {courseId, assignmentId} = useParams<{ courseId: string, assignmentId: string }>()
 
     const { submissionId } = useParams<{submissionId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
@@ -61,7 +62,8 @@ const SubmissionFeedbackPage = () => {
                     <pre>{sps.feedback}</pre>
                 </div>
             ))}
-            <Link to = {`/submissions/${submissionId}`}>View Submission Details</Link> 
+            <Link to={`/courses/${courseId}/assignments/${assignmentId}/submissions/${submissionId}`}>View Submission
+                Details</Link>
         </PageWrapper>
     )
 }

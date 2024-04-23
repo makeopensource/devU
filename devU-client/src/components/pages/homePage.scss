@@ -2,11 +2,12 @@
 
 .coursesContainer {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, 500px);
     gap: 20px; /* adjust this value to set the space between the cards */
 }
 
 .header {
+    color: $text-color;
     display: flex;
     align-items: center;
 }
