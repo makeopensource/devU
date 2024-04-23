@@ -30,13 +30,15 @@ const AuthenticatedRouter = () => (
   <Switch>
     <Route exact path='/' component={HomePage} />
     <Route exact path='/users/:userId/update' component={UserDetailPage} />
-    <Route exact path='/users/:userId/submissions' component={UserSubmissionsListPage} />
+      <Route exact path='/submissions' component={UserSubmissionsListPage}/>
     {/* Just reuse the homepage here, for now this is fine. we might want to change this in the future though which is why they exist as separate routes */}
-    <Route exact path='/users/:userId/assignments' component={HomePage} />
-    <Route exact path='/users/:userId/courses' component={UserCoursesListPage} />
-    <Route exact path='/users/:userId/addCoursesForm' component={EditCourseFormPage} />
-    <Route exact path='/submissions/:submissionId' component={SubmissionDetailPage} />
-    <Route exact path='/submissions/:submissionId/feedback' component={SubmissionFeedbackPage} />
+      <Route exact path='/assignments' component={HomePage}/>
+      <Route exact path='/courses' component={UserCoursesListPage}/>
+      <Route exact path='/addCoursesForm' component={EditCourseFormPage}/>
+      <Route exact path='/courses/:courseId/assignments/:assignmentId/submissions/:submissionId'
+             component={SubmissionDetailPage}/>
+      <Route exact path='/courses/:courseId/assignments/:assignmentId/submissions/:submissionId/feedback'
+             component={SubmissionFeedbackPage}/>
     <Route exact path='/courses/' component={CoursesListPage} />
     <Route exact path='/courses/:courseId' component={CourseDetailPage} />
     <Route exact path='/courses/:courseId/update' component={CourseUpdatePage} />
@@ -45,8 +47,9 @@ const AuthenticatedRouter = () => (
     <Route exact path='/courses/:courseId/assignments/create' component={AssignmentCreatePage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId' component={AssignmentDetailPage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId/update' component={AssignmentUpdatePage} />
-    <Route exact path='/ncagtest' component={NonContainerAutoGraderForm} />
-    <Route exact path='/cagtest' component={ContainerAutoGraderForm} />
+      <Route exact path='/courses/:courseId/assignments/:assignmentId/createNCAG'
+             component={NonContainerAutoGraderForm}/>
+      <Route exact path='/courses/:courseId/assignments/:assignmentId/createCAG' component={ContainerAutoGraderForm}/>
     <Route exact path='/courses/:courseId/gradebook' component={GradebookStudentPage} />
     <Route exact path='/courses/:courseId/gradebook/instructor' component={GradebookInstructorPage} />
     <Route component={NotFoundPage} />

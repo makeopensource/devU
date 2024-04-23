@@ -1,16 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 import DarkModeToggle from 'components/utils/darkModeToggle'
 import FaIcon from 'components/shared/icons/faIcon'
 import UserOptionsDropdown from 'components/utils/userOptionsDropdown'
 
-import { useAppSelector } from 'redux/hooks'
 
 import styles from './globalToolbar.scss'
 
 const GlobalToolbar = () => {
-  const userId = useAppSelector((store) => store.user.id)
 
   return (
     <div className={styles.bar}>
@@ -26,13 +24,13 @@ const GlobalToolbar = () => {
           {/* Turns into a sidebar via css on mobile */}
           <div className={styles.menu}>
             <DarkModeToggle />
-            <Link to={`/users/${userId}/courses/`} className={styles.link}>
+            <Link to={`/courses`} className={styles.link}>
               Courses
             </Link>
-            <Link to={`/users/${userId}/assignments/`} className={styles.link}>
+            <Link to={`/assignments`} className={styles.link}>
               Assignments
             </Link>
-            <Link to={`/users/${userId}/submissions/`} className={styles.link}>
+            <Link to={`/submissions`} className={styles.link}>
               Submissions
             </Link>
           </div>

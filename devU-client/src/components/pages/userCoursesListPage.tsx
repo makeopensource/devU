@@ -85,10 +85,10 @@ const UserCoursesListPage = () => {
   return (
     <PageWrapper>
       <div className={styles.header}>
-        <h1>My Courses</h1>
+        <h1>All Courses</h1>
 
         <div>
-          <Link className={styles.addCourseBtn} to={`/users/${userId}/addCoursesForm`}>
+          <Link className={styles.addCourseBtn} to={`/addCoursesForm`}>
             Add Courses
           </Link>
         </div>
@@ -106,13 +106,13 @@ const UserCoursesListPage = () => {
       {userCourses.map((userCourse) => (
         <UserCourseListItem
           key={userCourse.courseId}
-          userCourse={userCourse}
           course={courses[userCourse.courseId || '']} 
         />
       ))}
       {allCourses.map(course => (
           <div>
-            <Link className={styles.courseName} to={{pathname:`/courses/${course.id}`,state:course}}>{course.name}</Link>
+            <Link className={styles.courseName}
+                  to={{pathname: `/courses/${course.id}/preview`, state: course}}>{course.name}</Link>
           </div>
         ))}
     </PageWrapper>
