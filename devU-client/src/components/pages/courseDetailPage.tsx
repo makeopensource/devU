@@ -1,7 +1,7 @@
-import React,{ useState,useEffect } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
+import {useHistory, useParams} from 'react-router-dom'
 import RequestService from 'services/request.service'
-import { Course, Assignment } from 'devu-shared-modules'
+import {Assignment, Course} from 'devu-shared-modules'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
@@ -17,12 +17,16 @@ import Stack from '@mui/material/Stack'
 
 
 import styles from './courseDetailPage.scss'
+import {SET_ALERT} from "../../redux/types/active.types";
+import {useActionless} from "../../redux/hooks";
 
 const CourseDetailPage = () => {
     const history = useHistory()
     const { courseId } = useParams<{courseId: string}>()
+
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
+    const [setAlert] = useActionless(SET_ALERT)
     
     const fetchCourseInfo = async () => {
         RequestService.get<Course>(`/api/courses/${courseId}`)
@@ -41,8 +45,23 @@ const CourseDetailPage = () => {
                     categoryMap[assignment.categoryName] = [assignment]
                 }
             })
-            console.log(categoryMap)
             setCategoryMap(categoryMap)
+        })
+
+    }
+
+
+    const handleDropCourse = () => {
+
+        RequestService.delete(`/api/user-courses/${courseId}`).then(() => {
+            setAlert({autoDelete: true, type: 'success', message: 'Course Dropped'})
+            setTimeout(() => {
+                history.push('/courses')
+            }, 3000)
+
+        }).catch((error: Error) => {
+            const message = error.message
+            setAlert({autoDelete: false, type: 'error', message})
         })
     }
 
@@ -69,6 +88,8 @@ const CourseDetailPage = () => {
                             <Button variant='contained' className={styles.buttons} onClick={() => {
                                 history.push(`/courses/${courseId}/update`)
                             }}>Edit Course</Button>
+                            <Button variant='contained' className={styles.buttons} onClick={handleDropCourse}>Drop
+                                Course</Button>
                         </Stack>
                     </div>
                     
