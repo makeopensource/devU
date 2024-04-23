@@ -20,7 +20,7 @@ import nonContainerAutoGraderRouter from '../entities/nonContainerAutoGrader/non
 
 import { asInt } from '../middleware/validator/generic.validator'
 
-const assignmentRouter = express.Router()
+const assignmentRouter = express.Router({mergeParams: true})
 assignmentRouter.use('/assignment-problems', assignmentProblem)
 assignmentRouter.use('/container-auto-graders', containerAutoGrader)
 assignmentRouter.use('/deadline-extensions', deadlineExtensions)
@@ -29,7 +29,7 @@ assignmentRouter.use('/submissions', submissions)
 assignmentRouter.use('/submission-problem-scores', submissionProblemScore)
 assignmentRouter.use('/submission-scores', submissionScore)
 
-const Router = express.Router()
+const Router = express.Router({mergeParams: true})
 Router.use('/assignment/:assignmentId/', asInt('assignmentId'), assignmentRouter)
 Router.use('/a/:assignmentId/', asInt('assignmentId'), assignmentRouter)
 

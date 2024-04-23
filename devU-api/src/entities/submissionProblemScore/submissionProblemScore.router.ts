@@ -9,7 +9,7 @@ import { isAuthorized } from '../../authorization/authorization.middleware'
 // Controller
 import SubmissionProblemScoreController from '../submissionProblemScore/submissionProblemScore.controller'
 
-const Router = express.Router()
+const Router = express.Router({mergeParams: true})
 
 // TODO: get by assignment and user
 

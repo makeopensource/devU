@@ -9,7 +9,7 @@ import { asInt } from '../../middleware/validator/generic.validator'
 import AssignmentsController from './assignment.controller'
 import { isAuthorized, isAuthorizedByAssignmentStatus } from '../../authorization/authorization.middleware'
 
-const Router = express.Router()
+const Router = express.Router({mergeParams: true})
 
 /**
  * @swagger

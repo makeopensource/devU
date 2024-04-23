@@ -10,7 +10,7 @@ import { isAuthorized } from '../../authorization/authorization.middleware'
 // Controller
 import SubmissionController from '../submission/submission.controller'
 
-const Router = express.Router()
+const Router = express.Router({mergeParams: true})
 const upload = Multer()
 
 /**

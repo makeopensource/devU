@@ -9,7 +9,7 @@ import { extractOwnerByPathParam, isAuthorized } from '../../authorization/autho
 // Controller
 import SubmissionScoreController from './submissionScore.controller'
 
-const Router = express.Router()
+const Router = express.Router({mergeParams: true})
 
 /**
  * @swagger

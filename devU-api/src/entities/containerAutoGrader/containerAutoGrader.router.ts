@@ -7,7 +7,7 @@ import { isAuthorized } from '../../authorization/authorization.middleware'
 
 import ContainerAutoGraderController from './containerAutoGrader.controller'
 
-const Router = express.Router()
+const Router = express.Router({mergeParams: true})
 const upload = multer()
 
 /**
