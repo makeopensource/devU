@@ -1,25 +1,33 @@
-import { getRepository, IsNull } from 'typeorm'
+import {getRepository, IsNull} from 'typeorm'
 
-import { UserCourse as UserCourseType } from 'devu-shared-modules'
+import {UserCourse as UserCourseType} from 'devu-shared-modules'
 
 import UserCourse from './userCourse.model'
 
 const connect = () => getRepository(UserCourse)
 
 export async function create(userCourse: UserCourseType) {
+    const userId = userCourse.userId
+    const hasEnrolled = await connect().findOne({userId, courseId: userCourse.courseId})
+    if (hasEnrolled) throw new Error('User already enrolled in course')
   return await connect().save(userCourse)
 }
 
-export async function update(userCourse: UserCourseType) {
-  const { id, level, dropped } = userCourse
+export async function update(userCourse: UserCourseType, currentUser: number) {
+    const {courseId, level, dropped} = userCourse
+    const userCourseData = await connect().findOne({courseId, userId: currentUser})
+    if (!userCourseData) throw new Error('User not enrolled in course')
+    userCourseData.level = level
+    userCourseData.dropped = dropped
+    //@ts-ignore
+    return await connect().update(userCourse.id, userCourseData)
 
-  if (!id) throw new Error('Missing Id')
-
-  return await connect().update(id, { level, dropped })
 }
 
-export async function _delete(id: number) {
-  return await connect().softDelete({ id, deletedAt: IsNull() })
+export async function _delete(courseId: number, userId: number) {
+    const userCourse = await connect().findOne({courseId, userId})
+    if (!userCourse) throw new Error('User Not Found in Course')
+    return await connect().softDelete({courseId, userId, deletedAt: IsNull()})
 }
 
 export async function retrieve(id: number) {
@@ -37,6 +45,10 @@ export async function listByCourse(courseId: number) {
   return await connect().find({ courseId, deletedAt: IsNull() })
 }
 
+export async function checking(userId: number, courseId: number) {
+    return await connect().findOne({userId, courseId, dropped: false, deletedAt: IsNull()})
+}
+
 export default {
   create,
   retrieve,
@@ -45,4 +57,5 @@ export default {
   list,
   listAll,
   listByCourse,
+    checking
 }

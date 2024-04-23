@@ -3,7 +3,7 @@ import express from 'express'
 
 // Middleware
 import validator from './userCourse.validator'
-import { asInt } from '../../middleware/validator/generic.validator'
+import {asInt} from '../../middleware/validator/generic.validator'
 
 // Controller
 import UserCourseController from './userCourse.controller'
@@ -83,6 +83,8 @@ Router.get('/course/:id', asInt(), UserCourseController.getByCourse)
  *           type: integer
  */
 Router.get('/:id', asInt(), UserCourseController.detail)
+
+Router.get('/user/courses/:courseId', asInt("courseId"), UserCourseController.checkEnroll)
 
 /**
  * @swagger
