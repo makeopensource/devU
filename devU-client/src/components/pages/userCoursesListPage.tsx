@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
+import {Link} from 'react-router-dom'
 
-import { UserCourse, Course } from 'devu-shared-modules'
-import { useAppSelector } from 'redux/hooks'
+import {Course, UserCourse} from 'devu-shared-modules'
 
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import UserCourseListItem from 'components/listItems/userCourseListItem'
-import Dropdown, { Option } from 'components/shared/inputs/dropdown'
+import Dropdown, {Option} from 'components/shared/inputs/dropdown'
 import ErrorPage from './errorPage'
 
 import RequestService from 'services/request.service'
@@ -28,7 +27,7 @@ const filterOptions: Option<Filter>[] = [
 ]
 
 const UserCoursesListPage = () => {
-  const userId = useAppSelector((store) => store.user.id)
+
 
   const defaultFilter = LocalStorageService.get<Filter>(FILTER_LOCAL_STORAGE_KEY) || 'active'
 
@@ -62,7 +61,7 @@ const UserCoursesListPage = () => {
 
       setUserCourses(userCourses)
       setCourses(courseMap)
-    } catch (error) {
+    } catch (error: any) {
       setError(error)
     } finally {
       setLoading(false)

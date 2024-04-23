@@ -1,16 +1,18 @@
 import React from 'react'
 
-import { UserCourse, Course } from 'devu-shared-modules'
+import {Assignment, Course} from 'devu-shared-modules'
 
 import ListItemWrapper from 'components/shared/layouts/listItemWrapper'
 
-import { prettyPrintDate } from 'utils/date.utils'
+import {prettyPrintDate} from 'utils/date.utils'
 
 import styles from './userCourseListItem.scss'
 
+import SimpleAssignmentListItem from "./simpleAssignmentListItem";
+
 type Props = {
-  userCourse: UserCourse
-  course: Course
+    course: Course
+    assignments?: Assignment[]
 }
 
 const UserCourseListItem = ({ course }: Props) => (
