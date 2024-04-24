@@ -9,11 +9,12 @@ import RequestService from 'services/request.service'
 import {ExpressValidationError} from "../../../devu-shared-modules";
 import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
 import textStyles from "../shared/inputs/textField.scss";
-import { useParams } from 'react-router-dom'
+import {useHistory, useParams} from 'react-router-dom'
 
 const ContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
-
+    const {assignmentId} = useParams<{ assignmentId: string }>()
+    const history = useHistory()
     const [graderFile, setGraderFile] = useState<File | null>()
     const [makefile, setMakefile] = useState<File | null>()
     const [formData,setFormData] = useState({
@@ -57,6 +58,8 @@ const ContainerAutoGraderForm = () => {
             setInvalidFields(newFields)
 
             setAlert({autoDelete: false, type: 'error', message: message})
+        }).finally(() => {
+            history.goBack()
         })
 
 

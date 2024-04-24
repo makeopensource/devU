@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-
+import {useHistory} from 'react-router-dom'
 import {ExpressValidationError} from 'devu-shared-modules'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
@@ -15,8 +15,10 @@ import {SET_ALERT} from 'redux/types/active.types'
 import styles from '../shared/inputs/textField.scss'
 import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
 
+
 const EditCourseFormPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
+    const history = useHistory();
 
     const [formData,setFormData] = useState({
         name: '',
@@ -53,6 +55,7 @@ const EditCourseFormPage = () => {
         RequestService.post('/api/courses/', finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Course Added' })
+
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -62,7 +65,10 @@ const EditCourseFormPage = () => {
 
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-            .finally(() => setLoading(false))
+        .finally(() => {
+            history.goBack()
+            setLoading(false)
+        })
     }
 
     return (

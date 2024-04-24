@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {ExpressValidationError} from 'devu-shared-modules'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import {useParams} from 'react-router-dom'
+import {useHistory, useParams} from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
@@ -88,8 +88,7 @@ const AssignmentUpdatePage = () => {
     const [dueDate, setDueDate] = useState(new Date())
     const [loading, setLoading] = useState(false)
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
-   
-    const { assignmentId } = useParams() as UrlParams
+    const history = useHistory()
 
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
@@ -133,56 +132,61 @@ const AssignmentUpdatePage = () => {
                 setInvalidFields(newFields)
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-            .finally(() => setLoading(false))
+        .finally(() => {
+            setLoading(false)
+            history.goBack()
+        })
     }
 
     return (
-    <PageWrapper>
-        <h1>Assignment Detail Update</h1>
-        <p>Required Field *</p>
-        
+        <PageWrapper>
+            <h1>Assignment Detail Update</h1>
+            <p>Required Field *</p>
 
-        <Button onClick={toggleProblemForm}>Add Problem</Button>
-        {toggleForm && (
-            <div>
-                <br></br>
-                <TextField id='problemName' label='Problem Question *' onChange={handleProblemChange}
-                           value={problemFormData.problemName}
-                           className={problemInvalidFields.get('problemName')}/>
-                <TextField id='maxScore' label='Max Score *' onChange={handleProblemChange}
-                           value={problemFormData.maxScore}
-                           className={problemInvalidFields.get('maxScore')}/>
-                <Button onClick={handleSubmit} loading={loading}>Create Problem</Button>
-            </div>
-        )}
-        
-        <br></br><br></br>
-        <TextField id='name' label='Assignment Name *' onChange={handleChange} className={invalidFields.get('name')}/>
 
-        <label htmlFor='start_date'>Start Date *</label>
-        <br/>
-        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange} />
-        <br/>
-        <label htmlFor='due_date'>Due Date *</label>
-        <br/>
-        <DatePicker id='due_date' selected={dueDate}  onChange={handleDueDateChange} />
-        <br/>
-        <label htmlFor='end_date'>End Date *</label>
-        <br/>
-        <DatePicker id='end_date' selected={endDate}  onChange={handleEndDateChange}/>
-        <TextField id='categoryName' label='Category Name *' onChange={handleChange}
-                   className={invalidFields.get('categoryName')}/>
-        <TextField id='description' label='Description of the Assignment *' onChange={handleChange}
-                   className={invalidFields.get('description')}/>
-        <TextField id='maxFileSize' label='Maximum allowable file Size *' onChange={handleChange}
-                   className={invalidFields.get('maxFileSize')}/>
-        <TextField id='maxSubmission' label='Maximum Submissions' onChange={handleChange}
-                   className={invalidFields.get('maxSubmission')}/>
-        <TextField id='disableHandins' label='Disable Handins' onChange={handleChange}
-                   className={invalidFields.get('disableHandins')}/>
+            <Button onClick={toggleProblemForm}>Add Problem</Button>
+            {toggleForm && (
+                <div>
+                    <br></br>
+                    <TextField id='problemName' label='Problem Question *' onChange={handleProblemChange}
+                               value={problemFormData.problemName}
+                               className={problemInvalidFields.get('problemName')}/>
+                    <TextField id='maxScore' label='Max Score *' onChange={handleProblemChange}
+                               value={problemFormData.maxScore}
+                               className={problemInvalidFields.get('maxScore')}/>
+                    <Button onClick={handleSubmit} loading={loading}>Create Problem</Button>
+                </div>
+            )}
 
-        <Button onClick={handleAssignmentUpdate} loading={loading}>Submit Updates</Button>
-    </PageWrapper>
+            <br></br><br></br>
+            <TextField id='name' label='Assignment Name *' onChange={handleChange}
+                       className={invalidFields.get('name')}/>
+
+            <label htmlFor='start_date'>Start Date *</label>
+            <br/>
+            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}/>
+            <br/>
+            <label htmlFor='due_date'>Due Date *</label>
+            <br/>
+            <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}/>
+            <br/>
+            <label htmlFor='end_date'>End Date *</label>
+            <br/>
+            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}/>
+            <TextField id='categoryName' label='Category Name *' onChange={handleChange}
+                       className={invalidFields.get('categoryName')}/>
+            <TextField id='description' label='Description of the Assignment *' onChange={handleChange}
+                       className={invalidFields.get('description')}/>
+            <TextField id='maxFileSize' label='Maximum allowable file Size *' onChange={handleChange}
+                       className={invalidFields.get('maxFileSize')}/>
+            <TextField id='maxSubmission' label='Maximum Submissions' onChange={handleChange}
+                       className={invalidFields.get('maxSubmission')}/>
+            <label htmlFor='disableHandins'>Disable Handins</label>
+            <input type='checkbox' id='disableHandins' checked={formData.disableHandins} onChange={handleCheckbox}/>
+            <br/>
+
+            <Button onClick={handleAssignmentUpdate} loading={loading}>Submit Updates</Button>
+        </PageWrapper>
     )
 }
 

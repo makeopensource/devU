@@ -22,6 +22,7 @@ const CoursePreviewPage = () => {
     const [course, setCourse] = useState<Course>()
     const [userCourses, setUserCourses] = useState<UserCourse>()
     const userId = useAppSelector((store) => store.user.id)
+    const history = useHistory()
 
 
     const handleCheckEnroll = async () => {
@@ -57,7 +58,7 @@ const CoursePreviewPage = () => {
     if (loading) return <LoadingOverlay delay={250}/>
 
     if (enrolled) {
-        useHistory().push(`/courses/${courseId}`)
+        history.push(`/courses/${courseId}`)
     }
 
     const handleJoinCourse = () => {
@@ -74,6 +75,7 @@ const CoursePreviewPage = () => {
             setAlert({autoDelete: false, type: 'error', message})
         }).finally(() => {
             setAlert({autoDelete: true, type: 'success', message: 'Course Joined'})
+            history.goBack()
         })
     }
 

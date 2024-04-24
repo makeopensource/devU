@@ -55,9 +55,7 @@ const CourseDetailPage = () => {
 
         RequestService.delete(`/api/user-courses/${courseId}`).then(() => {
             setAlert({autoDelete: true, type: 'success', message: 'Course Dropped'})
-            setTimeout(() => {
                 history.push('/courses')
-            }, 3000)
 
         }).catch((error: Error) => {
             const message = error.message

@@ -1,5 +1,5 @@
-                        import React, {useState} from 'react'
-import {useParams} from 'react-router-dom'
+import React, {useState} from 'react'
+import {useHistory, useParams} from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
@@ -23,7 +23,7 @@ type UrlParams = {
 const CourseUpdatePage = ({}) => {
 
     const [setAlert] = useActionless(SET_ALERT)
-
+    const history = useHistory()
     const [formData,setFormData] = useState({
         name: '',
         number: '',
@@ -67,7 +67,10 @@ const CourseUpdatePage = ({}) => {
 
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-            .finally(() => setLoading(false))
+        .finally(() => {
+            setLoading(false)
+            history.goBack()
+        })
     }
 
 
