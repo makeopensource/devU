@@ -22,7 +22,7 @@ export default class ContainerAutoGraderModel {
    *  schemas:
    *    ContainerAutoGrader:
    *      type: object
-   *      required: [assignmentId, autogradingImage, timeout, graderFile, makefileFile]
+   *      required: [assignmentId, autogradingImage, timeout, graderFile]
    *      properties:
    *        assignmentId:
    *          type: integer

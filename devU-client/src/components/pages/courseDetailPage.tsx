@@ -83,7 +83,7 @@ const CourseDetailPage = () => {
                                 history.push(`/courses/${courseId}/gradebook`)
                             }}>Gradebook</Button>
                             <Button variant='contained' className={styles.buttons} onClick={() => {
-                                history.push(`/courses/${courseId}/assignments/create`)
+                                history.push(`/courses/${courseId}/createAssignment`)
                             }}>Add Assignment</Button>
                             <Button variant='contained' className={styles.buttons} onClick={() => {
                                 history.push(`/courses/${courseId}/update`)

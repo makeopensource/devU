@@ -12,7 +12,7 @@ const SubmissionFeedbackPage = () => {
     const [error, setError] = useState(null)
     const {courseId, assignmentId} = useParams<{ courseId: string, assignmentId: string }>()
 
-    const { submissionId } = useParams<{submissionId: string}>()
+    const { submissionId, assignmentId, courseId } = useParams<{submissionId: string, assignmentId: string, courseId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
