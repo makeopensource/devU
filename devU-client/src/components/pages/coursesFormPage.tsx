@@ -60,15 +60,16 @@ const EditCourseFormPage = () => {
     return (
         <PageWrapper>
             <h1>Course Form</h1>
-            <TextField id='name' label='Course Name' onChange={handleChange} value={formData.name}/>
-            <TextField id='number' label='Course Number' onChange={handleChange} value={formData.number}/>
-            <TextField id='semester' label='Semester' onChange={handleChange} value={formData.semester} placeholder='Ex. f2022, w2023, s2024'/>
+            <p>Required Fields *</p>
+            <TextField id='name' label='Course Name *' onChange={handleChange} value={formData.name}/>
+            <TextField id='number' label='Course Number *' onChange={handleChange} value={formData.number}/>
+            <TextField id='semester' label='Semester *' onChange={handleChange} value={formData.semester} placeholder='Ex. f2022, w2023, s2024'/>
             
-            <label htmlFor='start_date'>Start Date</label>
+            <label htmlFor='start_date'>Start Date *</label>
             <br/>
             <DatePicker id='start_date' selected = {startDate} onChange={handleStartDateChange}/>
             <br/>
-            <label htmlFor='end_date'>End Date</label>
+            <label htmlFor='end_date'>End Date *</label>
             <br/>
             <DatePicker id='end_date' selected = {endDate} onChange={handleEndDateChange}/>
             <br/>

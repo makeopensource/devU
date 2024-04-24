@@ -60,14 +60,15 @@ const ContainerAutoGraderForm = () => {
 
     return(
         <PageWrapper>
-            <h1>Non Container Auto Grader Form</h1>
+            <h1>Container Auto Grader Form</h1>
             <div className = {styles.leftColumn}>
-                <h1>Add a Non-Container Auto Grader</h1>
-                <TextField id= 'autogradingImage' label='Autograding Image' onChange={handleChange} value={formData.autogradingImage}></TextField>
-                <TextField id= 'timeout' label='Timeout' onChange={handleChange} value={formData.timeout}></TextField>
-                <label htmlFor="graderFile">Graderfile</label>
+                <h1>Container Auto Grader</h1>
+                <p>Required Field *</p>
+                <TextField id= 'autogradingImage' label='Autograding Image *' onChange={handleChange} value={formData.autogradingImage}></TextField>
+                <TextField id= 'timeout' label='Timeout *' onChange={handleChange} value={formData.timeout}></TextField>
+                <label htmlFor="graderFile">Graderfile *</label>
                 <input type="file" id='graderFile'  onChange={handleGraderfileChange} /> <br/>
-                <label htmlFor="makefileFile">Makefile</label>
+                <label htmlFor="makefileFile">Makefile *</label>
                 <input type="file" id='makefileFile' onChange={handleMakefileChange} /> <br/>
                 <br></br><br></br>
                 <Button onClick= { handleSubmit } >Add Problem</Button>

@@ -67,15 +67,16 @@ const CourseUpdatePage = ({}) => {
     return (
     <PageWrapper>
         <h1>Course Detail Update</h1>
-        <TextField id='name' label='Course Name' onChange={handleChange}/>
-        <TextField id='number' label='Course Number' onChange={handleChange}/>
-        <TextField id='semester' label='Semester' onChange={handleChange}  placeholder='Ex. f2022, w2023, s2024, u2025'/>
+        <p>Required Field *</p>
+        <TextField id='name' label='Course Name *' onChange={handleChange}/>
+        <TextField id='number' label='Course Number *' onChange={handleChange}/>
+        <TextField id='semester' label='Semester *' onChange={handleChange}  placeholder='Ex. f2022, w2023, s2024, u2025'/>
 
-        <label htmlFor='start_date'>Start Date</label>
+        <label htmlFor='start_date'>Start Date *</label>
         <br/>
         <DatePicker id='start_date' selected = {startDate} onChange={handleStartDateChange}/>
         <br/>
-        <label htmlFor='end_date'>End Date</label>
+        <label htmlFor='end_date'>End Date *</label>
         <br/>
         <DatePicker id='end_date' selected = {endDate} onChange={handleEndDateChange}/>
         <br/>

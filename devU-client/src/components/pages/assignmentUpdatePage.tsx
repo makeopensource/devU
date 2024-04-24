@@ -125,36 +125,37 @@ const AssignmentUpdatePage = () => {
     return (
     <PageWrapper>
         <h1>Assignment Detail Update</h1>
+        <p>Required Field *</p>
         
 
         <Button onClick={toggleProblemForm}>Add Problem</Button>
         {toggleForm && (
             <div>
                 <br></br>
-                <TextField id='problemName' label='Problem Question' onChange={handleProblemChange} value={problemFormData.problemName}/>
-                <TextField id='maxScore' label='Max Score' onChange={handleProblemChange} value={problemFormData.maxScore}/>
+                <TextField id='problemName' label='Problem Question *' onChange={handleProblemChange} value={problemFormData.problemName}/>
+                <TextField id='maxScore' label='Max Score *' onChange={handleProblemChange} value={problemFormData.maxScore}/>
                 <Button onClick={handleSubmit} loading={loading}>Create Problem</Button>
             </div>
         )}
         
         <br></br><br></br>
-        <TextField id='name' label='Assignment Name' onChange={handleChange}/>
+        <TextField id='name' label='Assignment Name *' onChange={handleChange}/>
 
-        <label htmlFor='start_date'>Start Date</label>
+        <label htmlFor='start_date'>Start Date *</label>
         <br/>
         <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange} />
         <br/>
-        <label htmlFor='due_date'>Due Date</label>
+        <label htmlFor='due_date'>Due Date *</label>
         <br/>
         <DatePicker id='due_date' selected={dueDate}  onChange={handleDueDateChange} />
         <br/>
-        <label htmlFor='end_date'>End Date</label>
+        <label htmlFor='end_date'>End Date *</label>
         <br/>
         <DatePicker id='end_date' selected={endDate}  onChange={handleEndDateChange}/>
-        <TextField id='categoryName' label='Category Name' onChange={handleChange}/>
-        <TextField id='description' label='Description of the Assignment' onChange={handleChange}/>
-        <TextField id='maxFileSize' label='Maximum allowable file Size' onChange={handleChange}/>
-        <TextField id='maxSubmission' label='Maximum Submissions' onChange={handleChange}/>
+        <TextField id='categoryName' label='Category Name *' onChange={handleChange}/>
+        <TextField id='description' label='Description of the Assignment *' onChange={handleChange}/>
+        <TextField id='maxFileSize' label='Maximum allowable file Size *' onChange={handleChange}/>
+        <TextField id='maxSubmission' label='Maximum Submissions *' onChange={handleChange}/>
 
         <label htmlFor='disableHandins'>Disable Handins</label>
         <input type='checkbox' id='disableHandins' checked={formData.disableHandins} onChange={handleCheckbox}/>

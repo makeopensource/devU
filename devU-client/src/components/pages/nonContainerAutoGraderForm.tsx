@@ -74,9 +74,10 @@ const NonContainerAutoGraderForm = () => {
             <h1>Non Container Auto Grader Form</h1>
             <div className = {styles.leftColumn}>
                 <h1>Add a Non-Container Auto Grader</h1>
-                <TextField id= 'question' label='Question' onChange={handleChange} value={formData.question}></TextField>
-                <TextField id= 'correctString' label='Answer' onChange={handleChange} value={formData.correctString}></TextField>
-                <TextField id= 'score' label='Score' onChange={handleChange} value={formData.score}></TextField>
+                <p>Required Fields *</p>
+                <TextField id= 'question' label='Question *' onChange={handleChange} value={formData.question}></TextField>
+                <TextField id= 'correctString' label='Answer *' onChange={handleChange} value={formData.correctString}></TextField>
+                <TextField id= 'score' label='Score *' onChange={handleChange} value={formData.score}></TextField>
                 <label htmlFor='regex'>Regex</label>
                 <input  id= 'regex' type='checkbox' checked={formData.isRegex} onChange={toggleRegex}></input>
                 <br></br><br></br>
