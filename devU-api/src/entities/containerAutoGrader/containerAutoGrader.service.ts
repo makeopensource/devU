@@ -11,7 +11,7 @@ import {generateFilename} from "../../utils/fileUpload.utils";
 const connect = () => getRepository(ContainerAutoGraderModel)
 const fileConn = () => getRepository(FileModel)
 
-async function filesUpload(bucket: string, file: Express.Multer.File, containerAutoGrader: ContainerAutoGrader,filename: string) {
+async function filesUpload(bucket: string, file: Express.Multer.File, containerAutoGrader: ContainerAutoGrader,filename: string, userId: number) {
     const Etag: string = await uploadFile(bucket, file,filename)
     const assignmentId = containerAutoGrader.assignmentId
 
@@ -22,13 +22,13 @@ async function filesUpload(bucket: string, file: Express.Multer.File, containerA
         filename: filename,
         assignmentId: assignmentId,
     }
-    //TODO: This is a temporary fix to get the function to pass. CourseId and UserId should be modified in the future
+    //TODO: This is a temporary fix to get the function to pass. CourseId should be modified in the future
     fileModel.courseId = 1
-    fileModel.userId = 1
+    fileModel.userId = userId
 
     await fileConn().save(fileModel)
 
-  return Etag
+    return Etag
 }
 
 
@@ -38,12 +38,12 @@ export async function create(containerAutoGrader: ContainerAutoGrader, graderInp
     if (existingContainerAutoGrader) throw new Error('Container Auto Grader already exists for this assignment, please update instead of creating a new one')
     const bucket: string = 'graders'
     const filename: string = generateFilename(graderInputFile.originalname, userId)
-    await filesUpload(bucket, graderInputFile, containerAutoGrader, filename)
+    await filesUpload(bucket, graderInputFile, containerAutoGrader, filename, userId)
     containerAutoGrader.graderFile = filename
 
     if (makefileInputFile) {
         const makefileFilename: string = generateFilename(makefileInputFile.originalname, userId)
-        await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename)
+        await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename, userId)
         containerAutoGrader.makefileFile = makefileFilename
     }
 
@@ -56,14 +56,14 @@ export async function update(containerAutoGrader: ContainerAutoGrader, graderInp
     if (graderInputFile) {
         const bucket: string = 'graders'
         const filename: string = generateFilename(graderInputFile.originalname, userId)
-        await filesUpload(bucket, graderInputFile, containerAutoGrader, filename)
+        await filesUpload(bucket, graderInputFile, containerAutoGrader, filename, userId)
         containerAutoGrader.graderFile = filename
     }
 
     if (makefileInputFile) {
         const bucket: string = 'makefiles'
         const makefileFilename: string = generateFilename(makefileInputFile.originalname, userId)
-        await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename)
+        await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename, userId)
         containerAutoGrader.makefileFile = makefileFilename
     }
 
@@ -72,20 +72,20 @@ export async function update(containerAutoGrader: ContainerAutoGrader, graderInp
 }
 
 export async function _delete(id: number) {
-  return await connect().softDelete({ id, deletedAt: IsNull() })
+    return await connect().softDelete({ id, deletedAt: IsNull() })
 }
 
 export async function retrieve(id: number) {
-  return await connect().findOne({ id, deletedAt: IsNull() })
+    return await connect().findOne({ id, deletedAt: IsNull() })
 }
 
 export async function list() {
-  return await connect().find({ deletedAt: IsNull() })
+    return await connect().find({ deletedAt: IsNull() })
 }
 
 //The grader has not changed to the new function, so the fake function keep here for now to avoid error
 //But need to be deleted when the grader entity changed to the getGraderByAssignmentId
-export async function listByAssignmentId(assignmentId: number) {
+export async function getGraderObjectByAssignmentId(assignmentId: number) {
     if (!assignmentId) throw new Error('Missing AssignmentId')
     return await connect().find({ assignmentId: assignmentId, deletedAt: IsNull() })
 }
@@ -99,13 +99,14 @@ export async function getGraderByAssignmentId(assignmentId: number){
     let makefileData;
 
     if (makefileFile){
-         makefileData = await downloadFile('makefiles', makefileFile)
+        makefileData = await downloadFile('makefiles', makefileFile)
     }else{
-         makefileData = await downloadFile('makefiles', 'defaultMakefile') // Put actual default makefile name here
+        makefileData = await downloadFile('makefiles', 'defaultMakefile') // Put actual default makefile name here
     }
 
     return {graderData, makefileData, autogradingImage, timeout}
 }
+
 
 export default {
     create,
@@ -114,5 +115,5 @@ export default {
     _delete,
     list,
     getGraderByAssignmentId,
-    listByAssignmentId
+    getGraderObjectByAssignmentId,
 }

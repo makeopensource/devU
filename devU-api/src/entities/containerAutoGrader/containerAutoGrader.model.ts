@@ -22,21 +22,21 @@ export default class ContainerAutoGraderModel {
    *  schemas:
    *    ContainerAutoGrader:
    *      type: object
-   *      required: [assignmentId, graderFile, autogradingImage, timeout]
+   *      required: [assignmentId, autogradingImage, timeout, graderFile]
    *      properties:
    *        assignmentId:
    *          type: integer
-   *        graderFile:
-   *          type: string
-   *          description: Filename of already uploaded grader file
-   *        makeFileFile:
-   *          type: string
-   *          description: Filename of already uploaded makefile
    *        autogradingImage:
    *          type: string
    *        timeout:
    *          type: integer
    *          description: Must be a positive integer  
+   *        graderFile:
+   *          type: string
+   *          format: binary
+   *        makefileFile:
+   *          type: string
+   *          format: binary
    */
 
     @PrimaryGeneratedColumn()

@@ -1,4 +1,3 @@
-import { Submission } from 'devu-shared-modules'
 import { Request, Response, NextFunction } from 'express'
 
 import SubmissionService from '../submission/submission.service'
@@ -43,12 +42,12 @@ export async function post(req: Request, res: Response, next: NextFunction) {
     // If this is hit, developer messed up above in the chain by not checking the user for auth
     if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
 
-    const requestBody: Submission = req.body
+    const reqSubmission = req.body
 
-    requestBody.submitterIp = req.header('x-forwarded-for') || req.socket.remoteAddress
-    requestBody.submittedBy = req.currentUser?.userId
+    reqSubmission.submitterIp = req.header('x-forwarded-for') || req.socket.remoteAddress
+    reqSubmission.submittedBy = req.currentUser?.userId
 
-    const submission = await SubmissionService.create(requestBody, req.file)
+    const submission = await SubmissionService.create(reqSubmission, req.file)
     const response = serialize(submission)
 
     res.status(201).json(response)

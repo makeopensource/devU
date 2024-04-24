@@ -24,6 +24,7 @@ import NonContainerAutoGraderForm from './pages/nonContainerAutoGraderForm'
 import GradebookStudentPage from './pages/gradebookStudentPage'
 import GradebookInstructorPage from './pages/gradebookInstructorPage'
 import SubmissionFeedbackPage from './pages/submissionFeedbackPage'
+import ContainerAutoGraderForm from './pages/containerAutoGraderForm'
 
 const AuthenticatedRouter = () => (
   <Switch>
@@ -34,17 +35,18 @@ const AuthenticatedRouter = () => (
     <Route exact path='/users/:userId/assignments' component={HomePage} />
     <Route exact path='/users/:userId/courses' component={UserCoursesListPage} />
     <Route exact path='/users/:userId/addCoursesForm' component={EditCourseFormPage} />
-    <Route exact path='/submissions/:submissionId' component={SubmissionDetailPage} />
-    <Route exact path='/submissions/:submissionId/feedback' component={SubmissionFeedbackPage} />
     <Route exact path='/courses/' component={CoursesListPage} />
     <Route exact path='/courses/:courseId' component={CourseDetailPage} />
     <Route exact path='/courses/:courseId/update' component={CourseUpdatePage} />
     <Route exact path='/courses/:courseId/users' component={CourseUsersListPage} />
     <Route exact path='/courses/:courseId/assignments' component={CourseAssignmentsListPage} />
-    <Route exact path='/courses/:courseId/assignments/create' component={AssignmentCreatePage} />
+    <Route exact path='/courses/:courseId/createAssignment' component={AssignmentCreatePage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId' component={AssignmentDetailPage} />
     <Route exact path='/courses/:courseId/assignments/:assignmentId/update' component={AssignmentUpdatePage} />
-    <Route exact path='/ncagtest' component={NonContainerAutoGraderForm} />
+    <Route exact path='/courses/:courseId/assignments/:assignmentId/createCAG' component={ContainerAutoGraderForm} />
+    <Route exact path='/courses/:courseId/assignments/:assignmentId/createNCAG' component={NonContainerAutoGraderForm} />
+    <Route exact path='/courses/:courseId/assignments/:assignmentId/submissions/:submissionId' component={SubmissionDetailPage} />
+    <Route exact path='/courses/:courseId/assignments/:assignmentId/submissions/:submissionId/feedback' component={SubmissionFeedbackPage} />
     <Route exact path='/courses/:courseId/gradebook' component={GradebookStudentPage} />
     <Route exact path='/courses/:courseId/gradebook/instructor' component={GradebookInstructorPage} />
     <Route component={NotFoundPage} />

@@ -1,4 +1,4 @@
-version: '3.8'
+name: devu
 services:
   db:
     # Runs the PostgreSQL database
@@ -35,6 +35,9 @@ services:
         condition: service_completed_successfully
     ports:
       - '3001:3001'
+    profiles:
+      - '' # so it starts with normal docker compose
+      - 'dev-client'
   client:
     # Builds the front end and exports static files to ./dist
     build:
@@ -42,6 +45,9 @@ services:
       context: .
     volumes:
       - ./dist:/out
+    profiles:
+      - '' # so it starts with normal docker compose
+      - 'dev-api' # start when developing api
   nginx:
     # Hosts the front end static files from ./dist/local thorough a web server
     build:
@@ -51,6 +57,9 @@ services:
       - ./dist/local:/usr/share/nginx/html
     ports:
       - '9000:80'
+    profiles:
+      - '' # so it starts with normal docker compose
+      - 'dev-api' # start when developing api not when developing client
   minio:
     image: minio/minio
     #    ports:
