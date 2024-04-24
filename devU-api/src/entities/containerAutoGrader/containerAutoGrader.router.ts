@@ -44,6 +44,26 @@ Router.get('/:id', isAuthorized('assignmentViewAll'), asInt(), ContainerAutoGrad
 
 /**
  * @swagger
+ * /container-auto-graders/assignment/{id}:
+ *   get:
+ *     summary: Retrieve an assignment's container auto grader
+ *     tags:
+ *       - ContainerAutoGraders
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ */
+Router.get('/assignment/:id', asInt(), ContainerAutoGraderController.getObjectByAssignment);
+
+/**
+ * @swagger
+ * /container-auto-graders:
  * /course/:courseId/assignment/:assignmentId/container-auto-graders:
  *   post:
  *     summary: Create a new container auto grader

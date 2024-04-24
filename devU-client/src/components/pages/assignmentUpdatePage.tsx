@@ -19,10 +19,13 @@ type UrlParams = {
 }
   
 const AssignmentUpdatePage = () => {
+    const { assignmentId } = useParams() as UrlParams
+    const { courseId } = useParams<{courseId : string}>()
+
 
     const [toggleForm,setToggleForm] = useState(false)
     const [problemFormData,setProblemFormData] = useState({
-        assignmentId: '',
+        assignmentId: assignmentId,
         problemName: '',
         maxScore: '',
     })
@@ -49,7 +52,7 @@ const AssignmentUpdatePage = () => {
         .finally(() => {
             setLoading(false)
             setProblemFormData({
-                assignmentId: '',
+                assignmentId: assignmentId,
                 problemName: '',
                 maxScore: '',
             })
@@ -65,7 +68,7 @@ const AssignmentUpdatePage = () => {
     const [setAlert] = useActionless(SET_ALERT)
 
     const [formData, setFormData] = useState({
-        courseId: 0,
+        courseId: courseId,
         name: '',
         categoryName: null,
         description: null,
@@ -78,12 +81,13 @@ const AssignmentUpdatePage = () => {
     const [dueDate, setDueDate] = useState(new Date())
     const [loading, setLoading] = useState(false)
    
-    const { assignmentId } = useParams() as UrlParams
-
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
 
         setFormData(prevState => ({...prevState,[key] : value}))
+    }
+    const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData(prevState => ({...prevState,disableHandins : e.target.checked}))
     }
     const handleStartDateChange = (date : Date) => {setStartDate(date)}
     const handleEndDateChange = (date : Date) => {setEndDate(date)}
@@ -121,30 +125,41 @@ const AssignmentUpdatePage = () => {
     return (
     <PageWrapper>
         <h1>Assignment Detail Update</h1>
+        <p>Required Field *</p>
         
 
         <Button onClick={toggleProblemForm}>Add Problem</Button>
         {toggleForm && (
             <div>
                 <br></br>
-                <TextField id='assignmentId' label='Assignment Id' onChange={handleProblemChange} value={problemFormData.assignmentId}/>
-                <TextField id='problemName' label='Problem Question' onChange={handleProblemChange} value={problemFormData.problemName}/>
-                <TextField id='maxScore' label='Max Score' onChange={handleProblemChange} value={problemFormData.maxScore}/>
+                <TextField id='problemName' label='Problem Question *' onChange={handleProblemChange} value={problemFormData.problemName}/>
+                <TextField id='maxScore' label='Max Score *' onChange={handleProblemChange} value={problemFormData.maxScore}/>
                 <Button onClick={handleSubmit} loading={loading}>Create Problem</Button>
             </div>
         )}
         
         <br></br><br></br>
-        <TextField id='courseId' label='Course Id' onChange={handleChange}/>
-        <TextField id='name' label='Assignment Name' onChange={handleChange}/>
-        <DatePicker selected={startDate} onChange={handleStartDateChange} />
-        <DatePicker selected={dueDate}  onChange={handleDueDateChange} />
-        <DatePicker selected={endDate}  onChange={handleEndDateChange}/>
-        <TextField id='categoryName' label='Category Name' onChange={handleChange}/>
-        <TextField id='description' label='Description of the Assignment' onChange={handleChange}/>
-        <TextField id='maxFileSize' label='Maximum allowable file Size' onChange={handleChange}/>
-        <TextField id='maxSubmission' label='Maximum Submissions' onChange={handleChange}/>
-        <TextField id='disableHandins' label='Disable Handins' onChange={handleChange}/>
+        <TextField id='name' label='Assignment Name *' onChange={handleChange}/>
+
+        <label htmlFor='start_date'>Start Date *</label>
+        <br/>
+        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange} />
+        <br/>
+        <label htmlFor='due_date'>Due Date *</label>
+        <br/>
+        <DatePicker id='due_date' selected={dueDate}  onChange={handleDueDateChange} />
+        <br/>
+        <label htmlFor='end_date'>End Date *</label>
+        <br/>
+        <DatePicker id='end_date' selected={endDate}  onChange={handleEndDateChange}/>
+        <TextField id='categoryName' label='Category Name *' onChange={handleChange}/>
+        <TextField id='description' label='Description of the Assignment *' onChange={handleChange}/>
+        <TextField id='maxFileSize' label='Maximum allowable file Size *' onChange={handleChange}/>
+        <TextField id='maxSubmission' label='Maximum Submissions *' onChange={handleChange}/>
+
+        <label htmlFor='disableHandins'>Disable Handins</label>
+        <input type='checkbox' id='disableHandins' checked={formData.disableHandins} onChange={handleCheckbox}/>
+        <br/>
 
         <Button onClick={handleAssignmentUpdate} loading={loading}>Submit Updates</Button>
     </PageWrapper>

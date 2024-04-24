@@ -10,12 +10,14 @@ import TextField from 'components/shared/inputs/textField'
 import Button from 'components/shared/inputs/button'
 
 import { SET_ALERT } from 'redux/types/active.types'
+import { useParams } from 'react-router-dom'
 
 const AssignmentCreatePage = () => {
     const [setAlert] = useActionless(SET_ALERT)
+    const {courseId} = useParams<{courseId : string}>()
 
     const [formData, setFormData] = useState({
-        courseId: 0,
+        courseId: courseId,
         name: '',
         categoryName: null,
         description: null,
@@ -33,6 +35,10 @@ const AssignmentCreatePage = () => {
         const key = e.target.id
       
         setFormData(prevState => ({...prevState,[key] : value}))
+    }
+
+    const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData(prevState => ({...prevState,disableHandins : e.target.checked}))
     }
 
     const handleStartDateChange = (date : Date) => {setStartDate(date)}
@@ -70,16 +76,28 @@ const AssignmentCreatePage = () => {
     return(
         <PageWrapper>
             <h1>Assignment Form</h1>
-            <TextField id = 'courseId' label = 'Course Id' onChange={handleChange}/>
-            <TextField id='name' label='Assignment Name' onChange={handleChange}/>
-            <DatePicker selected={startDate} onChange={handleStartDateChange} />
-            <DatePicker selected={dueDate}  onChange={handleDueDateChange} />
-            <DatePicker selected={endDate}  onChange={handleEndDateChange}/>
-            <TextField id='categoryName' label='Category Name' onChange={handleChange}/>
-            <TextField id='description' label='Description of the Assignment' onChange={handleChange}/>
-            <TextField id='maxFileSize' label='Maximum allowable file Size' onChange={handleChange}/>
-            <TextField id='maxSubmission' label='Maximum Submissions' onChange={handleChange}/>
-            <TextField id='disableHandins' label='Disable Handins' onChange={handleChange}/>
+            <p>Required Field *</p>
+            <TextField id='name' label='Assignment Name *' onChange={handleChange}/>
+            
+            <label htmlFor='start_date'>Start Date *</label>
+            <br/>
+            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange} />
+            <br/>
+            <label htmlFor='due_date'>Due Date *</label>
+            <br/>
+            <DatePicker id='due_date' selected={dueDate}  onChange={handleDueDateChange} />
+            <br/>
+            <label htmlFor='end_date'>End Date *</label>
+            <br/>
+            <DatePicker id='end_date' selected={endDate}  onChange={handleEndDateChange}/>
+            <TextField id='categoryName' label='Category Name *' onChange={handleChange}/>
+            <TextField id='description' label='Description of the Assignment *' onChange={handleChange}/>
+            <TextField id='maxFileSize' label='Maximum allowable file Size *' onChange={handleChange}/>
+            <TextField id='maxSubmission' label='Maximum Submissions *' onChange={handleChange}/>
+
+            <label htmlFor='disableHandins'>Disable Handins</label>
+            <input type='checkbox' id='disableHandins' checked={formData.disableHandins} onChange={handleCheckbox}/>
+            <br/>
             
             <Button onClick={handleSubmit} loading={loading}>Create assignment</Button>
 
