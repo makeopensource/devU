@@ -5,7 +5,7 @@ import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from './errorPage'
 import styles from './userCoursesListPage.scss'
 import UserCourseListItem from "../listItems/userCourseListItem";
-
+import {Link} from 'react-router-dom'
 
 import {useAppSelector} from 'redux/hooks'
 import RequestService from 'services/request.service'
@@ -16,7 +16,6 @@ const HomePage = () => {
   const userId = useAppSelector((store) => store.user.id)
   const role = useAppSelector((store) => store.roleMode)
 
-  const defaultFilter = LocalStorageService.get<Filter>(FILTER_LOCAL_STORAGE_KEY) || 'active'
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -67,6 +66,7 @@ const HomePage = () => {
               Add Courses
             </Link>
           )}
+          </div>
         </div>
 
         <div className={styles.coursesContainer}>
