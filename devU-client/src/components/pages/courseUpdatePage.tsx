@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {useHistory, useParams} from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
@@ -23,7 +23,7 @@ type UrlParams = {
 const CourseUpdatePage = ({}) => {
 
     const [setAlert] = useActionless(SET_ALERT)
-
+    const history = useHistory()
     const [formData,setFormData] = useState({
         name: '',
         number: '',
@@ -67,19 +67,20 @@ const CourseUpdatePage = ({}) => {
 
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-            .finally(() => setLoading(false))
+        .finally(() => {
+            setLoading(false)
+            history.goBack()
+        })
     }
 
 
     return (
     <PageWrapper>
         <h1>Course Detail Update</h1>
-        <p>Required Field *</p>
         <TextField id='name' label='Course Name *' onChange={handleChange} className={invalidFields.get('name')}/>
         <TextField id='number' label='Course Number *' onChange={handleChange} className={invalidFields.get('number')}/>
-        <TextField id='semester' label='Semester *' onChange={handleChange}  placeholder='Ex. f2022, w2023, s2024, u2025'
-          className={invalidFields.get('semester')}/>
-
+        <TextField id='semester' label='Semester *' onChange={handleChange} placeholder='Ex. f2022, w2023, s2024, u2025'
+                   className={invalidFields.get('semester')}/>
         <label htmlFor='start_date'>Start Date *</label>
         <br/>
         <DatePicker id='start_date' selected = {startDate} onChange={handleStartDateChange}/>
@@ -88,7 +89,6 @@ const CourseUpdatePage = ({}) => {
         <br/>
         <DatePicker id='end_date' selected = {endDate} onChange={handleEndDateChange}/>
         <br/>
-    
         <Button onClick={handleCourseUpdate} loading={loading}>Update Course</Button>
     </PageWrapper>
     )

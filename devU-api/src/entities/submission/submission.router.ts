@@ -6,6 +6,7 @@ import Multer from 'multer'
 import validator from '../submission/submission.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
 import { isAuthorized } from '../../authorization/authorization.middleware'
+import {asInt} from '../../middleware/validator/generic.validator'
 
 // Controller
 import SubmissionController from '../submission/submission.controller'
@@ -38,6 +39,8 @@ const upload = Multer()
  *
  */
 Router.get('/', isAuthorized('submissionViewAll'), SubmissionController.get)
+
+Router.get('/assignments/:assignmentId', asInt('assignmentId'), SubmissionController.getByAssignment)
 
 /**
  * @swagger

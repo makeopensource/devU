@@ -6,7 +6,7 @@ import UserService from '../../../entities/user/user.service'
 import AuthService from '../../authentication.service'
 
 import Testing from '../../../utils/testing.utils'
-import { refreshCookieOptions } from '../../../utils/cookie.utils'
+import {refreshCookieOptions} from '../../../utils/cookie.utils'
 
 // Testing Globals
 let req: any
@@ -42,8 +42,10 @@ describe('LoginDeveloperController', () => {
       test('Returns refreshToken as cookie', () =>
         expect(res.cookie).toBeCalledWith('refreshToken', refreshToken, refreshCookieOptions))
       test('Status code is 200', () => expect(res.status).toBeCalledWith(200))
-      test('Generic response returned ', () =>
-        expect(res.json).toBeCalledWith({ message: 'Login successful', userId: 1 }))
+      test('Generic response returned ', () => expect(res.json).toBeCalledWith({
+        message: 'Login successful',
+        userId: 1
+      }))
     })
 
     describe('400 - Bad Request', () => {

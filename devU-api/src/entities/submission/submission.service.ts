@@ -1,12 +1,12 @@
-import { getRepository, IsNull } from 'typeorm'
+import {getRepository, IsNull} from 'typeorm'
 
 import SubmissionModel from '../submission/submission.model'
 import FileModel from '../../fileUpload/fileUpload.model'
 import CourseModel from '../course/course.model'
 
-import { Submission, FileUpload } from 'devu-shared-modules'
-import { uploadFile } from '../../fileStorage'
-import { groupBy } from '../../database'
+import {FileUpload, Submission} from 'devu-shared-modules'
+import {uploadFile} from '../../fileStorage'
+import {groupBy} from '../../database'
 
 const submissionConn = () => getRepository(SubmissionModel)
 const fileConn = () => getRepository(FileModel)
@@ -59,9 +59,16 @@ export async function list(query: any, id: number) {
   return await groupBy<SubmissionModel>(submissionConn(), OrderByMappings, query, { index: 'submittedBy', value: id })
 }
 
+
+export async function listByAssignment(assignmentId: number, id: number) {
+  return await submissionConn().find({where: {assignmentId, submittedBy: id, deletedAt: IsNull()}})
+}
+
+
 export default {
   create,
   retrieve,
   _delete,
   list,
+  listByAssignment,
 }
