@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { Course, Assignment, Submission } from 'devu-shared-modules'
+import React, {useEffect, useState} from 'react'
+import {Assignment, Course, Submission} from 'devu-shared-modules'
 
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import SubmissionListItem from 'components/listItems/submissionListItem'
-import Dropdown, { Option } from 'components/shared/inputs/dropdown'
+import Dropdown, {Option} from 'components/shared/inputs/dropdown'
 import ErrorPage from './errorPage'
 
 import RequestService from 'services/request.service'
 import LocalStorageService from 'services/localStorage.service'
 
 import styles from './userSubmissionsListPage.scss'
-import { useAppSelector } from 'redux/hooks'
+import {useAppSelector} from 'redux/hooks'
 
 const ORDER_BY_STORAGE_KEY = 'submissions_order_by'
 const GROUP_BY_STORAGE_KEY = 'submissions_group_by'
@@ -106,28 +106,31 @@ const UserCoursesListPage = () => {
   return (
     <PageWrapper>
       <div className={styles.header}>
+        <div className={styles.smallLine}></div>
+
         <h1>My Submissions</h1>
+        <div className={styles.largeLine}></div>
         <div className={styles.filters}>
           <Dropdown
-            label='Group By'
-            className={styles.dropdown}
-            options={groupByOptions}
-            onChange={handleGroupByChange}
-            defaultOption={defaultGroupByOption}
+              label='Group By'
+              className={styles.dropdown}
+              options={groupByOptions}
+              onChange={handleGroupByChange}
+              defaultOption={defaultGroupByOption}
           />
           <Dropdown
-            label='Order By'
-            className={styles.dropdown}
-            options={orderByOptions}
-            onChange={handleFilterChange}
-            defaultOption={defaultOrderByOption}
+              label='Order By'
+              className={styles.dropdown}
+              options={orderByOptions}
+              onChange={handleFilterChange}
+              defaultOption={defaultOrderByOption}
           />
         </div>
       </div>
       {submissions.map((submission) => (
-        <SubmissionListItem
-          key={submission.id}
-          submission={submission}
+          <SubmissionListItem
+              key={submission.id}
+              submission={submission}
           assignment={assignments[submission.assignmentId]}
           course={courses[submission.courseId]}
         />

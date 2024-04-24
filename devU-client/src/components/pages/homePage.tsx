@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import {useHistory} from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -7,7 +6,6 @@ import ErrorPage from './errorPage'
 import styles from './homePage.scss'
 import UserCourseListItem from "../listItems/userCourseListItem";
 
-import Button from '@mui/material/Button'
 
 import {useAppSelector} from 'redux/hooks'
 import RequestService from 'services/request.service'
@@ -15,7 +13,6 @@ import {Assignment, Course, UserCourse} from 'devu-shared-modules'
 
 
 const HomePage = () => {
-    const history = useHistory()
     const userId = useAppSelector((store) => store.user.id)
 
     const [loading, setLoading] = useState(true)
@@ -59,10 +56,6 @@ const HomePage = () => {
                 <div className={styles.smallLine}></div>
                 <h1>My Courses</h1>
                 <div className={styles.largeLine}></div>
-
-                <Button variant='contained' onClick={() => {
-                    history.push(`/addCoursesForm`)
-                }}>Add Course</Button>
             </div>
 
             <div className={styles.coursesContainer}>
@@ -71,13 +64,6 @@ const HomePage = () => {
 
                 ))}
             </div>
-
-            <div className={styles.header}>
-                <div className={styles.smallLine}></div>
-                <h1>Previous Courses</h1>
-                <div className={styles.largeLine}></div>                
-            </div>
-
         </PageWrapper>
     )
 }
