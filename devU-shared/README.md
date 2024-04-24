@@ -2,7 +2,7 @@
 
 This project exists as a shared resource between the DevU api and client projects
 
-For usage [see](/devu-shared/README.md#devu-shared-modules)
+For usage [see](/devU-shared/README.md#devu-shared-modules)
 
 ## Project Dependencies (install these)
 

@@ -32,13 +32,11 @@ export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
-export async function listByCourse(courseId: number, userLevel?: string) {
+export async function listByCourse(courseId: number, userRole?: string) {
   const userCourses = await UserCourseService.listByCourse(courseId)
   const userPromises = userCourses
-    .filter(uc => !(userLevel) || uc.level === userLevel)
-    .map(uc => (
-      connect().findOne({ id: uc.userId, deletedAt: IsNull()})
-   ))
+    .filter(uc => !userRole || uc.role === userRole)
+    .map(uc => connect().findOne({ id: uc.userId, deletedAt: IsNull() }))
   return await Promise.all(userPromises)
 }
 

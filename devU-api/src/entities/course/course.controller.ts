@@ -5,10 +5,22 @@ import CourseService from './course.service'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 import { serialize } from './course.serializer'
+import UserCourseService from '../userCourse/userCourse.service'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
     const courses = await CourseService.list()
+    const response = courses.map(serialize)
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
+export async function getByUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = parseInt(req.params.userId)
+    const courses = await CourseService.listByUser(userId)
     const response = courses.map(serialize)
 
     res.status(200).json(response)
@@ -43,6 +55,26 @@ export async function post(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function postAddInstructor(req: Request, res: Response, next: NextFunction) {
+  try {
+    const course = await CourseService.create(req.body)
+    const response = serialize(course)
+
+    if (req.currentUser?.userId) {
+      await UserCourseService.create({
+        userId: req.currentUser?.userId,
+        courseId: course.id,
+        dropped: false,
+        role: 'instructor',
+      })
+    }
+
+    res.status(201).json(response)
+  } catch (err) {
+    res.status(400).json(new GenericResponse(err.message))
+  }
+}
+
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
     req.body.id = parseInt(req.params.id)
@@ -69,4 +101,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, detail, post, put, _delete }
+export default { get, getByUser, detail, post, postAddInstructor, put, _delete }

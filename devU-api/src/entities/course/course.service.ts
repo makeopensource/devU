@@ -5,8 +5,6 @@ import CourseModel from './course.model'
 import { Course } from 'devu-shared-modules'
 import { initializeMinio } from '../../fileStorage'
 
-
-
 const connect = () => getRepository(CourseModel)
 
 export async function create(course: Course) {
@@ -33,6 +31,10 @@ export async function retrieve(id: number) {
 export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
+export async function listByUser(userId: number) {
+  // TODO: lookup using UserCourses
+  return await connect().find({ deletedAt: IsNull() })
+}
 
 export default {
   create,
@@ -40,4 +42,5 @@ export default {
   update,
   _delete,
   list,
+  listByUser,
 }

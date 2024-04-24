@@ -22,7 +22,8 @@ export async function _delete(id: number) {
   return await connect().softDelete({ id, deletedAt: IsNull() })
 }
 
-export async function retrieve(id: number) {
+export async function retrieve(id: number, courseId: number) {
+  // TODO: Submission Problem Score doesn't know its courseId (neither does submission score). Best way to ensure the request is authorized based on course permissions?
   return await connect().findOne({ id, deletedAt: IsNull() })
 }
 

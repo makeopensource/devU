@@ -2,7 +2,7 @@ FROM node:16 as module_builder
 
 WORKDIR /tmp
 
-COPY ./devu-shared .
+COPY devU-shared .
 
 RUN npm install && \
     npm run clean-directory && \

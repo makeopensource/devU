@@ -1,6 +1,6 @@
 import './tango.types'
 
-const tangoHost = `http://${(process.env.TANGO_KEY ?? 'localhost:3000')}`
+const tangoHost = `http://${process.env.TANGO_KEY ?? 'localhost:3000'}`
 const tangoKey = process.env.TANGO_KEY ?? 'test'
 
 // for more info https://docs.autolabproject.com/tango-rest/
@@ -25,7 +25,7 @@ export async function uploadFile(courselab: string, file: File, fileName: string
   const url = `${tangoHost}/upload/${tangoKey}/${courselab}/`
   const formData = new FormData()
   formData.append('file', file)
-  const response = await fetch(url, { method: 'POST', body: formData, headers: { 'filename': fileName } })
+  const response = await fetch(url, { method: 'POST', body: formData, headers: { filename: fileName } })
   return response.ok ? await response.json() : null
 }
 
@@ -49,13 +49,14 @@ export async function addJob(courselab: string, job: AddJobRequest): Promise<Add
  * @param courselab - The combination of the course name and the lab name.
  * @param outputFile - The name of the output file.
  */
-export async function pollJob(courselab: string, outputFile: string): Promise<PollSuccessResponse | PollFailureResponse> {
+export async function pollJob(
+  courselab: string,
+  outputFile: string
+): Promise<PollSuccessResponse | PollFailureResponse> {
   const url = `${tangoHost}/poll/${tangoKey}/${courselab}/${outputFile}/`
   const response = await fetch(url, { method: 'GET' })
   const data = await response.json()
-  return response.ok ?
-    data as PollSuccessResponse
-    : data as PollFailureResponse
+  return response.ok ? (data as PollSuccessResponse) : (data as PollFailureResponse)
 }
 
 /**
@@ -83,7 +84,11 @@ export async function getPoolInfo(image: string): Promise<Object | null> {
  * @param num - The number of instances to pre-allocate.
  * @param request - The request object.
  */
-export async function preallocateInstances(image: string, num: number, request: PreallocRequest): Promise<PreallocResponse | null> {
+export async function preallocateInstances(
+  image: string,
+  num: number,
+  request: PreallocRequest
+): Promise<PreallocResponse | null> {
   const url = `${tangoHost}/prealloc/${tangoKey}/${image}/${num}/`
   const response = await fetch(url, {
     method: 'POST',
