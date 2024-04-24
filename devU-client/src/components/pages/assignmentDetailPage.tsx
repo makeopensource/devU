@@ -128,9 +128,9 @@ const AssignmentDetailPage = () => {
 
             <Link to = {`/courses/${courseId}/assignments/${assignmentId}/update`} className = {styles.button}>Update Assignment</Link>
             <br/><br/><br/>
-            <Link to = {`/ncagtest`} className = {styles.button}>Add Non-Container Auto-Graders</Link>
+            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/createNCAG`} className = {styles.button}>Add Non-Container Auto-Graders</Link>
             <br/><br/><br/>
-            <Link to = {`/cagtest`} className = {styles.button}>Add Container Auto-Grader</Link>
+            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/createCAG`} className = {styles.button}>Add Container Auto-Grader</Link>
 
             {/**Assignment Problems & Submission */}
             {assignmentProblems.map(assignmentProblem => (
@@ -165,6 +165,7 @@ type SubmissionProps = {
     assignmentProblems: AssignmentProblem[],
 }
 const SubmissionComponent = ({index, submission, submissionScore, submissionProblemScores, assignmentProblems}: SubmissionProps) => {
+    const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
     return (
         <div>
             <h2>Submission {index}:</h2>
@@ -181,8 +182,8 @@ const SubmissionComponent = ({index, submission, submissionScore, submissionProb
                 </tr>
             </table> 
             <br/>
-            <Link to = {`/submissions/${submission.id}`} className = {styles.button}>Submission Details</Link>
-            <Link to = {`/submissions/${submission.id}/feedback`} className = {styles.button}>Submission Feedback</Link>
+            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/submissions/${submission.id}`} className = {styles.button}>Submission Details</Link>
+            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/submissions/${submission.id}/feedback`} className = {styles.button}>Submission Feedback</Link>
             <br/><br/><br/>
         </div>
     )
