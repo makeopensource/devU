@@ -14,6 +14,9 @@ import {Assignment, Course, UserCourse} from 'devu-shared-modules'
 
 const HomePage = () => {
   const userId = useAppSelector((store) => store.user.id)
+  const role = useAppSelector((store) => store.roleMode)
+
+  const defaultFilter = LocalStorageService.get<Filter>(FILTER_LOCAL_STORAGE_KEY) || 'active'
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -58,6 +61,12 @@ const HomePage = () => {
           <div className={styles.largeLine}></div>
 
 
+        <div>
+          {role.isInstructor() && (
+            <Link className={styles.addCourseBtn} to={`/users/${userId}/addCoursesForm`}>
+              Add Courses
+            </Link>
+          )}
         </div>
 
         <div className={styles.coursesContainer}>
