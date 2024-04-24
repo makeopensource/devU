@@ -16,7 +16,7 @@ const NonContainerAutoGraderForm = () => {
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const [formData,setFormData] = useState({
-        assignmentId: '',
+        assignmentId: assignmentId,
         question: '',
         correctString: '',
         score: '',
@@ -69,7 +69,7 @@ const NonContainerAutoGraderForm = () => {
 
 
         setFormData({
-            assignmentId: '',
+            assignmentId: assignmentId,
             question: '',
             correctString: '',
             score: '',
@@ -82,8 +82,7 @@ const NonContainerAutoGraderForm = () => {
             <h1>Non Container Auto Grader Form</h1>
             <div className = {styles.leftColumn}>
                 <h1>Add a Non-Container Auto Grader</h1>
-                <TextField id='assignmentId' label='Assignment ID' onChange={handleChange} value={formData.assignmentId}
-                           className={invalidFields.get('assignmentId')}></TextField>
+                <p>Required Fields *</p>
                 <TextField id='question' label='Question' onChange={handleChange} value={formData.question}
                            className={invalidFields.get('question')}></TextField>
                 <TextField id='correctString' label='Answer' onChange={handleChange} value={formData.correctString}
