@@ -25,6 +25,7 @@ import { Course, UserCourse } from 'devu-shared-modules'
 const HomePage = () => {
     const history = useHistory()
     const userId = useAppSelector((store) => store.user.id)
+    const role = useAppSelector((store) => store.roleMode)
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -59,9 +60,10 @@ const HomePage = () => {
                 <h1>Courses</h1>
                 <div className={styles.largeLine}></div>
 
-                <Button variant='contained' onClick={() => {
+                {role.isInstructor() && <Button variant="contained" onClick={() => {
                     history.push(`/users/${userId}/addCoursesForm`)
                 }}>Add Course</Button>
+                }
             </div>
 
             <div className={styles.coursesContainer}>

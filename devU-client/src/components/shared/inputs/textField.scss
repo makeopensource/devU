@@ -9,3 +9,11 @@
 .input {
   padding: 5px;
 }
+
+.errorField {
+  color: red;
+
+  .input {
+    border-color: red;
+  }
+}

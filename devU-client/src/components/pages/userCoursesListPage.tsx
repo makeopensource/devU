@@ -14,6 +14,7 @@ import RequestService from 'services/request.service'
 import LocalStorageService from 'services/localStorage.service'
 
 import styles from './userCoursesListPage.scss'
+
 //import Button from 'components/shared/inputs/button'
 
 const FILTER_LOCAL_STORAGE_KEY = 'courses_filter'
@@ -29,6 +30,7 @@ const filterOptions: Option<Filter>[] = [
 
 const UserCoursesListPage = () => {
   const userId = useAppSelector((store) => store.user.id)
+  const role = useAppSelector((store) => store.roleMode)
 
   const defaultFilter = LocalStorageService.get<Filter>(FILTER_LOCAL_STORAGE_KEY) || 'active'
 
@@ -81,16 +83,17 @@ const UserCoursesListPage = () => {
 
   const defaultOption = filterOptions.find((o) => o.value === filter)
 
-
   return (
     <PageWrapper>
       <div className={styles.header}>
         <h1>My Courses</h1>
 
         <div>
-          <Link className={styles.addCourseBtn} to={`/users/${userId}/addCoursesForm`}>
-            Add Courses
-          </Link>
+          {role.isInstructor() && (
+            <Link className={styles.addCourseBtn} to={`/users/${userId}/addCoursesForm`}>
+              Add Courses
+            </Link>
+          )}
         </div>
 
         <div className={styles.filters}>
