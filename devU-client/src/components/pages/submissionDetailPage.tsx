@@ -17,7 +17,6 @@ const SubmissionDetailPage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [setAlert] = useActionless(SET_ALERT)
-    const {courseId, assignmentId} = useParams<{ courseId: string, assignmentId: string }>()
     
     const { submissionId, assignmentId, courseId } = useParams<{submissionId: string, assignmentId: string, courseId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
