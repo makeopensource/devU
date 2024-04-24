@@ -1,39 +1,30 @@
 import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-
 import {Course, UserCourse} from 'devu-shared-modules'
-
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import Dropdown, {Option} from 'components/shared/inputs/dropdown'
 import ErrorPage from './errorPage'
-
 import RequestService from 'services/request.service'
-import LocalStorageService from 'services/localStorage.service'
-
 import styles from './coursesListPage.scss'
 import CourseListItem from "../listItems/courseListItem";
 //import Button from 'components/shared/inputs/button'
 
-const FILTER_LOCAL_STORAGE_KEY = 'courses_filter'
-
-type Filter = 'all' | 'active' | 'inactive' | 'dropped'
+type Filter = true | false
 
 const filterOptions: Option<Filter>[] = [
-    {label: 'All', value: 'all'},
-    {label: 'Active', value: 'active'},
-    {label: 'Inactive', value: 'inactive'},
-    {label: 'Dropped', value: 'dropped'},
+    {label: 'Expand All', value: true},
+    {label: 'Collapse All', value: false},
 ]
 
 const UserCoursesListPage = () => {
 
-    const defaultFilter = LocalStorageService.get<Filter>(FILTER_LOCAL_STORAGE_KEY) || 'active'
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [userCourses, setUserCourses] = useState(new Array<UserCourse>())
-    const [filter, setFilter] = useState<Filter>(defaultFilter)
+    const [filter, setFilter] = useState<Filter>(false )
+
 
     //Temporary place to store state for all courses
     const [allCourses, setAllCourses] = useState(new Array<Course>())
@@ -66,9 +57,6 @@ const UserCoursesListPage = () => {
 
     const handleFilterChange = (updatedFilter: Filter) => {
         setFilter(updatedFilter)
-        fetchData()
-
-        LocalStorageService.set(FILTER_LOCAL_STORAGE_KEY, updatedFilter)
     }
 
     if (loading) return <LoadingOverlay delay={250}/>
@@ -90,7 +78,7 @@ const UserCoursesListPage = () => {
 
                 <div className={styles.filters}>
                     <Dropdown
-                        label='Filter Courses'
+                        label='Courses Display Options'
                         className={styles.dropdown}
                         options={filterOptions}
                         onChange={handleFilterChange}
@@ -99,7 +87,7 @@ const UserCoursesListPage = () => {
                 </div>
             </div>
             {allCourses.map(course => (
-                <CourseListItem course={course} key={course.id}/>
+                <CourseListItem course={course} key={course.id} isOpen={filter}/>
             ))}
         </PageWrapper>
     )

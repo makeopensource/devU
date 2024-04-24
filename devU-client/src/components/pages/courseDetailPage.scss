@@ -4,6 +4,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px; /* adjust this value to set the space between the cards */
+
 }
 
 .header {
@@ -28,4 +29,10 @@
 
 .buttons {
 	margin : 0 10px;
+}
+
+.color{
+    background-color: $list-item-background;
+    color: $text-color;
+    max-width : 345px;
 }

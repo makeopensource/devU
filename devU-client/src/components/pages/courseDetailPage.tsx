@@ -27,7 +27,6 @@ const CourseDetailPage = () => {
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     const [setAlert] = useActionless(SET_ALERT)
-    
     const fetchCourseInfo = async () => {
         RequestService.get<Course>(`/api/courses/${courseId}`)
         .then((course) => {
@@ -91,11 +90,12 @@ const CourseDetailPage = () => {
                         </Stack>
                     </div>
                     
-                    <div className = {styles.categoriesContainer}>
+                    <div>
                     {Object.keys(categoryMap).map((category, index) => (
-                        <Card sx={{maxWidth : 345}} key={index}>
+                        <div className={styles.color}>
+                        <Card key={index}>
                             <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
+                                <Typography gutterBottom variant="h5" component="div" className={styles.color}>
                                     {category}
                                 </Typography>
                             </CardContent>
@@ -109,6 +109,7 @@ const CourseDetailPage = () => {
                             ))}
                             </List>
                         </Card>
+                        </div>
                     ))}
                     </div>
                 </div>

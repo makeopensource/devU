@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import {Course} from 'devu-shared-modules'
 
@@ -16,24 +16,28 @@ const colorHash = (input: string) => {
 }
 type Props = {
     course: Course
+    isOpen: boolean
 }
 
-const CourseListItem = ({course}: Props) => {
-    const [isOpen, setIsOpen] = useState(false)
+const CourseListItem = ({course, isOpen}: Props) => {
+    const [isOpened, setIsOpen] = useState(isOpen)
 
     const toggleOpen = () => {
-
-        setIsOpen(!isOpen)
+        setIsOpen(!isOpened)
     }
+
+    useEffect(() => {
+        setIsOpen(isOpen);
+    }, [isOpen]);
 
     return (
         <div className={styles.courseContainer} onClick={toggleOpen}>
             <div className={styles.name}>
                 <div className={styles.tag} style={{backgroundColor: colorHash(course.number)}}></div>
-                <span className={styles.triangle} style={{transform: isOpen ? "rotate(90deg)" : ""}}></span>
+                <span className={styles.triangle} style={{transform: isOpened ? "rotate(90deg)" : ""}}></span>
                 &nbsp;{course.name}
             </div>
-            {isOpen &&
+            {isOpened &&
                 <Link to={`/courses/${course.id}/preview`} className={styles.container}>
                     {infoSection("Course Number", course.number)}
                     {infoSection("Semester", prettyPrintSemester(course.semester))}
