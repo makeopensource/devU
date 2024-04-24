@@ -31,9 +31,9 @@ export async function grade(submissionId: number) {
     const assignmentProblems = await assignmentProblemService.list(assignmentId)
 
     
-    var score = 0
-    var feedback = ''
-    var allScores = [] //This is the return value, the serializer parses it into a GraderInfo object for the controller to return
+    let score = 0
+    let feedback = ''
+    let allScores = [] //This is the return value, the serializer parses it into a GraderInfo object for the controller to return
 
     //Run Non-Container Autograders
     for (const question in form) { 
@@ -118,7 +118,7 @@ export async function grade(submissionId: number) {
             userId: submission.userId,
             score: score,
         }
-        assignmentScoreService.create(assignmentScore)
+        await assignmentScoreService.create(assignmentScore)
     }
 
     return response

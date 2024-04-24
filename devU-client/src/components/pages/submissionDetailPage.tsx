@@ -13,14 +13,13 @@ import { SET_ALERT } from 'redux/types/active.types'
 
 
 
-const SubmissionDetailPage = (props : any) => { 
-    const { state } = props.location
+const SubmissionDetailPage = () => { 
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [setAlert] = useActionless(SET_ALERT)
     
-    const { submissionId } = useParams<{submissionId: string}>()
+    const { submissionId, assignmentId, courseId } = useParams<{submissionId: string, assignmentId: string, courseId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [submission, setSubmission] = useState<Submission>()
@@ -29,7 +28,7 @@ const SubmissionDetailPage = (props : any) => {
 
     const [showManualGrade, setToggleManualGrade] = useState(false)
     const [formData, setFormData] = useState({
-        submissionId: state.id,
+        submissionId: submissionId,
         score: 0,
         feedback: '',
         releasedAt: "2024-10-05T14:48:00.00Z"
@@ -37,7 +36,7 @@ const SubmissionDetailPage = (props : any) => {
 
     const fetchData = async () => {
         try {
-            const submissionScore = await RequestService.get<SubmissionScore>( `/api/submission-scores/${submissionId}` )
+            const submissionScore = (await RequestService.get<SubmissionScore[]>( `/api/submission-scores?submission=${submissionId}` )).pop() ?? null
             setSubmissionScore(submissionScore)
 
             const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>( `/api/submission-problem-scores/${submissionId}` )
@@ -121,7 +120,7 @@ const SubmissionDetailPage = (props : any) => {
                     <td>{submissionScore?.score ?? "N/A"}</td>
                 </tr>
             </table> 
-            <Link to = {`/submissions/${submission?.id}/feedback`}>View Feedback</Link> 
+            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/submissions/${submissionId}/feedback`}>View Feedback</Link> 
             <br/>
             
             <h2>Submission Content:</h2>

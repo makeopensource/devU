@@ -43,6 +43,25 @@ Router.get('/:id', asInt(), ContainerAutoGraderController.detail);
 
 /**
  * @swagger
+ * /container-auto-graders/assignment/{id}:
+ *   get:
+ *     summary: Retrieve an assignment's container auto grader
+ *     tags:
+ *       - ContainerAutoGraders
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ */
+Router.get('/assignment/:id', asInt(), ContainerAutoGraderController.getObjectByAssignment);
+
+/**
+ * @swagger
  * /container-auto-graders:
  *   post:
  *     summary: Create a new container auto grader
@@ -77,7 +96,7 @@ Router.post('/', upload.fields([{name: 'graderFile'},{name: 'makefileFile'}]), v
  *           type: integer
  *     requestBody:
  *       content:
- *         application/x-www-form-urlencoded:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/ContainerAutoGrader'
  */

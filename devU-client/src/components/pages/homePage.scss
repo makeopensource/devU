@@ -1,6 +1,6 @@
 @import 'variables';
 
-.categoriesContainer {
+.coursesContainer {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px; /* adjust this value to set the space between the cards */
@@ -22,8 +22,4 @@
     border-top: 3px solid white; /* adjust this value to set the color and thickness of the line */
     margin-left: 10px; /* adjust this value to set the space between the line and the text */
     margin-right: 10px; /* add this line to create some space between the line and the button */
-}
-
-.buttons {
-	margin : 0 10px;
 }

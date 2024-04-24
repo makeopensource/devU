@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -11,7 +11,7 @@ const SubmissionFeedbackPage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
-    const { submissionId } = useParams<{submissionId: string}>()
+    const { submissionId, assignmentId, courseId } = useParams<{submissionId: string, assignmentId: string, courseId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
@@ -19,7 +19,7 @@ const SubmissionFeedbackPage = () => {
 
     const fetchData = async () => {
         try {
-            const submissionScore = await RequestService.get<SubmissionScore>( `/api/submission-scores/${submissionId}` )
+            const submissionScore = (await RequestService.get<SubmissionScore[]>( `/api/submission-scores?submission=${submissionId}` )).pop() ?? null
             setSubmissionScore(submissionScore)
 
             const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>( `/api/submission-problem-scores/${submissionId}` )
@@ -48,8 +48,6 @@ const SubmissionFeedbackPage = () => {
 
     return(
         <PageWrapper>
-            {console.log(assignment)}
-            {console.log(assignmentProblems)}
             <h1>Feedback for {assignment?.name}</h1>
             {submissionScore?.feedback ? (
                 <div>
@@ -63,6 +61,7 @@ const SubmissionFeedbackPage = () => {
                     <pre>{sps.feedback}</pre>
                 </div>
             ))}
+            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/submissions/${submissionId}`}>View Submission Details</Link> 
         </PageWrapper>
     )
 }

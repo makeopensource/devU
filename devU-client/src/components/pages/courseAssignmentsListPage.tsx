@@ -41,7 +41,7 @@ const CourseAssignmentsListPage = () => {
                 <h1>Course Assignments List Page</h1>
 
                 <div>
-                    <Link className={styles.button} to={`/courses/${courseId}/assignments/create`}>Add Assignments</Link>
+                    <Link className={styles.button} to={`/courses/${courseId}/createAssignment`}>Add Assignments</Link>
                 </div>
             </div>
             
