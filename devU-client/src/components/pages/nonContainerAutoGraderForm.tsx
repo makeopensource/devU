@@ -11,12 +11,15 @@ import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textFi
 import {ExpressValidationError} from "../../../devu-shared-modules";
 
 
+import { useParams } from 'react-router-dom'
+
 const NonContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
+    const { assignmentId } = useParams<{ assignmentId: string }>()
 
     const [formData,setFormData] = useState({
-        assignmentId: '',
+        assignmentId: assignmentId,
         question: '',
         correctString: '',
         score: '',
@@ -69,7 +72,7 @@ const NonContainerAutoGraderForm = () => {
 
 
         setFormData({
-            assignmentId: '',
+            assignmentId: assignmentId,
             question: '',
             correctString: '',
             score: '',
@@ -82,14 +85,13 @@ const NonContainerAutoGraderForm = () => {
             <h1>Non Container Auto Grader Form</h1>
             <div className = {styles.leftColumn}>
                 <h1>Add a Non-Container Auto Grader</h1>
-                <TextField id='assignmentId' label='Assignment ID' onChange={handleChange} value={formData.assignmentId}
-                           className={invalidFields.get('assignmentId')}></TextField>
-                <TextField id='question' label='Question' onChange={handleChange} value={formData.question}
-                           className={invalidFields.get('question')}></TextField>
-                <TextField id='correctString' label='Answer' onChange={handleChange} value={formData.correctString}
-                           className={invalidFields.get('correctString')}></TextField>
-                <TextField id='score' label='Score' onChange={handleChange} value={formData.score}
-                           className={invalidFields.get('score')}></TextField>
+                <p>Required Fields *</p>
+                <TextField id= 'question' label='Question *' onChange={handleChange} value={formData.question}
+                  className={invalidFields.get('question')}></TextField>
+                <TextField id= 'correctString' label='Answer *' onChange={handleChange} value={formData.correctString}
+                  className={invalidFields.get('correctString')}></TextField>
+                <TextField id= 'score' label='Score *' onChange={handleChange} value={formData.score}
+                  className={invalidFields.get('score')}></TextField>
                 <label htmlFor='regex'>Regex</label>
                 <input  id= 'regex' type='checkbox' checked={formData.isRegex} onChange={toggleRegex}></input>
                 <br></br><br></br>

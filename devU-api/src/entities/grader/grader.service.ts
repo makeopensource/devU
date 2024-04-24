@@ -23,7 +23,7 @@ export async function grade(submissionId: number) {
     const filepaths = content.filepaths //Using the field name that was written on the whiteboard for now
 
     const nonContainerAutograders = await nonContainerAutograderService.listByAssignmentId(assignmentId)
-    const containerAutograders = await containerAutograderService.listByAssignmentId(assignmentId)
+    const containerAutograders = await containerAutograderService.getGraderObjectByAssignmentId(assignmentId) //No longer called in proper implementation but fixed to prevent compilation error
     const assignmentProblems = await assignmentProblemService.list(assignmentId)
 
     

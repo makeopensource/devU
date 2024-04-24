@@ -9,14 +9,16 @@ import RequestService from 'services/request.service'
 import {ExpressValidationError} from "../../../devu-shared-modules";
 import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
 import textStyles from "../shared/inputs/textField.scss";
+import { useParams } from 'react-router-dom'
 
 const ContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
+    const { assignmentId } = useParams<{ assignmentId: string }>()
 
     const [graderFile, setGraderFile] = useState<File | null>()
     const [makefile, setMakefile] = useState<File | null>()
     const [formData,setFormData] = useState({
-        assignmentId: '',
+        assignmentId: assignmentId,
         autogradingImage: '',
         timeout: '',
     })
@@ -60,7 +62,7 @@ const ContainerAutoGraderForm = () => {
 
 
         setFormData({
-            assignmentId: '',
+            assignmentId: assignmentId,
             autogradingImage: '',
             timeout: '',
         })
@@ -70,17 +72,17 @@ const ContainerAutoGraderForm = () => {
         <PageWrapper>
             <h1>Container Auto Grader Form</h1>
             <div className = {styles.leftColumn}>
-                <h1>Add a Container Auto Grader</h1>
-                <TextField id='assignmentId' label='Assignment ID' onChange={handleChange} value={formData.assignmentId}
-                           className={invalidFields.get('assignmentId')}></TextField>
-                <TextField id='autogradingImage' label='Autograding Image*' onChange={handleChange}
-                           value={formData.autogradingImage}
-                           className={invalidFields.get('autogradingImage')}></TextField>
-                <TextField id='timeout' label='Timeout*' onChange={handleChange} value={formData.timeout}
-                           className={invalidFields.get('timeout')}></TextField>
-                <label htmlFor="graderFile">Graderfile*</label>
+                <h1>Container Auto Grader</h1>
+                <p>Required Field *</p>
+                <TextField id= 'autogradingImage' label='Autograding Image *' onChange={handleChange} 
+                  value={formData.autogradingImage}
+                  className={invalidFields.get('autogradingImage')}></TextField>
+                <TextField id= 'timeout' label='Timeout *' onChange={handleChange}
+                  value={formData.timeout}
+                  className={invalidFields.get('timeout')}></TextField>
+                <label htmlFor="graderFile">Graderfile *</label>
                 <input type="file" id='graderFile'  onChange={handleGraderfileChange} /> <br/>
-                <label htmlFor="makefileFile">Makefile</label>
+                <label htmlFor="makefileFile">Makefile *</label>
                 <input type="file" id='makefileFile' onChange={handleMakefileChange} /> <br/>
                 <br></br><br></br>
                 <Button onClick= { handleSubmit } >Add Problem</Button>
