@@ -91,8 +91,8 @@ const AssignmentCreatePage = () => {
                        className={invalidFields.get('description')}/>
             <TextField id='maxFileSize' label='Maximum allowable file Size' onChange={handleChange}
                        className={invalidFields.get('maxFileSize')}/>
-            <TextField id='maxSubmission' label='Maximum Submissions' onChange={handleChange}
-                       className={invalidFields.get('maxSubmission')}/>
+            <TextField id='maxSubmissions' label='Maximum Submissions' onChange={handleChange}
+                       className={invalidFields.get('maxSubmissions')}/>
             <TextField id='disableHandins' label='Disable Handins' onChange={handleChange}
                        className={invalidFields.get('disableHandins')}/>
             
