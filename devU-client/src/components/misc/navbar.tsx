@@ -50,24 +50,47 @@ const AssignmentBreadcrumb = ({ match }: any) => {
     return (<>{assignmentName}</>)
 }
 
+const DynamicBreadcrumb = ({ match }: any) => {
+    const pathSegment = match.url.substr(match.url.lastIndexOf('/') + 1);
+    const breadcrumbName = pathSegment.charAt(0).toUpperCase() + pathSegment.slice(1);
+
+    return <>{breadcrumbName}</>;
+}
+
 const routes = [
     { path: '/', breadcrumb: 'Home' },
+
     { path: '/users/:userId', breadcrumb: UserBreadcrumb},
+
     { path: '/courses/:courseId', breadcrumb: CourseBreadcrumb},
-    { path: '/courses/:courseId/gradebook', breadcrumb: 'Gradebook'},
+    { path: '/courses/:courseId/:path', breadcrumb: DynamicBreadcrumb},
+    
     { path: '/courses/:courseId/assignments/:assignmentId', breadcrumb: AssignmentBreadcrumb},
+    { path: '/courses/:courseId/assignments/:assignmentId/:path', breadcrumb: DynamicBreadcrumb},
+
+    { path: '/courses/:courseId/assignments/:assignmentId/submissions/:submissionId', breadcrumb: 'Submission'},
+    { path: '/courses/:courseId/assignments/:assignmentId/submissions/:submissionId/feedback', breadcrumb: 'Feedback'},
 ]
 
 const Navbar = ({breadcrumbs}: any) => {
 
+    const excludedPaths = [
+        'assignments',
+        'submissions',
+    ]
+
     return (
         <div>
-            {breadcrumbs.map(({breadcrumb, match}: any, index: number) => (
-                <span>
-                    <Link to={match.url} className={styles.link}> {breadcrumb} </Link>
-                    {index < (breadcrumbs.length - 1) ? ' > ' : ''}
-                </span>
-            ))}
+            {breadcrumbs.map(({breadcrumb, match}: any, index: number) => {
+                if (excludedPaths.includes(match.params.path)) return <></>
+
+                return (
+                    <span>
+                        <Link to={match.url} className={styles.link}> {breadcrumb} </Link>
+                        {index < (breadcrumbs.length - 1) ? ' > ' : ''}
+                    </span>
+                )
+            })}
         </div>
     )
         
