@@ -1,19 +1,18 @@
-import React,{useState,useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from './errorPage'
 import RequestService from 'services/request.service'
-import { SubmissionScore, SubmissionProblemScore, Submission, Assignment, AssignmentProblem } from 'devu-shared-modules'
-import { Link, useParams } from 'react-router-dom'
+import {Assignment, AssignmentProblem, Submission, SubmissionProblemScore, SubmissionScore} from 'devu-shared-modules'
+import {Link, useParams} from 'react-router-dom'
 import Button from '../shared/inputs/button'
 import TextField from '../shared/inputs/textField'
-import { useActionless } from 'redux/hooks'
-import { SET_ALERT } from 'redux/types/active.types'
+import {useActionless} from 'redux/hooks'
+import {SET_ALERT} from 'redux/types/active.types'
 
 
-
-const SubmissionDetailPage = () => { 
+const SubmissionDetailPage = () => {
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -119,8 +118,9 @@ const SubmissionDetailPage = () => {
                     ))}
                     <td>{submissionScore?.score ?? "N/A"}</td>
                 </tr>
-            </table> 
-            <Link to = {`/courses/${courseId}/assignments/${assignmentId}/submissions/${submissionId}/feedback`}>View Feedback</Link> 
+            </table>
+            <Link to={`/courses/${courseId}/assignments/${assignmentId}/submissions/${submissionId}/feedback`}>View
+                Feedback</Link>
             <br/>
             
             <h2>Submission Content:</h2>

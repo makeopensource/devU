@@ -6,18 +6,15 @@ let fakeFileUpload: FileUpload
 describe('fileUpload.serializer', () => {
   beforeEach(() => {
     let fieldName: string = 'submissions'
-    // const originalNames: string[] = ["test1.txt", "test2.txt", "test3.txt"]
-    // const fileNames: string[] = ["modified1.txt", "modified2.txt", "modified3.txt"]
-    // const etags: string[] = ["etag1", "etag2", "etag3"]
-    const originalName: string = 'test1.txt'
-    const filename: string = 'modified1.txt'
-    const etag: string = 'etag1'
+    const originalNames: string = ['test1.txt', 'test2.txt', 'test3.txt'].join(',')
+    const fileNames: string = ['modified1.txt', 'modified2.txt', 'modified3.txt'].join(',')
+    const etags: string = ['etag1', 'etag2', 'etag3'].join(',')
 
     fakeFileUpload = {
       fieldName: fieldName,
-      originalName: originalName,
-      filename: filename,
-      etags: etag,
+      originalName: originalNames,
+      filename: fileNames,
+      etags: etags,
     }
   })
   describe('Serializing fileUpload', () => {

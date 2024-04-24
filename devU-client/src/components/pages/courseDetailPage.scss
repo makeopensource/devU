@@ -4,6 +4,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px; /* adjust this value to set the space between the cards */
+
 }
 
 .header {
@@ -12,12 +13,14 @@
 }
 
 .smallLine {
+    background-color: $text-color;
     width: 50px; /* adjust this value to set the length of the small line */
     border-top: 3px solid white; /* adjust this value to set the color and thickness of the line */
     margin-right: 10px; /* adjust this value to set the space between the line and the text */
 }
 
 .largeLine {
+    color: $text-color;
     flex-grow: 1;
     border-top: 3px solid white; /* adjust this value to set the color and thickness of the line */
     margin-left: 10px; /* adjust this value to set the space between the line and the text */
@@ -26,4 +29,10 @@
 
 .buttons {
 	margin : 0 10px;
+}
+
+.color{
+    background-color: $list-item-background;
+    color: $text-color;
+    max-width : 345px;
 }

@@ -13,12 +13,12 @@ import {SET_ALERT} from 'redux/types/active.types'
 
 import styles from '../shared/inputs/textField.scss'
 import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
-import {useParams} from 'react-router-dom'
+import {useHistory, useParams} from 'react-router-dom'
 
 const AssignmentCreatePage = () => {
     const [setAlert] = useActionless(SET_ALERT)
     const {courseId} = useParams<{ courseId: string }>()
-
+    const history = useHistory()
 
     const [formData, setFormData] = useState({
         courseId: courseId,
@@ -79,7 +79,10 @@ const AssignmentCreatePage = () => {
                 setInvalidFields(newFields)
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-            .finally(() => setLoading(false))
+        .finally(() => {
+            setLoading(false)
+            history.goBack()
+        })
 
     }
 
@@ -87,32 +90,30 @@ const AssignmentCreatePage = () => {
         <PageWrapper>
             <h1>Assignment Form</h1>
             <p>Required Field *</p>
-            <TextField id='name' label='Assignment Name *' onChange={handleChange}/>
-            
+            <TextField id='name' label='Assignment Name*' onChange={handleChange}/>
             <label htmlFor='start_date'>Start Date *</label>
             <br/>
-            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange} />
+            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}/>
             <br/>
             <label htmlFor='due_date'>Due Date *</label>
             <br/>
-            <DatePicker id='due_date' selected={dueDate}  onChange={handleDueDateChange} />
+            <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}/>
             <br/>
             <label htmlFor='end_date'>End Date *</label>
             <br/>
-            <DatePicker id='end_date' selected={endDate}  onChange={handleEndDateChange}/>
+            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}/>
             <TextField id='categoryName' label='Category Name *' onChange={handleChange}
-              className={invalidFields.get('categoryName')}/>
+                       className={invalidFields.get('categoryName')}/>
             <TextField id='description' label='Description of the Assignment *' onChange={handleChange}
-              className={invalidFields.get('description')}/>
-            <TextField id='maxFileSize' label='Maximum allowable file Size *' onChange={handleChange}
-              className={invalidFields.get('maxFileSize')}/>
+                       className={invalidFields.get('description')}/>
+            <TextField id='maxFileSize' label="Maximum allowable file Size *" onChange={handleChange}
+                       className={invalidFields.get('maxFileSize')}/>
             <TextField id='maxSubmission' label='Maximum Submissions' onChange={handleChange}
-              className={invalidFields.get('maxSubmissions')}/>
-
+                       className={invalidFields.get('maxSubmission')}/>
             <label htmlFor='disableHandins'>Disable Handins</label>
             <input type='checkbox' id='disableHandins' checked={formData.disableHandins} onChange={handleCheckbox}/>
             <br/>
-            
+
             <Button onClick={handleSubmit} loading={loading}>Create assignment</Button>
 
         </PageWrapper>

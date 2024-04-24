@@ -78,6 +78,8 @@ Router.get(
   UserCourseController.detailByUser
 )
 
+Router.get('/user/courses/:courseId', asInt('courseId'), UserCourseController.checkEnroll)
+
 /**
  * @swagger
  * /course/:courseId/user-courses:

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 
 import SubmissionService from '../submission/submission.service'
 
@@ -52,7 +52,7 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
     res.status(201).json(response)
   } catch (err: any) {
-    next(err)
+    res.status(400).json(new GenericResponse(err.message))
   }
 }
 export async function revoke(req: Request, res: Response, next: NextFunction) {
@@ -83,4 +83,18 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, detail, post, revoke, unrevoke, _delete }
+export async function getByAssignment(req: Request, res: Response, next: NextFunction) {
+  try {
+    const assignmentId = parseInt(req.params.assignmentId)
+    const userId = req.currentUser?.userId
+    if (!userId) return res.status(400).json(new GenericResponse('Request requires auth'))
+    const submissions = await SubmissionService.listByAssignment(assignmentId, userId)
+    const response = submissions.map(serialize)
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export default { get, detail, post, revoke, getByAssignment, unrevoke, _delete }

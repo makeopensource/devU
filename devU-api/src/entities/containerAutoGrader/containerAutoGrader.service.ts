@@ -107,7 +107,7 @@ export async function list() {
 //But need to be deleted when the grader entity changed to the getGraderByAssignmentId
 export async function getGraderObjectByAssignmentId(assignmentId: number) {
   if (!assignmentId) throw new Error('Missing AssignmentId')
-  return await connect().find({assignmentId: assignmentId, deletedAt: IsNull()})
+  return await connect().find({ assignmentId: assignmentId, deletedAt: IsNull() })
 }
 
 export async function listByAssignmentId(assignmentId: number) {
@@ -133,11 +133,11 @@ export async function getGraderByAssignmentId(assignmentId: number) {
 }
 
 export default {
-    create,
-    retrieve,
-    update,
-    _delete,
-    list,
-    getGraderObjectByAssignmentId,
-    listByAssignmentId,
+  create,
+  retrieve,
+  update,
+  _delete,
+  list,
+  getGraderObjectByAssignmentId,
+  listByAssignmentId,
 }
