@@ -4,9 +4,8 @@ import Multer from 'multer'
 
 // Middleware
 import validator from '../submission/submission.validator'
-import { asInt } from '../../middleware/validator/generic.validator'
 import { isAuthorized } from '../../authorization/authorization.middleware'
-import {asInt} from '../../middleware/validator/generic.validator'
+import { asInt } from '../../middleware/validator/generic.validator'
 
 // Controller
 import SubmissionController from '../submission/submission.controller'

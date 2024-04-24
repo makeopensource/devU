@@ -7,27 +7,27 @@ import UserCourse from './userCourse.model'
 const connect = () => getRepository(UserCourse)
 
 export async function create(userCourse: UserCourseType) {
-    const userId = userCourse.userId
-    const hasEnrolled = await connect().findOne({userId, courseId: userCourse.courseId})
-    if (hasEnrolled) throw new Error('User already enrolled in course')
+  const userId = userCourse.userId
+  const hasEnrolled = await connect().findOne({ userId, courseId: userCourse.courseId })
+  if (hasEnrolled) throw new Error('User already enrolled in course')
   return await connect().save(userCourse)
 }
 
-
 export async function update(userCourse: UserCourseType, currentUser: number) {
-    const {courseId, level, dropped} = userCourse
-    if (!courseId) throw new Error('Missing Id')
-    const userCourseData = await connect().findOne({courseId, userId: currentUser})
-    if (!userCourseData) throw new Error('User not enrolled in course')
-    userCourseData.level = level
-    userCourseData.dropped = dropped
-    return await connect().update(userCourse.id, userCourseData)
+  const { courseId, role, dropped } = userCourse
+  if (!courseId) throw new Error('Missing course Id')
+  const userCourseData = await connect().findOne({ courseId, userId: currentUser })
+  if (!userCourseData) throw new Error('User not enrolled in course')
+  userCourseData.role = role
+  userCourseData.dropped = dropped
+  if (!userCourse.id) throw new Error('Missing Id')
+  return await connect().update(userCourse.id, userCourseData)
 }
 
 export async function _delete(courseId: number, userId: number) {
-    const userCourse = await connect().findOne({courseId, userId})
-    if (!userCourse) throw new Error('User Not Found in Course')
-    return await connect().softDelete({courseId, userId, deletedAt: IsNull()})
+  const userCourse = await connect().findOne({ courseId, userId })
+  if (!userCourse) throw new Error('User Not Found in Course')
+  return await connect().softDelete({ courseId, userId, deletedAt: IsNull() })
 }
 
 export async function retrieve(id: number) {
@@ -52,7 +52,7 @@ export async function listByCourse(courseId: number) {
 }
 
 export async function checking(userId: number, courseId: number) {
-    return await connect().findOne({userId, courseId, dropped: false, deletedAt: IsNull()})
+  return await connect().findOne({ userId, courseId, dropped: false, deletedAt: IsNull() })
 }
 
 export default {
@@ -64,5 +64,5 @@ export default {
   list,
   listAll,
   listByCourse,
-    checking
+  checking,
 }

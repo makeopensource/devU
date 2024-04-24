@@ -1,6 +1,6 @@
-import {UpdateResult} from 'typeorm'
+import { UpdateResult } from 'typeorm'
 
-import {UserCourse} from 'devu-shared-modules'
+import { UserCourse } from 'devu-shared-modules'
 
 import controller from '../userCourse.controller'
 
@@ -8,10 +8,10 @@ import UserCourseModel from '../userCourse.model'
 
 import UserCourseService from '../userCourse.service'
 
-import {serialize} from '../userCourse.serializer'
+import { serialize } from '../userCourse.serializer'
 
 import Testing from '../../../utils/testing.utils'
-import {GenericResponse, NotFound, Updated} from '../../../utils/apiResponse.utils'
+import { GenericResponse, NotFound, Updated } from '../../../utils/apiResponse.utils'
 
 // Testing Globals
 let req: any

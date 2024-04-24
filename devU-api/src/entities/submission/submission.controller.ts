@@ -1,10 +1,10 @@
-import {NextFunction, Request, Response} from 'express'
+import { NextFunction, Request, Response } from 'express'
 
 import SubmissionService from '../submission/submission.service'
 
-import {GenericResponse, NotFound} from '../../utils/apiResponse.utils'
+import { GenericResponse, NotFound } from '../../utils/apiResponse.utils'
 
-import {serialize} from './submission.serializer'
+import { serialize } from './submission.serializer'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
@@ -51,7 +51,7 @@ export async function post(req: Request, res: Response, next: NextFunction) {
     const response = serialize(submission)
 
     res.status(201).json(response)
-  } catch (err:any) {
+  } catch (err: any) {
     res.status(400).json(new GenericResponse(err.message))
   }
 }
@@ -83,7 +83,6 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-
 export async function getByAssignment(req: Request, res: Response, next: NextFunction) {
   try {
     const assignmentId = parseInt(req.params.assignmentId)
@@ -98,5 +97,4 @@ export async function getByAssignment(req: Request, res: Response, next: NextFun
   }
 }
 
-export default {get, detail, post, _delete, getByAssignment}
 export default { get, detail, post, revoke, getByAssignment, unrevoke, _delete }

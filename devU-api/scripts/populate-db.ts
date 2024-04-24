@@ -68,15 +68,14 @@ async function CreateCourse(name: string, number: string, semester: string) {
 }
 
 async function joinCourse(courseId: number, userId: number, level: string) {
-    const userCourseData = {
-        userId: userId,
-        courseId: courseId,
-        level: level,
-        dropped: false
-    };
-    console.log(`Joining course: ${courseId} for user: ${userId}`)
-    return await SendPOST('/user-courses', JSON.stringify(userCourseData), 'admin');
-
+  const userCourseData = {
+    userId: userId,
+    courseId: courseId,
+    level: level,
+    dropped: false,
+  }
+  console.log(`Joining course: ${courseId} for user: ${userId}`)
+  return await SendPOST('/user-courses', JSON.stringify(userCourseData), 'admin')
 }
 
 async function createAssignment(courseId: number, name: string, categoryName: string) {
@@ -233,11 +232,11 @@ async function runCourseAndSubmission() {
   //   JSON.stringify({ userId: bob, courseId: courseId2, role: 'student', dropped: false }),
   //   'admin'
   // )
-        //Create enroll students
-        await joinCourse(courseId1, billy, 'student')
-        await joinCourse(courseId1, bob, 'student')
-        await joinCourse(courseId2, billy, 'student')
-        await joinCourse(courseId2, bob, 'student')
+  //Create enroll students
+  await joinCourse(courseId1, billy, 'student')
+  await joinCourse(courseId1, bob, 'student')
+  await joinCourse(courseId2, billy, 'student')
+  await joinCourse(courseId2, bob, 'student')
 
   //Create assignments
   const assignment1 = await createAssignment(courseId1, 'Course1 Assignment 1', 'Quiz')

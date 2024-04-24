@@ -1,9 +1,9 @@
-import {NextFunction, Request, Response} from 'express'
+import { NextFunction, Request, Response } from 'express'
 
 import UserCourseService from './userCourse.service'
-import {serialize} from './userCourse.serializer'
+import { serialize } from './userCourse.serializer'
 
-import {GenericResponse, NotFound, Updated} from '../../utils/apiResponse.utils'
+import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
@@ -85,7 +85,7 @@ export async function put(req: Request, res: Response, next: NextFunction) {
   try {
     req.body.courseId = parseInt(req.params.id)
     const currentUser = req.currentUser?.userId
-    if (!currentUser) return res.status(401).json({message: 'Unauthorized'})
+    if (!currentUser) return res.status(401).json({ message: 'Unauthorized' })
     const results = await UserCourseService.update(req.body, currentUser)
     if (!results.affected) return res.status(404).json(NotFound)
 
@@ -99,7 +99,7 @@ export async function checkEnroll(req: Request, res: Response, next: NextFunctio
   try {
     const courseId = parseInt(req.params.courseId)
     const userId = req.currentUser?.userId
-    if (!userId) return res.status(401).json({message: 'Unauthorized'})
+    if (!userId) return res.status(401).json({ message: 'Unauthorized' })
 
     const userCourse = await UserCourseService.checking(userId, courseId)
     if (!userCourse) return res.status(404).json(NotFound)
@@ -110,12 +110,11 @@ export async function checkEnroll(req: Request, res: Response, next: NextFunctio
   }
 }
 
-
 export async function _delete(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
     const currentUser = req.currentUser?.userId
-    if (!currentUser) return res.status(401).json({message: 'Unauthorized'})
+    if (!currentUser) return res.status(401).json({ message: 'Unauthorized' })
 
     const results = await UserCourseService._delete(id, currentUser)
 
@@ -127,4 +126,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default {get, getByCourse, getAll, detail, detailByUser, post, put, _delete, checkEnroll}
+export default { get, getByCourse, getAll, detail, detailByUser, post, put, _delete, checkEnroll }
