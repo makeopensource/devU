@@ -51,7 +51,7 @@ const refreshTokenBuffer = load('auth.jwt.refreshTokenExpirationBufferSeconds') 
 // if it is undefined it is running on dev machine
 const isDocker = !(process.env.dev === undefined)
 
-if (process.env.TANGO_KEY === undefined){
+if (isDocker && process.env.TANGO_KEY === undefined){
   throw Error('Tango key not found.\nMake sure to set environment variable TANGO_KEY in the api service in docker-compose')
 }
 

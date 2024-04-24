@@ -9,7 +9,9 @@
     "build-all": "concurrently \"npm run build-development\" \"npm run build\"",
     "build-local": "cross-env NODE_ENV=local webpack -p --mode=production",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "dev-backend": "docker compose -f ../docker-compose.yml --profile dev-client up -d",
+    "dev-backend-stop": "docker compose -f ../docker-compose.yml --profile dev-client stop"
   },
   "lint-staged": {
     "./**/*.{js,ts,json,md}": [
