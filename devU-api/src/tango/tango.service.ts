@@ -1,55 +1,57 @@
 import './tango.types'
-import fetch from 'node-fetch'
+import fetch from "node-fetch";
 
-const tangoHost = `http://tango:3000`
+const tangoHost = `http://127.0.0.1:3000`
 const tangoKey = process.env.TANGO_KEY ?? 'test'
 
 // for more info https://docs.autolabproject.com/tango-rest/
 
 /**
- * Opens a directory for a given course and lab.
- * @param courselab - The combination of the course name and the lab name.
+ * Opens a directory for a given course.
+ * @param course - The course name.
  */
-export async function openDirectory(courselab: string): Promise<OpenResponse | null> {
-  const url = `${tangoHost}/open/${tangoKey}/${courselab}/`
+export async function createCourse(course: string): Promise<OpenResponse | null> {
+  const url = `${tangoHost}/open/${tangoKey}/${course}/`
   const response = await fetch(url, { method: 'GET' })
-  return response.ok ? await response.json() : null
+  return response.ok ? await response.json() as OpenResponse : null
 }
 
 /**
- * Uploads a file to the server for a given course and lab.
- * @param courselab - The combination of the course name and the lab name.
+ * Uploads a file to the server for a given course.
+ * @param course - The course name.
  * @param fileName - The file name, used to identify the file when uploaded
  * @param file - The file to be uploaded.
  */
-export async function uploadFile(courselab: string, file: Buffer, fileName: string): Promise<UploadResponse | null> {
-  const url = `${tangoHost}/upload/${tangoKey}/${courselab}/`
-  const response = await fetch(url, { method: 'POST', body: file, headers: { 'filename': fileName } })
-  return response.ok ? await response.json() : null
+export async function uploadFile(course: string, file: File, fileName: string): Promise<UploadResponse | null> {
+  const url = `${tangoHost}/upload/${tangoKey}/${course}/`
+  const formData = new FormData()
+  formData.append('file', file)
+  const response = await fetch(url, { method: 'POST', body: formData, headers: { 'filename': fileName } })
+  return response.ok ? await response.json() as UploadResponse : null
 }
 
 /**
- * Adds a job to the server for a given course and lab.
- * @param courselab - The combination of the course name and the lab name.
+ * Adds a job to the server for a given course.
+ * @param course - The course name.
  * @param job - The job request object.
  */
-export async function addJob(courselab: string, job: AddJobRequest): Promise<AddJobResponse | null> {
-  const url = `${tangoHost}/addJob/${tangoKey}/${courselab}/`
+export async function addJob(course: string, job: AddJobRequest): Promise<AddJobResponse | null> {
+  const url = `${tangoHost}/addJob/${tangoKey}/${course}/`
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(job),
   })
-  return response.ok ? await response.json() : null
+  return response.ok ? await response.json() as AddJobResponse : null
 }
 
 /**
  * Polls the server for the status of a job.
- * @param courselab - The combination of the course name and the lab name.
+ * @param course - The course name.
  * @param outputFile - The name of the output file.
  */
-export async function pollJob(courselab: string, outputFile: string): Promise<PollSuccessResponse | PollFailureResponse> {
-  const url = `${tangoHost}/poll/${tangoKey}/${courselab}/${outputFile}/`
+export async function pollJob(course: string, outputFile: string): Promise<PollSuccessResponse | PollFailureResponse> {
+  const url = `${tangoHost}/poll/${tangoKey}/${course}/${outputFile}/`
   const response = await fetch(url, { method: 'GET' })
   const data = await response.json()
   return response.ok ?
@@ -58,12 +60,21 @@ export async function pollJob(courselab: string, outputFile: string): Promise<Po
 }
 
 /**
+ * Pings the tango server.
+ */
+export async function tangoHelloWorld(): Promise<boolean> {
+  const url = `${tangoHost}/`
+  const response = await fetch(url, { method: 'GET' })
+  return response.ok
+}
+
+/**
  * Retrieves information about the Tango service.
  */
 export async function getInfo(): Promise<InfoResponse | null> {
   const url = `${tangoHost}/info/${tangoKey}/`
   const response = await fetch(url, { method: 'GET' })
-  return response.ok ? await response.json() : null
+  return response.ok ? await response.json() as InfoResponse: null
 }
 
 /**
@@ -73,7 +84,7 @@ export async function getInfo(): Promise<InfoResponse | null> {
 export async function getPoolInfo(image: string): Promise<Object | null> {
   const url = `${tangoHost}/pool/${tangoKey}/${image}/`
   const response = await fetch(url, { method: 'GET' })
-  return response.ok ? await response.json() : null
+  return response.ok ? await response.json() as Object: null
 }
 
 /**
@@ -89,7 +100,7 @@ export async function preallocateInstances(image: string, num: number, request: 
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(request),
   })
-  return response.ok ? await response.json() : null
+  return response.ok ? await response.json() as PreallocResponse: null
 }
 
 /**

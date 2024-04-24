@@ -91,11 +91,7 @@ services:
     environment:
       - DOCKER_REDIS_HOSTNAME=redis
       - RESTFUL_KEY=devutangokey
-#      - DOCKER_DEPLOYMENT
-      # Path to volumes within the Tango container. Does not need to be modified.
-#      - DOCKER_VOLUME_PATH
-      # Modify the below to be the path to volumes on your host machine
-#      - DOCKER_TANGO_HOST_VOLUME_PATH
+      - DOCKER_TANGO_HOST_VOLUME_PATH= #TODO add the absolute path to tango_files here before running
 
     depends_on:
       - redis
@@ -104,7 +100,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./logs/tango/:/var/log/tango/
       - ./logs/tangonginx:/var/log/nginx
-#      - ./Tango/volumes:/opt/TangoService/Tango/volumes
+      - ./tango_files/volumes:/opt/TangoService/Tango/volumes
 
 #  certbot:
 #    container_name: certbot
