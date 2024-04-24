@@ -97,6 +97,7 @@ Router.post('/', isAuthorized('enrolled'), upload.single('files'), validator, Su
  *         required: true
  *         schema:
  *           type: integer
+ *
  */
 Router.put('/:id/revoke', isAuthorized('submissionChangeState'), asInt(), SubmissionController.revoke)
 
