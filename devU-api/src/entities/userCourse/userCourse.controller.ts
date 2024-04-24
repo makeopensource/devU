@@ -7,7 +7,6 @@ import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.util
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-
     const userCourses = await UserCourseService.listAll()
 
     res.status(200).json(userCourses.map(serialize))
@@ -44,6 +43,22 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
     const userCourse = await UserCourseService.retrieve(id)
+
+    if (!userCourse) return res.status(404).json(NotFound)
+
+    const response = serialize(userCourse)
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function detailByUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const courseId = parseInt(req.params.courseId)
+    const userId = parseInt(req.params.userId)
+    const userCourse = await UserCourseService.retrieveByCourseAndUser(courseId, userId)
 
     if (!userCourse) return res.status(404).json(NotFound)
 
@@ -92,4 +107,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, getByCourse, getAll, detail, post, put, _delete }
+export default { get, getByCourse, getAll, detail, detailByUser, post, put, _delete }

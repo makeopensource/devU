@@ -51,7 +51,21 @@ export async function post(req: Request, res: Response, next: NextFunction) {
     const response = serialize(submission)
 
     res.status(201).json(response)
-  } catch (err:any) {
+  } catch (err: any) {
+    next(err)
+  }
+}
+export async function revoke(req: Request, res: Response, next: NextFunction) {
+  try {
+    // TODO: Revoke a submission
+  } catch (err: any) {
+    next(err)
+  }
+}
+export async function unrevoke(req: Request, res: Response, next: NextFunction) {
+  try {
+    // TODO: Unrevoke a submission
+  } catch (err: any) {
     next(err)
   }
 }
@@ -69,4 +83,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, detail, post, _delete }
+export default { get, detail, post, revoke, unrevoke, _delete }

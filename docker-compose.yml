@@ -25,7 +25,7 @@ services:
       context: .
       dockerfile: api.Dockerfile
     environment:
-      TANGO_KEY: devutangokey # todo load in from env file. for now this is defined in tango section below
+      TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
       WAIT_HOSTS: db:5432
       dev: 0 # value here is irrelevant; just here to make sure dev env exists
     depends_on:
@@ -62,9 +62,9 @@ services:
       - 'dev-api' # start when developing api not when developing client
   minio:
     image: minio/minio
-    #    ports:
-    #      - '9002:9000'
-    #      - '9001:9001'
+    ports:
+      - '9002:9000'
+      - '9001:9001'
     expose:
       - '9000'
     #    volumes:

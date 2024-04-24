@@ -11,13 +11,7 @@ export async function create(submissionScore: SubmissionScore) {
 }
 
 export async function update(submissionScore: SubmissionScore) {
-  const {
-    id,
-    submissionId,
-    score,
-    feedback,
-    releasedAt,
-  } = submissionScore
+  const { id, submissionId, score, feedback, releasedAt } = submissionScore
 
   if (!id) throw new Error('Missing Id')
 
@@ -41,8 +35,19 @@ export async function list(submissionId?: number) {
   const options: FindManyOptions = {
     where: {
       deletedAt: IsNull(),
-      ...(submissionId !== undefined && {submissionId}),
-    }
+      ...(submissionId !== undefined && { submissionId }),
+    },
+  }
+  return await connect().find(options)
+}
+
+export async function listByUser(userId: number, assignmentId: number) {
+  const options: FindManyOptions = {
+    where: {
+      userId: userId,
+      assignmentId: assignmentId,
+      deletedAt: IsNull(),
+    },
   }
   return await connect().find(options)
 }
@@ -53,4 +58,5 @@ export default {
   update,
   _delete,
   list,
+  listByUser,
 }

@@ -5,7 +5,7 @@ import environment from '../../environment'
 
 import controller from '../login/login.controller'
 
-import { isValidRefreshToken, isRefreshNearingExpiration } from '../../auth/auth.middleware'
+import { isValidRefreshToken, isRefreshNearingExpiration } from '../authentication.middleware'
 
 import SamlRouter from '../login.saml/login.saml.router'
 import DeveloperRouter from '../login.developer/login.developer.router'

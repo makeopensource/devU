@@ -33,7 +33,6 @@ export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
 
-
 export default {
   create,
   retrieve,
