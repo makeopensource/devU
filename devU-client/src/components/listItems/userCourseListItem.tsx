@@ -9,6 +9,7 @@ import {prettyPrintDate} from 'utils/date.utils'
 import styles from './userCourseListItem.scss'
 
 import SimpleAssignmentListItem from "./simpleAssignmentListItem";
+import {prettyPrintSemester} from "../../utils/semester.utils";
 
 type Props = {
     course: Course
@@ -21,7 +22,7 @@ const UserCourseListItem = ({course, assignments}: Props) => (
         <div className={styles.name}>{course.name}</div>
         <div className={styles.subText}>
             <div>{course.number}</div>
-            <div>Semester: {course.semester}</div>
+            <div>Semester: {prettyPrintSemester(course.semester)}</div>
             <div>Start Date: {prettyPrintDate(course.startDate)}</div>
             <div>End Date: {prettyPrintDate(course.endDate)}</div>
 
