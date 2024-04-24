@@ -8,6 +8,7 @@ import UserOptionsDropdown from 'components/utils/userOptionsDropdown'
 import { useAppSelector } from 'redux/hooks'
 
 import styles from './globalToolbar.scss'
+import RoleToggle from '../utils/roleToggle'
 
 const GlobalToolbar = () => {
   const userId = useAppSelector((store) => store.user.id)
@@ -25,6 +26,7 @@ const GlobalToolbar = () => {
           </button>
           {/* Turns into a sidebar via css on mobile */}
           <div className={styles.menu}>
+            <RoleToggle />
             <DarkModeToggle />
             <Link to={`/users/${userId}/courses/`} className={styles.link}>
               Courses
