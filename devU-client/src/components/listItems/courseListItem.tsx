@@ -34,7 +34,7 @@ const CourseListItem = ({course}: Props) => {
                 &nbsp;{course.name}
             </div>
             {isOpen &&
-                <Link to={`/courses/${course.id}`} className={styles.container}>
+                <Link to={`/courses/${course.id}/preview`} className={styles.container}>
                     {infoSection("Course Number", course.number)}
                     {infoSection("Semester", prettyPrintSemester(course.semester))}
                     {infoSection("Start/End Date", prettyPrintDate(course.startDate), prettyPrintDate(course.endDate))}
