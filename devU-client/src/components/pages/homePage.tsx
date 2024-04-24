@@ -14,7 +14,7 @@ import {Assignment, Course, UserCourse} from 'devu-shared-modules'
 
 const HomePage = () => {
     const userId = useAppSelector((store) => store.user.id)
-    const role = useAppSelector((store) => store.roleMode)
+    // const role = useAppSelector((store) => store.roleMode)
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
