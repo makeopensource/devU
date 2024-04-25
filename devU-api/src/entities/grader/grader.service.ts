@@ -6,7 +6,7 @@ import containerAutograderService from '../containerAutoGrader/containerAutoGrad
 import assignmentProblemService from '../assignmentProblem/assignmentProblem.service'
 import assignmentScoreService from '../assignmentScore/assignmentScore.service'
 import courseService from '../course/course.service'
-import { addJob, openDirectory, uploadFile } from '../../tango/tango.service'
+import { addJob, createCourse, uploadFile } from '../../tango/tango.service'
 
 import { SubmissionScore, SubmissionProblemScore, ContainerAutoGrader, AssignmentScore } from 'devu-shared-modules'
 import { checkAnswer } from '../nonContainerAutoGrader/nonContainerAutoGrader.grader'
@@ -15,6 +15,7 @@ import { serialize as serializeAssignmentScore } from '../assignmentScore/assign
 import { downloadFile, initializeMinio } from '../../fileStorage'
 
 import crypto from 'crypto'
+import environment from '../../environment'
 
 export async function grade(submissionId: number) {
     const submission = await submissionService.retrieve(submissionId)
@@ -66,7 +67,7 @@ export async function grade(submissionId: number) {
         var response = null
         const labName = bucketName + '-' + submission.assignmentId
         const optionFiles = []
-        const openResponse = await openDirectory(labName)
+        const openResponse = await createCourse(labName)
         if (openResponse) {
             if (!(openResponse.files["Graderfile"]) || openResponse.files["Graderfile"] !== crypto.createHash('md5').update(graderData).digest('hex')) {
                 await uploadFile(labName, graderData, "Graderfile")
@@ -80,15 +81,17 @@ export async function grade(submissionId: number) {
                     optionFiles.push({localFile: filepath, destFile: filepath})
                 }
             }
+            console.log(environment.apiUrl)
+            console.log(labName)
             const jobOptions = {
                 image: autogradingImage,
-                files: [{localFile: "Graderfile", destFile: "Graderfile"}, 
+                files: [{localFile: "Graderfile", destFile: "autograde.tar"}, 
                         {localFile: "Makefile", destFile: "Makefile"},]
                         .concat(optionFiles),
                 jobName: labName,
                 output_file: labName,
                 timeout: timeout,
-                callback_url: ""
+                callback_url: `${environment.apiUrl}/grade/callback/${submissionId}`
             }
             response = await addJob(labName, jobOptions)
         }
@@ -140,4 +143,10 @@ export async function mockContainerCheckAnswer(file: string, containerAutoGrader
     return gradeResults
 }
 
-export default { grade }
+export async function tangoCallback(submissionId: number) {
+    console.log("!!!!!!!!!!!!!!YAYYYY!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!YAYYYY!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!YAYYYY!!!!!!!!!!!!!!\n")
+    console.log(`${submissionId} did it yayyy`)
+    return {id: submissionId}
+}
+
+export default { grade, tangoCallback }

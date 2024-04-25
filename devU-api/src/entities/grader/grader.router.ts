@@ -32,4 +32,6 @@ const Router = express.Router()
  */
 Router.post('/:id', asInt(), GraderController.grade)
 
+Router.post('/callback/:id', asInt(), GraderController.tangoCallback)
+
 export default Router

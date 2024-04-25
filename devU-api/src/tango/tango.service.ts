@@ -1,7 +1,7 @@
 import './tango.types'
 import fetch from "node-fetch";
 
-const tangoHost = `http://127.0.0.1:3000`
+const tangoHost = `http://tango:3000`
 const tangoKey = process.env.TANGO_KEY ?? 'test'
 
 // for more info https://docs.autolabproject.com/tango-rest/
@@ -22,11 +22,9 @@ export async function createCourse(course: string): Promise<OpenResponse | null>
  * @param fileName - The file name, used to identify the file when uploaded
  * @param file - The file to be uploaded.
  */
-export async function uploadFile(course: string, file: File, fileName: string): Promise<UploadResponse | null> {
+export async function uploadFile(course: string, file: Buffer, fileName: string): Promise<UploadResponse | null> {
   const url = `${tangoHost}/upload/${tangoKey}/${course}/`
-  const formData = new FormData()
-  formData.append('file', file)
-  const response = await fetch(url, { method: 'POST', body: formData, headers: { 'filename': fileName } })
+  const response = await fetch(url, { method: 'POST', body: file, headers: { 'filename': fileName } })
   return response.ok ? await response.json() as UploadResponse : null
 }
 

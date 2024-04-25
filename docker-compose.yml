@@ -91,7 +91,7 @@ services:
     environment:
       - DOCKER_REDIS_HOSTNAME=redis
       - RESTFUL_KEY=devutangokey
-      - DOCKER_TANGO_HOST_VOLUME_PATH= #TODO add the absolute path to tango_files here before running
+      - DOCKER_TANGO_HOST_VOLUME_PATH= C:\Users\Keifer\Desktop\Programming\devU\tango_files #TODO add the absolute path to tango_files here before running
 
     depends_on:
       - redis
@@ -101,6 +101,7 @@ services:
       - ./logs/tango/:/var/log/tango/
       - ./logs/tangonginx:/var/log/nginx
       - ./tango_files/volumes:/opt/TangoService/Tango/volumes
+      
 
 #  certbot:
 #    container_name: certbot
