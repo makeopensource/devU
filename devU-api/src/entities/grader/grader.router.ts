@@ -33,6 +33,26 @@ const Router = express.Router()
  */
 Router.post('/:id', asInt(), isAuthorized, GraderController.grade)
 
+/**
+ * @swagger
+ * tags:
+ *    - name: Grader callback
+ *      description: 
+ * /grade/callback/{outputFilename}:
+ *   post:
+ *     summary: Not directly called by the user. Tells the API that a container grading job has finished and creates relevant entities from the results.
+ *     tags:
+ *       - Grader
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: outputFilename
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ */
 Router.post('/callback/:outputFile', GraderController.tangoCallback) //Unauthorized route so tango can make callback without needing token
 
 export default Router

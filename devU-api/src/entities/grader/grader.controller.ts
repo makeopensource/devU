@@ -11,7 +11,7 @@ export async function grade(req: Request, res: Response, next: NextFunction) {
         const submissionId = parseInt(req.params.id)
         const response = await GraderService.grade(submissionId) //grade
 
-        res.status(200).json({message: response?.jobId + ", " + response?.statusId + ", " + response?.statusMsg})
+        res.status(200).json(response)
     } catch (err) {
         res.status(400).json(new GenericResponse(err.message))
     }

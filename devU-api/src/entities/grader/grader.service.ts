@@ -35,7 +35,6 @@ async function grade(submissionId: number) {
     
     let score = 0
     let feedback = ''
-    let allScores = [] //This is the return value, the serializer parses it into a GraderInfo object for the controller to return
     let containerGrading = true //Is set to false if no container autograders are found for this assignment
 
     //Run Non-Container Autograders
@@ -54,7 +53,7 @@ async function grade(submissionId: number) {
                 score: problemScore,
                 feedback: problemFeedback 
             }
-            allScores.push(await submissionProblemScoreService.create(problemScoreObj))
+            submissionProblemScoreService.create(problemScoreObj)
         }
     }
 
@@ -69,7 +68,7 @@ async function grade(submissionId: number) {
             })
             initializeMinio(bucketName)
     
-            var response = null
+            var jobResponse = null
             const labName = `${bucketName}-${submission.assignmentId}`
             const optionFiles = []
             const openResponse = await createCourse(labName)
@@ -95,7 +94,7 @@ async function grade(submissionId: number) {
                     timeout: timeout,
                     callback_url: `http://api:3001/grade/callback/${labName}-${submissionId}-output.txt`
                 }
-                response = await addJob(labName, jobOptions)
+                jobResponse = await addJob(labName, jobOptions)
             }
         } catch (e: any) {
             throw new Error(e)
@@ -108,12 +107,14 @@ async function grade(submissionId: number) {
         score: score,       //Sum of all SubmissionProblemScore scores
         feedback: feedback  //Concatination of SubmissionProblemScore feedbacks
     }
-    allScores.push(await submissionScoreService.create(scoreObj))
+    submissionScoreService.create(scoreObj)
 
     //If containergrading is true, tangoCallback handles assignmentScore creation
-    if (containerGrading === false) updateAssignmentScore(submission, score)    
-
-    return response
+    if (containerGrading === false) {
+        updateAssignmentScore(submission, score)
+        return {message: `Noncontainer autograding completed successfully`, submissionScore: scoreObj}
+    }  
+    return {message: `Autograder successfully added job #${jobResponse?.jobId} to the queue with status message ${jobResponse?.statusMsg}`}
 }
 
 
