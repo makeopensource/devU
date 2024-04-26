@@ -29,7 +29,7 @@ const Router = express.Router({ mergeParams: true })
  *         schema:
  *           type: integer
  */
-Router.get('/', isAuthorized('enrolled'), asInt(), AssignmentProblemController.get)
+Router.get('/', isAuthorized('enrolled'), AssignmentProblemController.get)
 // Router.get('/', isAuthorizedByAssignmentStatus, asInt(), AssignmentProblemController.get)
 // TODO: assignment released status
 
