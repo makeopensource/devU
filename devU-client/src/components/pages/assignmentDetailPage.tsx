@@ -16,6 +16,7 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Unstable_Grid2'
 
 import styles from './assignmentDetailPage.scss'
+import {prettyPrintDateTime} from "../../utils/date.utils";
 
 const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -35,7 +36,8 @@ const AssignmentDetailPage = () => {
     const [assignment, setAssignment] = useState<Assignment>()
 
     // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
-    const containerAutograder = false;
+    const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
+
     useEffect(() => {
         fetchData()
     }, []);
@@ -68,8 +70,10 @@ const AssignmentDetailPage = () => {
             // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/container-auto-graders/assignment/${assignmentId}`)).pop() ?? null
             // setContainerAutograder(containerAutograder)
 
-        } catch (error) {
-            setError(error)
+        } catch (err) {
+            setError(err)
+            const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+            setAlert({autoDelete: false, type: 'error', message})
         } finally {
             setLoading(false)
         }
@@ -109,9 +113,9 @@ const AssignmentDetailPage = () => {
                 submission.append('content', JSON.stringify(contentField))
                 submission.append('files', file)
 
-                var response = await RequestService.postMultipart('/api/submissions', submission)
+                var response = await RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission)
             } else {
-                var response = await RequestService.post('/api/submissions', submission)
+                var response = await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission)
             }
             
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
@@ -126,6 +130,7 @@ const AssignmentDetailPage = () => {
             setAlert({ autoDelete: false, type: 'error', message })
         } finally {
             setLoading(false)
+            fetchData()
         }
     }
 
@@ -188,10 +193,12 @@ const AssignmentDetailPage = () => {
             <div>
             {submissions.map((submission, index) => (
                 <Card className={styles.submissionCard}>
-                    <CardActionArea onClick={() => {history.push(`/courses/${courseId}/assignments/${assignmentId}/submissions/${submission.id}`)}}>
+                    <CardActionArea onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
+                    }}>
                         <CardContent>
                             {`Submission ${submissions.length - index}`}
-                            <Typography>{`Submitted at: ${submission.createdAt}`}</Typography>
+                            <Typography>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>

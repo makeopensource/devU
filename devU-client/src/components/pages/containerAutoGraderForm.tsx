@@ -53,6 +53,7 @@ const ContainerAutoGraderForm = () => {
         RequestService.postMultipart('/api/container-auto-graders/', multipart)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Container Auto-Grader Added' })
+                history.goBack()
             })
         .catch((err: ExpressValidationError[] | Error) => {
             const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -61,7 +62,6 @@ const ContainerAutoGraderForm = () => {
 
             setAlert({autoDelete: false, type: 'error', message: message})
         }).finally(() => {
-            history.goBack()
         })
 
 

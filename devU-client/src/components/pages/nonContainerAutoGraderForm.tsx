@@ -62,6 +62,7 @@ const NonContainerAutoGraderForm = () => {
         RequestService.post('/api/nonContainerAutoGrader/', finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Non-Container Auto-Grader Added' })
+                history.goBack()
             })
         .catch((err: ExpressValidationError[] | Error) => {
             const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -70,8 +71,6 @@ const NonContainerAutoGraderForm = () => {
 
             setAlert({autoDelete: false, type: 'error', message: message})
         }).finally(() => {
-            history.goBack()
-
         })
 
 

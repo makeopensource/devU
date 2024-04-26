@@ -35,19 +35,19 @@ const SubmissionDetailPage = () => {
 
     const fetchData = async () => {
         try {
-            const submissionScore = (await RequestService.get<SubmissionScore[]>( `/api/submission-scores?submission=${submissionId}` )).pop() ?? null
+            const submissionScore = (await RequestService.get<SubmissionScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores?submission=${submissionId}`)).pop() ?? null
             setSubmissionScore(submissionScore)
 
-            const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>( `/api/submission-problem-scores/${submissionId}` )
+            const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores/${submissionId}`)
             setSubmissionProblemScores(submissionProblemScores)
 
-            const submission = await RequestService.get<Submission>( `/api/submissions/${submissionId}` )
+            const submission = await RequestService.get<Submission>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/${submissionId}`)
             setSubmission(submission)
 
-            const assignment = await RequestService.get<Assignment>( `/api/assignments/${submission.assignmentId}` )
+            const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignment/${submission.assignmentId}`)
             setAssignment(assignment)
 
-            const assignmentProblems = await RequestService.get<AssignmentProblem[]>( `/api/assignment-problems/${assignment.id}` )
+            const assignmentProblems = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignment.id}`)
             setAssignmentProblems(assignmentProblems)  
 
         } catch (error) {
@@ -74,7 +74,7 @@ const SubmissionDetailPage = () => {
         if (submissionScore) {
             // Update the submission score
             console.log('Submission Exists')
-            await RequestService.put( `/api/submission-scores/${submissionScore.id}`, formData)
+            await RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores/${submissionScore.id}`, formData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Updated' })
             
@@ -83,7 +83,7 @@ const SubmissionDetailPage = () => {
         else {
             // Create a new submission score
             console.log('No Submission')
-            await RequestService.post( `/api/submission-scores`, formData)
+            await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores`, formData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Created' })
             })

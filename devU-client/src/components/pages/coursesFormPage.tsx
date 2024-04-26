@@ -55,7 +55,7 @@ const EditCourseFormPage = () => {
         RequestService.post('/api/courses/', finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Course Added' })
-
+                history.goBack()
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -66,7 +66,6 @@ const EditCourseFormPage = () => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         .finally(() => {
-            history.goBack()
         })
     }
 

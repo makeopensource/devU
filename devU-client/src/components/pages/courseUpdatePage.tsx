@@ -60,6 +60,7 @@ const CourseUpdatePage = ({}) => {
         RequestService.put(`/api/courses/${courseId}`, finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Course Updated' })
+                history.goBack()
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -69,7 +70,6 @@ const CourseUpdatePage = ({}) => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         .finally(() => {
-            history.goBack()
         })
     }
 

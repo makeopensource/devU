@@ -69,9 +69,10 @@ const AssignmentCreatePage = () => {
             disableHandins: formData.disableHandins,
         }
 
-        RequestService.post('/api/assignments/', finalFormData)
+        RequestService.post(`/api/course/${courseId}/assignments/`, finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
+                history.goBack()
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -81,7 +82,7 @@ const AssignmentCreatePage = () => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         .finally(() => {
-            history.goBack()
+
         })
 
     }
@@ -121,7 +122,7 @@ const AssignmentCreatePage = () => {
                 <label htmlFor='maxFileSize'>Max File Size *</label>
                 <TextField id='maxFileSize' onChange={handleChange}
                         className={invalidFields.get('maxFileSize')}/>
-                <label htmlFor='maxSubmission'>Max Submission *</label>
+                <label htmlFor='maxSubmission'>Max Submission</label>
                 <TextField id='maxSubmission' onChange={handleChange}
                         className={invalidFields.get('maxSubmission')}/>
 

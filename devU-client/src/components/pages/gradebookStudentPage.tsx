@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useAppSelector } from 'redux/hooks'
+import React, {useEffect, useState} from 'react'
+import {Link, useParams} from 'react-router-dom'
+import {useAppSelector} from 'redux/hooks'
 
-import { Assignment, AssignmentScore } from 'devu-shared-modules'
+import {Assignment, AssignmentScore} from 'devu-shared-modules'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -11,7 +11,6 @@ import ErrorPage from './errorPage'
 import RequestService from 'services/request.service'
 
 import styles from './gradebookPage.scss'
-import { useParams } from 'react-router-dom'
 
 type CategoryProps = {
     categoryName: string
@@ -29,7 +28,9 @@ const CategoryAssignment = ({assignment, assignmentScore}: AssignmentProps) => {
 
     return (
         <div>
-            <Link className={styles.assignmentName} to={`/courses/${courseId}/assignments/${assignment.id}`}>{assignment.name} </Link> - Score: {assignmentScore?.score ?? 'N/A'}
+            <Link className={styles.assignmentName}
+                  to={`/course/${courseId}/assignment/${assignment.id}`}>{assignment.name} </Link> -
+            Score: {assignmentScore?.score ?? 'N/A'}
         </div>
     )
 }
@@ -72,10 +73,10 @@ const GradebookStudentPage = () => {
     
     const fetchData = async () => {
         try {
-            const assignments = await RequestService.get<Assignment[]>( `/api/assignments/course/${courseId}` )
+            const assignments = await RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`)
             setAssignments(assignments)
 
-            const assignmentScores = await RequestService.get<AssignmentScore[]>( `/api/assignment-scores/user/${userId}` )
+            const assignmentScores = await RequestService.get<AssignmentScore[]>(`/api/course/${courseId}/assignment-scores/user/${userId}`)
             setAssignmentScores(assignmentScores)
 
             //As I'm unsure as to how category creation will be handled, this is done for now instead of an api call to /categories/course/{courseId}

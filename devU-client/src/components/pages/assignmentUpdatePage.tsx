@@ -122,6 +122,7 @@ const AssignmentUpdatePage = () => {
             .then(() => {
                 
                 setAlert({ autoDelete: true, type: 'success', message: 'Assignment Updated' })
+                history.goBack()
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -131,7 +132,6 @@ const AssignmentUpdatePage = () => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         .finally(() => {
-            history.goBack()
         })
     }
 
