@@ -93,7 +93,7 @@ export async function getGraderObjectByAssignmentId(assignmentId: number) {
 
 export async function getGraderByAssignmentId(assignmentId: number){
     const containerAutoGraders = await connect().findOne({ assignmentId: assignmentId, deletedAt: IsNull() })
-    if (!containerAutoGraders) throw new Error('No containerAutoGraders found')
+    if (!containerAutoGraders) return {graderData: null, makefileData: null, autogradingImage: null, timeout: null}
 
     const { graderFile, makefileFile, autogradingImage, timeout } = containerAutoGraders
     const graderData = await downloadFile('graders', graderFile)

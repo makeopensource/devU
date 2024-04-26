@@ -8,18 +8,20 @@ import assignmentScoreService from '../assignmentScore/assignmentScore.service'
 import courseService from '../course/course.service'
 import { addJob, createCourse, uploadFile, pollJob } from '../../tango/tango.service'
 
-import { SubmissionScore, SubmissionProblemScore, AssignmentScore } from 'devu-shared-modules'
+import { SubmissionScore, SubmissionProblemScore, AssignmentScore, Submission } from 'devu-shared-modules'
 import { checkAnswer } from '../nonContainerAutoGrader/nonContainerAutoGrader.grader'
 import { serialize as serializeNonContainer } from '../nonContainerAutoGrader/nonContainerAutoGrader.serializer'
 import { serialize as serializeAssignmentScore } from '../assignmentScore/assignmentScore.serializer'
+import { serialize as serializeSubmissionScore} from '../submissionScore/submissionScore.serializer'
+import { serialize as serializeSubmission } from '../submission/submission.serializer'
 import { downloadFile, initializeMinio } from '../../fileStorage'
 
-import crypto from 'crypto'
 import environment from '../../environment'
 
 export async function grade(submissionId: number) {
-    const submission = await submissionService.retrieve(submissionId)
-    if (!submission) return null
+    const submissionModel = await submissionService.retrieve(submissionId)
+    if (!submissionModel) throw new Error('Submission not found.')
+    const submission = serializeSubmission(submissionModel)
 
     const assignmentId = submission.assignmentId
 
@@ -35,6 +37,7 @@ export async function grade(submissionId: number) {
     let score = 0
     let feedback = ''
     let allScores = [] //This is the return value, the serializer parses it into a GraderInfo object for the controller to return
+    let containerGrading = true //Is set to false if no container autograders are found for this assignment
 
     //Run Non-Container Autograders
     for (const question in form) { 
@@ -57,48 +60,48 @@ export async function grade(submissionId: number) {
     }
 
     //Run Container Autograders
-    try {
-        const {graderData, makefileData, autogradingImage, timeout} = await containerAutograderService.getGraderByAssignmentId(assignmentId)
-        const bucketName = await courseService.retrieve(submission.courseId).then((course) => {
-            return course ? (course.number + course.semester + course.id).toLowerCase() : 'submission'
-        })
-        initializeMinio(bucketName)
-
-        var response = null
-        const labName = `${bucketName}-${submission.assignmentId}`
-        const optionFiles = []
-        const openResponse = await createCourse(labName)
-        if (openResponse) {
-            if (!(openResponse.files["Graderfile"]) || openResponse.files["Graderfile"] !== crypto.createHash('md5').update(graderData).digest('hex')) {
+    const {graderData, makefileData, autogradingImage, timeout} = await containerAutograderService.getGraderByAssignmentId(assignmentId)
+    if (!graderData || !makefileData || !autogradingImage || !timeout) {
+        containerGrading = false
+    } else {
+        try {
+            const bucketName = await courseService.retrieve(submission.courseId).then((course) => {
+                return course ? (course.number + course.semester + course.id).toLowerCase() : 'submission'
+            })
+            initializeMinio(bucketName)
+    
+            var response = null
+            const labName = `${bucketName}-${submission.assignmentId}`
+            const optionFiles = []
+            const openResponse = await createCourse(labName)
+            if (openResponse) {
                 await uploadFile(labName, graderData, "Graderfile")
-            }
-            if (!(openResponse.files["Makefile"]) || openResponse.files["Makefile"] !== crypto.createHash('md5').update(makefileData).digest('hex')) {
                 await uploadFile(labName, makefileData, "Makefile")
-            }
-            for (const filepath of filepaths){
-                const buffer = await downloadFile(bucketName, filepath)
-                if (await uploadFile(labName, buffer, filepath)) {
-                    optionFiles.push({localFile: filepath, destFile: filepath})
+    
+                for (const filepath of filepaths){
+                    const buffer = await downloadFile(bucketName, filepath)
+                    if (await uploadFile(labName, buffer, filepath)) {
+                        optionFiles.push({localFile: filepath, destFile: filepath})
+                    }
                 }
+                console.log(environment.apiUrl)
+                console.log(labName)
+                const jobOptions = {
+                    image: autogradingImage,
+                    files: [{localFile: "Graderfile", destFile: "autograde.tar"}, 
+                            {localFile: "Makefile", destFile: "Makefile"},]
+                            .concat(optionFiles),
+                    jobName: `${labName}-${submissionId}`,
+                    output_file: `${labName}-${submissionId}-output.txt`,
+                    timeout: timeout,
+                    callback_url: `http://api:3001/grade/callback/${labName}-${submissionId}-output.txt`
+                }
+                response = await addJob(labName, jobOptions)
             }
-            console.log(environment.apiUrl)
-            console.log(labName)
-            const jobOptions = {
-                image: autogradingImage,
-                files: [{localFile: "Graderfile", destFile: "autograde.tar"}, 
-                        {localFile: "Makefile", destFile: "Makefile"},]
-                        .concat(optionFiles),
-                jobName: `${labName}-${submissionId}`,
-                output_file: `${labName}-${submissionId}-output.txt`,
-                timeout: timeout,
-                callback_url: `http://api:3001/grade/callback/${labName}-${submissionId}-output.txt`
-            }
-            response = await addJob(labName, jobOptions)
+        } catch (e: any) {
+            throw new Error(e)
         }
-    } catch (e) {
-        console.error(e)
     }
-    //remember, immediate callback is made when job has been added to queue, not sure how we're handling the rest of it yet though lmao
 
     //Grading is finished. Create SubmissionScore and AssignmentScore and save to db.
     const scoreObj: SubmissionScore = {
@@ -108,28 +111,14 @@ export async function grade(submissionId: number) {
     }
     allScores.push(await submissionScoreService.create(scoreObj))
 
-    //PLACEHOLDER AssignmentScore logic. This should be customizable, but for now AssignmentScore will simply equal the latest SubmissionScore
-    const assignmentScoreModel = await assignmentScoreService.retrieveByUser(submission.assignmentId, submission.userId)
-    if (assignmentScoreModel) { //If assignmentScore already exists, update existing entity
-        const assignmentScore = serializeAssignmentScore(assignmentScoreModel)
-        assignmentScore.score = score
-        assignmentScoreService.update(assignmentScore)
-
-    } else { //Otherwise make a new one
-        const assignmentScore: AssignmentScore = {
-            assignmentId: submission.assignmentId,
-            userId: submission.userId,
-            score: score,
-        }
-        await assignmentScoreService.create(assignmentScore)
-    }
+    //If containergrading is true, tangoCallback handles assignmentScore creation
+    if (containerGrading === false) updateAssignmentScore(submission, score)    
 
     return response
 }
 
 
 export async function tangoCallback(outputFile: string) {
-    console.log('goot!')
     //Output filename consists of 4 sections separated by hyphens. + and () only for visual clarity, not a part of the filename
     //(course.number+course.semester+course.id)-(assignment.id)-(submission.id)-(output.txt)
     const filenameSplit = outputFile.split('-')
@@ -138,15 +127,18 @@ export async function tangoCallback(outputFile: string) {
     const submissionId = Number(filenameSplit[2])
 
     const response = await pollJob(labName, outputFile)
-    if (typeof response !== 'string') {
-        throw new Error('Autograder output file not found')
-    }
+    if (typeof response !== 'string') throw new Error('Autograder output file not found')
+
     const splitResponse = response.split(/\r\n|\r|\n/)
     const scores = (JSON.parse(splitResponse[splitResponse.length - 2])).scores
 
     let score = 0
     const assignmentProblems = await assignmentProblemService.list(assignmentId)
-    const submissionScore = await submissionScoreService.retrieve(submissionId)
+    const submissionScoreModel = await submissionScoreService.retrieve(submissionId)
+    const submissionModel = await submissionService.retrieve(submissionId)
+    if (!submissionModel) throw new Error("Submission not found.")
+    const submission = serializeSubmission(submissionModel)
+
     for (const question in scores) {
         const assignmentProblem = assignmentProblems.find(problem => problem.problemName === question)
         if (assignmentProblem) {
@@ -160,21 +152,42 @@ export async function tangoCallback(outputFile: string) {
             score += Number(scores[question])
         }
     }
-    if (submissionScore) {
-        submissionScore.score += score
+    if (submissionScoreModel) { //If noncontainer grading has occured
+        var submissionScore = serializeSubmissionScore(submissionScoreModel)
+        submissionScore.score = (submissionScore.score ?? 0) + score
+        score = submissionScore.score
         submissionScore.feedback += `\n${response}`
 
-        submissionScoreService.update(submissionScore)
-    } else {
-        const scoreObj: SubmissionScore = {
+        await submissionScoreService.update(submissionScore)
+    } else { //If submission is exclusively container graded
+        var submissionScore: SubmissionScore = {
             submissionId: submissionId,
             score: score,       //Sum of all SubmissionProblemScore scores
             feedback: response  //Feedback from Tango
         }
-        submissionScoreService.create(scoreObj)
+        await submissionScoreService.create(submissionScore)
     }
+    await updateAssignmentScore(submission, score)
 
-    return {output: response}
+    return (submissionScore)
+}
+
+//Currently just sets assignmentscore to the latest submission. Pulled this function out for easy future modification.
+async function updateAssignmentScore(submission: Submission, score: number) {
+    const assignmentScoreModel = await assignmentScoreService.retrieveByUser(submission.assignmentId, submission.userId)
+    if (assignmentScoreModel) { //If assignmentScore already exists, update existing entity
+        const assignmentScore = serializeAssignmentScore(assignmentScoreModel)
+        assignmentScore.score = score
+        await assignmentScoreService.update(assignmentScore)
+
+    } else { //Otherwise create a new one
+        const assignmentScore: AssignmentScore = {
+            assignmentId: submission.assignmentId,
+            userId: submission.userId,
+            score: score,
+        }
+        await assignmentScoreService.create(assignmentScore)
+    }
 }
 
 export default { grade, tangoCallback }
