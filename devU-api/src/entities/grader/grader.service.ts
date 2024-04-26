@@ -18,7 +18,7 @@ import { downloadFile, initializeMinio } from '../../fileStorage'
 
 import environment from '../../environment'
 
-export async function grade(submissionId: number) {
+async function grade(submissionId: number) {
     const submissionModel = await submissionService.retrieve(submissionId)
     if (!submissionModel) throw new Error('Submission not found.')
     const submission = serializeSubmission(submissionModel)
@@ -27,10 +27,9 @@ export async function grade(submissionId: number) {
 
     const content = JSON.parse(submission.content)
     const form = content.form
-    const filepaths: string[] = content.filepaths //Using the field name that was written on the whiteboard for now
+    const filepaths: string[] = content.filepaths
 
     const nonContainerAutograders = await nonContainerAutograderService.listByAssignmentId(assignmentId)
-    //const containerAutograders = await containerAutograderService.listByAssignmentId(assignmentId)
     const assignmentProblems = await assignmentProblemService.list(assignmentId)
 
     
@@ -118,7 +117,7 @@ export async function grade(submissionId: number) {
 }
 
 
-export async function tangoCallback(outputFile: string) {
+async function tangoCallback(outputFile: string) {
     //Output filename consists of 4 sections separated by hyphens. + and () only for visual clarity, not a part of the filename
     //(course.number+course.semester+course.id)-(assignment.id)-(submission.id)-(output.txt)
     const filenameSplit = outputFile.split('-')
@@ -126,50 +125,93 @@ export async function tangoCallback(outputFile: string) {
     const assignmentId = Number(filenameSplit[1])
     const submissionId = Number(filenameSplit[2])
 
-    const response = await pollJob(labName, outputFile)
-    if (typeof response !== 'string') throw new Error('Autograder output file not found')
+    try {
+        const response = await pollJob(labName, outputFile)
+        if (typeof response !== 'string') throw 'Autograder output file not found'
 
-    const splitResponse = response.split(/\r\n|\r|\n/)
-    const scores = (JSON.parse(splitResponse[splitResponse.length - 2])).scores
+        try {
+            const splitResponse = response.split(/\r\n|\r|\n/)
+            var scoresLine = JSON.parse(splitResponse[splitResponse.length - 2])
+        } catch {
+            throw response
+        }
+        const scores = scoresLine.scores
 
-    let score = 0
+        let score = 0
+        const assignmentProblems = await assignmentProblemService.list(assignmentId)
+        const submissionScoreModel = await submissionScoreService.retrieve(submissionId)
+        const submissionModel = await submissionService.retrieve(submissionId)
+        if (!submissionModel) throw "Submission not found."
+        const submission = serializeSubmission(submissionModel)
+
+        for (const question in scores) {
+            const assignmentProblem = assignmentProblems.find(problem => problem.problemName === question)
+            if (assignmentProblem) {
+                const problemScoreObj: SubmissionProblemScore = {
+                    submissionId: submissionId,
+                    assignmentProblemId: assignmentProblem.id,
+                    score: Number(scores[question]),
+                    feedback: `Autograder graded ${assignmentProblem.problemName} for ${Number(scores[question])} points`
+                }
+                submissionProblemScoreService.create(problemScoreObj)
+                score += Number(scores[question])
+            }
+        }
+        if (submissionScoreModel) { //If noncontainer grading has occured
+            var submissionScore = serializeSubmissionScore(submissionScoreModel)
+            submissionScore.score = (submissionScore.score ?? 0) + score
+            score = submissionScore.score
+            submissionScore.feedback += `\n${response}`
+
+            await submissionScoreService.update(submissionScore)
+        } else { //If submission is exclusively container graded
+            var submissionScore: SubmissionScore = {
+                submissionId: submissionId,
+                score: score,       //Sum of all SubmissionProblemScore scores
+                feedback: response  //Feedback from Tango
+            }
+            await submissionScoreService.create(submissionScore)
+        }
+        await updateAssignmentScore(submission, score)
+
+        return {submissionScore: submissionScore, outputFile: response}
+    } catch (e: any) {
+        callbackFailure(assignmentId, submissionId, e)
+        throw new Error(e)
+    }
+}
+
+export async function callbackFailure(assignmentId: number, submissionId: number, file: string) {
     const assignmentProblems = await assignmentProblemService.list(assignmentId)
     const submissionScoreModel = await submissionScoreService.retrieve(submissionId)
-    const submissionModel = await submissionService.retrieve(submissionId)
-    if (!submissionModel) throw new Error("Submission not found.")
-    const submission = serializeSubmission(submissionModel)
+    const submissionProblemScoreModels = await submissionProblemScoreService.list(submissionId)
 
-    for (const question in scores) {
-        const assignmentProblem = assignmentProblems.find(problem => problem.problemName === question)
-        if (assignmentProblem) {
+    for (const assignmentProblem of assignmentProblems) {
+        const submissionProblemScore = submissionProblemScoreModels.find((sps) => sps.assignmentProblemId === assignmentProblem.id)
+        if (!submissionProblemScore) { //If assignmentProblem hasn't already been graded by noncontainer autograder
             const problemScoreObj: SubmissionProblemScore = {
                 submissionId: submissionId,
                 assignmentProblemId: assignmentProblem.id,
-                score: Number(scores[question]),
-                feedback: '' //Not sure what to do for individual problemscore feedback 
+                score: 0,
+                feedback: 'Autograding failed to complete.'
             }
             submissionProblemScoreService.create(problemScoreObj)
-            score += Number(scores[question])
         }
     }
     if (submissionScoreModel) { //If noncontainer grading has occured
         var submissionScore = serializeSubmissionScore(submissionScoreModel)
-        submissionScore.score = (submissionScore.score ?? 0) + score
-        score = submissionScore.score
-        submissionScore.feedback += `\n${response}`
+        submissionScore.score = (submissionScore.score ?? 0)
+        submissionScore.feedback += `\n${file}`
 
-        await submissionScoreService.update(submissionScore)
+        submissionScoreService.update(submissionScore)
     } else { //If submission is exclusively container graded
         var submissionScore: SubmissionScore = {
             submissionId: submissionId,
-            score: score,       //Sum of all SubmissionProblemScore scores
-            feedback: response  //Feedback from Tango
+            score: 0,
+            feedback: file
         }
-        await submissionScoreService.create(submissionScore)
+        submissionScoreService.create(submissionScore)
     }
-    await updateAssignmentScore(submission, score)
-
-    return (submissionScore)
 }
 
 //Currently just sets assignmentscore to the latest submission. Pulled this function out for easy future modification.
@@ -178,7 +220,7 @@ async function updateAssignmentScore(submission: Submission, score: number) {
     if (assignmentScoreModel) { //If assignmentScore already exists, update existing entity
         const assignmentScore = serializeAssignmentScore(assignmentScoreModel)
         assignmentScore.score = score
-        await assignmentScoreService.update(assignmentScore)
+        assignmentScoreService.update(assignmentScore)
 
     } else { //Otherwise create a new one
         const assignmentScore: AssignmentScore = {
@@ -186,7 +228,7 @@ async function updateAssignmentScore(submission: Submission, score: number) {
             userId: submission.userId,
             score: score,
         }
-        await assignmentScoreService.create(assignmentScore)
+        assignmentScoreService.create(assignmentScore)
     }
 }
 

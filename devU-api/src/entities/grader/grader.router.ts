@@ -33,6 +33,6 @@ const Router = express.Router()
  */
 Router.post('/:id', asInt(), isAuthorized, GraderController.grade)
 
-Router.post('/callback/:id', GraderController.tangoCallback) //Unauthorized route so tango can make callback without needing token
+Router.post('/callback/:outputFile', GraderController.tangoCallback) //Unauthorized route so tango can make callback without needing token
 
 export default Router

@@ -10,9 +10,6 @@ export async function grade(req: Request, res: Response, next: NextFunction) {
     try {
         const submissionId = parseInt(req.params.id)
         const response = await GraderService.grade(submissionId) //grade
-        //if (!grade || grade.length === 0) return res.status(404).json(NotFound)
-
-        //const response = serialize(grade)
 
         res.status(200).json({message: response?.jobId + ", " + response?.statusId + ", " + response?.statusMsg})
     } catch (err) {
@@ -22,13 +19,11 @@ export async function grade(req: Request, res: Response, next: NextFunction) {
 
 export async function tangoCallback(req: Request, res: Response, next: NextFunction) {
     try {
-        console.log('awawawa')
-        const submissionId = req.params.id
-        const response = await GraderService.tangoCallback(submissionId)
+        const outputFile = req.params.outputFile
+        const response = await GraderService.tangoCallback(outputFile)
 
         res.status(200).json(response)
     } catch (err) {
-        console.log("wah :((")
         res.status(400).json(new GenericResponse(err.message))
     }
 }
