@@ -141,12 +141,13 @@ export async function tangoCallback(outputFile: string) {
     if (typeof response !== 'string') {
         throw new Error('Autograder output file not found')
     }
-    const splitResponse = (response as string).split(/\r\n|\r|\n/)
-    const scores = JSON.parse(splitResponse[splitResponse.length - 2])
+    const splitResponse = response.split(/\r\n|\r|\n/)
+    const scores = (JSON.parse(splitResponse[splitResponse.length - 2])).scores
 
     let score = 0
     const assignmentProblems = await assignmentProblemService.list(assignmentId)
-    for (const question in scores['scores']) {
+    const submissionScore = await submissionScoreService.retrieve(submissionId)
+    for (const question in scores) {
         const assignmentProblem = assignmentProblems.find(problem => problem.problemName === question)
         if (assignmentProblem) {
             const problemScoreObj: SubmissionProblemScore = {
@@ -158,7 +159,19 @@ export async function tangoCallback(outputFile: string) {
             submissionProblemScoreService.create(problemScoreObj)
             score += Number(scores[question])
         }
-        
+    }
+    if (submissionScore) {
+        submissionScore.score += score
+        submissionScore.feedback += `\n${response}`
+
+        submissionScoreService.update(submissionScore)
+    } else {
+        const scoreObj: SubmissionScore = {
+            submissionId: submissionId,
+            score: score,       //Sum of all SubmissionProblemScore scores
+            feedback: response  //Feedback from Tango
+        }
+        submissionScoreService.create(scoreObj)
     }
 
     return {output: response}
