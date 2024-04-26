@@ -26,7 +26,7 @@ const CoursePreviewPage = () => {
 
 
     const handleCheckEnroll = async () => {
-        RequestService.get(`/api/user-courses/user/courses/${courseId}`)
+        RequestService.get(`/api/course/${courseId}/user-courses/user`)
         .then((response) => {
             setUserCourses(response);
         })
@@ -65,11 +65,11 @@ const CoursePreviewPage = () => {
         const userCourseData = {
             userId: userId,
             courseId: courseId,
-            level: 'student',
+            role: 'student',
             dropped: false
         };
 
-        RequestService.post(`/api/courses/${courseId}/user-courses`, userCourseData)
+        RequestService.post(`/api/course/${courseId}/user-courses`, userCourseData)
         .catch((error: Error) => {
             const message = error.message
             setAlert({autoDelete: false, type: 'error', message})

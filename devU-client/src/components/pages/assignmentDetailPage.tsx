@@ -42,7 +42,7 @@ const AssignmentDetailPage = () => {
 
     const fetchData = async () => {
         try {
-            const assignment = await RequestService.get<Assignment>(`/api/assignments/${assignmentId}`)
+            const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${assignmentId}`)
             setAssignment(assignment)
 
             const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/assignment-problems/${assignmentId}`)
