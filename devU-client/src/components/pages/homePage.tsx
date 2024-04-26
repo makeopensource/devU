@@ -5,18 +5,13 @@ import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from './errorPage'
 import styles from './homePage.scss'
 import UserCourseListItem from "../listItems/userCourseListItem";
-import Button from '@mui/material/Button'
-
 
 import {useAppSelector} from 'redux/hooks'
 import RequestService from 'services/request.service'
 import {Assignment, Course, UserCourse} from 'devu-shared-modules'
-import {useHistory} from 'react-router-dom'
 
 const HomePage = () => {
     const userId = useAppSelector((store) => store.user.id)
-    const role = useAppSelector((store) => store.roleMode)
-    const history = useHistory()
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -59,10 +54,6 @@ const HomePage = () => {
                 <h1>My Courses</h1>
                 <div className={styles.largeLine}></div>
 
-                {role.isInstructor() && <Button variant="contained" onClick={() => {
-                    history.push(`/addCoursesForm`)
-                }}>Add Course</Button>
-                }
             </div>
 
             <div className={styles.coursesContainer}>

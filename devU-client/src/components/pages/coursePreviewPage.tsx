@@ -26,7 +26,7 @@ const CoursePreviewPage = () => {
 
 
     const handleCheckEnroll = async () => {
-        RequestService.get(`/api/course/${courseId}/user-courses/user`)
+        RequestService.get(`/api/course/${courseId}/user-courses/users`)
         .then((response) => {
             setUserCourses(response);
         })
@@ -58,7 +58,7 @@ const CoursePreviewPage = () => {
     if (loading) return <LoadingOverlay delay={250}/>
 
     if (enrolled) {
-        history.push(`/courses/${courseId}`)
+        history.push(`/course/${courseId}`)
     }
 
     const handleJoinCourse = () => {

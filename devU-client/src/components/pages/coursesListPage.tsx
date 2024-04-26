@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
 import {Course, UserCourse} from 'devu-shared-modules'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
@@ -8,7 +7,9 @@ import ErrorPage from './errorPage'
 import RequestService from 'services/request.service'
 import styles from './coursesListPage.scss'
 import CourseListItem from "../listItems/courseListItem";
-//import Button from 'components/shared/inputs/button'
+import {useAppSelector} from "../../redux/hooks";
+import Button from "@mui/material/Button";
+import {useHistory} from "react-router-dom";
 
 type Filter = true | false
 
@@ -24,7 +25,8 @@ const UserCoursesListPage = () => {
     const [error, setError] = useState(null)
     const [userCourses, setUserCourses] = useState(new Array<UserCourse>())
     const [filter, setFilter] = useState<Filter>(false )
-
+    const role = useAppSelector((store) => store.roleMode)
+    const history = useHistory()
 
     //Temporary place to store state for all courses
     const [allCourses, setAllCourses] = useState(new Array<Course>())
@@ -72,10 +74,10 @@ const UserCoursesListPage = () => {
                 <h1>All Courses</h1>
                 <div className={styles.largeLine}></div>
 
-                <Link className={styles.addCourseBtn} to={`/addCoursesForm`}>
-                    Add Courses
-                </Link>
-
+                {role.isInstructor() && <Button variant="contained" onClick={() => {
+                    history.push(`/addCoursesForm`)
+                }}>Add Course</Button>
+                }
                 <div className={styles.filters}>
                     <Dropdown
                         label='Courses Display Options'

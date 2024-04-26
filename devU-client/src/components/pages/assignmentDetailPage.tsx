@@ -1,24 +1,18 @@
-import React,{ useState, useEffect } from 'react'
-import {/*Link,*/ useHistory} from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
+import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import { AssignmentProblem, Submission, /*SubmissionScore, SubmissionProblemScore,*/ Assignment, ContainerAutoGrader } from 'devu-shared-modules' 
+import {Assignment, AssignmentProblem, Submission,} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from './errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-import { useAppSelector,useActionless } from 'redux/hooks'
-import { SET_ALERT } from 'redux/types/active.types'
-import { useParams } from 'react-router-dom'
+import {useActionless, useAppSelector} from 'redux/hooks'
+import {SET_ALERT} from 'redux/types/active.types'
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import {CardActionArea} from '@mui/material'
+import {Accordion, AccordionDetails, AccordionSummary, CardActionArea, TextField, Typography} from '@mui/material'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import {Accordion} from '@mui/material'
-import {AccordionSummary} from '@mui/material'
-import {AccordionDetails} from '@mui/material'
-import {Typography} from '@mui/material'
-import {TextField} from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
 
 import styles from './assignmentDetailPage.scss'
@@ -28,6 +22,7 @@ const AssignmentDetailPage = () => {
     const history = useHistory()
     const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
     const userId = useAppSelector((store) => store.user.id)
+    const role = useAppSelector((store) => store.roleMode)
 
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -38,8 +33,9 @@ const AssignmentDetailPage = () => {
     // const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
     // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
-    const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
 
+    // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
+    const containerAutograder = false;
     useEffect(() => {
         fetchData()
     }, []);
@@ -47,8 +43,8 @@ const AssignmentDetailPage = () => {
 
     const fetchData = async () => {
         try {
-            const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${assignmentId}`)
-            setAssignment(assignment)
+            const assignments = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${assignmentId}`)
+            setAssignment(assignments)
 
             const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
             setAssignmentProblems(assignmentProblemsReq)
@@ -69,8 +65,8 @@ const AssignmentDetailPage = () => {
             //  const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
             //  setSubmissionProblemScores(submissionProblemScoresReq)
 
-            const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/container-auto-graders/assignment/${assignmentId}`)).pop() ?? null
-            setContainerAutograder(containerAutograder)
+            // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/container-auto-graders/assignment/${assignmentId}`)).pop() ?? null
+            // setContainerAutograder(containerAutograder)
 
         } catch (error) {
             setError(error)
@@ -139,17 +135,16 @@ const AssignmentDetailPage = () => {
                 <div className={styles.smallLine}></div>
                 <h1>{assignment?.name}</h1>
                 <div className={styles.largeLine}></div>
-
+                {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                    history.push(`/course/${courseId}/assignment/${assignmentId}/createNCAG`)
+                }}>Add NCAG</Button>}
+                {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                    history.push(`/course/${courseId}/assignment/${assignmentId}/createCAG`)
+                }}>Add CAG</Button>}
                 <Stack spacing={2} direction='row'>
-                    <Button variant='contained' className={styles.buttons} onClick={() => {
-                        history.push(`/courses/${courseId}/assignments/${assignmentId}/update`)
-                    }}>Edit Assignment</Button>
-                    {/* <Button variant='contained' className={styles.buttons} onClick={() => {
-                        history.push(`/ncagtest`)
-                    }}>Add NCAG</Button>
-                    <Button variant='contained' className={styles.buttons} onClick={() => {
-                        history.push(`/cagtest`)
-                    }}>Add CAG</Button> */}
+                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
+                    }}>Edit Assignment</Button>}
                 </Stack>
             </div>
 

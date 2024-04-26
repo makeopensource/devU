@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express'
+import {NextFunction, Request, Response} from 'express'
 
 import UserCourseService from './userCourse.service'
-import { serialize } from './userCourse.serializer'
+import {serialize} from './userCourse.serializer'
 
-import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
+import {GenericResponse, NotFound, Updated} from '../../utils/apiResponse.utils'
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
@@ -112,7 +112,7 @@ export async function checkEnroll(req: Request, res: Response, next: NextFunctio
 
 export async function _delete(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.courseId)
     const currentUser = req.currentUser?.userId
     if (!currentUser) return res.status(401).json({ message: 'Unauthorized' })
 

@@ -10,7 +10,7 @@ type Props = {
 }
 
 const SimpleAssignmentListItem = ({assignment}: Props) => (
-    <ListItemWrapper to={`/courses/${assignment.courseId}/assignments/${assignment.id}`} tag={assignment.name}
+    <ListItemWrapper to={`/course/${assignment.courseId}/assignment/${assignment.id}`} tag={assignment.name}
                      className={styles.title} tagStyle={styles.tag} containerStyle={styles.container}>
         <div className={styles.subText}>{assignment.name}</div>
         <div className={styles.subText}>{assignment.categoryName}</div>

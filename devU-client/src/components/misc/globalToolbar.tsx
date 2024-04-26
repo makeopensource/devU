@@ -29,9 +29,9 @@ const GlobalToolbar = () => {
             <Link to={`/courses`} className={styles.link}>
               Courses
             </Link>
-            <Link to={`/myCourses`} className={styles.link}>
-              My Courses
-            </Link>
+            {/*<Link to={`/myCourses`} className={styles.link}>*/}
+            {/*  My Courses*/}
+            {/*</Link>*/}
             {/* <Link to={`/submissions`} className={styles.link}>
               Submissions
             </Link> */}
