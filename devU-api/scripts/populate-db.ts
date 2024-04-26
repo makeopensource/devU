@@ -67,15 +67,15 @@ async function CreateCourse(name: string, number: string, semester: string) {
   return await SendPOST('/courses/instructor', JSON.stringify(courseData), 'admin')
 }
 
-async function joinCourse(courseId: number, userId: number, level: string) {
+async function joinCourse(courseId: number, userId: number, role: string) {
   const userCourseData = {
     userId: userId,
     courseId: courseId,
-    level: level,
+    role: role,
     dropped: false,
   }
   console.log(`Joining course: ${courseId} for user: ${userId}`)
-  return await SendPOST('/user-courses', JSON.stringify(userCourseData), 'admin')
+  return await SendPOST(`/course/${courseId}/user-courses`, JSON.stringify(userCourseData), 'admin')
 }
 
 async function createAssignment(courseId: number, name: string, categoryName: string) {
@@ -210,29 +210,7 @@ async function runCourseAndSubmission() {
   const courseId1 = (await CreateCourse('Testing Course Name1', 'CSE101', 's2024')).id
   const courseId2 = (await CreateCourse('Testing Course Name2', 'CSE102', 's2024')).id
 
-  //Create enroll students
-  // const response = await SendPOST(
-  //   `/course/${courseId1}/user-courses`,
-  //   JSON.stringify({ userId: billy, courseId: courseId1, role: 'student', dropped: false }),
-  //   'admin'
-  // )
-  // console.log(response)
-  // await SendPOST(
-  //   `/course/${courseId2}/user-courses`,
-  //   JSON.stringify({ userId: billy, courseId: courseId2, role: 'student', dropped: false }),
-  //   'admin'
-  // )
-  // await SendPOST(
-  //   `/course/${courseId1}/user-courses`,
-  //   JSON.stringify({ userId: bob, courseId: courseId1, role: 'student', dropped: false }),
-  //   'admin'
-  // )
-  // await SendPOST(
-  //   `/course/${courseId2}/user-courses`,
-  //   JSON.stringify({ userId: bob, courseId: courseId2, role: 'student', dropped: false }),
-  //   'admin'
-  // )
-  //Create enroll students
+  //Enroll students
   await joinCourse(courseId1, billy, 'student')
   await joinCourse(courseId1, bob, 'student')
   await joinCourse(courseId2, billy, 'student')
