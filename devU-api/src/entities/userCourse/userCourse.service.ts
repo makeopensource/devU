@@ -52,7 +52,7 @@ export async function listByCourse(courseId: number) {
 }
 
 export async function listByUser(userId: number) {
-  return await connect().find({ userId, dropped: false, deletedAt: IsNull() })
+  return await connect().find({ userId: userId, dropped: false, deletedAt: IsNull() })
 }
 
 export async function checkIfEnrolled(userId: number, courseId: number) {

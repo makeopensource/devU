@@ -31,7 +31,7 @@ export async function getByUser(req: Request, res: Response, next: NextFunction)
 
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.courseId)
     const course = await CourseService.retrieve(id)
 
     if (!course) return res.status(404).json(NotFound)

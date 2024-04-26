@@ -32,9 +32,8 @@ const HomePage = () => {
             const enrolledCourses = await RequestService.get<UserCourse[]>( `/api/courses/user/${userId}` )
             const coursePromises = enrolledCourses.map(_course => {
                 const course = RequestService.get<Course>(`/api/courses/${_course.id}`) // TODO: Optimize out this redundant call
-                const assignments = RequestService.get<Assignment[]>(`/api/course/${_course.id}/assignments/`)
+                const assignments = RequestService.get<Assignment[]>(`/api/course/${_course.id}/assignments/released`)
                 return Promise.all([course, assignments])
-
             })
             const result = await Promise.all(coursePromises)
             const courses = result.map(([course]) => course)
