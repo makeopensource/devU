@@ -51,9 +51,16 @@ export async function listByCourse(courseId: number) {
   return await connect().find({ courseId, deletedAt: IsNull() })
 }
 
-export async function checking(userId: number, courseId: number) {
+export async function listByUser(userId: number) {
+  return await connect().find({ userId, dropped: false, deletedAt: IsNull() })
+}
+
+export async function checkIfEnrolled(userId: number, courseId: number) {
   return await connect().findOne({ userId, courseId, dropped: false, deletedAt: IsNull() })
 }
+
+
+
 
 export default {
   create,
@@ -64,5 +71,6 @@ export default {
   list,
   listAll,
   listByCourse,
-  checking,
+  listByUser,
+  checking: checkIfEnrolled,
 }

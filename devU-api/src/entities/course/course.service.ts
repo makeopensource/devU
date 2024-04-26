@@ -4,6 +4,7 @@ import CourseModel from './course.model'
 
 import { Course } from 'devu-shared-modules'
 import { initializeMinio } from '../../fileStorage'
+import UserCourseService from "../userCourse/userCourse.service";
 
 const connect = () => getRepository(CourseModel)
 
@@ -32,8 +33,16 @@ export async function list() {
   return await connect().find({ deletedAt: IsNull() })
 }
 export async function listByUser(userId: number) {
-  // TODO: lookup using UserCourses
-  return await connect().find({ deletedAt: IsNull() })
+  const userCourses = await UserCourseService.listByUser(userId)
+  const courses: CourseModel[] = []
+  // TODO: There is a more efficient way to do this than a query in a loop.. I'm too rusty on SQL to think of it rn
+  for(const userCourse of userCourses) {
+    const course = await connect().findOne({id: userCourse.courseId, deletedAt: IsNull()})
+    if(course){
+    courses.push()
+      }
+  }
+  return courses
 }
 
 export default {
