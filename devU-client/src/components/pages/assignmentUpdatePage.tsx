@@ -10,7 +10,9 @@ import RequestService from 'services/request.service'
 
 import {useActionless} from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
-import Button from 'components/shared/inputs/button'
+// import Button from 'components/shared/inputs/button'
+import Button from '@mui/material/Button'
+import formStyles from './assignmentFormPage.scss'
 
 import {SET_ALERT} from 'redux/types/active.types'
 import styles from 'components/shared/inputs/textField.scss'
@@ -36,7 +38,6 @@ const AssignmentUpdatePage = () => {
     const toggleProblemForm = () => { setToggleForm(!toggleForm) }
 
     const handleSubmit = () => {
-        setLoading(true)
         const finalProblemFormData = {
             assignmentId: parseInt(problemFormData.assignmentId),
             problemName: problemFormData.problemName,
@@ -55,7 +56,6 @@ const AssignmentUpdatePage = () => {
             setAlert({ autoDelete: false, type: 'error', message })
         })
         .finally(() => {
-            setLoading(false)
             setProblemFormData({
                 assignmentId: assignmentId,
                 problemName: '',
@@ -86,7 +86,6 @@ const AssignmentUpdatePage = () => {
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [dueDate, setDueDate] = useState(new Date())
-    const [loading, setLoading] = useState(false)
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
     const history = useHistory()
 
@@ -118,7 +117,6 @@ const AssignmentUpdatePage = () => {
             disableHandins: formData.disableHandins,
 
         }
-        setLoading(true)
         
         RequestService.put(`/api/assignments/${assignmentId}`, finalFormData)
             .then(() => {
@@ -133,59 +131,88 @@ const AssignmentUpdatePage = () => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         .finally(() => {
-            setLoading(false)
             history.goBack()
         })
     }
 
     return (
         <PageWrapper>
-            <h1>Assignment Detail Update</h1>
-            <p>Required Field *</p>
+            <div className={formStyles.header}>
+                <div className={formStyles.smallLine}></div>
+                <h1>Assignment Detail Update</h1>
+                <div className={formStyles.largeLine}></div>
 
+                <Button variant="contained" onClick={toggleProblemForm}>Add Problem</Button>
+            </div>
 
-            <Button onClick={toggleProblemForm}>Add Problem</Button>
             {toggleForm && (
-                <div>
-                    <br></br>
-                    <TextField id='problemName' label='Problem Question *' onChange={handleProblemChange}
+                <div className={formStyles.form}>
+                    <p>Required Field *</p>
+
+                    <label htmlFor='problemName'>Problem Question *</label>
+                    <TextField id='problemName' onChange={handleProblemChange}
                                value={problemFormData.problemName}
                                className={problemInvalidFields.get('problemName')}/>
-                    <TextField id='maxScore' label='Max Score *' onChange={handleProblemChange}
+
+                    <label htmlFor='maxScore'>Max Score *</label>
+                    <TextField id='maxScore' onChange={handleProblemChange}
                                value={problemFormData.maxScore}
                                className={problemInvalidFields.get('maxScore')}/>
-                    <Button onClick={handleSubmit} loading={loading}>Create Problem</Button>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Button variant='contained' onClick={handleSubmit} className={formStyles.submitBtn}>Create Problem</Button>
+                    </div>
                 </div>
             )}
 
             <br></br><br></br>
-            <TextField id='name' label='Assignment Name *' onChange={handleChange}
-                       className={invalidFields.get('name')}/>
+            <div className={formStyles.form}>
+                <p>Required Field *</p>
 
-            <label htmlFor='start_date'>Start Date *</label>
-            <br/>
-            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}/>
-            <br/>
-            <label htmlFor='due_date'>Due Date *</label>
-            <br/>
-            <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}/>
-            <br/>
-            <label htmlFor='end_date'>End Date *</label>
-            <br/>
-            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}/>
-            <TextField id='categoryName' label='Category Name *' onChange={handleChange}
-                       className={invalidFields.get('categoryName')}/>
-            <TextField id='description' label='Description of the Assignment *' onChange={handleChange}
-                       className={invalidFields.get('description')}/>
-            <TextField id='maxFileSize' label='Maximum allowable file Size *' onChange={handleChange}
-                       className={invalidFields.get('maxFileSize')}/>
-            <TextField id='maxSubmission' label='Maximum Submissions' onChange={handleChange}
-                       className={invalidFields.get('maxSubmission')}/>
-            <label htmlFor='disableHandins'>Disable Handins</label>
-            <input type='checkbox' id='disableHandins' checked={formData.disableHandins} onChange={handleCheckbox}/>
-            <br/>
+                <label htmlFor='name'>Assignment Name *</label>
+                <TextField id='name' onChange={handleChange}/>
 
-            <Button onClick={handleAssignmentUpdate} loading={loading}>Submit Updates</Button>
+                <div className={formStyles.datepickerContainer}>
+                    <div>
+                        <label htmlFor='start_date'>Start Date *</label>
+                        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}/>
+                    </div>
+                    <div>
+                        <label htmlFor='due_date'>Due Date *</label>
+                        <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}/>
+                    </div>
+                    <div>
+                        <label htmlFor='end_date'>End Date *</label>
+                        <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}/>
+                    </div>
+                </div>
+                <br/>
+
+                <label htmlFor='categoryName'>Category *</label>
+                <TextField id='categoryName' onChange={handleChange}
+                        className={invalidFields.get('categoryName')}/>
+
+                <label htmlFor='description'>Description *</label>
+                <TextField id='description' onChange={handleChange}
+                        className={invalidFields.get('description')}/>
+                <label htmlFor='maxFileSize'>Max File Size *</label>
+                <TextField id='maxFileSize' onChange={handleChange}
+                        className={invalidFields.get('maxFileSize')}/>
+                <label htmlFor='maxSubmission'>Max Submission *</label>
+                <TextField id='maxSubmission' onChange={handleChange}
+                        className={invalidFields.get('maxSubmission')}/>
+
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <label htmlFor='disableHandins'>Disable Handins</label>
+                    <input type='checkbox' id='disableHandins' checked={formData.disableHandins} onChange={handleCheckbox} className={formStyles.submitBtn}/>
+                </div>
+
+                <br/>
+
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant='contained' onClick={handleAssignmentUpdate} className={formStyles.submitBtn}>Submit Updates</Button>
+                </div>
+            </div>
         </PageWrapper>
     )
 }

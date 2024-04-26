@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import styles from './nonContainerAutoGraderForm.scss'
 import TextField from 'components/shared/inputs/textField'
-import Button from 'components/shared/inputs/button'
+// import Button from 'components/shared/inputs/button'
 import {useActionless} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
 import RequestService from 'services/request.service'
@@ -10,6 +10,8 @@ import textStyles from '../shared/inputs/textField.scss'
 import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
 import {ExpressValidationError} from "../../../devu-shared-modules";
 import {useHistory, useParams} from 'react-router-dom'
+
+import Button from '@mui/material/Button'
 
 const NonContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -85,19 +87,28 @@ const NonContainerAutoGraderForm = () => {
     return(
         <PageWrapper>
             <h1>Non Container Auto Grader Form</h1>
-            <div className = {styles.leftColumn}>
-                <h1>Add a Non-Container Auto Grader</h1>
+            <div className = {styles.form}>
                 <p>Required Fields *</p>
-                <TextField id='question' label='Question *' onChange={handleChange} value={formData.question}
+
+                <label htmlFor='question'>Question *</label>
+                <TextField id='question' onChange={handleChange} value={formData.question}
                            className={invalidFields.get('question')}></TextField>
-                <TextField id='correctString' label='Answer *' onChange={handleChange} value={formData.correctString}
+                <label htmlFor='correctString'>Answer *</label>
+                <TextField id='correctString' onChange={handleChange} value={formData.correctString}
                            className={invalidFields.get('correctString')}></TextField>
-                <TextField id='score' label='Score *' onChange={handleChange} value={formData.score}
+                <label htmlFor='score'>Score *</label>
+                <TextField id='score' onChange={handleChange} value={formData.score}
                            className={invalidFields.get('score')}></TextField>
-                <label htmlFor='regex'>Regex</label>
-                <input  id= 'regex' type='checkbox' checked={formData.isRegex} onChange={toggleRegex}></input>
-                <br></br><br></br>
-                <Button onClick= { handleSubmit } >Add Problem</Button>
+                
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <label htmlFor='regex'>Regex</label>
+                    <input  id= 'regex' type='checkbox' checked={formData.isRegex} onChange={toggleRegex}></input>
+                </div>
+                <br/>
+                
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant='contained' onClick= { handleSubmit }>Add Problem</Button>
+                </div>
             </div>
             <div className = {styles.rightColumn}>
                 <h1>Existing Problems</h1>

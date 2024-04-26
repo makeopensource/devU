@@ -1,7 +1,27 @@
 @import 'variables';
 
-.header {
-    color: $text-color;
-    display: flex;
-    justify-content: space-between;
-  }
+.form {
+  display: absolute;
+  background-color: #4e4e4e;
+  border-radius: 10px;
+  padding: 20px;
+  width: 50%;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+}
+
+.datepickerContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.datepickerContainer > * {
+  margin: 0 10px;
+}
+
+.submitBtn {
+  display: flex;
+  justify-content: center;
+}

@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import styles from './nonContainerAutoGraderForm.scss'
 import TextField from 'components/shared/inputs/textField'
-import Button from 'components/shared/inputs/button'
+// import Button from 'components/shared/inputs/button'
 import {useActionless} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
 import RequestService from 'services/request.service'
@@ -10,6 +10,8 @@ import {ExpressValidationError} from "../../../devu-shared-modules";
 import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
 import textStyles from "../shared/inputs/textField.scss";
 import {useHistory, useParams} from 'react-router-dom'
+
+import Button from '@mui/material/Button'
 
 const ContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -73,20 +75,35 @@ const ContainerAutoGraderForm = () => {
     return(
         <PageWrapper>
             <h1>Container Auto Grader Form</h1>
-            <div className = {styles.leftColumn}>
-                <h1>Container Auto Grader</h1>
+            <div className = {styles.form}>
                 <p>Required Field *</p>
-                <TextField id='autogradingImage' label='Autograding Image *' onChange={handleChange}
+
+                <label htmlFor='autogradingImage'>Autograding Image *</label>
+                <TextField id='autogradingImage' onChange={handleChange}
                            value={formData.autogradingImage}
                            className={invalidFields.get('autogradingImage')}></TextField>
-                <TextField id='timeout' label='Timeout *' onChange={handleChange} value={formData.timeout}
+
+                <label htmlFor='timeout'>Timeout *</label>
+                <TextField id='timeout' onChange={handleChange} value={formData.timeout}
                            className={invalidFields.get('timeout')}></TextField>
-                <label htmlFor="graderFile">Graderfile *</label>
-                <input type="file" id='graderFile'  onChange={handleGraderfileChange} /> <br/>
-                <label htmlFor="makefileFile">Makefile</label>
-                <input type="file" id='makefileFile' onChange={handleMakefileChange} /> <br/>
-                <br></br><br></br>
-                <Button onClick= { handleSubmit } >Add Problem</Button>
+
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <label htmlFor="graderFile">Graderfile *</label>
+                    <input type="file" id='graderFile'  onChange={handleGraderfileChange} /> <br/>
+                </div>
+
+                <br/>
+
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <label htmlFor="makefileFile">Makefile *</label>
+                    <input type="file" id='makefileFile' onChange={handleMakefileChange} /> <br/>
+                </div>
+
+                <br/>
+
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant='contained' onClick= { handleSubmit } >Add Problem</Button>
+                </div>
             </div>
             <div className = {styles.rightColumn}>
                 <h1>Existing Problems</h1>

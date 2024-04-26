@@ -62,7 +62,7 @@ const HomePage = () => {
 
         <div>
           {role.isInstructor() && (
-            <Link className={styles.addCourseBtn} to={`/users/${userId}/addCoursesForm`}>
+            <Link className={styles.addCourseBtn} to={`/addCoursesForm`}>
               Add Courses
             </Link>
           )}

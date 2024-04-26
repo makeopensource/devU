@@ -29,7 +29,7 @@ const HomePage = () => {
 
     const fetchData = async () => {
         try {
-            const enrolledCourses = await RequestService.get<UserCourse[]>( `/api/courses/user/${userId}` )
+            const enrolledCourses = await RequestService.get<UserCourse[]>( `/api/user-courses/user/${userId}` )
             const coursePromises = enrolledCourses.map(_course => {
                 const course = RequestService.get<Course>(`/api/courses/${_course.id}`) // TODO: Optimize out this redundant call
                 const assignments = RequestService.get<Assignment[]>(`/api/course/${_course.id}/assignments/released`)
