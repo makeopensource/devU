@@ -1,4 +1,4 @@
-import { FileUpload } from '../../../devu-shared-modules'
+// import { FileUpload } from '../../../devu-shared-modules'
 import controller from '../fileUpload.controller'
 import FileUploadService from '../fileUpload.service'
 import Testing from '../../utils/testing.utils'
