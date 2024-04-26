@@ -21,6 +21,21 @@ export async function get(req: Request, res: Response, next: NextFunction) {
     next(err)
   }
 }
+export async function listByUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = req.currentUser?.userId
+    const query = req.query
+
+    if (!userId) return res.status(400).json(new GenericResponse('Request requires auth'))
+
+    const submissions = await SubmissionService.list(query, userId)
+    const response = submissions.map(serialize)
+
+    res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
 
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
@@ -97,4 +112,4 @@ export async function getByAssignment(req: Request, res: Response, next: NextFun
   }
 }
 
-export default { get, detail, post, revoke, getByAssignment, unrevoke, _delete }
+export default { get, listByUser, detail, post, revoke, getByAssignment, unrevoke, _delete }
