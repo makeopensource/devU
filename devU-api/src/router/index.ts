@@ -42,7 +42,7 @@ Router.use('/container-auto-graders', isAuthorized, containerAutoGrader)
 Router.use('/submission-problem-scores', isAuthorized, submissionProblemScore)
 Router.use('/file-upload', isAuthorized, fileUpload)
 Router.use('/deadline-extensions', isAuthorized, deadlineExtensions)
-Router.use('/grade', isAuthorized, grader)
+Router.use('/grade', grader) //Only the /grade/callback/:id route isn't authorized
 Router.use('/categories', isAuthorized, categories)
 Router.use('/assignment-scores', isAuthorized, assignmentScore)
 

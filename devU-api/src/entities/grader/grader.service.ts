@@ -91,7 +91,7 @@ export async function grade(submissionId: number) {
                 jobName: labName,
                 output_file: labName,
                 timeout: timeout,
-                callback_url: `${environment.apiUrl}/grade/callback/${submissionId}`
+                callback_url: `http://api:3001/grade/callback/${submissionId}`
             }
             response = await addJob(labName, jobOptions)
         }
