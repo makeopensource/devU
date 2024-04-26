@@ -1,4 +1,4 @@
-FROM node:16 as module_builder
+FROM node:20 as module_builder
 
 WORKDIR /tmp
 
@@ -8,7 +8,7 @@ RUN npm install && \
     npm run clean-directory && \
     npm run build-docker
 
-FROM node:16
+FROM node:20
 
 WORKDIR /app
 
