@@ -6,9 +6,9 @@ import containerAutograderService from '../containerAutoGrader/containerAutoGrad
 import assignmentProblemService from '../assignmentProblem/assignmentProblem.service'
 import assignmentScoreService from '../assignmentScore/assignmentScore.service'
 import courseService from '../course/course.service'
-import { addJob, createCourse, uploadFile } from '../../tango/tango.service'
+import { addJob, createCourse, uploadFile, pollJob } from '../../tango/tango.service'
 
-import { SubmissionScore, SubmissionProblemScore, ContainerAutoGrader, AssignmentScore } from 'devu-shared-modules'
+import { SubmissionScore, SubmissionProblemScore, AssignmentScore } from 'devu-shared-modules'
 import { checkAnswer } from '../nonContainerAutoGrader/nonContainerAutoGrader.grader'
 import { serialize as serializeNonContainer } from '../nonContainerAutoGrader/nonContainerAutoGrader.serializer'
 import { serialize as serializeAssignmentScore } from '../assignmentScore/assignmentScore.serializer'
@@ -65,7 +65,7 @@ export async function grade(submissionId: number) {
         initializeMinio(bucketName)
 
         var response = null
-        const labName = bucketName + '-' + submission.assignmentId
+        const labName = `${bucketName}-${submission.assignmentId}`
         const optionFiles = []
         const openResponse = await createCourse(labName)
         if (openResponse) {
@@ -88,15 +88,15 @@ export async function grade(submissionId: number) {
                 files: [{localFile: "Graderfile", destFile: "autograde.tar"}, 
                         {localFile: "Makefile", destFile: "Makefile"},]
                         .concat(optionFiles),
-                jobName: labName,
-                output_file: labName,
+                jobName: `${labName}-${submissionId}`,
+                output_file: `${labName}-${submissionId}-output.txt`,
                 timeout: timeout,
-                callback_url: `http://api:3001/grade/callback/${submissionId}`
+                callback_url: `http://api:3001/grade/callback/${labName}-${submissionId}-output.txt`
             }
             response = await addJob(labName, jobOptions)
         }
     } catch (e) {
-        console.log(e)
+        console.error(e)
     }
     //remember, immediate callback is made when job has been added to queue, not sure how we're handling the rest of it yet though lmao
 
@@ -127,26 +127,41 @@ export async function grade(submissionId: number) {
     return response
 }
 
-//Temporary mock function, delete when the container autograder grading function is written
-export async function mockContainerCheckAnswer(file: string, containerAutoGrader: ContainerAutoGrader) {
-    let gradeResults = []
 
-    //SubmissionProblemScore 1
-    gradeResults.push({score: 5, feedback: "Grader #" + containerAutoGrader.id + " graded " + file + " problem 1 for 5/5 points"})
+export async function tangoCallback(outputFile: string) {
+    console.log('goot!')
+    //Output filename consists of 4 sections separated by hyphens. + and () only for visual clarity, not a part of the filename
+    //(course.number+course.semester+course.id)-(assignment.id)-(submission.id)-(output.txt)
+    const filenameSplit = outputFile.split('-')
+    const labName = `${filenameSplit[0]}-${filenameSplit[1]}`
+    const assignmentId = Number(filenameSplit[1])
+    const submissionId = Number(filenameSplit[2])
 
-    //SubmissionProblemScore 2
-    gradeResults.push({score: 5, feedback: "Grader #" + containerAutoGrader.id + " graded " + file + " problem 2 for 5/5 points"})
+    const response = await pollJob(labName, outputFile)
+    if (typeof response !== 'string') {
+        throw new Error('Autograder output file not found')
+    }
+    const splitResponse = (response as string).split(/\r\n|\r|\n/)
+    const scores = JSON.parse(splitResponse[splitResponse.length - 2])
 
-    //SubmissionProblemScore 3
-    gradeResults.push({score: 10, feedback: "Grader #" + containerAutoGrader.id + " graded " + file + " problem 3 for 10/10 points"})
-    
-    return gradeResults
-}
+    let score = 0
+    const assignmentProblems = await assignmentProblemService.list(assignmentId)
+    for (const question in scores['scores']) {
+        const assignmentProblem = assignmentProblems.find(problem => problem.problemName === question)
+        if (assignmentProblem) {
+            const problemScoreObj: SubmissionProblemScore = {
+                submissionId: submissionId,
+                assignmentProblemId: assignmentProblem.id,
+                score: Number(scores[question]),
+                feedback: '' //Not sure what to do for individual problemscore feedback 
+            }
+            submissionProblemScoreService.create(problemScoreObj)
+            score += Number(scores[question])
+        }
+        
+    }
 
-export async function tangoCallback(submissionId: number) {
-    console.log("!!!!!!!!!!!!!!YAYYYY!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!YAYYYY!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!YAYYYY!!!!!!!!!!!!!!\n")
-    console.log(`${submissionId} did it yayyy`)
-    return {id: submissionId}
+    return {output: response}
 }
 
 export default { grade, tangoCallback }

@@ -21,13 +21,14 @@ export async function grade(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function tangoCallback(req: Request, res: Response, next: NextFunction) {
-    console.log("haiiiii hiiiii :3")
     try {
-        const submissionId = parseInt(req.params.id)
+        console.log('awawawa')
+        const submissionId = req.params.id
         const response = await GraderService.tangoCallback(submissionId)
 
         res.status(200).json(response)
     } catch (err) {
+        console.log("wah :((")
         res.status(400).json(new GenericResponse(err.message))
     }
 }

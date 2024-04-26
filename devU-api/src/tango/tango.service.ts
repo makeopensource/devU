@@ -48,13 +48,13 @@ export async function addJob(course: string, job: AddJobRequest): Promise<AddJob
  * @param course - The course name.
  * @param outputFile - The name of the output file.
  */
-export async function pollJob(course: string, outputFile: string): Promise<PollSuccessResponse | PollFailureResponse> {
+export async function pollJob(course: string, outputFile: string): Promise<PollSuccessResponse | PollFailureResponse> { //PollSuccessResponse
   const url = `${tangoHost}/poll/${tangoKey}/${course}/${outputFile}/`
   const response = await fetch(url, { method: 'GET' })
-  const data = await response.json()
-  return response.ok ?
-    data as PollSuccessResponse
-    : data as PollFailureResponse
+
+  return response.headers.get('Content-Type')?.includes('application/json') 
+    ? (await response.json()) as PollFailureResponse 
+    : (await response.text()) as PollSuccessResponse
 }
 
 /**
