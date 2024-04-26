@@ -8,7 +8,7 @@ import { serialize } from './assignment.serializer'
 
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.assignmentId)
     const courseId = parseInt(req.params.courseId)
     const assignment = await AssignmentService.retrieve(id, courseId)
 
@@ -60,7 +60,7 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
-    req.body.id = parseInt(req.params.id)
+    req.body.id = parseInt(req.params.assignmentId)
     const results = await AssignmentService.update(req.body)
 
     if (!results.affected) return res.status(404).json(NotFound)
@@ -73,7 +73,7 @@ export async function put(req: Request, res: Response, next: NextFunction) {
 
 export async function _delete(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.assignmentId)
     const results = await AssignmentService._delete(id)
 
     if (!results.affected) return res.status(404).json(NotFound)
