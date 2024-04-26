@@ -32,9 +32,9 @@ const GlobalToolbar = () => {
             <Link to={`/myCourses`} className={styles.link}>
               My Courses
             </Link>
-            <Link to={`/submissions`} className={styles.link}>
+            {/* <Link to={`/submissions`} className={styles.link}>
               Submissions
-            </Link>
+            </Link> */}
           </div>
         </div>
         <UserOptionsDropdown />

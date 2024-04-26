@@ -69,8 +69,11 @@ const CoursePreviewPage = () => {
             dropped: false
         };
 
-        RequestService.post('/api/user-courses', userCourseData)
+        RequestService.post(`/api/courses/${courseId}/user-courses`, userCourseData)
         .catch((error: Error) => {
+            const message = error.message
+            setAlert({autoDelete: false, type: 'error', message})
+        }).catch((error: Error) => {
             const message = error.message
             setAlert({autoDelete: false, type: 'error', message})
         }).finally(() => {
