@@ -61,7 +61,7 @@ const HomePage = () => {
                 <div className={styles.largeLine}></div>
 
                 {role.isInstructor() && <Button variant="contained" onClick={() => {
-                    history.push(`/users/${userId}/addCoursesForm`)
+                    history.push(`/addCoursesForm`)
                 }}>Add Course</Button>
                 }
             </div>
