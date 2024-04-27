@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import {Assignment, AssignmentProblem, Submission,} from 'devu-shared-modules'
+import {Assignment, AssignmentProblem, Submission, ContainerAutoGrader} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from './errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -35,8 +35,8 @@ const AssignmentDetailPage = () => {
     // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
 
-    // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
-    const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
+    const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
+    // const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
 
     useEffect(() => {
         fetchData()
@@ -67,8 +67,8 @@ const AssignmentDetailPage = () => {
             //  const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
             //  setSubmissionProblemScores(submissionProblemScoresReq)
 
-            // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/container-auto-graders/assignment/${assignmentId}`)).pop() ?? null
-            // setContainerAutograder(containerAutograder)
+            const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/container-auto-graders/assignment/${assignmentId}`)).pop() ?? null
+            setContainerAutograder(containerAutograder)
 
         } catch (err) {
             setError(err)

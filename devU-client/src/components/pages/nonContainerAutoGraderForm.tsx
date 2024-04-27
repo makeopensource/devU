@@ -16,7 +16,7 @@ import Button from '@mui/material/Button'
 const NonContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
-    const {assignmentId} = useParams<{ assignmentId: string }>()
+    const {assignmentId, courseId} = useParams<{ assignmentId: string, courseId : string }>()
     const history = useHistory()
 
     const [formData,setFormData] = useState({
@@ -60,7 +60,7 @@ const NonContainerAutoGraderForm = () => {
         }
 
         // TODO: Get courseId and update path
-        RequestService.post(`/api/course/???/nonContainerAutoGrader/`, finalFormData)
+        RequestService.post(`/api/course/${courseId}/nonContainerAutoGrader/`, finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Non-Container Auto-Grader Added' })
                 history.goBack()
