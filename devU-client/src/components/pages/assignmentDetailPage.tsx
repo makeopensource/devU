@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import {Assignment, AssignmentProblem, Submission, ContainerAutoGrader} from 'devu-shared-modules'
+import {Assignment, AssignmentProblem, Submission, /*ContainerAutoGrader*/} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from './errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -35,7 +35,7 @@ const AssignmentDetailPage = () => {
     // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
 
-    const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
+    // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
     // const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
 
     useEffect(() => {
@@ -67,8 +67,8 @@ const AssignmentDetailPage = () => {
             //  const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
             //  setSubmissionProblemScores(submissionProblemScoresReq)
 
-            const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
-            setContainerAutograder(containerAutograder)
+            // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
+            // setContainerAutograder(containerAutograder)
 
         } catch (err) {
             setError(err)
@@ -141,13 +141,13 @@ const AssignmentDetailPage = () => {
                 <div className={styles.smallLine}></div>
                 <h1>{assignment?.name}</h1>
                 <div className={styles.largeLine}></div>
-                {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
-                    history.push(`/course/${courseId}/assignment/${assignmentId}/createNCAG`)
-                }}>Add NCAG</Button>}
-                {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
-                    history.push(`/course/${courseId}/assignment/${assignmentId}/createCAG`)
-                }}>Add CAG</Button>}
                 <Stack spacing={2} direction='row'>
+                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/createNCAG`)
+                    }}>Add NCAG</Button>}
+                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/createCAG`)
+                    }}>Add CAG</Button>}
                     {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
                     }}>Edit Assignment</Button>}
@@ -175,7 +175,7 @@ const AssignmentDetailPage = () => {
                 </CardContent>
             )}
 
-            {containerAutograder && (<input type="file" onChange={handleFileChange} />)}
+            {assignment?.disableHandins === true && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
 
             {assignmentProblems && assignmentProblems.length > 0 ? (
                 <Button variant='contained' style={{marginTop: 10, marginBottom: 10}} onClick={handleSubmit}>Submit</Button>
