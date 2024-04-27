@@ -8,7 +8,7 @@ import UserCourseListItem from "../listItems/userCourseListItem";
 
 import {useAppSelector} from 'redux/hooks'
 import RequestService from 'services/request.service'
-import {Assignment, Course, UserCourse} from 'devu-shared-modules'
+import {Assignment, Course} from 'devu-shared-modules'
 
 const HomePage = () => {
     const userId = useAppSelector((store) => store.user.id)
@@ -18,37 +18,38 @@ const HomePage = () => {
     const [enrollCourses, setEnrollCourses] = useState(new Array<Course>())
     const [pastCourses, setPastCourses] = useState(new Array<Course>())
     const [assignments, setAssignments] = useState(new Map<Course, Array<Assignment>>())
+    const [instructorCourses, setInstructorCourses] = useState(new Array<Course>())
 
     useEffect(() => {
         fetchData()
     }, [])
 
     const fetchData = async () => {
+        const assignmentMap = new Map<Course, Array<Assignment>>()
         try {
             const allCourses = await RequestService.get<{
-                activeCourses: UserCourse[];
-                pastCourses: UserCourse[]
+                instructorCourses: Course[];
+                activeCourses: Course[];
+                pastCourses: Course[];
+                upcomingCourses: Course[];//TODO: Add upcoming courses feature
             }>(`/api/courses/user/${userId}`);
-            const enrolledCourses: UserCourse[] = allCourses.activeCourses;
-            const pastCourses: UserCourse[] = allCourses.pastCourses;
+            const enrolledCourses: Course[] = allCourses.activeCourses;
 
-            const coursePromises = enrolledCourses.map(_course => {
-                const course = RequestService.get<Course>(`/api/courses/${_course.id}`) // TODO: Optimize out this redundant call
-                const assignments = RequestService.get<Assignment[]>(`/api/course/${_course.id}/assignments/released`)
+            const pastCourses: Course[] = allCourses.pastCourses;
+            const instructorCourses: Course[] = allCourses.instructorCourses;
+
+            const assignmentPromises = enrolledCourses.map((course) => {
+                const assignments = RequestService.get<Assignment[]>(`/api/course/${course.id}/assignments/released`)
                 return Promise.all([course, assignments])
             })
-            const pastCoursePromises = pastCourses.map(_course => {
-                const course = RequestService.get<Course>(`/api/courses/${_course.id}`)
-                return Promise.all([course, assignments])
-            })
-            const pastCourseResults = await Promise.all(pastCoursePromises)
-            const result = await Promise.all(coursePromises)
-            const courses = result.map(([course]) => course)
-            const assignmentsMap = new Map<Course, Array<Assignment>>()
-            result.forEach(([course, assignments]) => assignmentsMap.set(course, assignments))
-            setEnrollCourses(courses)
-            setPastCourses(pastCourseResults.map(([course]) => course))
-            setAssignments(assignmentsMap)
+            const assignmentResults = await Promise.all(assignmentPromises)
+            assignmentResults.forEach(([course, assignments]) => assignmentMap.set(course, assignments))
+
+            setAssignments(assignmentMap)
+            setPastCourses(pastCourses)
+            setEnrollCourses(enrolledCourses)
+            setInstructorCourses(instructorCourses)
+
         } catch (error) {
             setError(error)
         } finally {
@@ -67,7 +68,12 @@ const HomePage = () => {
                 <h1>My Courses</h1>
                 <div className={styles.largeLine}></div>
             </div>
-
+            <div className={styles.coursesContainer}>
+                {instructorCourses && instructorCourses.map((course) => (
+                    <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}
+                                        instructor={true}/>
+                ))}
+            </div>
             <div className={styles.coursesContainer}>
                 {enrollCourses && enrollCourses.map((course) => (
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}/>

@@ -20,8 +20,20 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 export async function getByUser(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = parseInt(req.params.userId)
-    const {activeCourses, pastCourses} = await CourseService.listByUser(userId)
-    const response = {activeCourses: activeCourses.map(serialize), pastCourses: pastCourses.map(serialize)}
+    const {
+      activeCourses,
+      pastCourses,
+      instructorCourses,
+      upcomingCourses
+    } = await CourseService.listByUser(userId)
+
+    const response =
+        {
+          activeCourses: activeCourses.map(serialize),
+          pastCourses: pastCourses.map(serialize),
+          instructorCourses: instructorCourses.map(serialize),
+          upcomingCourses: upcomingCourses.map(serialize)
+        }
 
     res.status(200).json(response)
   } catch (err) {

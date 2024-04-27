@@ -35,21 +35,37 @@ export async function list() {
 
 export async function listByUser(userId: number) {
     const userCourses = await UserCourseService.listByUser(userId)
-    let activeCourses: CourseModel[] = []
-    let pastCourses: CourseModel[] = []
     const date = new Date()
-    // TODO: There is a more efficient way to do this than a query in a loop.. I'm too rusty on SQL to think of it rn
-    for (const userCourse of userCourses) {
-        const course = await connect().findOne({id: userCourse.courseId, deletedAt: IsNull()})
-        if (course) {
-            if (course.endDate > date) {
-                activeCourses.push(course)
-            } else {
+    const activeCourses = []
+    const pastCourses = []
+    const instructorCourses = []
+    const upcomingCourses = []
+
+    const userCourseIds = userCourses.map(userCourse => userCourse.courseId)
+    const allCourses = await connect()
+    .createQueryBuilder('course')
+    .where('course.id IN (:...ids)', {ids: userCourseIds})
+    .andWhere('course.deletedAt IS NULL')
+    .getMany();
+
+    for (const course of allCourses) {
+        const userCourse = userCourses.find(userCourse => userCourse.courseId === course.id);
+        switch (true) {
+            case course.startDate > date:
+                upcomingCourses.push(course)
+                break
+            case course.endDate < date:
                 pastCourses.push(course)
-            }
+                break
+            case userCourse && userCourse.role === 'instructor':
+                instructorCourses.push(course)
+                break
+            default:
+                activeCourses.push(course)
         }
     }
-    return {activeCourses, pastCourses}
+
+    return {activeCourses, pastCourses, instructorCourses, upcomingCourses}
 }
 
 export default {
