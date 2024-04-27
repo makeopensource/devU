@@ -50,7 +50,7 @@ const EditCourseFormPage = () => {
             endDate : endDate.toISOString(),
         }
 
-        RequestService.post('/api/courses/', finalFormData)
+        RequestService.post('/api/courses/instructor', finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Course Added' })
                 history.goBack()

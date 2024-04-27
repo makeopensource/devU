@@ -1,8 +1,7 @@
 import React, {useState} from 'react'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import styles from './nonContainerAutoGraderForm.scss'
+import styles from './ContainerAutoGraderForm.scss'
 import TextField from 'components/shared/inputs/textField'
-// import Button from 'components/shared/inputs/button'
 import {useActionless} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
 import RequestService from 'services/request.service'
@@ -15,7 +14,7 @@ import Button from '@mui/material/Button'
 
 const ContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
-    const {assignmentId} = useParams<{ assignmentId: string }>()
+    const {courseId, assignmentId} = useParams<{ courseId: string, assignmentId: string }>()
     const history = useHistory()
     const [graderFile, setGraderFile] = useState<File | null>()
     const [makefile, setMakefile] = useState<File | null>()
@@ -50,7 +49,7 @@ const ContainerAutoGraderForm = () => {
         if (graderFile) multipart.append('graderFile', graderFile)
         if (makefile) multipart.append('makefileFile', makefile)
 
-        RequestService.postMultipart('/api/container-auto-graders/', multipart)
+        RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders/`, multipart)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Container Auto-Grader Added' })
                 history.goBack()

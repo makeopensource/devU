@@ -26,6 +26,7 @@ type AssignmentProps = {
 const CategoryAssignment = ({assignment, assignmentScore}: AssignmentProps) => {
     const { courseId } = useParams<{courseId: string}>()
 
+
     return (
         <div>
             <Link className={styles.assignmentName}
@@ -63,7 +64,7 @@ const GradebookStudentPage = () => {
     const [categories, setCategories] = useState(new Array<string>())
     const [assignments, setAssignments] = useState(new Array<Assignment>())
     const [assignmentScores, setAssignmentScores] = useState(new Array<AssignmentScore>())
-
+    const role = useAppSelector((store) => store.roleMode)
     const { courseId } = useParams<{courseId: string}>()
     const userId = useAppSelector((store) => store.user.id)
     
@@ -98,7 +99,9 @@ const GradebookStudentPage = () => {
             <div className={styles.header}>
                 <h1>Student Gradebook</h1>
                 <div>
-                    <Link className={styles.button} to={`/courses/${courseId}/gradebook/instructor`}>Instructor View</Link>
+                    {role.isInstructor() &&
+                        <Link className={styles.button} to={`/course/${courseId}/gradebook/instructor`}>Instructor
+                            View</Link>}
                 </div>
             </div>
             <div>

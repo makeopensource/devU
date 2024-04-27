@@ -42,9 +42,9 @@ const AssignmentUpdatePage = () => {
             assignmentId: parseInt(problemFormData.assignmentId),
             problemName: problemFormData.problemName,
             maxScore: parseInt(problemFormData.maxScore),
-        }         
-        
-        RequestService.post('/api/assignment-problems/', finalProblemFormData)
+        }
+
+        RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`, finalProblemFormData)
         .then(() => {
             setAlert({ autoDelete: true, type: 'success', message: 'Assignment Problem Added' })
         })
