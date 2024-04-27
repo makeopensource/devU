@@ -8,15 +8,14 @@ import assignmentScoreService from '../assignmentScore/assignmentScore.service'
 import courseService from '../course/course.service'
 import { addJob, createCourse, uploadFile, pollJob } from '../../tango/tango.service'
 
-import { SubmissionScore, SubmissionProblemScore, AssignmentScore, Submission } from 'devu-shared-modules'
+import { SubmissionScore, SubmissionProblemScore, AssignmentScore, Submission, NonContainerAutoGrader, AssignmentProblem } from 'devu-shared-modules'
 import { checkAnswer } from '../nonContainerAutoGrader/nonContainerAutoGrader.grader'
 import { serialize as serializeNonContainer } from '../nonContainerAutoGrader/nonContainerAutoGrader.serializer'
 import { serialize as serializeAssignmentScore } from '../assignmentScore/assignmentScore.serializer'
 import { serialize as serializeSubmissionScore} from '../submissionScore/submissionScore.serializer'
 import { serialize as serializeSubmission } from '../submission/submission.serializer'
+import { serialize as serializeAssignmentProblem } from '../assignmentProblem/assignmentProblem.serializer'
 import { downloadFile, initializeMinio } from '../../fileStorage'
-
-import environment from '../../environment'
 
 async function grade(submissionId: number) {
     const submissionModel = await submissionService.retrieve(submissionId)
@@ -29,78 +28,22 @@ async function grade(submissionId: number) {
     const form = content.form
     const filepaths: string[] = content.filepaths
 
-    const nonContainerAutograders = await nonContainerAutograderService.listByAssignmentId(assignmentId)
-    const assignmentProblems = await assignmentProblemService.list(assignmentId)
+    const nonContainerAutograders = (await nonContainerAutograderService.listByAssignmentId(assignmentId)).map(model => serializeNonContainer(model))
+    const assignmentProblems = (await assignmentProblemService.list(assignmentId)).map(model => serializeAssignmentProblem(model))
 
-    
     let score = 0
     let feedback = ''
-    let containerGrading = true //Is set to false if no container autograders are found for this assignment
 
     //Run Non-Container Autograders
-    for (const question in form) { 
-        const nonContainerGrader = nonContainerAutograders.find(grader => grader.question === question)
-        const assignmentProblem = assignmentProblems.find(problem => problem.problemName === question)
-
-        if (nonContainerGrader && assignmentProblem) {
-            const [problemScore, problemFeedback] = checkAnswer(form[question], serializeNonContainer(nonContainerGrader)) 
-            score += problemScore
-            feedback += problemFeedback + '\n'
-
-            const problemScoreObj: SubmissionProblemScore = {
-                submissionId: submissionId,
-                assignmentProblemId: assignmentProblem.id,
-                score: problemScore,
-                feedback: problemFeedback 
-            }
-            submissionProblemScoreService.create(problemScoreObj)
-        }
-    }
+    const ncagResults = await runNonContainerAutograders(form, nonContainerAutograders, assignmentProblems, submissionId)
+    score += ncagResults.score
+    feedback += ncagResults.feedback
 
     //Run Container Autograders
-    const {graderData, makefileData, autogradingImage, timeout} = await containerAutograderService.getGraderByAssignmentId(assignmentId)
-    if (!graderData || !makefileData || !autogradingImage || !timeout) {
-        containerGrading = false
-    } else {
-        try {
-            const bucketName = await courseService.retrieve(submission.courseId).then((course) => {
-                return course ? (course.number + course.semester + course.id).toLowerCase() : 'submission'
-            })
-            initializeMinio(bucketName)
+    const cagResults = await runContainerAutograders(filepaths, submission, assignmentId)
+    const jobResponse = cagResults.jobResponse
+    const containerGrading = cagResults.containerGrading
     
-            var jobResponse = null
-            const labName = `${bucketName}-${submission.assignmentId}`
-            const optionFiles = []
-            const openResponse = await createCourse(labName)
-            if (openResponse) {
-                await uploadFile(labName, graderData, "Graderfile")
-                await uploadFile(labName, makefileData, "Makefile")
-    
-                for (const filepath of filepaths){
-                    const buffer = await downloadFile(bucketName, filepath)
-                    if (await uploadFile(labName, buffer, filepath)) {
-                        optionFiles.push({localFile: filepath, destFile: filepath})
-                    }
-                }
-                console.log(environment.apiUrl)
-                console.log(labName)
-                const jobOptions = {
-                    image: autogradingImage,
-                    files: [{localFile: "Graderfile", destFile: "autograde.tar"}, 
-                            {localFile: "Makefile", destFile: "Makefile"},]
-                            .concat(optionFiles),
-                    jobName: `${labName}-${submissionId}`,
-                    output_file: `${labName}-${submissionId}-output.txt`,
-                    timeout: timeout,
-                    callback_url: `http://api:3001/grade/callback/${labName}-${submissionId}-output.txt`
-                }
-                jobResponse = await addJob(labName, jobOptions)
-            }
-        } catch (e: any) {
-            throw new Error(e)
-        }
-    }
-
     //Grading is finished. Create SubmissionScore and AssignmentScore and save to db.
     const scoreObj: SubmissionScore = {
         submissionId: submissionId,
@@ -115,6 +58,77 @@ async function grade(submissionId: number) {
         return {message: `Noncontainer autograding completed successfully`, submissionScore: scoreObj}
     }  
     return {message: `Autograder successfully added job #${jobResponse?.jobId} to the queue with status message ${jobResponse?.statusMsg}`}
+}
+
+async function runNonContainerAutograders(form: any, nonContainerAutograders: NonContainerAutoGrader[], assignmentProblems: AssignmentProblem[], submissionId: number) {
+    let score = 0
+    let feedback = ''
+
+    for (const question in form) { 
+        const nonContainerGrader = nonContainerAutograders.find(grader => grader.question === question)
+        const assignmentProblem = assignmentProblems.find(problem => problem.problemName === question)
+
+        if (nonContainerGrader && assignmentProblem) {
+            const [problemScore, problemFeedback] = checkAnswer(form[question], nonContainerGrader) 
+            score += problemScore
+            feedback += `${problemFeedback}\n`
+
+            const problemScoreObj: SubmissionProblemScore = {
+                submissionId: submissionId,
+                assignmentProblemId: assignmentProblem.id ?? 0, //This should never be undefined, not sure why our types have id set as optional
+                score: problemScore,
+                feedback: problemFeedback 
+            }
+            submissionProblemScoreService.create(problemScoreObj)
+        }
+    }
+    return {score, feedback}
+}
+
+async function runContainerAutograders(filepaths: string[], submission: Submission, assignmentId: number) {
+    let containerGrading = true
+    let jobResponse = null
+
+    const {graderData, makefileData, autogradingImage, timeout} = await containerAutograderService.getGraderByAssignmentId(assignmentId)
+    if (!graderData || !makefileData || !autogradingImage || !timeout) {
+        containerGrading = false
+    } else {
+        try {
+            const bucketName = await courseService.retrieve(submission.courseId).then((course) => {
+                return course ? (course.number + course.semester + course.id).toLowerCase() : 'submission'
+            })
+            initializeMinio(bucketName)
+            
+            const labName = `${bucketName}-${submission.assignmentId}`
+            const optionFiles = []
+            const openResponse = await createCourse(labName)
+            if (openResponse) {
+                await uploadFile(labName, graderData, "Graderfile")
+                await uploadFile(labName, makefileData, "Makefile")
+    
+                for (const filepath of filepaths){
+                    const buffer = await downloadFile(bucketName, filepath)
+                    if (await uploadFile(labName, buffer, filepath)) {
+                        optionFiles.push({localFile: filepath, destFile: filepath})
+                    }
+                }
+                const jobOptions = {
+                    image: autogradingImage,
+                    files: [{localFile: "Graderfile", destFile: "autograde.tar"}, 
+                            {localFile: "Makefile", destFile: "Makefile"},]
+                            .concat(optionFiles),
+                    jobName: `${labName}-${submission.id}`,
+                    output_file: `${labName}-${submission.id}-output.txt`,
+                    timeout: timeout,
+                    callback_url: `http://api:3001/grade/callback/${labName}-${submission.id}-output.txt`
+                }
+                jobResponse = await addJob(labName, jobOptions)
+            }
+        } catch (e: any) {
+            throw new Error(e)
+        }
+    }
+    return {containerGrading, jobResponse}
 }
 
 
