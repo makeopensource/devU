@@ -63,10 +63,10 @@ export async function downloadFile(bucketName: string, filename: string): Promis
 
     minioClient.getObject(bucketName, filename, (err, dataStream) => {
       if (err) {
-        reject(new Error('File failed to download from MinIO because' + err.message))
+        reject(new Error('File failed to download from MinIO because '+err.message))
       }
+      dataStream.on('data', (chunk:any) => {
 
-      dataStream.on('data', (chunk: any) => {
         fileData.push(chunk)
       })
 

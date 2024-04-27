@@ -80,12 +80,12 @@ export async function update(
     containerAutoGrader.graderFile = filename
   }
 
-  if (makefileInputFile) {
-    const bucket: string = 'makefiles'
-    const makefileFilename: string = generateFilename(makefileInputFile.originalname, userId)
-    await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename, userId)
-    containerAutoGrader.makefileFile = makefileFilename
-  }
+    if (makefileInputFile) {
+        const bucket: string = 'makefiles'
+        const makefileFilename: string = generateFilename(makefileInputFile.originalname, userId)
+        await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename, userId)
+        containerAutoGrader.makefileFile = makefileFilename
+    }
 
   const { id, assignmentId, graderFile, makefileFile, autogradingImage, timeout } = containerAutoGrader
   return await connect().update(id, { assignmentId, graderFile, makefileFile, autogradingImage, timeout })
@@ -110,10 +110,9 @@ export async function getGraderObjectByAssignmentId(assignmentId: number) {
   return await connect().find({ assignmentId: assignmentId, deletedAt: IsNull() })
 }
 
-export async function listByAssignmentId(assignmentId: number) {
-  if (!assignmentId) throw new Error('Missing AssignmentId')
-  return await connect().find({ assignmentId: assignmentId, deletedAt: IsNull() })
-}
+export async function getGraderByAssignmentId(assignmentId: number){
+    const containerAutoGraders = await connect().findOne({ assignmentId: assignmentId, deletedAt: IsNull() })
+    if (!containerAutoGraders) return {graderData: null, makefileData: null, autogradingImage: null, timeout: null}
 
 export async function getGraderByAssignmentId(assignmentId: number) {
   const containerAutoGraders = await connect().findOne({ assignmentId: assignmentId, deletedAt: IsNull() })
