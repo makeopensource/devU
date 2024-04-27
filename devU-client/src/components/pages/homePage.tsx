@@ -15,7 +15,8 @@ const HomePage = () => {
 
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    const [courses, setCourses] = useState(new Array<Course>())
+    const [enrollCourses, setEnrollCourses] = useState(new Array<Course>())
+    const [pastCourses, setPastCourses] = useState(new Array<Course>())
     const [assignments, setAssignments] = useState(new Map<Course, Array<Assignment>>())
 
     useEffect(() => {
@@ -24,17 +25,29 @@ const HomePage = () => {
 
     const fetchData = async () => {
         try {
-            const enrolledCourses = await RequestService.get<UserCourse[]>( `/api/courses/user/${userId}` )
+            const allCourses = await RequestService.get<{
+                activeCourses: UserCourse[];
+                pastCourses: UserCourse[]
+            }>(`/api/courses/user/${userId}`);
+            const enrolledCourses: UserCourse[] = allCourses.activeCourses;
+            const pastCourses: UserCourse[] = allCourses.pastCourses;
+
             const coursePromises = enrolledCourses.map(_course => {
                 const course = RequestService.get<Course>(`/api/courses/${_course.id}`) // TODO: Optimize out this redundant call
                 const assignments = RequestService.get<Assignment[]>(`/api/course/${_course.id}/assignments/released`)
                 return Promise.all([course, assignments])
             })
+            const pastCoursePromises = pastCourses.map(_course => {
+                const course = RequestService.get<Course>(`/api/courses/${_course.id}`)
+                return Promise.all([course, assignments])
+            })
+            const pastCourseResults = await Promise.all(pastCoursePromises)
             const result = await Promise.all(coursePromises)
             const courses = result.map(([course]) => course)
             const assignmentsMap = new Map<Course, Array<Assignment>>()
             result.forEach(([course, assignments]) => assignmentsMap.set(course, assignments))
-            setCourses(courses)
+            setEnrollCourses(courses)
+            setPastCourses(pastCourseResults.map(([course]) => course))
             setAssignments(assignmentsMap)
         } catch (error) {
             setError(error)
@@ -53,15 +66,30 @@ const HomePage = () => {
                 <div className={styles.smallLine}></div>
                 <h1>My Courses</h1>
                 <div className={styles.largeLine}></div>
-
             </div>
 
             <div className={styles.coursesContainer}>
-                {courses.map((course) => (
+                {enrollCourses && enrollCourses.map((course) => (
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}/>
 
                 ))}
+                {enrollCourses.length === 0 && <h2>You do not have current enrollment yet</h2>}
             </div>
+
+            <div className={styles.header}>
+                <div className={styles.smallLine}></div>
+                <h1>Completed Courses</h1>
+                <div className={styles.largeLine}></div>
+            </div>
+
+            <div className={styles.coursesContainer}>
+                {pastCourses && pastCourses.map((course) => (
+                    <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}
+                                        past={true}/>
+                ))}
+                {pastCourses.length === 0 && <h2>You do not have completed courses yet</h2>}
+            </div>
+
         </PageWrapper>
     )
 }

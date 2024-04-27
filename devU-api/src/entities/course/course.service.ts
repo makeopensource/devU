@@ -35,15 +35,21 @@ export async function list() {
 
 export async function listByUser(userId: number) {
     const userCourses = await UserCourseService.listByUser(userId)
-    let courses: CourseModel[] = []
+    let activeCourses: CourseModel[] = []
+    let pastCourses: CourseModel[] = []
+    const date = new Date()
     // TODO: There is a more efficient way to do this than a query in a loop.. I'm too rusty on SQL to think of it rn
     for (const userCourse of userCourses) {
         const course = await connect().findOne({id: userCourse.courseId, deletedAt: IsNull()})
         if (course) {
-            courses.push(course)
+            if (course.endDate > date) {
+                activeCourses.push(course)
+            } else {
+                pastCourses.push(course)
+            }
         }
     }
-    return courses
+    return {activeCourses, pastCourses}
 }
 
 export default {

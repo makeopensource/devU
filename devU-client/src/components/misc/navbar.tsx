@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import styles from './navbar.scss'
 import RequestService from 'services/request.service'
-import { Assignment, Course, User } from 'devu-shared-modules'
+import {Assignment, Course, User} from 'devu-shared-modules'
 
 const UserBreadcrumb = ({ match }: any) => {
     const [userName, setUserName] = useState('')
@@ -85,7 +85,7 @@ const Navbar = ({breadcrumbs}: any) => {
                 if (excludedPaths.includes(match.params.path)) return <></>
 
                 return (
-                    <span>
+                    <span key={match.url}>
                         <Link to={match.url} className={styles.link}> {breadcrumb} </Link>
                         {index < (breadcrumbs.length - 1) ? ' > ' : ''}
                     </span>

@@ -91,6 +91,7 @@ const AssignmentDetailPage = () => {
     }
 
     const handleSubmit = async () => {
+        let response;
         const contentField = {
             filepaths : [],
             form : formData,
@@ -113,9 +114,9 @@ const AssignmentDetailPage = () => {
                 submission.append('content', JSON.stringify(contentField))
                 submission.append('files', file)
 
-                var response = await RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission)
+                response = await RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
             } else {
-                var response = await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission)
+                response = await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
             }
             
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
@@ -124,13 +125,13 @@ const AssignmentDetailPage = () => {
             await RequestService.post(`/api/grade/${response.id}`, {} )
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
 
-            fetchData()
+            await fetchData()
         } catch (err) {
             const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
             setAlert({ autoDelete: false, type: 'error', message })
         } finally {
             setLoading(false)
-            fetchData()
+            await fetchData()
         }
     }
 
@@ -158,7 +159,7 @@ const AssignmentDetailPage = () => {
             <Card className={styles.card}>
             {assignmentProblems && assignmentProblems.length > 0 ? (
                 assignmentProblems.map((assignmentProblem, index) => (
-                    <Accordion className={styles.accordion}>
+                    <Accordion className={styles.accordion} key={index}>
                     <AccordionSummary>
                         <Typography>{`Assignment Problem ${index + 1}`}</Typography>
                     </AccordionSummary>
@@ -192,7 +193,7 @@ const AssignmentDetailPage = () => {
             {/**Submissions List */}
             <div>
             {submissions.map((submission, index) => (
-                <Card className={styles.submissionCard}>
+                <Card className={styles.submissionCard} key={index}>
                     <CardActionArea onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
                     }}>
