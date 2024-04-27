@@ -67,7 +67,7 @@ const AssignmentDetailPage = () => {
             //  const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
             //  setSubmissionProblemScores(submissionProblemScoresReq)
 
-            const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/container-auto-graders/assignment/${assignmentId}`)).pop() ?? null
+            const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
             setContainerAutograder(containerAutograder)
 
         } catch (err) {

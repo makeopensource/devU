@@ -44,7 +44,7 @@ Router.get('/:id', isAuthorized('assignmentViewAll'), asInt(), ContainerAutoGrad
 
 /**
  * @swagger
- * /container-auto-graders/assignment/{id}:
+ * /course/:courseId/assignment/:assignmentId/container-auto-graders:
  *   get:
  *     summary: Retrieve an assignment's container auto grader
  *     tags:
