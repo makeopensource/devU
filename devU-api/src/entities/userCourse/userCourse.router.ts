@@ -10,6 +10,11 @@ import {extractOwnerByPathParam, isAuthorized} from '../../authorization/authori
 import UserCourseController from './userCourse.controller'
 
 const Router = express.Router({ mergeParams: true })
+
+
+/**
+ * TODO: Document this
+ */
 Router.get('/users', UserCourseController.checkEnroll)
 /**
  * @swagger

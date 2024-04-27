@@ -118,7 +118,7 @@ const AssignmentUpdatePage = () => {
 
         }
         
-        RequestService.put(`/api/assignments/${assignmentId}`, finalFormData)
+        RequestService.put(`/api/course/${courseId}/assignments/${assignmentId}`, finalFormData)
             .then(() => {
                 
                 setAlert({ autoDelete: true, type: 'success', message: 'Assignment Updated' })

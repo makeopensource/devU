@@ -81,17 +81,17 @@ const GradebookInstructorPage = () => {
     
     const fetchData = async () => {
         try {
-            const userCourses = await RequestService.get<UserCourse[]>(`/api/course/${courseId}/user-courses/course/${courseId}`)
+            const userCourses = await RequestService.get<UserCourse[]>(`/api/course/${courseId}/user-courses/`)
             setUserCourses(userCourses)
 
             const users = await RequestService.get<User[]>(`/api/users/course/${courseId}`)
             setUsers(users)
             
-            const assignments = await RequestService.get<Assignment[]>( `/api/assignments/course/${courseId}` )
+            const assignments = await RequestService.get<Assignment[]>( `/api/course/${courseId}/assignments` )
             assignments.sort((a, b) => (Date.parse(a.startDate) - Date.parse(b.startDate))) //Sort by assignment's start date
             setAssignments(assignments)
 
-            const assignmentScores = await RequestService.get<AssignmentScore[]>( `/api/assignment-scores/course/${courseId}` )
+            const assignmentScores = await RequestService.get<AssignmentScore[]>( `/api/course/${courseId}/assignment-scores` )
             setAssignmentScores(assignmentScores)
 
         } catch (error) {

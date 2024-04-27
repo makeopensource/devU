@@ -59,7 +59,8 @@ const UserCoursesListPage = () => {
 
       const courseRequests = submissions.map((s) => RequestService.get<Course>(`/api/courses/${s.courseId}`))
       const assignmentRequests = submissions.map((s) =>
-        RequestService.get<Assignment>(`/api/assignments/${s.assignmentId}`),
+          // TODO: Get courseId and update path
+        RequestService.get<Assignment>(`/api/course/???/assignments/${s.assignmentId}`),
       )
 
       const courses = await Promise.all(courseRequests)

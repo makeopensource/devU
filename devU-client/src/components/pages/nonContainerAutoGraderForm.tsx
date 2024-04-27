@@ -59,7 +59,8 @@ const NonContainerAutoGraderForm = () => {
             correctString: formData.correctString,
         }
 
-        RequestService.post('/api/nonContainerAutoGrader/', finalFormData)
+        // TODO: Get courseId and update path
+        RequestService.post(`/api/course/???/nonContainerAutoGrader/`, finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Non-Container Auto-Grader Added' })
                 history.goBack()

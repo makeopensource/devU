@@ -19,17 +19,17 @@ const SubmissionFeedbackPage = () => {
 
     const fetchData = async () => {
         try {
-            const submissionScore = (await RequestService.get<SubmissionScore[]>( `/api/submission-scores?submission=${submissionId}` )).pop() ?? null
+            const submissionScore = (await RequestService.get<SubmissionScore[]>( `/api/course/${courseId}/assignment/${assignmentId}/submission-scores?submission=${submissionId}` )).pop() ?? null
             setSubmissionScore(submissionScore)
 
-            const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>( `/api/submission-problem-scores/${submissionId}` )
+            const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>( `/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores/${submissionId}` )
             setSubmissionProblemScores(submissionProblemScores)
 
-            const submission = await RequestService.get<Submission>( `/api/submissions/${submissionId}` )
-            const assignment = await RequestService.get<Assignment>( `/api/assignments/${submission.assignmentId}` )
+            const submission = await RequestService.get<Submission>( `/api/course/${courseId}/assignment/${assignmentId}/submissions/${submissionId}` )
+            const assignment = await RequestService.get<Assignment>( `/api/course/${courseId}/assignments/${submission.assignmentId}` )
             setAssignment(assignment)
 
-            const assignmentProblems = await RequestService.get<AssignmentProblem[]>( `/api/assignment-problems/${assignment.id}` )
+            const assignmentProblems = await RequestService.get<AssignmentProblem[]>( `/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/${assignment.id}` )
             setAssignmentProblems(assignmentProblems)  
 
         } catch (error) {

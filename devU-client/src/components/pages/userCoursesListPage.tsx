@@ -31,7 +31,7 @@ const UserCoursesListPage = () => {
       const userCourses = await RequestService.get<UserCourse[]>(`/api/courses/user/${userId}`)
       const coursePromises = userCourses.map(uc => {
         const course = RequestService.get<Course>(`/api/courses/${uc.courseId}`)
-        const assignments = RequestService.get<Assignment[]>(`/api/assignments/course/${uc.courseId}`)
+        const assignments = RequestService.get<Assignment[]>(`/api/course/${uc.courseId}/assignments/released`)
         return Promise.all([course, assignments])
 
       })
