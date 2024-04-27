@@ -35,7 +35,7 @@ export async function list() {
 export async function listByCourse(courseId: number, userRole?: string) {
   const userCourses = await UserCourseService.listByCourse(courseId)
   const userPromises = userCourses
-    .filter(uc => !userRole || uc.role === userRole)
+    // .filter(uc => !userRole || uc.role === userRole)
     .map(uc => connect().findOne({ id: uc.userId, deletedAt: IsNull() }))
   return await Promise.all(userPromises)
 }

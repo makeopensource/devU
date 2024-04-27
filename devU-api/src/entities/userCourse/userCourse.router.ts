@@ -29,7 +29,7 @@ Router.get('/users', UserCourseController.checkEnroll)
  *         schema:
  *           type: integer
  */
-Router.get('/course/:id', isAuthorized('courseViewAll'), asInt(), UserCourseController.getByCourse)
+Router.get('/', isAuthorized('courseViewAll'), UserCourseController.getByCourse)
 
 /**
  * @swagger

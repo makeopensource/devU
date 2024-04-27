@@ -28,7 +28,7 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 
 export async function getByCourse(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.courseId)
     const userCourses = await UserCourseService.listByCourse(id)
 
     const response = userCourses.map(serialize)
