@@ -70,10 +70,10 @@ Router.get('/:id', isAuthorized('scoresViewAll'), asInt(), AssignmentScoreContro
  *          type: integer
  */
 Router.get(
-  '/user/:id',
+  '/user/:userId',
   extractOwnerByPathParam('userId'),
   isAuthorized('scoresViewAll', 'scoresViewSelfReleased'),
-  asInt(),
+  asInt("userId"),
   AssignmentScoreController.getByUser
 )
 

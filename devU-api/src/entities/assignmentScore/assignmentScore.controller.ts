@@ -35,7 +35,7 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
 export async function getByUser(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = parseInt(req.params.id)
+    const userId = parseInt(req.params.userId)
     const assignmentScores = await AssignmentScoreService.listByUser(userId)
 
     const response = assignmentScores.map(serialize)
