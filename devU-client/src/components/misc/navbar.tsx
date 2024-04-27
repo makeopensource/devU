@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import styles from './navbar.scss'
 import RequestService from 'services/request.service'
 import { Assignment, Course, User } from 'devu-shared-modules'
@@ -37,13 +37,14 @@ const CourseBreadcrumb = ({ match }: any) => {
 
 const AssignmentBreadcrumb = ({ match }: any) => {
     const [assignmentName, setAssignmentName] = useState('')
+    const { courseId } = useParams<{courseId: string}>()
 
     useEffect(() => {
         getAssignment()
     }, [])
 
     const getAssignment = async () => { 
-        const assignment = await RequestService.get<Assignment>( `/api/assignments/${match.params.assignmentId}` ) 
+        const assignment = await RequestService.get<Assignment>( `/api/course/${courseId}/assignments/${match.params.assignmentId}` ) 
         setAssignmentName(assignment.name)
     }
 
@@ -58,30 +59,33 @@ const DynamicBreadcrumb = ({ match }: any) => {
 }
 
 const routes = [
-    { path: '/', breadcrumb: 'Home' },
+    { path: '/:any', breadcrumb: 'Home'}, //Only appears once at least one directory deep
 
-    { path: '/users/:userId', breadcrumb: UserBreadcrumb},
+    { path: '/user/:userId', breadcrumb: UserBreadcrumb},
 
-    { path: '/courses/:courseId', breadcrumb: CourseBreadcrumb},
-    { path: '/courses/:courseId/:path', breadcrumb: DynamicBreadcrumb},
+    { path: '/course/:courseId', breadcrumb: CourseBreadcrumb},
+    { path: '/course/:courseId/:path', breadcrumb: DynamicBreadcrumb},
     
-    { path: '/courses/:courseId/assignments/:assignmentId', breadcrumb: AssignmentBreadcrumb},
-    { path: '/courses/:courseId/assignments/:assignmentId/:path', breadcrumb: DynamicBreadcrumb},
+    { path: '/course/:courseId/assignment/:assignmentId', breadcrumb: AssignmentBreadcrumb},
+    { path: '/course/:courseId/assignment/:assignmentId/:path', breadcrumb: DynamicBreadcrumb},
 
-    { path: '/courses/:courseId/assignments/:assignmentId/submissions/:submissionId', breadcrumb: 'Submission'},
-    { path: '/courses/:courseId/assignments/:assignmentId/submissions/:submissionId/feedback', breadcrumb: 'Feedback'},
+    { path: '/course/:courseId/assignment/:assignmentId/submission/:submissionId', breadcrumb: 'Submission'},
+    { path: '/course/:courseId/assignment/:assignmentId/submission/:submissionId/feedback', breadcrumb: 'Feedback'},
 ]
 
 const Navbar = ({breadcrumbs}: any) => {
 
     const excludedPaths = [
-        'assignments',
-        'submissions',
+        'assignment',
+        'submission',
     ]
 
     return (
         <div>
             {breadcrumbs.map(({breadcrumb, match}: any, index: number) => {
+                console.log(match.params.path)
+                console.log(match.url)
+                console.log(breadcrumb)
                 if (excludedPaths.includes(match.params.path)) return <></>
 
                 return (
