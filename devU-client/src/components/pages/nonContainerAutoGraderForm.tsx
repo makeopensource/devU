@@ -60,7 +60,7 @@ const NonContainerAutoGraderForm = () => {
         }
 
         // TODO: Get courseId and update path
-        RequestService.post(`/api/course/${courseId}/nonContainerAutoGrader/`, finalFormData)
+        RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Non-Container Auto-Grader Added' })
                 history.goBack()
@@ -107,7 +107,7 @@ const NonContainerAutoGraderForm = () => {
                 <br/>
                 
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant='contained' onClick= { handleSubmit }>Add Problem</Button>
+                    <Button variant='contained' onClick= { handleSubmit }>Add NCAG</Button>
                 </div>
             </div>
             <div className = {styles.rightColumn}>

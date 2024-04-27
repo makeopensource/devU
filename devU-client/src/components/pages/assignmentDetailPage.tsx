@@ -122,7 +122,7 @@ const AssignmentDetailPage = () => {
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
 
             // Now you can use submissionResponse.id here
-            await RequestService.post(`/api/grade/${response.id}`, {} )
+            await RequestService.post(`/api/course/${courseId}/grade/${response.id}`, {} )
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
 
             await fetchData()
