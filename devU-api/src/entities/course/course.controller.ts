@@ -77,7 +77,7 @@ export async function postAddInstructor(req: Request, res: Response, next: NextF
 
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
-    req.body.id = parseInt(req.params.id)
+    req.body.id = parseInt(req.params.courseId)
     const results = await CourseService.update(req.body)
 
     if (!results.affected) return res.status(404).json(NotFound)
