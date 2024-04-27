@@ -1,7 +1,8 @@
 import './tango.types'
 import fetch from "node-fetch";
 
-const tangoHost = `http://tango:3000`
+
+const tangoHost = `http://${process.env.TANGO_KEY ?? 'localhost:3000'}`
 const tangoKey = process.env.TANGO_KEY ?? 'test'
 
 // for more info https://docs.autolabproject.com/tango-rest/
@@ -22,10 +23,13 @@ export async function createCourse(course: string): Promise<OpenResponse | null>
  * @param fileName - The file name, used to identify the file when uploaded
  * @param file - The file to be uploaded.
  */
-export async function uploadFile(course: string, file: Buffer, fileName: string): Promise<UploadResponse | null> {
-  const url = `${tangoHost}/upload/${tangoKey}/${course}/`
-  const response = await fetch(url, { method: 'POST', body: file, headers: { 'filename': fileName } })
-  return response.ok ? await response.json() as UploadResponse : null
+
+export async function uploadFile(courselab: string, file: File, fileName: string): Promise<UploadResponse | null> {
+  const url = `${tangoHost}/upload/${tangoKey}/${courselab}/`
+  const formData = new FormData()
+  formData.append('file', file)
+  const response = await fetch(url, { method: 'POST', body: formData, headers: { filename: fileName } })
+  return response.ok ? await response.json() : null
 }
 
 /**
@@ -64,6 +68,7 @@ export async function tangoHelloWorld(): Promise<boolean> {
   const url = `${tangoHost}/`
   const response = await fetch(url, { method: 'GET' })
   return response.ok
+
 }
 
 /**
@@ -91,7 +96,11 @@ export async function getPoolInfo(image: string): Promise<Object | null> {
  * @param num - The number of instances to pre-allocate.
  * @param request - The request object.
  */
-export async function preallocateInstances(image: string, num: number, request: PreallocRequest): Promise<PreallocResponse | null> {
+export async function preallocateInstances(
+  image: string,
+  num: number,
+  request: PreallocRequest
+): Promise<PreallocResponse | null> {
   const url = `${tangoHost}/prealloc/${tangoKey}/${image}/${num}/`
   const response = await fetch(url, {
     method: 'POST',

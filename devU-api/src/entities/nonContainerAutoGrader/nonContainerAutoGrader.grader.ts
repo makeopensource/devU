@@ -23,3 +23,4 @@ export function checkAnswer(studentAnswer: string, nonContainerAutoGrader: NonCo
   // i.e. the answer is incorrect or improperly formatted
   return [0, `Autograder graded "${nonContainerAutoGrader.question}" for 0 points`]
 }
+

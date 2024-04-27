@@ -45,7 +45,6 @@ export async function getByCourse(req: Request, res: Response, next: NextFunctio
   }
 }
 
-
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
     const category = await CategoryService.create(req.body)

@@ -30,9 +30,12 @@ export async function retrieve(id: number) {
 // export async function listByCategory(categoryId: number) {
 //   return await connect().find({ categoryId: categoryId, deletedAt: IsNull() })
 
-
 export async function list() {
   return await connect().find({ deletedAt: IsNull() })
+}
+
+export async function listByCourse(courseId: number) {
+  return await connect().find({ courseId, deletedAt: IsNull() })
 }
 
 export default {
@@ -40,6 +43,6 @@ export default {
   retrieve,
   update,
   _delete,
-  // listByCategory,
+  listByCourse,
   list,
 }

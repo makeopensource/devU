@@ -26,6 +26,7 @@ export async function tangoCallback(req: Request, res: Response, next: NextFunct
     } catch (err) {
         res.status(400).json(new GenericResponse(err.message))
     }
+
 }
 
 export default { grade, tangoCallback }

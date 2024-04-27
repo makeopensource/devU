@@ -6,7 +6,7 @@ export default class UserModel {
    * @swagger
    * tags:
    *   - name: Users
-   *     description: 
+   *     description:
    * components:
    *  schemas:
    *    User:

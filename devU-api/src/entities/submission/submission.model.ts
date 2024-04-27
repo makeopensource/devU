@@ -80,5 +80,4 @@ export default class SubmissionModel {
   @JoinColumn({ name: 'submitted_by' })
   @ManyToOne(() => UserModel)
   submittedBy: number
-
 }

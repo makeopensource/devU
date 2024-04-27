@@ -248,3 +248,4 @@ async function updateAssignmentScore(submission: Submission, score: number) {
 }
 
 export default { grade, tangoCallback }
+

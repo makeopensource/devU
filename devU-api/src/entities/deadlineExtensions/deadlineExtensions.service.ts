@@ -11,15 +11,7 @@ export async function create(assignment: DeadlineExtensions) {
 }
 
 export async function update(assignment: DeadlineExtensions) {
-  const {
-    id,
-    userId,
-    creatorId,
-    deadlineDate,
-    assignmentId,
-    newEndDate,
-    newStartDate,
-  } = assignment
+  const { id, userId, creatorId, deadlineDate, assignmentId, newEndDate, newStartDate } = assignment
 
   if (!id) throw new Error('Missing Id')
 
