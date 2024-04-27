@@ -42,11 +42,12 @@ export async function listByUser(userId: number) {
     const upcomingCourses = []
 
     const userCourseIds = userCourses.map(userCourse => userCourse.courseId)
-    const allCourses = await connect()
+
+    const allCourses = userCourseIds.length > 0 ? await connect()
     .createQueryBuilder('course')
     .where('course.id IN (:...ids)', {ids: userCourseIds})
     .andWhere('course.deletedAt IS NULL')
-    .getMany();
+    .getMany() : [];
 
     for (const course of allCourses) {
         const userCourse = userCourses.find(userCourse => userCourse.courseId === course.id);

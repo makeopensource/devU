@@ -27,6 +27,7 @@ const HomePage = () => {
     const fetchData = async () => {
         const assignmentMap = new Map<Course, Array<Assignment>>()
         try {
+            const assignmentMap = new Map<Course, Array<Assignment>>()
             const allCourses = await RequestService.get<{
                 instructorCourses: Course[];
                 activeCourses: Course[];
