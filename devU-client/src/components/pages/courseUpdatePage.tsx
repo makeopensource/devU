@@ -78,23 +78,20 @@ const CourseUpdatePage = ({}) => {
     <PageWrapper>
         <h1>Course Detail Update</h1>
         <div className={formStyles.form}>
-                <p>Required Fields *</p>
 
-                <label htmlFor='name'>Course Name *</label>
-                <TextField id='name' onChange={handleChange} value={formData.name}
-                        className={invalidFields.get('name')}/>
-                <label htmlFor='number'>Course Number *</label>
-                <TextField id='number' onChange={handleChange} value={formData.number}
-                        className={invalidFields.get('number')}/>
-                <label htmlFor='semester'>Semester *</label>
-                <TextField id='semester' onChange={handleChange} value={formData.semester}
-                        placeholder='Ex. f2022, w2023, s2024' className={invalidFields.get('semester')}/>
-                
+            <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
+                       invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}/>
+            <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
+                       invalidated={!!invalidFields.get("number")}/>
+            <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
+                       placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}/>
+
                 <div className = {formStyles.datepickerContainer}>
                     <div>
                         <label htmlFor='start_date'>Start Date *</label>
                         <br/>
-                        <DatePicker id='start_date' selected = {startDate} onChange={handleStartDateChange}/>  
+                        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
+                                    startDate={new Date()}/>
                     </div>
                     <div>
                     <label htmlFor='end_date'>End Date *</label>
@@ -103,10 +100,10 @@ const CourseUpdatePage = ({}) => {
                     </div>
                 </div>
                 <br/>
-                
+
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Button variant='contained' onClick={handleCourseUpdate} className={formStyles.submitBtn}>Submit</Button>
-                </div>            
+                </div>
 
             </div>
     </PageWrapper>
