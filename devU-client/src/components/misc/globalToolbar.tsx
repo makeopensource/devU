@@ -14,7 +14,7 @@ const GlobalToolbar = () => {
   return (
     <div className={styles.bar}>
       <Link to='/' className={styles.header}>
-        Auto Four
+        DevU
       </Link>
       <div className={styles.controls}>
         <div className={styles.sidebar}>

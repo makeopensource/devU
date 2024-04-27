@@ -10,6 +10,11 @@ import {extractOwnerByPathParam, isAuthorized} from '../../authorization/authori
 import UserCourseController from './userCourse.controller'
 
 const Router = express.Router({ mergeParams: true })
+
+
+/**
+ * TODO: Document this
+ */
 Router.get('/users', UserCourseController.checkEnroll)
 /**
  * @swagger
@@ -29,7 +34,7 @@ Router.get('/users', UserCourseController.checkEnroll)
  *         schema:
  *           type: integer
  */
-Router.get('/course/:id', isAuthorized('courseViewAll'), asInt(), UserCourseController.getByCourse)
+Router.get('/', isAuthorized('courseViewAll'), UserCourseController.getByCourse)
 
 /**
  * @swagger

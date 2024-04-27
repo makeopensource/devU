@@ -177,7 +177,7 @@ const AssignmentDetailPage = () => {
 
             {containerAutograder && (<input type="file" onChange={handleFileChange} />)}
 
-            {assignmentProblems? (
+            {assignmentProblems && assignmentProblems.length > 0 ? (
                 <Button variant='contained' style={{marginTop: 10, marginBottom: 10}} onClick={handleSubmit}>Submit</Button>
             ) : null}
             </Card>

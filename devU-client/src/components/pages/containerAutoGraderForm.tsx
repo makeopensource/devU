@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import styles from './ContainerAutoGraderForm.scss'
+import styles from './containerAutoGraderForm.scss'
 import TextField from 'components/shared/inputs/textField'
 import {useActionless} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
