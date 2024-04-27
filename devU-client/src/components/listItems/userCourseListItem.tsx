@@ -14,9 +14,10 @@ import {prettyPrintSemester} from "../../utils/semester.utils";
 type Props = {
     course: Course
     assignments?: Assignment[]
+    past?: boolean
 }
 
-const UserCourseListItem = ({course, assignments}: Props) => (
+const UserCourseListItem = ({course, assignments, past = false}: Props) => (
     <ListItemWrapper to={`/course/${course.id}`} tag={course.number} containerStyle={styles.container}>
 
         <div className={styles.name}>{course.name}</div>
@@ -28,9 +29,9 @@ const UserCourseListItem = ({course, assignments}: Props) => (
 
             {assignments && assignments.length > 0 ? (assignments.map((assignment) => (
                 <SimpleAssignmentListItem assignment={assignment} key={assignment.id}/>
-            ))) : (<div className={styles.name}>No Assignments Due Yet</div>)}
+            ))) : (past ? <div></div> : <div className={styles.name}>No Assignments Due Yet</div>)}
 
-    </div>
+        </div>
 
     </ListItemWrapper>
 
