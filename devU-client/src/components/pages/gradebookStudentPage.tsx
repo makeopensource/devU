@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useHistory, useParams} from 'react-router-dom'
 import {useAppSelector} from 'redux/hooks'
 
 import {Assignment, AssignmentScore} from 'devu-shared-modules'
@@ -9,6 +9,7 @@ import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from './errorPage'
 
 import RequestService from 'services/request.service'
+import Button from '@mui/material/Button'
 
 import styles from './gradebookPage.scss'
 
@@ -67,6 +68,7 @@ const GradebookStudentPage = () => {
     const role = useAppSelector((store) => store.roleMode)
     const { courseId } = useParams<{courseId: string}>()
     const userId = useAppSelector((store) => store.user.id)
+    const history = useHistory()
     
     useEffect(() => {
         fetchData()
@@ -97,11 +99,15 @@ const GradebookStudentPage = () => {
     return (
         <PageWrapper>
             <div className={styles.header}>
+                <div className={styles.smallLine}></div>
                 <h1>Student Gradebook</h1>
+                <div className={styles.largeLine}></div>
                 <div>
                     {role.isInstructor() &&
-                        <Link className={styles.button} to={`/course/${courseId}/gradebook/instructor`}>Instructor
-                            View</Link>}
+                        <Button variant='contained' className={styles.button} onClick={() => {
+                            history.push(`/course/${courseId}/gradebook/instructor`)
+                        }
+                        }>Instructor View</Button>}
                 </div>
             </div>
             <div>
