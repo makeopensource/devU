@@ -65,7 +65,8 @@ Router.get('/:id', asInt(), UserController.detail)
  *         schema:
  *           type: string
  */
-Router.get('/course/:id', isAuthorized('courseViewAll'), asInt(), UserController.getByCourse)
+Router.get('/course/:id', /* isAuthorized('courseViewAll'), */ asInt(), UserController.getByCourse)
+// TODO: Removed authorization for now, fix later
 
 /**
  * @swagger
