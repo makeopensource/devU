@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import {Assignment, AssignmentProblem, Submission, ContainerAutoGrader} from 'devu-shared-modules'
+import {Assignment, AssignmentProblem, Submission, NonContainerAutoGrader} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from './errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -35,8 +35,9 @@ const AssignmentDetailPage = () => {
     // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
 
-    const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
+    //const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
     // const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
+    const [nonContainerAutograders, setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
 
     useEffect(() => {
         fetchData()
@@ -67,8 +68,12 @@ const AssignmentDetailPage = () => {
             //  const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
             //  setSubmissionProblemScores(submissionProblemScoresReq)
 
-            const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
-            setContainerAutograder(containerAutograder)
+            // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
+            // setContainerAutograder(containerAutograder)
+
+            const nonContainers = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
+            setNonContainerAutograders(nonContainers)
+
 
         } catch (err) {
             setError(err)
@@ -122,7 +127,7 @@ const AssignmentDetailPage = () => {
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
 
             // Now you can use submissionResponse.id here
-            await RequestService.post(`/api/grade/${response.id}`, {} )
+            await RequestService.post(`/api/course/${courseId}/grade/${response.id}`, {} )
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
 
             await fetchData()
@@ -157,15 +162,15 @@ const AssignmentDetailPage = () => {
         
             <Grid display='flex' justifyContent='center' alignItems='center'>
             <Card className={styles.card}>
-            {assignmentProblems && assignmentProblems.length > 0 ? (
-                assignmentProblems.map((assignmentProblem, index) => (
+            {nonContainerAutograders && nonContainerAutograders.length > 0 ? (
+                nonContainerAutograders.map((nonContainer, index) => (
                     <Accordion className={styles.accordion} key={index}>
                     <AccordionSummary>
                         <Typography>{`Assignment Problem ${index + 1}`}</Typography>
                     </AccordionSummary>
                     <AccordionDetails className={styles.accordionDetails}>
-                        <Typography>{assignmentProblem.problemName}</Typography>
-                        <TextField id={assignmentProblem.problemName} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
+                        <Typography>{nonContainer.question}</Typography>
+                        <TextField id={nonContainer.question} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
                     </AccordionDetails>
                     </Accordion>
                 ))
@@ -175,7 +180,7 @@ const AssignmentDetailPage = () => {
                 </CardContent>
             )}
 
-            {containerAutograder && (<input type="file" onChange={handleFileChange} />)}
+            <input type="file" onChange={handleFileChange} />
 
             {assignmentProblems && assignmentProblems.length > 0 ? (
                 <Button variant='contained' style={{marginTop: 10, marginBottom: 10}} onClick={handleSubmit}>Submit</Button>

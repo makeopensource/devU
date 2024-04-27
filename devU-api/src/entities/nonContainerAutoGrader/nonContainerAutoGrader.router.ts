@@ -13,7 +13,7 @@ const Router = express.Router({ mergeParams: true })
 
 /**
  * @swagger
- * /course/:courseId/assignment/:assignmentId/nonContainerAutoGraders:
+ * /course/:courseId/assignment/:assignmentId/non-container-auto-graders:
  *   get:
  *     summary: Retrieve a list of all nonContainerAutoGrader with the assignment ID
  *     tags:
@@ -28,11 +28,12 @@ const Router = express.Router({ mergeParams: true })
  *         schema:
  *           type: integer
  */
-Router.get('/', isAuthorized('assignmentViewAll'), nonContainerQuestions.getByAssignmentId)
+Router.get('/', isAuthorized('enrolled'), nonContainerQuestions.getByAssignmentId)
+// TODO: Authorization set to enrolled temporarily, add proper authorization in context of retrieving questions on assignment detail page
 
 /**
  * @swagger
- * /course/:courseId/assignment/:assignmentId/nonContainerAutoGraders/byId/{id}:
+ * /course/:courseId/assignment/:assignmentId/non-container-auto-graders/byId/{id}:
  *   get:
  *     summary: Retrieve a single non container auto grader
  *     tags:
@@ -51,7 +52,7 @@ Router.get('/byId/:id', isAuthorized('assignmentViewAll'), asInt(), nonContainer
 
 /**
  * @swagger
- * /course/:courseId/assignment/:assignmentId/nonContainerAutoGraders:
+ * /course/:courseId/assignment/:assignmentId/non-container-auto-graders:
  *   post:
  *     summary: Create a question
  *     tags:
@@ -69,7 +70,7 @@ Router.post('/', isAuthorized('assignmentEditAll'), validator, nonContainerQuest
 
 /**
  * @swagger
- * /course/:courseId/assignment/:assignmentId/nonContainerAutoGraders:
+ * /course/:courseId/assignment/:assignmentId/non-container-auto-graders:
  *   put:
  *     summary: Update a question
  *     tags:
@@ -93,7 +94,7 @@ Router.put('/:id', isAuthorized('assignmentEditAll'), asInt(), validator, nonCon
 
 /**
  * @swagger
- * /course/:courseId/assignment/:assignmentId/nonContainerAutoGraders/{id}:
+ * /course/:courseId/assignment/:assignmentId/non-container-auto-graders/{id}:
  *   delete:
  *     summary: Delete a question
  *     tags:
