@@ -37,7 +37,7 @@ const upload = Multer()
  *           type: integer
  *
  */
-Router.get('/', /*isAuthorized('submissionViewAll'),*/ SubmissionController.get)
+Router.get('/', /*isAuthorized('submissionViewAll'),*/ SubmissionController.getByAssignment)
 // TODO: Authorization
 
 

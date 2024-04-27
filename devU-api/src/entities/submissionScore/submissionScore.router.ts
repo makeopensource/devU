@@ -22,7 +22,8 @@ const Router = express.Router({ mergeParams: true })
  *       '200':
  *         description: OK
  */
-Router.get('/', isAuthorized('scoresViewAll'), SubmissionScoreController.get)
+Router.get('/', isAuthorized('enrolled'), SubmissionScoreController.get)
+// TODO: Allow retrieving score by submission by the submission owner
 
 /**
  * @swagger
