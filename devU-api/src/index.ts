@@ -31,7 +31,7 @@ initializeMinio()
     app.use(bodyParser.urlencoded({ extended: true }))
     app.use(bodyParser.json())
     app.use(cookieParser())
-    app.use(cors({ origin: environment.clientUrl, credentials: true }))
+    app.use(cors())
     app.use(morgan('combined'))
     app.use(passport.initialize())
 

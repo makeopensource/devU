@@ -60,7 +60,7 @@ if (isDocker && process.env.TANGO_KEY === undefined) {
 const environment = {
   port,
   apiUrl,
-  clientUrl: (process.env.CLIENT_URL || load('api.clientUrl') || 'http://localhost:9000') as string,
+  clientUrl: (process.env.CLIENT_URL || load('api.clientUrl') || 'http://fiona.cse.buffalo.edu') as string,
 
   // Database settings
   dbHost: isDocker ? load('database.host') : ('localhost' as string),

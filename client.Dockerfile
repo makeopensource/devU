@@ -21,5 +21,5 @@ COPY ./devU-client/ .
 
 COPY --from=module_builder /tmp/devu-shared-modules ./devu-shared-modules
 
-RUN npm run build-local
+RUN npm run build
 CMD cp -r /app/dist/* /out
