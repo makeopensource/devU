@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { toCapitalizedWords } from 'devu-shared-modules'
-
+import {TextField as MuiTextField} from '@mui/material'
 import styles from './textField.scss'
 
 type Props = {
@@ -14,10 +13,11 @@ type Props = {
   disabled?: true
   defaultValue?: string
   value?: string
+  invalidated?: boolean
+  helpText?: string
 }
 
 const TextField = ({
-  type = 'text',
   onChange,
   className = '',
   label,
@@ -26,24 +26,27 @@ const TextField = ({
   disabled,
   defaultValue,
   value,
+                     invalidated,
+                     helpText,
+
 }: Props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) onChange(e.target.value, e)
   }
-
   return (
     <div className={`${styles.textField} ${className}`}>
-      {label && <label htmlFor={id}>{toCapitalizedWords(label)}</label>}
-      <input
-        id={id}
-        type={type}
-        onChange={handleChange}
-        className={styles.input}
-        placeholder={placeholder}
+      <MuiTextField {...invalidated && {error: true}}
+                    id={id}
+                    className={styles.input}
+                    placeholder={placeholder}
+                    variant='outlined'
+                    label={label}
+                    defaultValue={defaultValue}
+                    value={value}
+                    onChange={handleChange}>
         disabled={disabled}
-        defaultValue={defaultValue}
-        value={value}
-      />
+        helperText={helpText}
+      </MuiTextField>
     </div>
   )
 }

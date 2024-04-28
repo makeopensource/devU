@@ -26,7 +26,7 @@ const CoursePreviewPage = () => {
 
 
     const handleCheckEnroll = async () => {
-        RequestService.get(`/api/user-courses/user/courses/${courseId}`)
+        RequestService.get(`/api/course/${courseId}/user-courses/users`)
         .then((response) => {
             setUserCourses(response);
         })
@@ -58,19 +58,22 @@ const CoursePreviewPage = () => {
     if (loading) return <LoadingOverlay delay={250}/>
 
     if (enrolled) {
-        history.push(`/courses/${courseId}`)
+        history.push(`/course/${courseId}`)
     }
 
     const handleJoinCourse = () => {
         const userCourseData = {
             userId: userId,
             courseId: courseId,
-            level: 'student',
+            role: 'student',
             dropped: false
         };
 
-        RequestService.post('/api/user-courses', userCourseData)
+        RequestService.post(`/api/course/${courseId}/user-courses`, userCourseData)
         .catch((error: Error) => {
+            const message = error.message
+            setAlert({autoDelete: false, type: 'error', message})
+        }).catch((error: Error) => {
             const message = error.message
             setAlert({autoDelete: false, type: 'error', message})
         }).finally(() => {

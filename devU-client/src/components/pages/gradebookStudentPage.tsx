@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useAppSelector } from 'redux/hooks'
+import React, {useEffect, useState} from 'react'
+import {Link, useHistory, useParams} from 'react-router-dom'
+import {useAppSelector} from 'redux/hooks'
 
-import { Assignment, AssignmentScore } from 'devu-shared-modules'
+import {Assignment, AssignmentScore} from 'devu-shared-modules'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from './errorPage'
 
 import RequestService from 'services/request.service'
+import Button from '@mui/material/Button'
 
 import styles from './gradebookPage.scss'
-import { useParams } from 'react-router-dom'
 
 type CategoryProps = {
     categoryName: string
@@ -27,9 +27,12 @@ type AssignmentProps = {
 const CategoryAssignment = ({assignment, assignmentScore}: AssignmentProps) => {
     const { courseId } = useParams<{courseId: string}>()
 
+
     return (
         <div>
-            <Link className={styles.assignmentName} to={`/courses/${courseId}/assignments/${assignment.id}`}>{assignment.name} </Link> - Score: {assignmentScore?.score ?? 'N/A'}
+            <Link className={styles.assignmentName}
+                  to={`/course/${courseId}/assignment/${assignment.id}`}>{assignment.name} </Link> -
+            Score: {assignmentScore?.score ?? 'N/A'}
         </div>
     )
 }
@@ -62,9 +65,10 @@ const GradebookStudentPage = () => {
     const [categories, setCategories] = useState(new Array<string>())
     const [assignments, setAssignments] = useState(new Array<Assignment>())
     const [assignmentScores, setAssignmentScores] = useState(new Array<AssignmentScore>())
-
+    const role = useAppSelector((store) => store.roleMode)
     const { courseId } = useParams<{courseId: string}>()
     const userId = useAppSelector((store) => store.user.id)
+    const history = useHistory()
     
     useEffect(() => {
         fetchData()
@@ -72,10 +76,10 @@ const GradebookStudentPage = () => {
     
     const fetchData = async () => {
         try {
-            const assignments = await RequestService.get<Assignment[]>( `/api/assignments/course/${courseId}` )
+            const assignments = await RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`)
             setAssignments(assignments)
 
-            const assignmentScores = await RequestService.get<AssignmentScore[]>( `/api/assignment-scores/user/${userId}` )
+            const assignmentScores = await RequestService.get<AssignmentScore[]>(`/api/course/${courseId}/assignment-scores/user/${userId}`)
             setAssignmentScores(assignmentScores)
 
             //As I'm unsure as to how category creation will be handled, this is done for now instead of an api call to /categories/course/{courseId}
@@ -95,9 +99,15 @@ const GradebookStudentPage = () => {
     return (
         <PageWrapper>
             <div className={styles.header}>
+                <div className={styles.smallLine}></div>
                 <h1>Student Gradebook</h1>
+                <div className={styles.largeLine}></div>
                 <div>
-                    <Link className={styles.button} to={`/courses/${courseId}/gradebook/instructor`}>Instructor View</Link>
+                    {role.isInstructor() &&
+                        <Button variant='contained' className={styles.button} onClick={() => {
+                            history.push(`/course/${courseId}/gradebook/instructor`)
+                        }
+                        }>Instructor View</Button>}
                 </div>
             </div>
             <div>

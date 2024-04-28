@@ -7,13 +7,14 @@ import PageWrapper from 'components/shared/layouts/pageWrapper'
 import RequestService from 'services/request.service'
 import {useActionless} from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
-import Button from 'components/shared/inputs/button'
+import Button from '@mui/material/Button'
 
 import {SET_ALERT} from 'redux/types/active.types'
 
-import styles from '../shared/inputs/textField.scss'
-import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
+import {applyMessageToErrorFields, removeClassFromField} from "../../utils/textField.utils";
 import {useHistory, useParams} from 'react-router-dom'
+
+import formStyles from './assignmentFormPage.scss'
 
 const AssignmentCreatePage = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -29,7 +30,6 @@ const AssignmentCreatePage = () => {
         maxSubmissions: null,
         disableHandins: false,
     })
-    const [loading, setLoading] = useState(false)
     const [endDate, setEndDate] = useState(new Date())
     const [dueDate, setDueDate] = useState(new Date())
     const [startDate, setStartDate] = useState(new Date())
@@ -67,21 +67,21 @@ const AssignmentCreatePage = () => {
             disableHandins: formData.disableHandins,
         }
 
-        setLoading(true)
-        RequestService.post('/api/assignments/', finalFormData)
+        RequestService.post(`/api/course/${courseId}/assignments/`, finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
+                history.goBack()
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
-                const newFields = applyStylesToErrorFields(err, formData, styles.errorField)
+                const newFields = new Map<string, string>()
+                Array.isArray(err) ? err.map((e) => applyMessageToErrorFields(newFields, e.param, e.msg)) : newFields
+                setInvalidFields(newFields);
 
-                setInvalidFields(newFields)
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         .finally(() => {
-            setLoading(false)
-            history.goBack()
+
         })
 
     }
@@ -89,32 +89,59 @@ const AssignmentCreatePage = () => {
     return(
         <PageWrapper>
             <h1>Assignment Form</h1>
-            <p>Required Field *</p>
-            <TextField id='name' label='Assignment Name*' onChange={handleChange}/>
-            <label htmlFor='start_date'>Start Date *</label>
-            <br/>
-            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}/>
-            <br/>
-            <label htmlFor='due_date'>Due Date *</label>
-            <br/>
-            <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}/>
-            <br/>
-            <label htmlFor='end_date'>End Date *</label>
-            <br/>
-            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}/>
-            <TextField id='categoryName' label='Category Name *' onChange={handleChange}
-                       className={invalidFields.get('categoryName')}/>
-            <TextField id='description' label='Description of the Assignment *' onChange={handleChange}
-                       className={invalidFields.get('description')}/>
-            <TextField id='maxFileSize' label="Maximum allowable file Size *" onChange={handleChange}
-                       className={invalidFields.get('maxFileSize')}/>
-            <TextField id='maxSubmission' label='Maximum Submissions' onChange={handleChange}
-                       className={invalidFields.get('maxSubmission')}/>
-            <label htmlFor='disableHandins'>Disable Handins</label>
-            <input type='checkbox' id='disableHandins' checked={formData.disableHandins} onChange={handleCheckbox}/>
-            <br/>
+            <div className={formStyles.form}>
 
-            <Button onClick={handleSubmit} loading={loading}>Create assignment</Button>
+                <TextField id='name' onChange={handleChange} label={"Assignment Name"}
+                           invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}/>
+
+                <TextField id='categoryName' onChange={handleChange} label={"Category Name*"}
+                           invalidated={!!invalidFields.get("categoryName")}
+                           helpText={invalidFields.get("categoryName")}/>
+
+                <TextField id='description' onChange={handleChange} label={"Description*"}
+                           invalidated={!!invalidFields.get("description")}
+                           helpText={invalidFields.get("description")}/>
+
+                <TextField id='maxFileSize' onChange={handleChange} label={"Max File Size"}
+                           invalidated={!!invalidFields.get("maxFileSize")}
+                           helpText={invalidFields.get("maxFileSize")}/>
+
+                <TextField id='maxSubmission' onChange={handleChange} label={"Max Submission"}
+                           invalidated={!!invalidFields.get("maxSubmission")}
+                           helpText={invalidFields.get("maxSubmission")}/>
+                <br/>
+
+                <div className={formStyles.datepickerContainer}>
+                    <div>
+                        <label htmlFor='start_date'>Start Date *</label>
+                        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
+                                    className={formStyles.datepicker}/>
+                    </div>
+                    <div>
+                        <label htmlFor='due_date'>Due Date *</label>
+                        <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}
+                                    className={formStyles.datepicker}/>
+                    </div>
+                    <div>
+                        <label htmlFor='end_date'>End Date *</label>
+                        <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
+                                    className={formStyles.datepicker}/>
+                    </div>
+                </div>
+                <br/>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <label htmlFor='disableHandins'>Disable Handins</label>
+                    <input type='checkbox' id='disableHandins' checked={formData.disableHandins}
+                           onChange={handleCheckbox} className={formStyles.submitBtn}/>
+                </div>
+
+                <br/>
+
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <Button variant='contained' onClick={handleSubmit} className={formStyles.submitBtn}>Create
+                        assignment</Button>
+                </div>
+            </div>
 
         </PageWrapper>
     )

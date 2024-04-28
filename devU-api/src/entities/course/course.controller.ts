@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express'
+import {NextFunction, Request, Response} from 'express'
 
 import CourseService from './course.service'
 
-import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
+import {GenericResponse, NotFound, Updated} from '../../utils/apiResponse.utils'
 
-import { serialize } from './course.serializer'
+import {serialize} from './course.serializer'
 import UserCourseService from '../userCourse/userCourse.service'
 
 export async function get(req: Request, res: Response, next: NextFunction) {
@@ -20,8 +20,20 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 export async function getByUser(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = parseInt(req.params.userId)
-    const courses = await CourseService.listByUser(userId)
-    const response = courses.map(serialize)
+    const {
+      activeCourses,
+      pastCourses,
+      instructorCourses,
+      upcomingCourses
+    } = await CourseService.listByUser(userId)
+
+    const response =
+        {
+          activeCourses: activeCourses.map(serialize),
+          pastCourses: pastCourses.map(serialize),
+          instructorCourses: instructorCourses.map(serialize),
+          upcomingCourses: upcomingCourses.map(serialize)
+        }
 
     res.status(200).json(response)
   } catch (err) {
@@ -31,7 +43,7 @@ export async function getByUser(req: Request, res: Response, next: NextFunction)
 
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.courseId)
     const course = await CourseService.retrieve(id)
 
     if (!course) return res.status(404).json(NotFound)
@@ -77,7 +89,7 @@ export async function postAddInstructor(req: Request, res: Response, next: NextF
 
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
-    req.body.id = parseInt(req.params.id)
+    req.body.id = parseInt(req.params.courseId)
     const results = await CourseService.update(req.body)
 
     if (!results.affected) return res.status(404).json(NotFound)

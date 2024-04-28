@@ -29,7 +29,7 @@ const Router = express.Router({ mergeParams: true })
  *        schema:
  *          type: integer
  */
-Router.get('/:id', isAuthorized('scoresViewAll'), asInt(), AssignmentScoreController.getByCourse)
+Router.get('/', isAuthorized('scoresViewAll'), AssignmentScoreController.getByCourse)
 
 /**
  * @swagger
@@ -70,10 +70,10 @@ Router.get('/:id', isAuthorized('scoresViewAll'), asInt(), AssignmentScoreContro
  *          type: integer
  */
 Router.get(
-  '/user/:id',
+  '/user/:userId',
   extractOwnerByPathParam('userId'),
   isAuthorized('scoresViewAll', 'scoresViewSelfReleased'),
-  asInt(),
+  asInt("userId"),
   AssignmentScoreController.getByUser
 )
 

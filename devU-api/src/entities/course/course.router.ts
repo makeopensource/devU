@@ -57,7 +57,8 @@ Router.get('/user/:userId', asInt('userId'), CourseController.getByUser)
  *         schema:
  *           type: integer
  */
-Router.get('/:courseId', isAuthorized('enrolled'), asInt('courseId'), CourseController.detail)
+Router.get('/:courseId', /*isAuthorized('enrolled'),*/ asInt('courseId'), CourseController.detail)
+// TODO: authorization. Can only view if enrolled
 
 /**
  * @swagger

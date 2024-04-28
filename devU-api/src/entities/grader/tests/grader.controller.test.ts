@@ -1,5 +1,4 @@
 import { GraderInfo, SubmissionScore, SubmissionProblemScore } from 'devu-shared-modules'
-import SubmissionModel from '../../submission/submission.model'
 
 import controller from '../grader.controller'
 
@@ -18,7 +17,6 @@ let req: any
 let res: any
 let next: any
 
-let mockedSubmission: SubmissionModel
 let expectedReturn = new Array()
 let expectedResult: GraderInfo
 let expectedError: Error
@@ -33,8 +31,6 @@ describe('GraderController', () => {
     res = Testing.fakeResponse()
     next = Testing.fakeNext()
 
-    mockedSubmission = Testing.generateTypeOrm(SubmissionModel)
-
     expectedReturn.push(expectedProblemScore1)
     expectedReturn.push(expectedProblemScore2)
     expectedReturn.push(expectedScore)
@@ -45,7 +41,7 @@ describe('GraderController', () => {
   describe('POST - /grade/:id', () => {
     describe('200 - Ok', () => {
       beforeEach(async () => {
-        GraderService.grade = jest.fn().mockImplementation(() => Promise.resolve(mockedSubmission))
+        GraderService.grade = jest.fn().mockImplementation(() => Promise.resolve(expectedReturn))
         await controller.grade(req, res, next)
       })
       test('Status code is 200', () => expect(res.status).toBeCalledWith(200))

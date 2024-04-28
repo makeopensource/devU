@@ -12,7 +12,7 @@ import RequestService from 'services/request.service'
 import {Assignment, Course, UserCourse} from 'devu-shared-modules'
 
 
-const HomePage = () => {
+const UserCoursesListPage = () => {
   const userId = useAppSelector((store) => store.user.id)
   const role = useAppSelector((store) => store.roleMode)
 
@@ -28,10 +28,10 @@ const HomePage = () => {
 
   const fetchData = async () => {
     try {
-      const userCourses = await RequestService.get<UserCourse[]>(`/api/user-courses/user/${userId}`)
+      const userCourses = await RequestService.get<UserCourse[]>(`/api/courses/user/${userId}`)
       const coursePromises = userCourses.map(uc => {
         const course = RequestService.get<Course>(`/api/courses/${uc.courseId}`)
-        const assignments = RequestService.get<Assignment[]>(`/api/assignments/course/${uc.courseId}`)
+        const assignments = RequestService.get<Assignment[]>(`/api/course/${uc.courseId}/assignments/released`)
         return Promise.all([course, assignments])
 
       })
@@ -62,7 +62,7 @@ const HomePage = () => {
 
         <div>
           {role.isInstructor() && (
-            <Link className={styles.addCourseBtn} to={`/users/${userId}/addCoursesForm`}>
+            <Link className={styles.addCourseBtn} to={`/addCoursesForm`}>
               Add Courses
             </Link>
           )}
@@ -86,4 +86,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default UserCoursesListPage

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 
-import { User, UserCourse, Assignment, AssignmentScore } from 'devu-shared-modules'
+import {Assignment, AssignmentScore, User, UserCourse} from 'devu-shared-modules'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -9,7 +9,7 @@ import ErrorPage from './errorPage'
 import RequestService from 'services/request.service'
 
 import styles from './gradebookPage.scss'
-import { useParams } from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 
 type TableProps = {
     users: User[]
@@ -81,17 +81,17 @@ const GradebookInstructorPage = () => {
     
     const fetchData = async () => {
         try {
-            const userCourses = await RequestService.get<UserCourse[]>( `/api/user-courses/course/${courseId}` )
+            const userCourses = await RequestService.get<UserCourse[]>(`/api/course/${courseId}/user-courses/`)
             setUserCourses(userCourses)
 
-            const users = await RequestService.get<User[]>( `/api/users/course/${courseId}?level=student` )
+            const users = await RequestService.get<User[]>(`/api/users/course/${courseId}`)
             setUsers(users)
             
-            const assignments = await RequestService.get<Assignment[]>( `/api/assignments/course/${courseId}` )
+            const assignments = await RequestService.get<Assignment[]>( `/api/course/${courseId}/assignments` )
             assignments.sort((a, b) => (Date.parse(a.startDate) - Date.parse(b.startDate))) //Sort by assignment's start date
             setAssignments(assignments)
 
-            const assignmentScores = await RequestService.get<AssignmentScore[]>( `/api/assignment-scores/course/${courseId}` )
+            const assignmentScores = await RequestService.get<AssignmentScore[]>( `/api/course/${courseId}/assignment-scores` )
             setAssignmentScores(assignmentScores)
 
         } catch (error) {

@@ -1,13 +1,28 @@
 @import 'variables';
 
-.categoriesContainer {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px; /* adjust this value to set the space between the cards */
 
+h1 {
+  text-align: center;
 }
+.form {
+  background-color: $list-item-background;
+    border-radius: 10px;
+    padding: 20px;
+    width: 50%;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+
+  .datepickerContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
 
 .header {
+    color: $text-color;
     display: flex;
     align-items: center;
 }
@@ -25,12 +40,16 @@
     margin-right: 10px; /* add this line to create some space between the line and the button */
 }
 
-.buttons {
-	margin : 0 10px;
-}
-
-.color{
-    background-color: $list-item-background;
-    color: $text-color;
-    max-width : 345px;
+.datepicker {
+  font: inherit;
+  letter-spacing: inherit;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  -webkit-tap-highlight-color: transparent;
+  width: 85%;
+  animation-duration: 10ms;
+  padding: 16.5px 14px;
+  border: 1px solid #bbbbbb;
+  border-radius: 4px;
 }

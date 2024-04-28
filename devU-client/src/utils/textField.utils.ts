@@ -45,3 +45,8 @@ export function applyStylesToErrorFields(error: ExpressValidationError[] | Error
     const allFields = initializeFieldClasses(data)
     return applyClassToMultipleFields(allFields, sections, styles)
 }
+
+export function applyMessageToErrorFields(allFields: Map<string, string>, errField: string, message: string) {
+    allFields.set(errField, message)
+    return allFields
+}

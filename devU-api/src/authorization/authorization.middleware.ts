@@ -75,7 +75,7 @@ export function isAuthorized(permission: string, permissionIfSelf?: string) {
  * but not checked to be a valid assignment id
  */
 export async function isAuthorizedByAssignmentStatus(req: Request, res: Response, next: NextFunction) {
-  const assignmentId = parseInt(req.params['assignmentId'])
+  const assignmentId = parseInt(req.params.assignmentId)
   const isAssignmentReleased = await AssignmentService.isReleased(assignmentId)
   const permissionString = isAssignmentReleased ? 'assignmentViewReleased' : 'assignmentViewAll'
   await isAuthorized(permissionString)(req, res, next)

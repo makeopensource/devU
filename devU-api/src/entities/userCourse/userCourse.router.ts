@@ -3,14 +3,19 @@ import express from 'express'
 
 // Middleware
 import validator from './userCourse.validator'
-import { asInt } from '../../middleware/validator/generic.validator'
-import { extractOwnerByPathParam, isAuthorized } from '../../authorization/authorization.middleware'
+import {asInt} from '../../middleware/validator/generic.validator'
+import {extractOwnerByPathParam, isAuthorized} from '../../authorization/authorization.middleware'
 
 // Controller
 import UserCourseController from './userCourse.controller'
 
 const Router = express.Router({ mergeParams: true })
 
+
+/**
+ * TODO: Document this
+ */
+Router.get('/users', UserCourseController.checkEnroll)
 /**
  * @swagger
  * /course/:courseId/user-courses/:
@@ -29,7 +34,7 @@ const Router = express.Router({ mergeParams: true })
  *         schema:
  *           type: integer
  */
-Router.get('/course/:id', isAuthorized('courseViewAll'), asInt(), UserCourseController.getByCourse)
+Router.get('/', isAuthorized('courseViewAll'), UserCourseController.getByCourse)
 
 /**
  * @swagger
@@ -70,6 +75,8 @@ Router.get('/:id', isAuthorized('courseViewAll'), asInt(), UserCourseController.
  *         schema:
  *           type: integer
  */
+
+
 Router.get(
   '/user/:userId',
   extractOwnerByPathParam('userId'),
@@ -77,8 +84,6 @@ Router.get(
   asInt('userId'),
   UserCourseController.detailByUser
 )
-
-Router.get('/user/courses/:courseId', asInt('courseId'), UserCourseController.checkEnroll)
 
 /**
  * @swagger
@@ -140,6 +145,6 @@ Router.put('/:id', isAuthorized('userCourseEditAll'), asInt(), validator, UserCo
  *         schema:
  *           type: integer
  */
-Router.delete('/:id', asInt(), UserCourseController._delete)
+Router.delete('/', UserCourseController._delete)
 // TODO: eventually add authorization to this. For now, everyone can remove anyone
 export default Router

@@ -37,7 +37,9 @@ const upload = Multer()
  *           type: integer
  *
  */
-Router.get('/', isAuthorized('submissionViewAll'), SubmissionController.get)
+Router.get('/', /*isAuthorized('submissionViewAll'),*/ SubmissionController.getByAssignment)
+// TODO: Authorization
+
 
 Router.get('/assignments/:assignmentId', asInt('assignmentId'), SubmissionController.getByAssignment)
 
@@ -59,6 +61,25 @@ Router.get('/assignments/:assignmentId', asInt('assignmentId'), SubmissionContro
  *           type: integer
  */
 Router.get('/:id', isAuthorized('enrolled'), asInt(), SubmissionController.detail)
+
+/**
+ * @swagger
+ * /course/:courseId/assignment/:assignmentId/submissions/user/{userId}:
+ *   get:
+ *     summary: Retrieve submission by user
+ *     tags:
+ *       - Submissions
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ */
+Router.get('/user/:userId', isAuthorized('enrolled'), asInt("userId"), SubmissionController.listByUser)
 // TODO: submissionViewAll or enrolled/self
 
 /**
@@ -97,6 +118,7 @@ Router.post('/', isAuthorized('enrolled'), upload.single('files'), validator, Su
  *         required: true
  *         schema:
  *           type: integer
+ *
  */
 Router.put('/:id/revoke', isAuthorized('submissionChangeState'), asInt(), SubmissionController.revoke)
 

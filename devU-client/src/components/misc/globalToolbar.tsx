@@ -14,7 +14,7 @@ const GlobalToolbar = () => {
   return (
     <div className={styles.bar}>
       <Link to='/' className={styles.header}>
-        Auto Four
+        DevU
       </Link>
       <div className={styles.controls}>
         <div className={styles.sidebar}>
@@ -29,12 +29,12 @@ const GlobalToolbar = () => {
             <Link to={`/courses`} className={styles.link}>
               Courses
             </Link>
-            <Link to={`/myCourses`} className={styles.link}>
-              My Courses
-            </Link>
-            <Link to={`/submissions`} className={styles.link}>
+            {/*<Link to={`/myCourses`} className={styles.link}>*/}
+            {/*  My Courses*/}
+            {/*</Link>*/}
+            {/* <Link to={`/submissions`} className={styles.link}>
               Submissions
-            </Link>
+            </Link> */}
           </div>
         </div>
         <UserOptionsDropdown />

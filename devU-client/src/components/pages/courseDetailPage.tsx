@@ -18,7 +18,7 @@ import Stack from '@mui/material/Stack'
 
 import styles from './courseDetailPage.scss'
 import {SET_ALERT} from "../../redux/types/active.types";
-import {useActionless} from "../../redux/hooks";
+import {useActionless, useAppSelector} from "redux/hooks";
 
 const CourseDetailPage = () => {
     const history = useHistory()
@@ -27,12 +27,13 @@ const CourseDetailPage = () => {
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     const [setAlert] = useActionless(SET_ALERT)
+    const role = useAppSelector((store) => store.roleMode)
     const fetchCourseInfo = async () => {
         RequestService.get<Course>(`/api/courses/${courseId}`)
         .then((course) => {
             setCourseInfo(course)
         })
-        RequestService.get<Assignment[]>(`/api/assignments/course/${courseId}`)
+        RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`)
         .then((assignments) => {
             console.log(assignments)
             let categoryMap : Record<string, Assignment[]> = {}
@@ -52,7 +53,7 @@ const CourseDetailPage = () => {
 
     const handleDropCourse = () => {
 
-        RequestService.delete(`/api/user-courses/${courseId}`).then(() => {
+        RequestService.delete(`/api/course/${courseId}/user-courses`).then(() => {
             setAlert({autoDelete: true, type: 'success', message: 'Course Dropped'})
                 history.push('/courses')
 
@@ -77,14 +78,20 @@ const CourseDetailPage = () => {
 
                         <Stack spacing={2} direction='row'>
                             <Button variant='contained' className={styles.buttons} onClick={() => {
-                                history.push(`/courses/${courseId}/gradebook`)
+                                history.push(`/course/${courseId}/gradebook`)
                             }}>Gradebook</Button>
-                            <Button variant='contained' className={styles.buttons} onClick={() => {
-                                history.push(`/courses/${courseId}/createAssignment`)
-                            }}>Add Assignment</Button>
-                            <Button variant='contained' className={styles.buttons} onClick={() => {
-                                history.push(`/courses/${courseId}/update`)
-                            }}>Edit Course</Button>
+
+                            {role.isInstructor() &&
+                                <Button variant='contained' className={styles.buttons} onClick={() => {
+                                    history.push(`/course/${courseId}/createAssignment`)
+                                }}>Add Assignment</Button>}
+
+                            {role.isInstructor() &&
+                                <Button variant='contained' className={styles.buttons} onClick={() => {
+                                    history.push(`/course/${courseId}/update`)
+                                }}>Edit Course</Button>}
+
+
                             <Button variant='contained' className={styles.buttons} onClick={handleDropCourse}>Drop
                                 Course</Button>
                         </Stack>
@@ -102,7 +109,9 @@ const CourseDetailPage = () => {
                             <List sx = {{maxHeight : 300, overflow : 'auto', '& ul' : {padding : 0} }}>
                             {categoryMap[category].map((assignment, index) => (
                                 <ListItem disablePadding key={index}>
-                                    <ListItemButton onClick={() => {history.push(`/courses/${courseId}/assignments/${assignment.id}`)}}>
+                                    <ListItemButton onClick={() => {
+                                        history.push(`/course/${courseId}/assignment/${assignment.id}`)
+                                    }}>
                                         <ListItemText primary={assignment.name} />
                                     </ListItemButton>
                                 </ListItem>

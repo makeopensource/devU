@@ -1,33 +1,29 @@
-import React,{ useState, useEffect } from 'react'
-import {/*Link,*/ useHistory} from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
+import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import { AssignmentProblem, Submission, /*SubmissionScore, SubmissionProblemScore,*/ Assignment, ContainerAutoGrader } from 'devu-shared-modules' 
+import {Assignment, AssignmentProblem, Submission, NonContainerAutoGrader, /*ContainerAutoGrader*/} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from './errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-import { useAppSelector,useActionless } from 'redux/hooks'
-import { SET_ALERT } from 'redux/types/active.types'
-import { useParams } from 'react-router-dom'
+import {useActionless, useAppSelector} from 'redux/hooks'
+import {SET_ALERT} from 'redux/types/active.types'
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import {CardActionArea} from '@mui/material'
+import {Accordion, AccordionDetails, AccordionSummary, CardActionArea, TextField, Typography} from '@mui/material'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
-import {Accordion} from '@mui/material'
-import {AccordionSummary} from '@mui/material'
-import {AccordionDetails} from '@mui/material'
-import {Typography} from '@mui/material'
-import {TextField} from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
 
 import styles from './assignmentDetailPage.scss'
+import {prettyPrintDateTime} from "../../utils/date.utils";
 
 const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
     const history = useHistory()
     const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
     const userId = useAppSelector((store) => store.user.id)
+    const role = useAppSelector((store) => store.roleMode)
 
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -38,7 +34,10 @@ const AssignmentDetailPage = () => {
     // const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
     // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
-    const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
+
+    // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
+    // const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
+    const [nonContainerAutograders, setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
 
     useEffect(() => {
         fetchData()
@@ -47,8 +46,8 @@ const AssignmentDetailPage = () => {
 
     const fetchData = async () => {
         try {
-            const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${assignmentId}`)
-            setAssignment(assignment)
+            const assignments = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${assignmentId}`)
+            setAssignment(assignments)
 
             const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
             setAssignmentProblems(assignmentProblemsReq)
@@ -69,11 +68,17 @@ const AssignmentDetailPage = () => {
             //  const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
             //  setSubmissionProblemScores(submissionProblemScoresReq)
 
-            const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/container-auto-graders/assignment/${assignmentId}`)).pop() ?? null
-            setContainerAutograder(containerAutograder)
+            // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
+            // setContainerAutograder(containerAutograder)
 
-        } catch (error) {
-            setError(error)
+            const nonContainers = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
+            setNonContainerAutograders(nonContainers)
+
+
+        } catch (err) {
+            setError(err)
+            const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+            setAlert({autoDelete: false, type: 'error', message})
         } finally {
             setLoading(false)
         }
@@ -91,6 +96,7 @@ const AssignmentDetailPage = () => {
     }
 
     const handleSubmit = async () => {
+        let response;
         const contentField = {
             filepaths : [],
             form : formData,
@@ -113,23 +119,24 @@ const AssignmentDetailPage = () => {
                 submission.append('content', JSON.stringify(contentField))
                 submission.append('files', file)
 
-                var response = await RequestService.postMultipart('/api/submissions', submission)
+                response = await RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
             } else {
-                var response = await RequestService.post('/api/submissions', submission)
+                response = await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
             }
             
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
 
             // Now you can use submissionResponse.id here
-            await RequestService.post(`/api/grade/${response.id}`, {} )
+            await RequestService.post(`/api/course/${courseId}/grade/${response.id}`, {} )
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
 
-            fetchData()
+            await fetchData()
         } catch (err) {
             const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
             setAlert({ autoDelete: false, type: 'error', message })
         } finally {
             setLoading(false)
+            await fetchData()
         }
     }
 
@@ -139,32 +146,31 @@ const AssignmentDetailPage = () => {
                 <div className={styles.smallLine}></div>
                 <h1>{assignment?.name}</h1>
                 <div className={styles.largeLine}></div>
-
                 <Stack spacing={2} direction='row'>
-                    <Button variant='contained' className={styles.buttons} onClick={() => {
-                        history.push(`/courses/${courseId}/assignments/${assignmentId}/update`)
-                    }}>Edit Assignment</Button>
-                    {/* <Button variant='contained' className={styles.buttons} onClick={() => {
-                        history.push(`/ncagtest`)
-                    }}>Add NCAG</Button>
-                    <Button variant='contained' className={styles.buttons} onClick={() => {
-                        history.push(`/cagtest`)
-                    }}>Add CAG</Button> */}
+                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/createNCAG`)
+                    }}>Add NCAG</Button>}
+                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/createCAG`)
+                    }}>Add CAG</Button>}
+                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
+                    }}>Edit Assignment</Button>}
                 </Stack>
             </div>
 
         
             <Grid display='flex' justifyContent='center' alignItems='center'>
             <Card className={styles.card}>
-            {assignmentProblems && assignmentProblems.length > 0 ? (
-                assignmentProblems.map((assignmentProblem, index) => (
-                    <Accordion className={styles.accordion}>
+            {nonContainerAutograders && nonContainerAutograders.length > 0 ? (
+                nonContainerAutograders.map((nonContainer, index) => (
+                    <Accordion className={styles.accordion} key={index}>
                     <AccordionSummary>
                         <Typography>{`Assignment Problem ${index + 1}`}</Typography>
                     </AccordionSummary>
                     <AccordionDetails className={styles.accordionDetails}>
-                        <Typography>{assignmentProblem.problemName}</Typography>
-                        <TextField id={assignmentProblem.problemName} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
+                        <Typography>{nonContainer.question}</Typography>
+                        <TextField id={nonContainer.question} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
                     </AccordionDetails>
                     </Accordion>
                 ))
@@ -174,9 +180,9 @@ const AssignmentDetailPage = () => {
                 </CardContent>
             )}
 
-            {containerAutograder && (<input type="file" onChange={handleFileChange} />)}
+            {assignment?.disableHandins === true && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
 
-            {assignmentProblems? (
+            {assignmentProblems && assignmentProblems.length > 0 ? (
                 <Button variant='contained' style={{marginTop: 10, marginBottom: 10}} onClick={handleSubmit}>Submit</Button>
             ) : null}
             </Card>
@@ -192,11 +198,13 @@ const AssignmentDetailPage = () => {
             {/**Submissions List */}
             <div>
             {submissions.map((submission, index) => (
-                <Card className={styles.submissionCard}>
-                    <CardActionArea onClick={() => {history.push(`/courses/${courseId}/assignments/${assignmentId}/submissions/${submission.id}`)}}>
+                <Card className={styles.submissionCard} key={index}>
+                    <CardActionArea onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
+                    }}>
                         <CardContent>
                             {`Submission ${submissions.length - index}`}
-                            <Typography>{`Submitted at: ${submission.createdAt}`}</Typography>
+                            <Typography>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>
