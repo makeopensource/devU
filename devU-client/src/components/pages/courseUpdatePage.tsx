@@ -11,13 +11,12 @@ import {ExpressValidationError} from 'devu-shared-modules'
 
 import {useActionless} from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
-// import Button from 'components/shared/inputs/button'
 import Button from '@mui/material/Button'
 import {SET_ALERT} from 'redux/types/active.types'
 import styles from '../shared/inputs/textField.scss'
 import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
 
-import formStyles from './courseUpdatePage.scss'
+import formStyles from './coursesFormPage.scss'
 
 type UrlParams = {
     courseId: string
@@ -91,12 +90,14 @@ const CourseUpdatePage = ({}) => {
                         <label htmlFor='start_date'>Start Date *</label>
                         <br/>
                         <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
+                                    className={formStyles.datepicker}
                                     startDate={new Date()}/>
                     </div>
                     <div>
                     <label htmlFor='end_date'>End Date *</label>
                     <br/>
-                    <DatePicker id='end_date' selected = {endDate} onChange={handleEndDateChange}/>
+                        <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
+                                    className={formStyles.datepicker}/>
                     </div>
                 </div>
                 <br/>

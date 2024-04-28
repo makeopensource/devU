@@ -17,11 +17,8 @@ h1 {
 
   .datepickerContainer {
     display: flex;
-    justify-content: center;
-  }
-
-  .datepickerContainer > * {
-    margin: 0 10px;
+    justify-content: space-between;
+    width: 100%;
   }
 
 .header {
@@ -41,4 +38,18 @@ h1 {
     border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
     margin-left: 10px; /* adjust this value to set the space between the line and the text */
     margin-right: 10px; /* add this line to create some space between the line and the button */
+}
+
+.datepicker {
+  font: inherit;
+  letter-spacing: inherit;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  -webkit-tap-highlight-color: transparent;
+  width: 85%;
+  animation-duration: 10ms;
+  padding: 16.5px 14px;
+  border: 1px solid #bbbbbb;
+  border-radius: 4px;
 }

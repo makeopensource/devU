@@ -11,8 +11,7 @@ import Button from '@mui/material/Button'
 
 import {SET_ALERT} from 'redux/types/active.types'
 
-import styles from '../shared/inputs/textField.scss'
-import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
+import {applyMessageToErrorFields, removeClassFromField} from "../../utils/textField.utils";
 import {useHistory, useParams} from 'react-router-dom'
 
 import formStyles from './assignmentFormPage.scss'
@@ -75,9 +74,10 @@ const AssignmentCreatePage = () => {
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
-                const newFields = applyStylesToErrorFields(err, formData, styles.errorField)
+                const newFields = new Map<string, string>()
+                Array.isArray(err) ? err.map((e) => applyMessageToErrorFields(newFields, e.param, e.msg)) : newFields
+                setInvalidFields(newFields);
 
-                setInvalidFields(newFields)
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         .finally(() => {
@@ -90,50 +90,56 @@ const AssignmentCreatePage = () => {
         <PageWrapper>
             <h1>Assignment Form</h1>
             <div className={formStyles.form}>
-                <p>Required Field *</p>
 
-                <label htmlFor='name'>Assignment Name *</label>
-                <TextField id='name' onChange={handleChange}/>
+                <TextField id='name' onChange={handleChange} label={"Assignment Name"}
+                           invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}/>
+
+                <TextField id='categoryName' onChange={handleChange} label={"Category Name*"}
+                           invalidated={!!invalidFields.get("categoryName")}
+                           helpText={invalidFields.get("categoryName")}/>
+
+                <TextField id='description' onChange={handleChange} label={"Description*"}
+                           invalidated={!!invalidFields.get("description")}
+                           helpText={invalidFields.get("description")}/>
+
+                <TextField id='maxFileSize' onChange={handleChange} label={"Max File Size"}
+                           invalidated={!!invalidFields.get("maxFileSize")}
+                           helpText={invalidFields.get("maxFileSize")}/>
+
+                <TextField id='maxSubmission' onChange={handleChange} label={"Max Submission"}
+                           invalidated={!!invalidFields.get("maxSubmission")}
+                           helpText={invalidFields.get("maxSubmission")}/>
+                <br/>
 
                 <div className={formStyles.datepickerContainer}>
                     <div>
                         <label htmlFor='start_date'>Start Date *</label>
-                        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}/>
+                        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
+                                    className={formStyles.datepicker}/>
                     </div>
                     <div>
                         <label htmlFor='due_date'>Due Date *</label>
-                        <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}/>
+                        <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}
+                                    className={formStyles.datepicker}/>
                     </div>
                     <div>
                         <label htmlFor='end_date'>End Date *</label>
-                        <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}/>
+                        <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
+                                    className={formStyles.datepicker}/>
                     </div>
                 </div>
                 <br/>
-
-                <label htmlFor='categoryName'>Category *</label>
-                <TextField id='categoryName' onChange={handleChange}
-                        className={invalidFields.get('categoryName')}/>
-
-                <label htmlFor='description'>Description *</label>
-                <TextField id='description' onChange={handleChange}
-                        className={invalidFields.get('description')}/>
-                <label htmlFor='maxFileSize'>Max File Size *</label>
-                <TextField id='maxFileSize' onChange={handleChange}
-                        className={invalidFields.get('maxFileSize')}/>
-                <label htmlFor='maxSubmission'>Max Submission</label>
-                <TextField id='maxSubmission' onChange={handleChange}
-                        className={invalidFields.get('maxSubmission')}/>
-
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
                     <label htmlFor='disableHandins'>Disable Handins</label>
-                    <input type='checkbox' id='disableHandins' checked={formData.disableHandins} onChange={handleCheckbox} className={formStyles.submitBtn}/>
+                    <input type='checkbox' id='disableHandins' checked={formData.disableHandins}
+                           onChange={handleCheckbox} className={formStyles.submitBtn}/>
                 </div>
 
                 <br/>
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant='contained' onClick={handleSubmit} className={formStyles.submitBtn} >Create assignment</Button>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <Button variant='contained' onClick={handleSubmit} className={formStyles.submitBtn}>Create
+                        assignment</Button>
                 </div>
             </div>
 
