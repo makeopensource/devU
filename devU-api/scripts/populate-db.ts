@@ -116,7 +116,7 @@ async function createNonContainerAutoGrader(
   }
   console.log('Creating NonContainerAutoGrader for Assignment Id: ', assignmentId)
   return await SendPOST(
-    `/course/${courseId}/assignment/${assignmentId}/nonContainerAutoGrader`,
+    `/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`,
     JSON.stringify(problemData),
     'admin'
   )
@@ -205,6 +205,7 @@ async function runCourseAndSubmission() {
   //Create users
   const billy = await fetchToken('billy@buffalo.edu', 'billy')
   const bob = await fetchToken('bob@buffalo.edu', 'bob')
+  const jones = await fetchToken('jones@buffalo.edu', 'jones')
 
   //Create courses
   const courseId1 = (await CreateCourse('Testing Course Name1', 'CSE101', 's2024')).id
@@ -213,8 +214,10 @@ async function runCourseAndSubmission() {
   //Enroll students
   await joinCourse(courseId1, billy, 'student')
   await joinCourse(courseId1, bob, 'student')
+  await joinCourse(courseId1, jones, 'instructor')
   await joinCourse(courseId2, billy, 'student')
   await joinCourse(courseId2, bob, 'student')
+  await joinCourse(courseId2, jones, 'instructor')
 
   //Create assignments
   const assignment1 = await createAssignment(courseId1, 'Course1 Assignment 1', 'Quiz')

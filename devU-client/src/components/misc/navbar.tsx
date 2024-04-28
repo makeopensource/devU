@@ -59,7 +59,7 @@ const DynamicBreadcrumb = ({ match }: any) => {
 }
 
 const routes = [
-    { path: '/:any', breadcrumb: 'Home'}, //Only appears once at least one directory deep
+    { path: '/:home', breadcrumb: 'Home'}, //Only appears once at least one directory deep
 
     { path: '/user/:userId', breadcrumb: UserBreadcrumb},
 
@@ -83,14 +83,13 @@ const Navbar = ({breadcrumbs}: any) => {
     return (
         <div>
             {breadcrumbs.map(({breadcrumb, match}: any, index: number) => {
-                console.log(match.params.path)
-                console.log(match.url)
-                console.log(breadcrumb)
+                let url = match.url
                 if (excludedPaths.includes(match.params.path)) return <></>
+                if (match.params.home) url = '/'
 
                 return (
                     <span key={match.url}>
-                        <Link to={match.url} className={styles.link}> {breadcrumb} </Link>
+                        <Link to={url} className={styles.link}> {breadcrumb} </Link>
                         {index < (breadcrumbs.length - 1) ? ' > ' : ''}
                     </span>
                 )

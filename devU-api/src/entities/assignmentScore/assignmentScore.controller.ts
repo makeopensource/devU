@@ -64,8 +64,8 @@ export async function detailByUser(req: Request, res: Response, next: NextFuncti
 
 export async function getByCourse(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = parseInt(req.params.id)
-    const assignmentScores = await AssignmentScoreService.listByCourse(userId)
+    const courseId = parseInt(req.params.courseId)
+    const assignmentScores = await AssignmentScoreService.listByCourse(courseId)
 
     const response = assignmentScores.map(as => {
       if (as) return serialize(as)

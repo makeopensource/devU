@@ -35,19 +35,19 @@ const SubmissionDetailPage = () => {
 
     const fetchData = async () => {
         try {
-            const submissionScore = (await RequestService.get<SubmissionScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores?submission=${submissionId}`)).pop() ?? null
-            setSubmissionScore(submissionScore)
-
-            const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores/${submissionId}`)
-            setSubmissionProblemScores(submissionProblemScores)
-
             const submission = await RequestService.get<Submission>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/${submissionId}`)
             setSubmission(submission)
 
-            const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignment/${submission.assignmentId}`)
+            const submissionScore = (await RequestService.get<SubmissionScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores?submission=${submissionId}`)).pop() ?? null
+            setSubmissionScore(submissionScore)
+
+            const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores/submission/${submissionId}`)
+            setSubmissionProblemScores(submissionProblemScores)
+            
+            const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${submission.assignmentId}`)
             setAssignment(assignment)
 
-            const assignmentProblems = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignment.id}`)
+            const assignmentProblems = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignment.id}/assignment-problems`)
             setAssignmentProblems(assignmentProblems)  
 
         } catch (error) {
@@ -119,7 +119,7 @@ const SubmissionDetailPage = () => {
                     <td>{submissionScore?.score ?? "N/A"}</td>
                 </tr>
             </table>
-            <Link to={`/courses/${courseId}/assignments/${assignmentId}/submissions/${submissionId}/feedback`}>View
+            <Link to={`/course/${courseId}/assignment/${assignmentId}/submission/${submissionId}/feedback`}>View
                 Feedback</Link>
             <br/>
             

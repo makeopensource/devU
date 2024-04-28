@@ -42,6 +42,7 @@ export async function list(submissionId?: number) {
 }
 
 export async function listByUser(userId: number, assignmentId: number) {
+  //This doesn't work, the SubmissionScore entity doesn't have userId and assignmentId.
   const options: FindManyOptions = {
     where: {
       userId: userId,
