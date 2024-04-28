@@ -9,7 +9,6 @@ import assignmentProblem from '../entities/assignmentProblem/assignmentProblem.r
 import submissionProblemScore from '../entities/submissionProblemScore/submissionProblemScore.router'
 import deadlineExtensions from '../entities/deadlineExtensions/deadlineExtensions.router'
 import fileUpload from '../fileUpload/fileUpload.router'
-import grader from '../entities/grader/grader.router'
 import categories from '../entities/category/category.router'
 import categoryScores from '../entities/categoryScore/categoryScore.router'
 import courseScores from '../entities/courseScore/courseScore.router'
@@ -39,7 +38,6 @@ Router.use('/categories', categories)
 Router.use('/category-scores', categoryScores)
 Router.use('/course-scores', courseScores)
 Router.use('/file-upload', fileUpload)
-Router.use('/grade', grader)
 Router.use('/roles', role)
 Router.use('/user-courses', userCourse)
 

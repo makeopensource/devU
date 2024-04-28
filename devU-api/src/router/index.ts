@@ -9,6 +9,7 @@ import logout from '../authentication/logout/logout.router'
 import status from '../status/status.router'
 import users from '../entities/user/user.router'
 import courseRoutes from './courseData.router'
+import grader from '../entities/grader/grader.router'
 
 import { isAuthenticated } from '../authentication/authentication.middleware'
 
@@ -19,6 +20,9 @@ const Router = express.Router()
 
 // TODO: Decide if we want to pull the course object (And return a 404 if not found) in middleware here or let it
 //  happen later... do this check in isAuthorized
+
+//Has to be pulled out of course router due to unauthenticated route
+Router.use('/course/:courseId/grade', asInt('courseId'), grader)
 
 Router.use('/course/:courseId', isAuthenticated, asInt('courseId'), courseRoutes)
 Router.use('/c/:courseId', isAuthenticated, asInt('courseId'), courseRoutes)
