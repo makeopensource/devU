@@ -54,7 +54,7 @@ services:
       context: .
       dockerfile: nginx.Dockerfile
     volumes:
-      - ./dist/local:/usr/share/nginx/html
+      - ./dist/production:/usr/share/nginx/html
     ports:
       - '9000:80'
     profiles:
