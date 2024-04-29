@@ -61,7 +61,7 @@ const environment = {
     port,
     apiUrl,
     clientUrl: (process.env.CLIENT_URL || load('api.clientUrl') || 'http://fiona.cse.buffalo.edu') as string,
-    clientUrls: ['http://fiona.cse.buffalo.edu', 'https://fiona.cse.buffalo.edu', 'http://fiona.cse.buffalo.edu:9000', 'https://fiona.cse.buffalo.edu:9000'],
+    clientUrls: ['http://fiona.cse.buffalo.edu', 'https://fiona.cse.buffalo.edu', 'http://fiona.cse.buffalo.edu:9000', 'https://fiona.cse.buffalo.edu:9000', 'http://127.0.0.1:3000', 'http://fiona.cse.buffalo.edu:3000', 'http://tango:3000', 'http://localhost:3000'],
 
     // Database settings
     dbHost: isDocker ? load('database.host') : ('localhost' as string),
