@@ -18,7 +18,7 @@ const RoleToggle = () => {
     const path = window.location.pathname
     const hasCoursePath = path.includes('/course/')
     setHasCoursePath(hasCoursePath)
-
+    //TODO: This is a temporary solution to get the user role for the course. The whole toggle switch should be removed in the future
     if (hasCoursePath) {
       RequestService.get(`/api/course/${courseId}/user-courses/users`)
       .then((response) => {
@@ -36,7 +36,7 @@ const RoleToggle = () => {
       })
     }
 
-  }, [courseId, dispatch]);
+  }, []);
 
   const handleToggle = () => {
     const newRole = userRole === 'Student' ? 'Instructor' : 'Student';
