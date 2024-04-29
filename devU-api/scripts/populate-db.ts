@@ -240,11 +240,11 @@ async function runCourseAndSubmission() {
   await createNonContainerAutoGrader(courseId2, assignmentId3, problemName2, 10, '/^[^Bb]+$/', true)
 
   //ContainerAutoGrader
+  makefile = new File(['This is a test makefile'], 'makefile')
   file = new File(['This is a test grader file'], 'grader.code')
-  await createContainerAutoGrader(courseId1, assignmentId2, 'NewestImageInTheWorld', 300, file)
+  await createContainerAutoGrader(courseId1, assignmentId2, 'NewestImageInTheWorld', 300, file, makefile)
 
   file = new File(['This is another test grader file'], 'grader.code')
-  makefile = new File(['This is a test makefile'], 'makefile')
   await createContainerAutoGrader(courseId2, assignmentId4, 'OldestImageInTheWorld', 300, file, makefile)
 
   //Create submissions

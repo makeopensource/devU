@@ -180,7 +180,7 @@ const AssignmentDetailPage = () => {
                 </CardContent>
             )}
 
-            {assignment?.disableHandins === true && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
+            {!(assignment?.disableHandins) && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
 
             {assignmentProblems && assignmentProblems.length > 0 ? (
                 <Button variant='contained' style={{marginTop: 10, marginBottom: 10}} onClick={handleSubmit}>Submit</Button>
