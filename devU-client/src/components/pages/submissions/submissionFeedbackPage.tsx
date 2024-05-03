@@ -3,7 +3,7 @@ import {Link, useParams} from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-import ErrorPage from './errorPage'
+import ErrorPage from '../errorPage/errorPage'
 import {Assignment, AssignmentProblem, SubmissionProblemScore, SubmissionScore} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 

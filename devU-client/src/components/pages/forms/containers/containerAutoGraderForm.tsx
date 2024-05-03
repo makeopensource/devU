@@ -5,9 +5,9 @@ import TextField from 'components/shared/inputs/textField'
 import {useActionless} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
 import RequestService from 'services/request.service'
-import {ExpressValidationError} from "../../../devu-shared-modules";
-import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
-import textStyles from "../shared/inputs/textField.scss";
+import {ExpressValidationError} from "devu-shared-modules";
+import {applyStylesToErrorFields, removeClassFromField} from "../../../../utils/textField.utils";
+import textStyles from "../../../shared/inputs/textField.scss";
 import {useHistory, useParams} from 'react-router-dom'
 
 import Button from '@mui/material/Button'

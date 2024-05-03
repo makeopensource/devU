@@ -6,7 +6,7 @@ import {Assignment, AssignmentScore} from 'devu-shared-modules'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-import ErrorPage from './errorPage'
+import ErrorPage from '../errorPage/errorPage'
 
 import RequestService from 'services/request.service'
 import Button from '@mui/material/Button'

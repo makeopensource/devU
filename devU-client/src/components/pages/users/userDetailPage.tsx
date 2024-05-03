@@ -8,7 +8,7 @@ import { UPDATE_USER } from 'redux/types/user.types'
 
 import RequestService from 'services/request.service'
 
-import ErrorPage from 'components/pages/errorPage'
+import ErrorPage from 'components/pages/errorPage/errorPage'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import EditUserForm from 'components/forms/editUserForm'

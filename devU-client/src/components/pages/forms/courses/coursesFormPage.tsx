@@ -12,7 +12,7 @@ import {useActionless} from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
 import {SET_ALERT} from 'redux/types/active.types'
 import formStyles from './coursesFormPage.scss'
-import {applyMessageToErrorFields, removeClassFromField} from "../../utils/textField.utils";
+import {applyMessageToErrorFields, removeClassFromField} from "../../../../utils/textField.utils";
 
 import Button from '@mui/material/Button'
 
@@ -74,9 +74,10 @@ const EditCourseFormPage = () => {
                 <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
                            invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}/>
                 <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
-                           invalidated={!!invalidFields.get("number")}/>
+                           invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")}/>
                 <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
-                           placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}/>
+                           placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
+                           helpText={invalidFields.get("semester")} />
 
                 <div className = {formStyles.datepickerContainer}>
                     <div>

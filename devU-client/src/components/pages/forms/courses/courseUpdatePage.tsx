@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
@@ -13,8 +13,10 @@ import {useActionless} from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
 import Button from '@mui/material/Button'
 import {SET_ALERT} from 'redux/types/active.types'
-import styles from '../shared/inputs/textField.scss'
-import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
+import {
+    applyMessageToErrorFields,
+    removeClassFromField
+} from "../../../../utils/textField.utils";
 
 import formStyles from './coursesFormPage.scss'
 
@@ -23,7 +25,6 @@ type UrlParams = {
 }
 
 const CourseUpdatePage = ({}) => {
-
     const [setAlert] = useActionless(SET_ALERT)
     const history = useHistory()
     const [formData,setFormData] = useState({
@@ -36,7 +37,21 @@ const CourseUpdatePage = ({}) => {
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const { courseId } = useParams() as UrlParams
-
+    useEffect(() => {
+        let isMounted = false;
+        if (!isMounted){
+            RequestService.get(`/api/courses/${courseId}`).then((res) => {
+                setFormData({
+                    name: res.name,
+                    number: res.number,
+                    semester: res.semester,
+                });
+                setStartDate(new Date(res.startDate));
+                setEndDate(new Date(res.endDate));
+                isMounted = true;
+            });
+        }
+    }, []);
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
         const newInvalidFields = removeClassFromField(invalidFields, key)
@@ -54,7 +69,6 @@ const CourseUpdatePage = ({}) => {
             startDate : startDate.toISOString(),
             endDate : endDate.toISOString(),
         }
-        
 
         RequestService.put(`/api/courses/${courseId}`, finalFormData)
             .then(() => {
@@ -63,9 +77,9 @@ const CourseUpdatePage = ({}) => {
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
-                const newInvalidFields = applyStylesToErrorFields(err, formData, styles.errorField)
-                setInvalidFields(newInvalidFields)
-
+                const newFields = new Map<string, string>()
+                Array.isArray(err) ? err.map((e) => applyMessageToErrorFields(newFields, e.param, e.msg)) : newFields
+                setInvalidFields(newFields);
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         .finally(() => {
@@ -79,11 +93,13 @@ const CourseUpdatePage = ({}) => {
         <div className={formStyles.form}>
 
             <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
-                       invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}/>
+                        invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}
+                        defaultValue={formData.name}/>
             <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
-                       invalidated={!!invalidFields.get("number")}/>
+                        invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")}/>
             <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
-                       placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}/>
+                        placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
+                        helpText={invalidFields.get("semester")}/>
 
                 <div className = {formStyles.datepickerContainer}>
                     <div>
@@ -103,7 +119,7 @@ const CourseUpdatePage = ({}) => {
                 <br/>
 
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant='contained' onClick={handleCourseUpdate} className={formStyles.submitBtn}>Submit</Button>
+                    <Button variant='contained' onClick={handleCourseUpdate} className={formStyles.submitBtn}>Update Course</Button>
                 </div>
 
             </div>

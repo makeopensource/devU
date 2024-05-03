@@ -1,24 +1,24 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 
-import AssignmentDetailPage from 'components/pages/assignmentDetailPage'
-import AssignmentCreatePage from 'components/pages/assignmentFormPage'
-import AssignmentUpdatePage from 'components/pages/assignmentUpdatePage'
-import CourseAssignmentsListPage from 'components/pages/courseAssignmentsListPage'
-import CourseDetailPage from 'components/pages/courseDetailPage'
-import EditCourseFormPage from 'components/pages/coursesFormPage'
-import CourseUpdatePage from 'components/pages/courseUpdatePage'
-import HomePage from 'components/pages/homePage'
+import AssignmentDetailPage from 'components/pages/assignments/assignmentDetailPage'
+import AssignmentCreatePage from 'components/pages/forms/assignments/assignmentFormPage'
+import AssignmentUpdatePage from 'components/pages/forms/assignments/assignmentUpdatePage'
+import CourseDetailPage from 'components/pages/courses/courseDetailPage'
+import EditCourseFormPage from 'components/pages/forms/courses/coursesFormPage'
+import CourseUpdatePage from 'components/pages/forms/courses/courseUpdatePage'
+import HomePage from 'components/pages/homePage/homePage'
 import NotFoundPage from 'components/pages/notFoundPage'
-import SubmissionDetailPage from 'components/pages/submissionDetailPage'
-import UserDetailPage from 'components/pages/userDetailPage'
-import NonContainerAutoGraderForm from './pages/nonContainerAutoGraderForm'
-import GradebookStudentPage from './pages/gradebookStudentPage'
-import GradebookInstructorPage from './pages/gradebookInstructorPage'
-import SubmissionFeedbackPage from './pages/submissionFeedbackPage'
-import ContainerAutoGraderForm from './pages/containerAutoGraderForm'
-import CoursePreviewPage from './pages/coursePreviewPage'
-import CoursesListPage from "./pages/coursesListPage";
+import SubmissionDetailPage from 'components/pages/submissions/submissionDetailPage'
+import UserDetailPage from 'components/pages/users/userDetailPage'
+import NonContainerAutoGraderForm from './pages/forms/containers/nonContainerAutoGraderForm'
+import GradebookStudentPage from './pages/gradebook/gradebookStudentPage'
+import GradebookInstructorPage from './pages/gradebook/gradebookInstructorPage'
+import SubmissionFeedbackPage from './pages/submissions/submissionFeedbackPage'
+import ContainerAutoGraderForm from './pages/forms/containers/containerAutoGraderForm'
+import CoursePreviewPage from './pages/courses/coursePreviewPage'
+import CoursesListPage from "./pages/listPages/courses/coursesListPage";
+import AssignmentProblemFormPage from './pages/forms/assignments/assignmentProblemFormPage'
 
 const AuthenticatedRouter = () => (
     <Switch>
@@ -34,7 +34,6 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/update' component={CourseUpdatePage}/>
         <Route exact path='/course/:courseId/gradebook' component={GradebookStudentPage}/>
         <Route exact path='/course/:courseId/createAssignment' component={AssignmentCreatePage}/>
-        <Route exact path='/course/:courseId/assignments' component={CourseAssignmentsListPage}/>
         <Route exact path='/course/:courseId/gradebook/instructor' component={GradebookInstructorPage}/>
 
         <Route exact path='/course/:courseId/assignment/:assignmentId' component={AssignmentDetailPage}/>
@@ -42,6 +41,7 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/assignment/:assignmentId/createNCAG'
                component={NonContainerAutoGraderForm}/>
         <Route exact path='/course/:courseId/assignment/:assignmentId/createCAG' component={ContainerAutoGraderForm}/>
+        <Route exact path='/course/:courseId/assignment/:assignmentId/createProblem' component={AssignmentProblemFormPage}/>
 
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId'
                component={SubmissionDetailPage}/>
