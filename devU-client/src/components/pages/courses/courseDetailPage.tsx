@@ -17,7 +17,7 @@ import Stack from '@mui/material/Stack'
 
 
 import styles from './courseDetailPage.scss'
-import {SET_ALERT} from "../../redux/types/active.types";
+import {SET_ALERT} from "../../../redux/types/active.types";
 import {useActionless, useAppSelector} from "redux/hooks";
 
 const CourseDetailPage = () => {

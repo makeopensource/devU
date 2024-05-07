@@ -10,11 +10,12 @@ type Props = {
   className?: string
   placeholder?: string
   id?: string
-  disabled?: true
+  disabled?: boolean
   defaultValue?: string
   value?: string
   invalidated?: boolean
   helpText?: string
+  variant?: 'outlined' | 'standard' | 'filled'
 }
 
 const TextField = ({
@@ -26,9 +27,9 @@ const TextField = ({
   disabled,
   defaultValue,
   value,
-                     invalidated,
-                     helpText,
-
+  invalidated,
+  helpText,
+  variant = 'outlined'
 }: Props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) onChange(e.target.value, e)
@@ -36,17 +37,16 @@ const TextField = ({
   return (
     <div className={`${styles.textField} ${className}`}>
       <MuiTextField {...invalidated && {error: true}}
+                    disabled={disabled}
+                    helperText={helpText}
                     id={id}
                     className={styles.input}
                     placeholder={placeholder}
-                    variant='outlined'
+                    variant={variant}
                     label={label}
                     defaultValue={defaultValue}
                     value={value}
-                    onChange={handleChange}>
-        disabled={disabled}
-        helperText={helpText}
-      </MuiTextField>
+                    onChange={handleChange}/>
     </div>
   )
 }

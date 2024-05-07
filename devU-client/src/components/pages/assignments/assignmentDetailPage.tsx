@@ -3,7 +3,7 @@ import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import {Assignment, AssignmentProblem, Submission, NonContainerAutoGrader, /*ContainerAutoGrader*/} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
-import ErrorPage from './errorPage'
+import ErrorPage from '../errorPage/errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import {useActionless, useAppSelector} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
@@ -16,7 +16,7 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Unstable_Grid2'
 
 import styles from './assignmentDetailPage.scss'
-import {prettyPrintDateTime} from "../../utils/date.utils";
+import {prettyPrintDateTime} from "../../../utils/date.utils";
 
 const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -75,7 +75,7 @@ const AssignmentDetailPage = () => {
             setNonContainerAutograders(nonContainers)
 
 
-        } catch (err) {
+        } catch (err:any) {
             setError(err)
             const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
             setAlert({autoDelete: false, type: 'error', message})
@@ -154,6 +154,9 @@ const AssignmentDetailPage = () => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/createCAG`)
                     }}>Add CAG</Button>}
                     {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/createProblem`)
+                    }}>Add Problem</Button>}
+                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
                     }}>Edit Assignment</Button>}
                 </Stack>
@@ -166,7 +169,7 @@ const AssignmentDetailPage = () => {
                 nonContainerAutograders.map((nonContainer, index) => (
                     <Accordion className={styles.accordion} key={index}>
                     <AccordionSummary>
-                        <Typography>{`Assignment Problem ${index + 1}`}</Typography>
+                        <Typography className={styles.accordionDetails}>{`Assignment Problem ${index + 1}`}</Typography>
                     </AccordionSummary>
                     <AccordionDetails className={styles.accordionDetails}>
                         <Typography>{nonContainer.question}</Typography>

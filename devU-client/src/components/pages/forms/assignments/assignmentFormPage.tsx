@@ -11,7 +11,7 @@ import Button from '@mui/material/Button'
 
 import {SET_ALERT} from 'redux/types/active.types'
 
-import {applyMessageToErrorFields, removeClassFromField} from "../../utils/textField.utils";
+import {applyMessageToErrorFields, removeClassFromField} from "../../../../utils/textField.utils";
 import {useHistory, useParams} from 'react-router-dom'
 
 import formStyles from './assignmentFormPage.scss'

@@ -84,7 +84,7 @@ const Navbar = ({breadcrumbs}: any) => {
         <div>
             {breadcrumbs.map(({breadcrumb, match}: any, index: number) => {
                 let url = match.url
-                if (excludedPaths.includes(match.params.path)) return <></>
+                if (excludedPaths.includes(match.params.path)) return <div key={index} ></div>
                 if (match.params.home) url = '/'
 
                 return (

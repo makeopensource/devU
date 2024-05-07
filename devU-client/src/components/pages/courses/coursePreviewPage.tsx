@@ -4,11 +4,11 @@ import {Course, UserCourse} from 'devu-shared-modules'
 
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import {useActionless, useAppSelector} from "../../redux/hooks"
-import RequestService from "../../services/request.service"
-import {SET_ALERT} from "../../redux/types/active.types"
+import {useActionless, useAppSelector} from "../../../redux/hooks"
+import RequestService from "../../../services/request.service"
+import {SET_ALERT} from "../../../redux/types/active.types"
 import {useHistory, useParams} from "react-router-dom"
-import LoadingOverlay from "../shared/loaders/loadingOverlay"
+import LoadingOverlay from "../../shared/loaders/loadingOverlay"
 import Button from '@mui/material/Button'
 import styles from "./courseDetailPage.scss"
 

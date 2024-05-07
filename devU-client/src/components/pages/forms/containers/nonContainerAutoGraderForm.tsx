@@ -1,22 +1,24 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import styles from './nonContainerAutoGraderForm.scss'
 import TextField from 'components/shared/inputs/textField'
-// import Button from 'components/shared/inputs/button'
 import {useActionless} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
 import RequestService from 'services/request.service'
-import textStyles from '../shared/inputs/textField.scss'
-import {applyStylesToErrorFields, removeClassFromField} from "../../utils/textField.utils";
-import {ExpressValidationError} from "../../../devu-shared-modules";
+import textStyles from '../../../shared/inputs/textField.scss'
+import {applyStylesToErrorFields, removeClassFromField} from "../../../../utils/textField.utils";
+import {AssignmentProblem, ExpressValidationError} from "devu-shared-modules";
 import {useHistory, useParams} from 'react-router-dom'
 
+import {Accordion, AccordionDetails, AccordionSummary, Typography} from '@mui/material'
 import Button from '@mui/material/Button'
+
 
 const NonContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
     const {assignmentId, courseId} = useParams<{ assignmentId: string, courseId : string }>()
+    const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>()
     const history = useHistory()
 
     const [formData,setFormData] = useState({
@@ -44,6 +46,15 @@ const NonContainerAutoGraderForm = () => {
     const toggleRegex = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(prevState => ({...prevState,isRegex : e.target.checked}))
     }
+    
+    useEffect(() => {
+        RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
+            .then((res) => {
+                const problems = res as AssignmentProblem[]
+                setAssignmentProblems(problems)
+            })
+    }, [])
+
 
     const handleSubmit = () => {
         if(!validateNumber(formData.assignmentId) || !validateNumber(formData.score)){
@@ -112,7 +123,21 @@ const NonContainerAutoGraderForm = () => {
             </div>
             <div className = {styles.rightColumn}>
                 <h1>Existing Problems</h1>
+                <div>
+                    {assignmentProblems?.map((problem:AssignmentProblem,index) => (
+                        <Accordion className={styles.accordion} key={index}>
+                        <AccordionSummary>
+                            <Typography>{`Assignment Problem Question ${index + 1}`}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails className={styles.accordionDetails}>
+                            <Typography>Problem Name:{problem.problemName}</Typography>
+                            <Typography>Max Score:{problem.maxScore}</Typography>
+                        </AccordionDetails>
+                        </Accordion>
+                    ))}
+                </div>
             </div>
+            <br/><br/><br/><br/><br/>
         </PageWrapper>
     )
 }

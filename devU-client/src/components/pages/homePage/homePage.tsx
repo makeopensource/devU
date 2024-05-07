@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-import ErrorPage from './errorPage'
+import ErrorPage from '../errorPage/errorPage'
 import styles from './homePage.scss'
-import UserCourseListItem from "../listItems/userCourseListItem";
+import UserCourseListItem from "../../listItems/userCourseListItem";
 
 import {useAppSelector} from 'redux/hooks'
 import RequestService from 'services/request.service'
