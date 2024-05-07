@@ -3,11 +3,11 @@ import {Course, UserCourse} from 'devu-shared-modules'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import Dropdown, {Option} from 'components/shared/inputs/dropdown'
-import ErrorPage from './errorPage'
+import ErrorPage from '../../errorPage/errorPage'
 import RequestService from 'services/request.service'
 import styles from './coursesListPage.scss'
-import CourseListItem from "../listItems/courseListItem";
-import {useAppSelector} from "../../redux/hooks";
+import CourseListItem from "../../../listItems/courseListItem";
+import {useAppSelector} from "../../../../redux/hooks";
 import Button from "@mui/material/Button";
 import {useHistory} from "react-router-dom";
 

@@ -39,6 +39,8 @@
 	margin-top: 10px;
 	margin-left: 10px;
 	margin-right: 10px;
+	background-color: $list-item-background;
+	color:$list-item-background
 }
 
 .accordionDetails {
@@ -46,6 +48,8 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	background-color: $list-item-background;
+	color:$text-color;
 }
 
 .textField {
