@@ -2,17 +2,15 @@
 import 'reflect-metadata'
 
 import express from 'express'
-import bodyParser from 'body-parser'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
-import { createConnection } from 'typeorm'
 import cookieParser from 'cookie-parser'
 
 import passport from 'passport'
+import { dataSource } from './database'
 
 import environment from './environment'
-import connectionInfo from './database'
 import { initializeMinio } from './fileStorage'
 
 // Middleware
@@ -25,11 +23,20 @@ import './utils/passport.utils'
 const app = express()
 
 initializeMinio()
-  .then(() => createConnection(connectionInfo))
+  .then(() =>
+    dataSource
+      .initialize()
+      .then(() => {
+        console.log('Data Source has been initialized!')
+      })
+      .catch(err => {
+        console.error('Error during Data Source initialization', err)
+      })
+  )
   .then(_connection => {
     app.use(helmet())
-    app.use(bodyParser.urlencoded({ extended: true }))
-    app.use(bodyParser.json())
+    app.use(express.urlencoded({ extended: true }))
+    app.use(express.json())
     app.use(cookieParser())
     app.use(cors({ origin: environment.clientUrl, credentials: true }))
     app.use(morgan('combined'))

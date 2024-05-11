@@ -75,7 +75,7 @@ Router.get('/', isAuthorized('assignmentViewAll'), AssignmentsController.getByCo
  *         schema:
  *           type: integer
  */
-Router.get('/:assignmentId', asInt("assignmentId"), isAuthorizedByAssignmentStatus, AssignmentsController.detail)
+Router.get('/:assignmentId', asInt('assignmentId'), isAuthorizedByAssignmentStatus, AssignmentsController.detail)
 
 /**
  * @swagger
@@ -130,7 +130,13 @@ Router.post('/', isAuthorized('assignmentEditAll'), validator, AssignmentsContro
  *           schema:
  *             $ref: '#/components/schemas/Assignment'
  */
-Router.put('/:assignmentId', isAuthorized('assignmentEditAll'), asInt("assignmentId"), validator, AssignmentsController.put)
+Router.put(
+  '/:assignmentId',
+  isAuthorized('assignmentEditAll'),
+  asInt('assignmentId'),
+  validator,
+  AssignmentsController.put
+)
 
 /**
  * @swagger
@@ -155,6 +161,6 @@ Router.put('/:assignmentId', isAuthorized('assignmentEditAll'), asInt("assignmen
  *         schema:
  *           type: integer
  */
-Router.delete('/:assignmentId', isAuthorized('assignmentEditAll'), asInt("assignmentId"), AssignmentsController._delete)
+Router.delete('/:assignmentId', isAuthorized('assignmentEditAll'), asInt('assignmentId'), AssignmentsController._delete)
 
 export default Router

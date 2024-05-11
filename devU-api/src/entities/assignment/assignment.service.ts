@@ -1,10 +1,11 @@
-import { getRepository, IsNull } from 'typeorm'
+import { IsNull } from 'typeorm'
+import { dataSource } from '../../database'
 
 import AssignmentModel from './assignment.model'
 
 import { Assignment } from 'devu-shared-modules'
 
-const connect = () => getRepository(AssignmentModel)
+const connect = () => dataSource.getRepository(AssignmentModel)
 
 export async function create(assignment: Assignment) {
   return await connect().save(assignment)
@@ -44,24 +45,24 @@ export async function _delete(id: number) {
 }
 
 export async function retrieve(id: number, courseId: number) {
-  return await connect().findOne({ id: id, courseId: courseId, deletedAt: IsNull() })
+  return await connect().findOneBy({ id: id, courseId: courseId, deletedAt: IsNull() })
 }
 
 export async function list() {
-  return await connect().find({ deletedAt: IsNull() })
+  return await connect().findBy({ deletedAt: IsNull() })
 }
 
 export async function listByCourse(courseId: number) {
-  return await connect().find({ courseId: courseId, deletedAt: IsNull() })
+  return await connect().findBy({ courseId: courseId, deletedAt: IsNull() })
 }
 
 export async function listByCourseReleased(courseId: number) {
   // TODO: filter by start date after current time
-  return await connect().find({ courseId: courseId, deletedAt: IsNull() })
+  return await connect().findBy({ courseId: courseId, deletedAt: IsNull() })
 }
 
 export async function isReleased(id: number) {
-  const assignment = await connect().findOne({ id, deletedAt: IsNull() })
+  const assignment = await connect().findOneBy({ id, deletedAt: IsNull() })
 
   if (!assignment) {
     return false

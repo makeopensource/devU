@@ -3,14 +3,13 @@ import express from 'express'
 
 // Middleware
 import validator from './userCourse.validator'
-import {asInt} from '../../middleware/validator/generic.validator'
-import {extractOwnerByPathParam, isAuthorized} from '../../authorization/authorization.middleware'
+import { asInt } from '../../middleware/validator/generic.validator'
+import { extractOwnerByPathParam, isAuthorized } from '../../authorization/authorization.middleware'
 
 // Controller
 import UserCourseController from './userCourse.controller'
 
 const Router = express.Router({ mergeParams: true })
-
 
 /**
  * TODO: Document this
@@ -75,7 +74,6 @@ Router.get('/:id', isAuthorized('courseViewAll'), asInt(), UserCourseController.
  *         schema:
  *           type: integer
  */
-
 
 Router.get(
   '/user/:userId',

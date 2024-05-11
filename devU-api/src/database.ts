@@ -1,8 +1,8 @@
-import { ConnectionOptions, Repository } from 'typeorm'
+import { DataSource, DataSourceOptions, Repository } from 'typeorm'
 
 import environment from './environment'
 
-const typeORMConfiguration: ConnectionOptions = {
+const typeORMConfiguration: DataSourceOptions = {
   type: 'postgres',
   host: environment.dbHost,
   username: environment.dbUsername,
@@ -15,14 +15,12 @@ const typeORMConfiguration: ConnectionOptions = {
   entities: [`${__dirname}/**/*.model.{ts,js}`],
   migrations: [`${__dirname}/migration/**/*.{ts,js}`],
   subscribers: [`${__dirname}/migration/**/*.{ts,js}`],
-  cli: {
-    entitiesDir: `./src/model`,
-    migrationsDir: `./src/migration`,
-    subscribersDir: `./src/subscriber`,
-  },
 }
 
+const dataSource = new DataSource(typeORMConfiguration)
+
 export default typeORMConfiguration
+export { dataSource }
 
 /*
   This function is used to group the data by the specified column
@@ -47,11 +45,5 @@ export async function groupBy<T>(
 
   orders = Object.keys(filteredOrders).length === 0 ? { id: 'ASC' } : filteredOrders
 
-  return await connection.find({
-    where: {
-      [filter.index]: filter.value,
-    },
-    order: orders,
-    withDeleted: false,
-  })
+  return await connection.findBy({ ...orders })
 }

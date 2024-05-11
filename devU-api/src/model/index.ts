@@ -19,7 +19,6 @@ type Models =
   | AssignmentModel
   | AssignmentProblemModel
   | AssignmentScoreModel
-  | CategoryModel
   | CategoryScoreModel
   | ContainerAutoGraderModel
   | CourseModel
