@@ -64,8 +64,8 @@ async function grade(submissionId: number) {
   submissionScoreService.create(scoreObj)
 
   //If containergrading is true, tangoCallback handles assignmentScore creation
-  if (containerGrading === false) {
-    updateAssignmentScore(submission, score)
+  if (!containerGrading) {
+    await updateAssignmentScore(submission, score)
     return { message: `Noncontainer autograding completed successfully`, submissionScore: scoreObj }
   }
   return {
@@ -116,7 +116,7 @@ async function runContainerAutograders(filepaths: string[], submission: Submissi
       const bucketName = await courseService.retrieve(submission.courseId).then(course => {
         return course ? (course.number + course.semester + course.id).toLowerCase() : 'submission'
       })
-      initializeMinio(bucketName)
+      await initializeMinio(bucketName)
 
       const labName = `${bucketName}-${submission.assignmentId}`
       const optionFiles = []

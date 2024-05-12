@@ -7,7 +7,6 @@ import CourseModel from '../course/course.model'
 
 import { FileUpload, Submission } from 'devu-shared-modules'
 import { uploadFile } from '../../fileStorage'
-import { groupBy } from '../../database'
 
 const submissionConn = () => dataSource.getRepository(SubmissionModel)
 const fileConn = () => dataSource.getRepository(FileModel)
@@ -56,9 +55,8 @@ export async function retrieve(id: number) {
 }
 
 export async function list(query: any, id: number) {
-  const OrderByMappings = ['id', 'createdAt', 'updatedAt', 'courseId', 'assignmentId', 'submittedBy']
 
-  return await groupBy<SubmissionModel>(submissionConn(), OrderByMappings, query, { index: 'submittedBy', value: id })
+  return await submissionConn().findBy({ ...query, submittedBy: id, deletedAt: IsNull() })
 }
 
 export async function listByAssignment(assignmentId: number, id: number) {

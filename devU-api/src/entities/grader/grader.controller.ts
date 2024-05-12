@@ -13,7 +13,9 @@ export async function grade(req: Request, res: Response, next: NextFunction) {
 
     res.status(200).json(response)
   } catch (err) {
-    res.status(400).json(new GenericResponse(err.message))
+    if (err instanceof Error) {
+        res.status(400).json(new GenericResponse(err.message))
+    }
   }
 }
 
@@ -24,7 +26,9 @@ export async function tangoCallback(req: Request, res: Response, next: NextFunct
 
     res.status(200).json(response)
   } catch (err) {
-    res.status(400).json(new GenericResponse(err.message))
+    if (err instanceof Error) {
+        res.status(400).json(new GenericResponse(err.message))
+    }
   }
 }
 

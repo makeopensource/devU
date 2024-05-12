@@ -24,8 +24,7 @@ const app = express()
 
 initializeMinio()
   .then(() =>
-    dataSource
-      .initialize()
+    dataSource.initialize()
       .then(() => {
         console.log('Data Source has been initialized!')
       })

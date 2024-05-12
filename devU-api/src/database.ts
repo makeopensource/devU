@@ -1,4 +1,4 @@
-import { DataSource, DataSourceOptions, Repository } from 'typeorm'
+import { DataSource, DataSourceOptions } from 'typeorm'
 
 import environment from './environment'
 
@@ -30,20 +30,3 @@ export { dataSource }
   @param filter: the filter object
   @returns the grouped data
 */
-export async function groupBy<T>(
-  connection: Repository<T>,
-  columnList: string[],
-  query: any,
-  filter: { index: string; value: number }
-) {
-  let orders = query
-  // The filteredOrders currently only filters the orders by the columnList, any other orders are removed
-  // and only set to 'ASC' since no input is provided for the order
-  const filteredOrders = Object.entries(orders)
-    .filter(([key]) => columnList.includes(orders[key]))
-    .reduce((acc, [key]) => ({ ...acc, [orders[key]]: 'ASC' }), {})
-
-  orders = Object.keys(filteredOrders).length === 0 ? { id: 'ASC' } : filteredOrders
-
-  return await connection.findBy({ ...orders })
-}

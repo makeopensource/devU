@@ -73,7 +73,7 @@ export async function downloadFile(bucketName: string, filename: string): Promis
     })
   } catch (err: Error | any) {
     if (err) {
-      throw new Error('File failed to download because ' + err)
+      throw new Error(filename + " and " + bucketName +' File failed to download because ' + err)
     } else {
       throw err
     }
