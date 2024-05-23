@@ -1,9 +1,9 @@
-import {NextFunction, Request, Response} from 'express'
+import { NextFunction, Request, Response } from 'express'
 
 import UserCourseService from './userCourse.service'
-import {serialize} from './userCourse.serializer'
+import { serialize } from './userCourse.serializer'
 
-import {GenericResponse, NotFound, Updated} from '../../utils/apiResponse.utils'
+import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
@@ -77,7 +77,9 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
     res.status(201).json(response)
   } catch (err) {
-    res.status(400).json(new GenericResponse(err.message))
+    if (err instanceof Error) {
+        res.status(400).json(new GenericResponse(err.message))
+    }
   }
 }
 

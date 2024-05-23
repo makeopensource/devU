@@ -16,7 +16,7 @@ const Router = express.Router()
  * @swagger
  * tags:
  *    - name: Grader
- *      description: 
+ *      description:
  * /grade/{id}:
  *   post:
  *     summary: Grade a submission, currently only with non-container autograders
@@ -39,7 +39,7 @@ Router.post('/:id', asInt(), isAuthenticated, /*isAuthorized('enrolled'),*/ Grad
  * @swagger
  * tags:
  *    - name: Grader callback
- *      description: 
+ *      description:
  * /grade/callback/{outputFilename}:
  *   post:
  *     summary: Not directly called by the user. Tells the API that a container grading job has finished and creates relevant entities from the results.

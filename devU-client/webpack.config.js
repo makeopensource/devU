@@ -89,6 +89,7 @@ module.exports = () => {
       publicPath: "/",
     },
     optimization: {
+      nodeEnv: `${env}`,
       usedExports: true,
       runtimeChunk: 'single',
       splitChunks: {
@@ -103,7 +104,9 @@ module.exports = () => {
     devServer: {
       hot: true,
       port: process.env.PORT || 9000,
-      contentBase: path.join(__dirname, "dist"),
+      static: {
+        directory: path.join(__dirname, "dist"),
+      },
       historyApiFallback: true,
     },
     devtool: 'inline-source-map',

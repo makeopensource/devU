@@ -1,4 +1,5 @@
-import { getRepository, IsNull } from 'typeorm'
+import { IsNull } from 'typeorm'
+import { dataSource } from '../../database'
 
 import SubmissionModel from '../submission/submission.model'
 import FileModel from '../../fileUpload/fileUpload.model'
@@ -6,15 +7,15 @@ import CourseModel from '../course/course.model'
 
 import { FileUpload, Submission } from 'devu-shared-modules'
 import { uploadFile } from '../../fileStorage'
-import { groupBy } from '../../database'
 
-const submissionConn = () => getRepository(SubmissionModel)
-const fileConn = () => getRepository(FileModel)
+const submissionConn = () => dataSource.getRepository(SubmissionModel)
+const fileConn = () => dataSource.getRepository(FileModel)
 
 export async function create(submission: Submission, file?: Express.Multer.File | undefined) {
   if (file) {
-    const bucket: string = await getRepository(CourseModel)
-      .findOne({ id: submission.courseId })
+    const bucket: string = await dataSource
+      .getRepository(CourseModel)
+      .findOneBy({ id: submission.courseId })
       .then(course => {
         if (course) {
           return (course.number + course.semester + course.id).replace(/ /g, '-').toLowerCase()
@@ -50,13 +51,12 @@ export async function _delete(id: number) {
 }
 
 export async function retrieve(id: number) {
-  return await submissionConn().findOne({ id, deletedAt: IsNull() })
+  return await submissionConn().findOneBy({ id, deletedAt: IsNull() })
 }
 
 export async function list(query: any, id: number) {
-  const OrderByMappings = ['id', 'createdAt', 'updatedAt', 'courseId', 'assignmentId', 'submittedBy']
 
-  return await groupBy<SubmissionModel>(submissionConn(), OrderByMappings, query, { index: 'submittedBy', value: id })
+  return await submissionConn().findBy({ ...query, submittedBy: id, deletedAt: IsNull() })
 }
 
 export async function listByAssignment(assignmentId: number, id: number) {

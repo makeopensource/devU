@@ -1,10 +1,11 @@
-import { FindManyOptions, getRepository, IsNull } from 'typeorm'
+import { FindManyOptions, IsNull } from 'typeorm'
+import { dataSource } from '../../database'
 
 import SubmissionScoreModel from '../submissionScore/submissionScore.model'
 
 import { SubmissionScore } from 'devu-shared-modules'
 
-const connect = () => getRepository(SubmissionScoreModel)
+const connect = () => dataSource.getRepository(SubmissionScoreModel)
 
 export async function create(submissionScore: SubmissionScore) {
   return await connect().save(submissionScore)
@@ -28,7 +29,7 @@ export async function _delete(id: number) {
 }
 
 export async function retrieve(id: number) {
-  return await connect().findOne({ id, deletedAt: IsNull() })
+  return await connect().findOneBy({ id, deletedAt: IsNull() })
 }
 
 export async function list(submissionId?: number) {

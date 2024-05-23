@@ -1,11 +1,12 @@
-import { getRepository, IsNull } from 'typeorm'
+import { IsNull } from 'typeorm'
+import { dataSource } from '../../database'
 
 import { Role as RoleType } from 'devu-shared-modules'
 
 import Role from './role.model'
 import Defaults from './role.defaults'
 
-const connect = () => getRepository(Role)
+const connect = () => dataSource.getRepository(Role)
 
 export async function create(role: RoleType) {
   return await connect().save(role)
@@ -63,11 +64,11 @@ export async function _delete(id: number) {
 }
 
 export async function retrieve(id: number) {
-  return await connect().findOne({ id, deletedAt: IsNull() })
+  return await connect().findOneBy({ id, deletedAt: IsNull() })
 }
 
 export async function retrieveByCourseAndName(courseId: number, name: string) {
-  return await connect().findOne({ courseId: courseId, name: name, deletedAt: IsNull() })
+  return await connect().findOneBy({ courseId: courseId, name: name, deletedAt: IsNull() })
 }
 
 export function retrieveDefaultByName(name: string) {
@@ -75,11 +76,11 @@ export function retrieveDefaultByName(name: string) {
 }
 
 export async function listAll() {
-  return await connect().find({ deletedAt: IsNull() })
+  return await connect().findBy({ deletedAt: IsNull() })
 }
 
 export async function listByCourse(courseId: number) {
-  return await connect().find({ courseId: courseId, deletedAt: IsNull() })
+  return await connect().findBy({ courseId: courseId, deletedAt: IsNull() })
 }
 
 export default {
