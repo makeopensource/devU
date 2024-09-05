@@ -131,7 +131,7 @@ const AssignmentDetailPage = () => {
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
 
             await fetchData()
-        } catch (err) {
+        } catch (err: any) {
             const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
             setAlert({ autoDelete: false, type: 'error', message })
         } finally {

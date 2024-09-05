@@ -12,7 +12,7 @@ FROM node:20
 
 WORKDIR /app
 
-COPY ./devU-api/package.json ./devU-api/package-lock.json ./
+COPY ./devU-api/package.json ./
 
 RUN npm install
 

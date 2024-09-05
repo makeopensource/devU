@@ -1,7 +1,7 @@
 {
   "name": "devu-api",
   "version": "1.0.0",
-  "description": "Auto-grading 4.0 API",
+  "description": "DevU API",
   "scripts": {
     "start": "ts-node-dev src/index.ts",
     "update-shared": "npm update devu-shared-modules",
@@ -78,6 +78,6 @@
     "regex-parser": "^2.3.0",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.1.6",
-    "typeorm": "0.3.20"
+    "typeorm": "^0.3.20"
   }
 }

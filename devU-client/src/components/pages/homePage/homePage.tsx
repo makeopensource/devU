@@ -50,7 +50,7 @@ const HomePage = () => {
             setEnrollCourses(enrolledCourses)
             setInstructorCourses(instructorCourses)
 
-        } catch (error) {
+        } catch (error: any) {
             setError(error)
         } finally {
             setLoading(false)
