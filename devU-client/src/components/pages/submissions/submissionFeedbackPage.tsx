@@ -31,7 +31,7 @@ const SubmissionFeedbackPage = () => {
             const assignmentProblems = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`)
             setAssignmentProblems(assignmentProblems)  
 
-        } catch (error) {
+        } catch (error: any) {
             setError(error)
         } finally {
             setLoading(false)

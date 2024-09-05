@@ -86,7 +86,7 @@ const GradebookStudentPage = () => {
             const categories = [... new Set(assignments.map(a => a.categoryName))] //Get all unique categories from assignments
             setCategories(categories)
 
-        } catch (error) {
+        } catch (error: any) {
             setError(error)
         } finally {
             setLoading(false)
