@@ -85,7 +85,7 @@ module.exports = () => {
     },
     output: {
       path: path.join(__dirname, `/dist/${env}`),
-      filename: "[name]-[hash:5].js",
+      filename: "[name]-[fullhash:5].js",
       publicPath: "/",
     },
     optimization: {
