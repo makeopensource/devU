@@ -11,14 +11,6 @@ services:
       - '5432:5432'
     expose:
       - '5432'
-  config:
-    #     Generates a config file for the API
-    build:
-      context: devU-api/scripts
-    command: "./generateConfig.sh config/default.yml"
-    image: ubautograding/devtools
-    volumes:
-      - ./devU-api/config:/config
   api:
     # Runs the API
     container_name: api
@@ -29,11 +21,6 @@ services:
       TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
       WAIT_HOSTS: db:5432
       dev: 0 # value here is irrelevant; just here to make sure dev env exists
-    depends_on:
-      db:
-        condition: service_started
-      config:
-        condition: service_completed_successfully
     ports:
       - '3001:3001'
     profiles:
