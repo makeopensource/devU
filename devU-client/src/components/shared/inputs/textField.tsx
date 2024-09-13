@@ -40,7 +40,7 @@ const TextField = ({
     if (onChange) onChange(e.target.value, e)
   }
 
-  const cssVariables = getCssVariables();
+  const colors = getCssVariables();
 
   return (
     <div className={`${styles.textField} ${className}`}>
@@ -58,8 +58,14 @@ const TextField = ({
                     sx={{
                       ...sx,
                       "& .MuiOutlinedInput-input" : {
-                        color: cssVariables.textColor
-                      }
+                        color: colors.textColor
+                      },
+                      "& .MuiInputLabel-outlined" : {
+                        color: colors.textColor
+                      },
+                      "& .MuiOutlinedInput-notchedOutline" : {
+                        color: colors.textColor
+                      },
                     }}
                     />
     </div>
