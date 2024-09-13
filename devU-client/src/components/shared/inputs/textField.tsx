@@ -1,7 +1,10 @@
 import React from 'react'
 
 import {TextField as MuiTextField} from '@mui/material'
+import { SxProps, Theme } from '@mui/material'
+
 import styles from './textField.scss'
+import { getCssVariables } from 'utils/theme.utils'
 
 type Props = {
   type?: 'text' | 'email' | 'password' | 'search'
@@ -16,6 +19,7 @@ type Props = {
   invalidated?: boolean
   helpText?: string
   variant?: 'outlined' | 'standard' | 'filled'
+  sx?: SxProps<Theme>;
 }
 
 const TextField = ({
@@ -29,11 +33,15 @@ const TextField = ({
   value,
   invalidated,
   helpText,
-  variant = 'outlined'
+  variant = 'outlined',
+  sx
 }: Props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) onChange(e.target.value, e)
   }
+
+  const cssVariables = getCssVariables();
+
   return (
     <div className={`${styles.textField} ${className}`}>
       <MuiTextField {...invalidated && {error: true}}
@@ -46,7 +54,14 @@ const TextField = ({
                     label={label}
                     defaultValue={defaultValue}
                     value={value}
-                    onChange={handleChange}/>
+                    onChange={handleChange}
+                    sx={{
+                      ...sx,
+                      "& .MuiOutlinedInput-input" : {
+                        color: cssVariables.textColor
+                      }
+                    }}
+                    />
     </div>
   )
 }
