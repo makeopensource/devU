@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {TextField as MuiTextField} from '@mui/material'
 import { SxProps, Theme } from '@mui/material'
 
-import styles from './textField.scss'
 import { getCssVariables } from 'utils/theme.utils'
+import styles from './textField.scss'
 
 type Props = {
   type?: 'text' | 'email' | 'password' | 'search'
@@ -36,11 +36,23 @@ const TextField = ({
   variant = 'outlined',
   sx
 }: Props) => {
+  const [theme, setTheme] = useState(getCssVariables())
+
+  // Needs a custom observer to force an update when the css variables change
+  // Custom observer will update the theme variables when the bodies classes change
+  useEffect(() => {
+    const observer = new MutationObserver(() => setTheme(getCssVariables()))
+
+    observer.observe(document.body, { attributes: true })
+
+    return () => observer.disconnect()
+  })
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) onChange(e.target.value, e)
   }
 
-  const colors = getCssVariables();
+  const { textColor } = theme
 
   return (
     <div className={`${styles.textField} ${className}`}>
@@ -57,15 +69,19 @@ const TextField = ({
                     onChange={handleChange}
                     sx={{
                       ...sx,
+                      // input field text
                       "& .MuiOutlinedInput-input" : {
-                        color: colors.textColor
+                        color: textColor
                       },
+                      // label text
                       "& .MuiInputLabel-outlined" : {
-                        color: colors.textColor
+                        color: textColor
                       },
+                      // border
                       "& .MuiOutlinedInput-notchedOutline" : {
-                        color: colors.textColor
+                        borderColor: textColor
                       },
+
                     }}
                     />
     </div>
