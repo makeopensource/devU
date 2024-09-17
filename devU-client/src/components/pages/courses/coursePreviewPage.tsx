@@ -89,6 +89,7 @@ const CoursePreviewPage = () => {
             <h2>{course?.name}</h2>
             <p>{course?.number}</p>
             <p>{course?.semester}</p>
+            <p> Instructor: Jesse Hartloff</p>
             <Button variant='contained' className={styles.buttons} onClick={handleJoinCourse}>Join Course</Button>
         </PageWrapper>
     )
