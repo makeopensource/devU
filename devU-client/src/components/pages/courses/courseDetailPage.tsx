@@ -50,17 +50,22 @@ const CourseDetailPage = () => {
 
     }
 
-
     const handleDropCourse = () => {
-
-        RequestService.delete(`/api/course/${courseId}/user-courses`).then(() => {
-            setAlert({autoDelete: true, type: 'success', message: 'Course Dropped'})
+        //confirmation to drop course or not
+        var confirm = window.confirm("Are you sure you want to drop?");
+        if (confirm)
+        {
+            RequestService.delete(`/api/course/${courseId}/user-courses`).then(() => {
+           
+                setAlert({autoDelete: true, type: 'success', message: 'Course Dropped'})
                 history.push('/courses')
+            
+
 
         }).catch((error: Error) => {
             const message = error.message
-            setAlert({autoDelete: false, type: 'error', message})
-        })
+            setAlert({autoDelete: false, type: 'error', message})  })
+        }
     }
 
     useEffect(() => {
