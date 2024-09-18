@@ -59,8 +59,6 @@ const CourseDetailPage = () => {
            
                 setAlert({autoDelete: true, type: 'success', message: 'Course Dropped'})
                 history.push('/courses')
-            
-
 
         }).catch((error: Error) => {
             const message = error.message
