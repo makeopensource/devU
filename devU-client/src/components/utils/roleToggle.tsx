@@ -35,7 +35,6 @@ const RoleToggle = () => {
         console.error(error)
       })
     }
-
   }, []);
 
   const handleToggle = () => {

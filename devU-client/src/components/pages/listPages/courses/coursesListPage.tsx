@@ -7,7 +7,7 @@ import ErrorPage from '../../errorPage/errorPage'
 import RequestService from 'services/request.service'
 import styles from './coursesListPage.scss'
 import CourseListItem from "../../../listItems/courseListItem";
-import {useAppSelector} from "../../../../redux/hooks";
+// import {useAppSelector} from "../../../../redux/hooks";
 import Button from "@mui/material/Button";
 import {useHistory} from "react-router-dom";
 
@@ -25,7 +25,6 @@ const UserCoursesListPage = () => {
     const [error, setError] = useState(null)
     const [userCourses, setUserCourses] = useState(new Array<UserCourse>())
     const [filter, setFilter] = useState<Filter>(false )
-    const role = useAppSelector((store) => store.roleMode)
     const history = useHistory()
 
     //Temporary place to store state for all courses
@@ -74,10 +73,10 @@ const UserCoursesListPage = () => {
                 <h1>All Courses</h1>
                 <div className={styles.largeLine}></div>
 
-                {role.isInstructor() && <Button variant="contained" onClick={() => {
+                <Button variant="contained" onClick={() => {
                     history.push(`/addCoursesForm`)
-                }}>Add Course</Button>
-                }
+                    }}>Add Course
+                </Button>
                 <div className={styles.filters}>
                     <Dropdown
                         label='Courses Display Options'
