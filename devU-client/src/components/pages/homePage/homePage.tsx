@@ -93,7 +93,7 @@ const HomePage = () => {
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}
                                         past={true}/>
                 ))}
-                {pastCourses.length === 0 && <h2>You do not have completed courses yet</h2>}
+                {pastCourses.length === 0 && <h2>No upcoming courses</h2>}
             </div>
 
         </PageWrapper>
