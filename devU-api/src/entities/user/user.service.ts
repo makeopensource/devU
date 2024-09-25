@@ -1,4 +1,5 @@
-import { getRepository, IsNull } from 'typeorm'
+import { IsNull } from 'typeorm'
+import { dataSource } from '../../database'
 
 import UserModel from './user.model'
 
@@ -6,7 +7,7 @@ import { User } from 'devu-shared-modules'
 
 import UserCourseService from '../userCourse/userCourse.service'
 
-const connect = () => getRepository(UserModel)
+const connect = () => dataSource.getRepository(UserModel)
 
 export async function create(user: User) {
   return await connect().save(user)
@@ -25,25 +26,25 @@ export async function _delete(id: number) {
 }
 
 export async function retrieve(id: number) {
-  return await connect().findOne({ id, deletedAt: IsNull() })
+  return await connect().findOneBy({ id, deletedAt: IsNull() })
 }
 
 export async function list() {
-  return await connect().find({ deletedAt: IsNull() })
+  return await connect().findBy({ deletedAt: IsNull() })
 }
 
 export async function listByCourse(courseId: number, userRole?: string) {
   const userCourses = await UserCourseService.listByCourse(courseId)
   const userPromises = userCourses
     // .filter(uc => !userRole || uc.role === userRole)
-    .map(uc => connect().findOne({ id: uc.userId, deletedAt: IsNull() }))
+    .map(uc => connect().findOneBy({ id: uc.userId, deletedAt: IsNull() }))
   return await Promise.all(userPromises)
 }
 
 export async function ensure(userInfo: User) {
   const { externalId, email } = userInfo
 
-  const user = await connect().findOne({ externalId })
+  const user = await connect().findOneBy({ externalId })
 
   if (user) return { user, isNewUser: false }
 

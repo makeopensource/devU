@@ -40,7 +40,6 @@ const upload = Multer()
 Router.get('/', /*isAuthorized('submissionViewAll'),*/ SubmissionController.getByAssignment)
 // TODO: Authorization
 
-
 Router.get('/assignments/:assignmentId', asInt('assignmentId'), SubmissionController.getByAssignment)
 
 /**
@@ -79,7 +78,7 @@ Router.get('/:id', isAuthorized('enrolled'), asInt(), SubmissionController.detai
  *         schema:
  *           type: integer
  */
-Router.get('/user/:userId', isAuthorized('enrolled'), asInt("userId"), SubmissionController.listByUser)
+Router.get('/user/:userId', isAuthorized('enrolled'), asInt('userId'), SubmissionController.listByUser)
 // TODO: submissionViewAll or enrolled/self
 
 /**

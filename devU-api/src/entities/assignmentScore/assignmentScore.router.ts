@@ -73,7 +73,7 @@ Router.get(
   '/user/:userId',
   extractOwnerByPathParam('userId'),
   isAuthorized('scoresViewAll', 'scoresViewSelfReleased'),
-  asInt("userId"),
+  asInt('userId'),
   AssignmentScoreController.getByUser
 )
 

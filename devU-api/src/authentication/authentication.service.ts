@@ -46,6 +46,7 @@ export function createRefreshToken(user: UserModel): string {
 
 export function validateJwt<TokenType>(token: string): TokenType | null {
   try {
+    // @ts-ignore
     const verificationKey = getVerificationKey(jws.decode(token).header.kid)
     const payload: unknown = jwt.verify(token, verificationKey, { ...jwtOptions, algorithms: ['RS256'] })
 

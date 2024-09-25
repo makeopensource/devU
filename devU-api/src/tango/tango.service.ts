@@ -13,7 +13,7 @@ const tangoKey = process.env.TANGO_KEY ?? 'test'
 export async function createCourse(course: string): Promise<OpenResponse | null> {
   const url = `${tangoHost}/open/${tangoKey}/${course}/`
   const response = await fetch(url, { method: 'GET' })
-  return response.ok ? await response.json() as OpenResponse : null
+  return response.ok ? ((await response.json()) as OpenResponse) : null
 }
 
 /**
@@ -24,8 +24,8 @@ export async function createCourse(course: string): Promise<OpenResponse | null>
  */
 export async function uploadFile(course: string, file: Buffer, fileName: string): Promise<UploadResponse | null> {
   const url = `${tangoHost}/upload/${tangoKey}/${course}/`
-  const response = await fetch(url, { method: 'POST', body: file, headers: { 'filename': fileName } })
-  return response.ok ? await response.json() as UploadResponse : null
+  const response = await fetch(url, { method: 'POST', body: file, headers: { filename: fileName } })
+  return response.ok ? ((await response.json()) as UploadResponse) : null
 }
 
 /**
@@ -40,7 +40,7 @@ export async function addJob(course: string, job: AddJobRequest): Promise<AddJob
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(job),
   })
-  return response.ok ? await response.json() as AddJobResponse : null
+  return response.ok ? ((await response.json()) as AddJobResponse) : null
 }
 
 /**
@@ -48,13 +48,14 @@ export async function addJob(course: string, job: AddJobRequest): Promise<AddJob
  * @param course - The course name.
  * @param outputFile - The name of the output file.
  */
-export async function pollJob(course: string, outputFile: string): Promise<PollSuccessResponse | PollFailureResponse> { //PollSuccessResponse
+export async function pollJob(course: string, outputFile: string): Promise<PollSuccessResponse | PollFailureResponse> {
+  //PollSuccessResponse
   const url = `${tangoHost}/poll/${tangoKey}/${course}/${outputFile}/`
   const response = await fetch(url, { method: 'GET' })
 
-  return response.headers.get('Content-Type')?.includes('application/json') 
-    ? (await response.json()) as PollFailureResponse 
-    : (await response.text()) as PollSuccessResponse
+  return response.headers.get('Content-Type')?.includes('application/json')
+    ? ((await response.json()) as PollFailureResponse)
+    : ((await response.text()) as PollSuccessResponse)
 }
 
 /**
@@ -72,7 +73,7 @@ export async function tangoHelloWorld(): Promise<boolean> {
 export async function getInfo(): Promise<InfoResponse | null> {
   const url = `${tangoHost}/info/${tangoKey}/`
   const response = await fetch(url, { method: 'GET' })
-  return response.ok ? await response.json() as InfoResponse: null
+  return response.ok ? ((await response.json()) as InfoResponse) : null
 }
 
 /**
@@ -82,7 +83,7 @@ export async function getInfo(): Promise<InfoResponse | null> {
 export async function getPoolInfo(image: string): Promise<Object | null> {
   const url = `${tangoHost}/pool/${tangoKey}/${image}/`
   const response = await fetch(url, { method: 'GET' })
-  return response.ok ? await response.json() as Object: null
+  return response.ok ? ((await response.json()) as Object) : null
 }
 
 /**
@@ -91,14 +92,18 @@ export async function getPoolInfo(image: string): Promise<Object | null> {
  * @param num - The number of instances to pre-allocate.
  * @param request - The request object.
  */
-export async function preallocateInstances(image: string, num: number, request: PreallocRequest): Promise<PreallocResponse | null> {
+export async function preallocateInstances(
+  image: string,
+  num: number,
+  request: PreallocRequest
+): Promise<PreallocResponse | null> {
   const url = `${tangoHost}/prealloc/${tangoKey}/${image}/${num}/`
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(request),
   })
-  return response.ok ? await response.json() as PreallocResponse: null
+  return response.ok ? ((await response.json()) as PreallocResponse) : null
 }
 
 /**

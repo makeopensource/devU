@@ -1,4 +1,5 @@
-import { getRepository, IsNull } from 'typeorm'
+import { IsNull } from 'typeorm'
+import { dataSource } from '../../database'
 
 import AssignmentScoreModel from './assignmentScore.model'
 
@@ -6,7 +7,7 @@ import { AssignmentScore } from 'devu-shared-modules'
 
 import AssignmentService from '../assignment/assignment.service'
 
-const connect = () => getRepository(AssignmentScoreModel)
+const connect = () => dataSource.getRepository(AssignmentScoreModel)
 
 export async function create(assignmentScore: AssignmentScore) {
   return await connect().save(assignmentScore)
@@ -24,26 +25,26 @@ export async function _delete(id: number) {
 }
 
 export async function retrieve(id: number) {
-  return await connect().findOne({ id, deletedAt: IsNull() })
+  return await connect().findOneBy({ id, deletedAt: IsNull() })
 }
 
 export async function list(assignmentId: number) {
   // TODO: There's no way this is right. Test to verify that it should be 'assignmentId': assignmentId
-  return await connect().find({ assignmentId, deletedAt: IsNull() })
+  return await connect().findBy({ assignmentId, deletedAt: IsNull() })
 }
 
 export async function retrieveByUser(assignmentId: number, userId: number) {
   //TODO: This can't be right.. can it?
-  return await connect().findOne({ assignmentId, userId, deletedAt: IsNull() })
+  return await connect().findOneBy({ assignmentId, userId, deletedAt: IsNull() })
 }
 
 export async function listByUser(userId: number) {
-  return await connect().find({ userId, deletedAt: IsNull() })
+  return await connect().findBy({ userId, deletedAt: IsNull() })
 }
 
 export async function listByCourse(courseId: number) {
   const assignments = await AssignmentService.listByCourse(courseId)
-  const assignmentScorePromises = assignments.map(a => connect().find({ assignmentId: a.id, deletedAt: IsNull() }))
+  const assignmentScorePromises = assignments.map(a => connect().findBy({ assignmentId: a.id, deletedAt: IsNull() }))
   return (await Promise.all(assignmentScorePromises)).reduce((a, b) => a.concat(b), []) //Must flatten 2D array resulting from array promises
 }
 

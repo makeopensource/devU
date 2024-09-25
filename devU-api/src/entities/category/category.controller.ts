@@ -52,7 +52,9 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
     res.status(201).json(response)
   } catch (err) {
-    res.status(400).json(new GenericResponse(err.message))
+    if (err instanceof Error) {
+        res.status(400).json(new GenericResponse(err.message))
+    }
   }
 }
 

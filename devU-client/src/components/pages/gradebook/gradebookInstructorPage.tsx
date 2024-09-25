@@ -94,7 +94,7 @@ const GradebookInstructorPage = () => {
             const assignmentScores = await RequestService.get<AssignmentScore[]>( `/api/course/${courseId}/assignment-scores` )
             setAssignmentScores(assignmentScores)
 
-        } catch (error) {
+        } catch (error: any) {
             setError(error)
         } finally {
             setLoading(false)

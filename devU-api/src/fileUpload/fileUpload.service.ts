@@ -1,7 +1,7 @@
 import { FileUpload } from '../../devu-shared-modules'
 import { generateFilename } from '../utils/fileUpload.utils'
 
-import { minioClient, uploadFile } from '../fileStorage'
+import { minioClient, uploadFile, downloadFile } from '../fileStorage'
 
 export async function create(files: Express.Multer.File[], bucketName: string, userId: number) {
   try {
@@ -34,24 +34,13 @@ export async function create(files: Express.Multer.File[], bucketName: string, u
 
 export async function retrieve(bucketName: string, fileName: string): Promise<Buffer> {
   return new Promise((resolve, reject) => {
-    minioClient.getObject(bucketName, fileName, function (err, dataStream) {
-      if (err) {
-        reject(err)
-      }
-
-      let file: Buffer[] = []
-      dataStream.on('data', function (chunk: Buffer) {
-        file.push(chunk)
+    downloadFile(bucketName, fileName)
+      .then(data => {
+        resolve(data)
       })
-
-      dataStream.on('end', function () {
-        resolve(Buffer.concat(file))
-      })
-
-      dataStream.on('error', function (err: Error) {
+      .catch(err => {
         reject(err)
       })
-    })
   })
 }
 
