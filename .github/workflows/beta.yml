@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - develop
-      - ci-cd
 
 jobs:
   build-docker:
