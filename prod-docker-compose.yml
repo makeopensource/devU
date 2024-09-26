@@ -91,3 +91,16 @@ services:
       - ./logs/tangonginx:/var/log/nginx
       - ./tango_files:/opt/TangoService/Tango/volumes
     restart: unless-stopped
+
+  # autoupdate containers
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=${TZ}
+      - WATCHTOWER_POLL_INTERVAL=30
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+    restart: unless-stopped
