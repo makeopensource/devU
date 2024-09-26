@@ -55,6 +55,6 @@ jobs:
 
       - name: build tango image
         run: |
-          docker build ./tango -f Dockerfile -t ghcr.io/${{ env.repo_url }}-tango:beta
+          docker build ./tango -f ./tango/Dockerfile -t ghcr.io/${{ env.repo_url }}-tango:beta
           docker push ghcr.io/${{ env.repo_url }}-tango:beta
       
