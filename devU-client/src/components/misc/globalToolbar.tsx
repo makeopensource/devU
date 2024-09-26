@@ -7,7 +7,7 @@ import UserOptionsDropdown from 'components/utils/userOptionsDropdown'
 
 
 import styles from './globalToolbar.scss'
-import RoleToggle from '../utils/roleToggle'
+import RoleDispatcher from '../utils/roleDispatcher'
 
 const GlobalToolbar = () => {
 
@@ -24,7 +24,7 @@ const GlobalToolbar = () => {
           </button>
           {/* Turns into a sidebar via css on mobile */}
           <div className={styles.menu}>
-            <RoleToggle />
+            <RoleDispatcher/>
             <DarkModeToggle />
             <Link to={`/courses`} className={styles.link}>
               Courses
