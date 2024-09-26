@@ -9,6 +9,6 @@ export const refreshCookieOptions: CookieOptions = {
   httpOnly: true,
   // Secure doesn't work in some browsers without a cert (localhost)
   // So we disable the secure cookie when dev auth is enabled
-  secure: !environment.providers.devAuth.enabled,
-  sameSite: true,
+  secure: true,
+  sameSite: 'none',
 }

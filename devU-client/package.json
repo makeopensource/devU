@@ -4,7 +4,7 @@
     "local": "cross-env NODE_ENV=local webpack-dev-server --mode development",
     "start": "cross-env NODE_ENV=development webpack-dev-server -d --open --mode development",
     "prod": "cross-env NODE_ENV=production webpack-dev-server -d --open --mode development",
-    "build": "cross-env NODE_ENV=production webpack -p --mode=production",
+    "build": "cross-env NODE_ENV=production webpack --mode production",
     "build-development": "cross-env NODE_ENV=development webpack --mode=production",
     "build-all": "concurrently \"npm run build-development\" \"npm run build\"",
     "build-local": "cross-env NODE_ENV=local webpack --mode=production",
