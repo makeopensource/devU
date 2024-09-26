@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - develop
+      - ci-cd
 
 jobs:
   build-docker:
@@ -30,8 +31,29 @@ jobs:
       - name: Login to GHCR registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: build beta tagged image
-        run: docker build . -t ghcr.io/${{ github.repository }}:beta
+      - name: Convert image name to lowercase
+        run: |
+          original_string=${{ github.repository }}
+          echo "repo_url=$(echo $original_string | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
-      - name: push
-        run: docker push ghcr.io/${{ github.repository }}:beta
+      # beta tags
+      - name: API beta image
+        run: |
+          docker build . -f api.Dockerfile -t ghcr.io/${{ env.repo_url }}-api:beta
+          docker push ghcr.io/${{ env.repo_url }}-api:beta
+
+      - name: client beta image
+        run: |
+          docker build . -f client.Dockerfile -t ghcr.io/${{ env.repo_url }}-client:beta
+          docker push ghcr.io/${{ env.repo_url }}-client:beta
+
+      - name: nginx beta image
+        run: |
+          docker build . -f nginx.Dockerfile -t ghcr.io/${{ env.repo_url }}-nginx:beta
+          docker push ghcr.io/${{ env.repo_url }}-nginx:beta
+
+      - name: build tango image
+        run: |
+          docker build ./tango -f Dockerfile -t ghcr.io/${{ env.repo_url }}-tango:beta
+          docker push ghcr.io/${{ env.repo_url }}-tango:beta
+      
