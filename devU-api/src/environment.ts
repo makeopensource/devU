@@ -67,7 +67,8 @@ const environment = {
   dbUsername: (load('database.username') || 'typescript_user') as string,
   dbPassword: (load('database.password') || 'password') as string,
   database: (load('database.name') || 'typescript_api') as string,
-
+  // environment info
+  isDocker: isDocker,
   // the below one is for local migration, due to some issues with command will not running load function nor 'localhost'
 
   // dbHost: ('localhost') as string,
@@ -92,7 +93,7 @@ const environment = {
   refreshTokenExpirationBufferSeconds: parseInt(refreshTokenBuffer),
 
   // BE CAREFUL WITH PROVIDERS - THEY'RE NOT TOTALLY TYPE SAFE UNLESS PROPERLY CONFIGURED
-  providers: config.get('auth.providers') as Providers,
+  providers: config.get('auth.providers') as Providers
 }
 
 export default environment
