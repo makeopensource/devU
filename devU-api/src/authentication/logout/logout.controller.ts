@@ -4,7 +4,11 @@ import { refreshToken } from '../../utils/cookie.utils'
 
 export async function logout(req: Request, res: Response, next: NextFunction) {
   try {
-    res.clearCookie(refreshToken).status(200).json(new GenericResponse('Refresh token cookie has been cleared!'))
+    res.clearCookie(refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    }).status(200).json(new GenericResponse('Refresh token cookie has been cleared!'))
   } catch (err) {
     next(err)
   }
