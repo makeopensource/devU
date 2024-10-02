@@ -36,7 +36,7 @@ COPY --from=config-builder /config/default.yml ./config/default.yml
 COPY --from=module_builder /tmp/devu-shared-modules ./devu-shared-modules
 
 # Indicate that the api is running in docker; value here is irrelevant
-ENV dev=0
+ENV IS_DOCKER=0
 
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
 RUN chmod +x /wait

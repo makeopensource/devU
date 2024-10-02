@@ -49,7 +49,7 @@ const refreshTokenBuffer = load('auth.jwt.refreshTokenExpirationBufferSeconds') 
 
 // if the dev env exists then file is running inside docker
 // if it is undefined it is running on dev machine
-const isDocker = !(process.env.dev === undefined)
+const isDocker = !(process.env.IS_DOCKER === undefined)
 
 if (isDocker && process.env.TANGO_KEY === undefined) {
   throw Error(
