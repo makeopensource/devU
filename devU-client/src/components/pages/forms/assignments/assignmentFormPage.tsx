@@ -8,6 +8,7 @@ import RequestService from 'services/request.service'
 import {useActionless} from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
 import Button from '@mui/material/Button'
+import DragDropFile from 'components/utils/dragDropFile'
 
 import {SET_ALERT} from 'redux/types/active.types'
 
@@ -134,6 +135,8 @@ const AssignmentCreatePage = () => {
                     <input type='checkbox' id='disableHandins' checked={formData.disableHandins}
                            onChange={handleCheckbox} className={formStyles.submitBtn}/>
                 </div>
+
+                <DragDropFile/>
 
                 <br/>
 
