@@ -1,17 +1,20 @@
 @import 'variables';
 
+
+
 .categoriesContainer {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     gap: 20px; /* adjust this value to set the space between the cards */
-
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.header {
+/*.header {
     display: flex;
     align-items: center;
 }
-
+*/
 .smallLine {
     width: 50px; /* adjust this value to set the length of the small line */
     border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
@@ -30,7 +33,50 @@
 }
 
 .color{
-    background-color: $list-item-background;
-    color: $text-color;
+    background-color: $purple;
+    color: $text-color2;
     max-width : 345px;
+}
+
+.header {
+    display: block;
+    justify-content: space-around;
+    align-items: flex-start;
+    background-color: $grey;
+    padding: 30px 50px;
+    border-radius: 10px;
+    color: $text-color
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+input {
+    width: 400px;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+}
+
+/*.edit-course-button {
+    background-color: $grey;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+}*/
+.assignment_card {
+    background-color: $text-color-secondary;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    transition: transform 0.2s;
+    max-width : 345px;
+
+}
+
+.assignment-card:hover {
+    transform: scale(1.05);
 }

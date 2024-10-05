@@ -20,10 +20,11 @@ import styles from './courseDetailPage.scss'
 import {SET_ALERT} from "../../../redux/types/active.types";
 import {useActionless, useAppSelector} from "redux/hooks";
 
+
+
 const CourseDetailPage = () => {
     const history = useHistory()
     const { courseId } = useParams<{courseId: string}>()
-
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     const [setAlert] = useActionless(SET_ALERT)
@@ -32,6 +33,7 @@ const CourseDetailPage = () => {
         RequestService.get<Course>(`/api/courses/${courseId}`)
         .then((course) => {
             setCourseInfo(course)
+
         })
         RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`)
         .then((assignments) => {
@@ -63,6 +65,7 @@ const CourseDetailPage = () => {
         })
     }
 
+
     useEffect(() => {
         fetchCourseInfo()
     }, [])
@@ -72,11 +75,12 @@ const CourseDetailPage = () => {
             {courseInfo ? (
                 <div>
                     <div className={styles.header}>
-                        <div className={styles.smallLine}></div>
                         <h1>{courseInfo.name}</h1>
-                        <div className={styles.largeLine}></div>
 
-                        <Stack spacing={2} direction='row'>
+                        <h2> Section: </h2>
+
+
+                        <Stack spacing={3} direction='row'>
                             <Button variant='contained' className={styles.buttons} onClick={() => {
                                 history.push(`/course/${courseId}/gradebook`)
                             }}>Gradebook</Button>
@@ -92,21 +96,22 @@ const CourseDetailPage = () => {
                                 }}>Edit Course</Button>}
 
 
+
                             <Button variant='contained' className={styles.buttons} onClick={handleDropCourse}>Drop
                                 Course</Button>
                         </Stack>
                     </div>
-                    
+
                     <div>
                     {Object.keys(categoryMap).map((category, index) => (
-                        <div className={styles.color}>
+                        <div className={styles.assignment_card}>
                         <Card key={index}>
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div" className={styles.color}>
                                     {category}
                                 </Typography>
                             </CardContent>
-                            <List sx = {{maxHeight : 300, overflow : 'auto', '& ul' : {padding : 0} }}>
+                            <List sx = {{maxHeight : 200, overflow : 'auto', '& ul' : {padding : 0} }}>
                             {categoryMap[category].map((assignment, index) => (
                                 <ListItem disablePadding key={index}>
                                     <ListItemButton onClick={() => {
