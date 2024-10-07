@@ -8,6 +8,9 @@ import RequestService from 'services/request.service'
 import {useActionless} from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
 import Button from '@mui/material/Button'
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import DragDropFile from 'components/utils/dragDropFile'
 
 import {SET_ALERT} from 'redux/types/active.types'
@@ -89,60 +92,83 @@ const AssignmentCreatePage = () => {
 
     return(
         <PageWrapper>
-            <h1>Assignment Form</h1>
-            <div className={formStyles.form}>
+            <h2>Create Assignment</h2>
+            <div className={formStyles.grid}>
+                <div className={formStyles.assignmentDropdown}>
+                    <h2>All Assignments</h2>
+                    <Accordion>
+                        <AccordionSummary>
+                            Dropdown 1
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            test
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion>
+                        <AccordionSummary>
+                            Dropdown 2
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            test
+                        </AccordionDetails>
+                    </Accordion>
+                </div>
+                <div className={formStyles.form}>
+                    <TextField id='name' onChange={handleChange} label={"Assignment Name*"}
+                            invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}/>
 
-                <TextField id='name' onChange={handleChange} label={"Assignment Name"}
-                           invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}/>
+                    <TextField id='categoryName' onChange={handleChange} label={"Category Name*"}
+                            invalidated={!!invalidFields.get("categoryName")}
+                            helpText={invalidFields.get("categoryName")}/>
 
-                <TextField id='categoryName' onChange={handleChange} label={"Category Name*"}
-                           invalidated={!!invalidFields.get("categoryName")}
-                           helpText={invalidFields.get("categoryName")}/>
+                    <TextField id='description' onChange={handleChange} label={"Description*"}
+                            invalidated={!!invalidFields.get("description")}
+                            helpText={invalidFields.get("description")}/>
 
-                <TextField id='description' onChange={handleChange} label={"Description*"}
-                           invalidated={!!invalidFields.get("description")}
-                           helpText={invalidFields.get("description")}/>
+                    <TextField id='maxFileSize' onChange={handleChange} label={"Max File Size*"}
+                            invalidated={!!invalidFields.get("maxFileSize")}
+                            helpText={invalidFields.get("maxFileSize")}/>
 
-                <TextField id='maxFileSize' onChange={handleChange} label={"Max File Size"}
-                           invalidated={!!invalidFields.get("maxFileSize")}
-                           helpText={invalidFields.get("maxFileSize")}/>
+                    <TextField id='maxSubmission' onChange={handleChange} label={"Max Submission*"}
+                            invalidated={!!invalidFields.get("maxSubmission")}
+                            helpText={invalidFields.get("maxSubmission")}/>
+                    <br/>
 
-                <TextField id='maxSubmission' onChange={handleChange} label={"Max Submission"}
-                           invalidated={!!invalidFields.get("maxSubmission")}
-                           helpText={invalidFields.get("maxSubmission")}/>
-                <br/>
-
-                <div className={formStyles.datepickerContainer}>
-                    <div>
-                        <label htmlFor='start_date'>Start Date *</label>
-                        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
-                                    className={formStyles.datepicker}/>
+                    <div className={formStyles.datepickerContainer}>
+                        <div>
+                            <label htmlFor='start_date'>Start Date *</label>
+                            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
+                                        className={formStyles.datepicker}/>
+                        </div>
+                        <div>
+                            <label htmlFor='due_date'>Due Date *</label>
+                            <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}
+                                        className={formStyles.datepicker}/>
+                        </div>
+                        <div>
+                            <label htmlFor='end_date'>End Date *</label>
+                            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
+                                        className={formStyles.datepicker}/>
+                        </div>
                     </div>
-                    <div>
-                        <label htmlFor='due_date'>Due Date *</label>
-                        <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}
-                                    className={formStyles.datepicker}/>
+                    <br/>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <label htmlFor='disableHandins'>Disable Handins</label>
+                        <input type='checkbox' id='disableHandins' checked={formData.disableHandins}
+                            onChange={handleCheckbox} className={formStyles.submitBtn}/>
                     </div>
-                    <div>
-                        <label htmlFor='end_date'>End Date *</label>
-                        <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
-                                    className={formStyles.datepicker}/>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <Button variant='contained' onClick={handleSubmit} className={formStyles.submitBtn}>Create
+                            assignment</Button>
                     </div>
                 </div>
-                <br/>
-                <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <label htmlFor='disableHandins'>Disable Handins</label>
-                    <input type='checkbox' id='disableHandins' checked={formData.disableHandins}
-                           onChange={handleCheckbox} className={formStyles.submitBtn}/>
+                <div className={formStyles.dragDropFile}>
+                    <h2>Attachments</h2>
+                    <p>Add up to 5 attachments with this assignment:</p>
+                    <br/><br/><br/>
+                    <DragDropFile/>
                 </div>
-
-                <DragDropFile/>
-
-                <br/>
-
-                <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <Button variant='contained' onClick={handleSubmit} className={formStyles.submitBtn}>Create
-                        assignment</Button>
+                <div className={formStyles.formButtons}>
                 </div>
             </div>
 

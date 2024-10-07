@@ -1,14 +1,20 @@
 @import 'variables';
 
 
-h1 {
+h2 {
   text-align: center;
 }
+
+p {
+  text-align: center;
+}
+
 .form {
-  background-color: $list-item-background;
+    background-color: $list-item-background;
+    grid-area: 1 / 2 / 2 / 3;
     border-radius: 10px;
     padding: 20px;
-    width: 50%;
+    // width: 50%;
     left: 0; 
     right: 0; 
     margin-left: auto; 
@@ -52,4 +58,32 @@ h1 {
   padding: 16.5px 14px;
   border: 1px solid #bbbbbb;
   border-radius: 4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.75fr;
+  grid-template-rows: 1fr;   
+  grid-column-gap: 10px;
+  grid-row-gap: 10px; 
+}
+
+.dragDropFile {
+  grid-area: 1 / 3 / 2 / 4;
+  padding: 20px;
+  background-color: $list-item-background;
+  border-radius: 10px;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+}
+
+.assignmentDropdown {
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.formButtons {
+  grid-area: 2 / 1 / 3 / 4;
+  background-color: $list-item-background;
 }
