@@ -132,6 +132,7 @@ const CourseUpdatePage = ({ }) => {
                     <h2>Add/Drop Students</h2>
                     <TextField id='ubit' label={"UBIT*"} onChange={handleChange}
                         placeholder='e.g. hartloff' invalidated={!!invalidFields.get("ubit")} helpText={invalidFields.get("ubit")} />
+                    <input type="file" id="addDropFile" />
                     <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 'auto', gap: '1rem'}}>
                         <button className='btnPrimary' onClick={handleAddStudent}>Add Student</button>
                         <button className='btnDelete' onClick={handleDropStudent}>Drop Student</button>

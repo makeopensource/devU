@@ -65,8 +65,15 @@ input[type='date'] {
   border-radius: 100px;
 }
 
-// MEDIA QUERIES
+input[type='file']::file-selector-button {
+  background-color: $primary;
+  border-radius: 100px;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+}
 
+// MEDIA QUERIES
 @media (max-width: 800px) {
   .courseFormWrapper {
     margin: 16px;
