@@ -39,12 +39,13 @@ h3 {
   }
 .create_course {
     border:0; /* Primary button color */
-    color: #52468a; /* Button text color */
-    padding: 10px 20px; /* Padding for button */
+    color: #52468a;
+    padding: 10px 20px; 
     border-radius: 5px;
     text-decoration: none;
     font-weight: 600;
     transition: background-color 0.3s ease;
+    margin:20px
 }
 .header {
     color: $text-color;
