@@ -16,6 +16,7 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [enrollCourses, setEnrollCourses] = useState(new Array<Course>())
+    const [upcomingCourses,setupcomingCourses] = useState(new Array<Course>())
     const [pastCourses, setPastCourses] = useState(new Array<Course>())
     const [assignments, setAssignments] = useState(new Map<Course, Array<Assignment>>())
     const [instructorCourses, setInstructorCourses] = useState(new Array<Course>())
@@ -35,7 +36,7 @@ const HomePage = () => {
                 upcomingCourses: Course[];//TODO: Add upcoming courses feature
             }>(`/api/courses/user/${userId}`);
             const enrolledCourses: Course[] = allCourses.activeCourses;
-
+            const upcomingCourses: Course[] = allCourses.upcomingCourses;
             const pastCourses: Course[] = allCourses.pastCourses;
             const instructorCourses: Course[] = allCourses.instructorCourses;
             
@@ -50,6 +51,7 @@ const HomePage = () => {
             setPastCourses(pastCourses)
             setEnrollCourses(enrolledCourses)
             setInstructorCourses(instructorCourses)
+            setupcomingCourses(upcomingCourses)
            
         } catch (error: any) {
             setError(error)
@@ -120,8 +122,19 @@ const HomePage = () => {
                 <div className={styles.smallLine}></div>
                 <h3>Upcoming</h3>
                 <div className={styles.largeLine}></div>
-            </div>
-            { <h4>No upcoming courses</h4>}
+                </div>
+
+                <div className={styles.coursesContainer}>
+                {upcomingCourses && upcomingCourses.map((course) => (
+                    <div className={styles.courseCard} key={course.id}>
+                    <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}/>
+                    </div>
+                ))}
+                {upcomingCourses.length === 0 && <h4>No upcoming Courses</h4>}
+                </div>
+          
+           
+            
         </PageWrapper>
     )
 }
