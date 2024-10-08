@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import {useHistory, useParams} from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
@@ -7,12 +7,12 @@ import RequestService from 'services/request.service'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import {ExpressValidationError} from 'devu-shared-modules'
+import { ExpressValidationError } from 'devu-shared-modules'
 
-import {useActionless} from 'redux/hooks'
+import { useActionless } from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
-import Button from '@mui/material/Button'
-import {SET_ALERT} from 'redux/types/active.types'
+// import Button from '@mui/material/Button'
+import { SET_ALERT } from 'redux/types/active.types'
 import {
     applyMessageToErrorFields,
     removeClassFromField
@@ -24,10 +24,10 @@ type UrlParams = {
     courseId: string
 }
 
-const CourseUpdatePage = ({}) => {
+const CourseUpdatePage = ({ }) => {
     const [setAlert] = useActionless(SET_ALERT)
     const history = useHistory()
-    const [formData,setFormData] = useState({
+    const [formData, setFormData] = useState({
         name: '',
         number: '',
         semester: '',
@@ -39,7 +39,7 @@ const CourseUpdatePage = ({}) => {
     const { courseId } = useParams() as UrlParams
     useEffect(() => {
         let isMounted = false;
-        if (!isMounted){
+        if (!isMounted) {
             RequestService.get(`/api/courses/${courseId}`).then((res) => {
                 setFormData({
                     name: res.name,
@@ -52,22 +52,22 @@ const CourseUpdatePage = ({}) => {
             });
         }
     }, []);
-    const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
         const newInvalidFields = removeClassFromField(invalidFields, key)
         setInvalidFields(newInvalidFields)
-        setFormData(prevState => ({...prevState,[key] : value}))
+        setFormData(prevState => ({ ...prevState, [key]: value }))
     }
-    const handleStartDateChange = (date : Date) => {setStartDate(date)}
-    const handleEndDateChange = (date : Date) => {setEndDate(date)}
+    const handleStartDateChange = (date: Date) => { setStartDate(date) }
+    const handleEndDateChange = (date: Date) => { setEndDate(date) }
 
     const handleCourseUpdate = () => {
         const finalFormData = {
-            name : formData.name,
-            number : formData.number,
-            semester : formData.semester,
-            startDate : startDate.toISOString(),
-            endDate : endDate.toISOString(),
+            name: formData.name,
+            number: formData.number,
+            semester: formData.semester,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
         }
 
         RequestService.put(`/api/courses/${courseId}`, finalFormData)
@@ -82,48 +82,68 @@ const CourseUpdatePage = ({}) => {
                 setInvalidFields(newFields);
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-        .finally(() => {
-        })
+            .finally(() => {
+            })
+    }
+
+    const handleAddStudent = () => {
+        // TODO: get user id by getting email and calling /users --> search through /users --> 
+        // RequestService.put(`/api/courses/${courseId}/users-courses/${id}:`,
+        
+    }
+
+    const handleDropStudent = () => {
+        
+       
     }
 
 
     return (
-    <PageWrapper>
-        <h1>Course Detail Update</h1>
-        <div className={formStyles.form}>
-
-            <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
+        <PageWrapper>
+            <h1>Update Course Form</h1>
+            <div className={formStyles.courseFormWrapper}>
+                <div className={formStyles.detailsForm}>
+                    <h2>Course Details</h2>
+                    <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
                         invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}
-                        defaultValue={formData.name}/>
-            <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
-                        invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")}/>
-            <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
+                        defaultValue={formData.name} />
+                    <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
+                        invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
+                    <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
                         placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
-                        helpText={invalidFields.get("semester")}/>
-
-                <div className = {formStyles.datepickerContainer}>
-                    <div>
-                        <label htmlFor='start_date'>Start Date *</label>
-                        <br/>
-                        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
-                                    className={formStyles.datepicker}
-                                    startDate={new Date()}/>
+                        helpText={invalidFields.get("semester")} />
+                    <div className={formStyles.datepickerContainer}>
+                        <div>
+                            <label htmlFor='start_date'>Start Date *</label>
+                            <br />
+                            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
+                                className={formStyles.datepicker}
+                                startDate={new Date()} />
+                        </div>
+                        <div>
+                            <label htmlFor='end_date'>End Date *</label>
+                            <br />
+                            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
+                                className={formStyles.datepicker} />
+                        </div>
                     </div>
-                    <div>
-                    <label htmlFor='end_date'>End Date *</label>
-                    <br/>
-                        <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
-                                    className={formStyles.datepicker}/>
+                    <br />
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        {/* <Button variant='contained' onClick={handleCourseUpdate} className={formStyles.submitBtn}>Update Course</Button> */}
+                        <button className='btnPrimary' onClick={handleCourseUpdate}>Update Course</button>
                     </div>
                 </div>
-                <br/>
-
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant='contained' onClick={handleCourseUpdate} className={formStyles.submitBtn}>Update Course</Button>
+                <div className={formStyles.addDropForm}>
+                    <h2>Add/Drop Students</h2>
+                    <TextField id='ubit' label={"UBIT*"} onChange={handleChange}
+                        placeholder='Ex. 13045829' invalidated={!!invalidFields.get("ubit")} helpText={invalidFields.get("ubit")} />
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <button className='btnPrimary' onClick={handleAddStudent}>Add Student</button>
+                        <button className='btnDelete' onClick={handleDropStudent}>Drop Student</button>
+                    </div>
                 </div>
-
             </div>
-    </PageWrapper>
+        </PageWrapper>
     )
 }
 

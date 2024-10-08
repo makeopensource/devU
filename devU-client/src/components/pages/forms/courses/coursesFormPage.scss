@@ -1,26 +1,37 @@
 @import 'variables';
 
+.courseFormWrapper {
+  display: flex;
+  margin: 16px 50px;
+  gap: 30px;
+}
+
 .form {
   background-color: $list-item-background;
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 30px;
   width: 50%;
-  left: 0; 
-  right: 0; 
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+}
 
+.detailsForm {
+  @extend .form;
+  // background-color: $list-item-background;
+  // border-radius: 20px;
+  // padding: 30px;
+  width: 70%;
+  margin: 0;
+}
+
+.addDropForm {
+  @extend .form;
+  width: 30%;
+  margin: 0;
 }
 
 .datepickerContainer {
   display: flex;
   justify-content: space-between;
-}
-
-
-.submitBtn {
-  display: flex;
-  justify-content: center;
 }
 
 .datepicker {
