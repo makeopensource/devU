@@ -41,7 +41,7 @@ const AssignmentCreatePage = () => {
     const [dueDate, setDueDate] = useState(new Date())
     const [startDate, setStartDate] = useState(new Date())
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
-    const [files, setFiles] = useState(new Map<string, File>())
+    const [files, setFiles] = useState<Map<string,File>>(new Map())
 
     useEffect(() => {
         const observer = new MutationObserver(() => setTheme(getCssVariables()))
@@ -117,15 +117,34 @@ const AssignmentCreatePage = () => {
 
     }
 
-    const handleFile = (file : File) => {
-        if(Object.keys(files).length < 5){
-        setFiles(prevState => ({...prevState, [file.name] : file}))
+    // const handleFile = (file : File) => {
+    //     if(Object.keys(files).length < 5){
+    //     setFiles(prevState => ({...prevState, [file.name] : file}))
+    //     } else {
+    //         //TODO: Add alert
+    //         console.log('Max files reached')
+    //     }
+    //     console.log(files)
+    // }
+
+    const handleFile = (file: File) => {
+        if (files.size < 5) {
+            setFiles(prevState => new Map(prevState).set(file.name, file));
         } else {
-            //TODO: Add alert
-            console.log('Max files reached')
+            // TODO: Add alert
+            console.log('Max files reached');
         }
-        console.log(files)
-    }
+        console.log(files);
+    };
+
+    const handleFileRemoval = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const key = e.currentTarget.id;
+        setFiles(prevState => {
+            const newFiles = new Map(prevState);
+            newFiles.delete(key);
+            return newFiles;
+        });
+    };
 
     return(
         <PageWrapper>
@@ -233,15 +252,25 @@ const AssignmentCreatePage = () => {
                     {/*TODO: Whenever file uploads is available on backend, store the files + create Object URLs*/}
                     <h2>Attachments</h2>
                     <p>Add up to 5 attachments with this assignment:</p>
-                    <p>Files Uploaded:</p>
-                    {Object.keys(files).map((file) => {
-                    return (
-                        <div key={file} className={formStyles.fileNameContainer}>
-                            <p className={formStyles.fileName}>{file}</p>
-                        </div>
-                        );
-                    })}
-                    <DragDropFile handleFile={handleFile}/>
+                    <p>Files Uploaded (click to delete) :</p>
+                    <div className={formStyles.fileNameContainer}>
+                        {Array.from(files.keys()).map((fileName) => {
+                            return (
+                                <div key={fileName} className={formStyles.fileName}>
+                                    <button
+                                        id={fileName}
+                                        className={formStyles.fileRemovalButton}
+                                        onClick={handleFileRemoval}
+                                    >
+                                        {fileName}
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className={formStyles.dragDropFileComponent}>
+                        <DragDropFile handleFile={handleFile}/>
+                    </div>
                 </div>
             </div>
 
