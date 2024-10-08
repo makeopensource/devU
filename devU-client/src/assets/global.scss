@@ -14,7 +14,7 @@
   }
 
   body {
-    font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
+    font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     text-size-adjust: 100%;
@@ -23,7 +23,7 @@
     color: var(--text-color);
 
     --background: white;
-    --text-color: black;
+    --text-color: #52468A;
     --text-color-secondary: #363636;
     --focus: #38c172;
 
@@ -66,7 +66,7 @@
 
   body.dark-mode {
     --background: #1b1f20;
-    --text-color: white;
+    --text-color: #D9D9D9;
     --text-color-secondary: #9b9b9b;
 
     --primary-lighter: #3796bc;
