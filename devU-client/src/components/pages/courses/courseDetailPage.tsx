@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import RequestService from 'services/request.service'
 import {Assignment, Course} from 'devu-shared-modules'
-
+//import {useHistory} from "react-router-dom";
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
 import Card from '@mui/material/Card'
@@ -12,23 +12,25 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
+//import Button from '@mui/material/Button'
+//import Stack from '@mui/material/Stack'
 
 
 import styles from './courseDetailPage.scss'
 import {SET_ALERT} from "../../../redux/types/active.types";
-import {useActionless, useAppSelector} from "redux/hooks";
+import {useActionless} from "../../../redux/hooks";
+//import TextField from "../../shared/inputs/textField";
+//import {useActionless, useAppSelector} from "redux/hooks";
 
 
 
 const CourseDetailPage = () => {
-    const history = useHistory()
+    //const history = useHistory()
     const { courseId } = useParams<{courseId: string}>()
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     const [setAlert] = useActionless(SET_ALERT)
-    const role = useAppSelector((store) => store.roleMode)
+   // const role = useAppSelector((store) => store.roleMode)
     const fetchCourseInfo = async () => {
         RequestService.get<Course>(`/api/courses/${courseId}`)
         .then((course) => {
@@ -50,6 +52,7 @@ const CourseDetailPage = () => {
             setCategoryMap(categoryMap)
         })
 
+
     }
 
 
@@ -69,69 +72,81 @@ const CourseDetailPage = () => {
     useEffect(() => {
         fetchCourseInfo()
     }, [])
-
+    const history = useHistory()
     return(
         <PageWrapper>
+
             {courseInfo ? (
                 <div>
-                    <div className={styles.header}>
-                        <h1>{courseInfo.name}</h1>
+                        <div className={styles.header}>
+                            <h1>{courseInfo.name}</h1>
+                            <h2> Section: </h2>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
 
-                        <h2> Section: </h2>
+
+                                <button className={styles.actual_button} onClick={() => {
+                                    history.push(`/course/${courseId}/gradebook`)
+                                }}>Gradebook
+                                </button>
 
 
-                        <Stack spacing={3} direction='row'>
-                            <Button variant='contained' className={styles.buttons} onClick={() => {
-                                history.push(`/course/${courseId}/gradebook`)
-                            }}>Gradebook</Button>
-
-                            {role.isInstructor() &&
-                                <Button variant='contained' className={styles.buttons} onClick={() => {
+                                <button className={styles.actual_button} onClick={() => {
                                     history.push(`/course/${courseId}/createAssignment`)
-                                }}>Add Assignment</Button>}
+                                }}>Add Assignment
+                                </button>
 
-                            {role.isInstructor() &&
-                                <Button variant='contained' className={styles.buttons} onClick={() => {
+
+                                <button className={styles.actual_button} onClick={() => {
                                     history.push(`/course/${courseId}/update`)
-                                }}>Edit Course</Button>}
+                                }}>Course WebSite
+                                </button>
 
 
-
-                            <Button variant='contained' className={styles.buttons} onClick={handleDropCourse}>Drop
-                                Course</Button>
-                        </Stack>
-                    </div>
-
-                    <div>
-                    {Object.keys(categoryMap).map((category, index) => (
-                        <div className={styles.assignment_card}>
-                        <Card key={index}>
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div" className={styles.color}>
-                                    {category}
-                                </Typography>
-                            </CardContent>
-                            <List sx = {{maxHeight : 200, overflow : 'auto', '& ul' : {padding : 0} }}>
-                            {categoryMap[category].map((assignment, index) => (
-                                <ListItem disablePadding key={index}>
-                                    <ListItemButton onClick={() => {
-                                        history.push(`/course/${courseId}/assignment/${assignment.id}`)
-                                    }}>
-                                        <ListItemText primary={assignment.name} />
-                                    </ListItemButton>
-                                </ListItem>
-                            ))}
-                            </List>
-                        </Card>
+                                <button className={styles.actual_button} onClick={handleDropCourse}
+                                    > Drop Course
+                                </button>
                         </div>
-                    ))}
-                    </div>
-                </div>
-            ) : (
-                <h1>Error fetching Course Information</h1>
-            )}
-        </PageWrapper>
-    )
-}
+                             </div>
 
-export default CourseDetailPage
+
+                            <div className={styles.coursesContainer}>
+
+
+                            {Object.keys(categoryMap).map((category, index) => (
+
+                                <Card key={index} className={styles.courseCard}>
+                                    <CardContent>
+                                        <Typography variant="h5" className={styles.color}>
+                                            {category}
+                                        </Typography>
+                                    </CardContent>
+                                    <List sx={{maxHeight: 200, overflow: 'auto', '& ul': {padding: 0}}}>
+                                        {categoryMap[category].map((assignment, index) => (
+                                            <ListItem key={index} disablePadding>
+                                                <ListItemButton onClick={() => {
+                                                    history.push(`/course/${courseId}/assignment/${assignment.id}`)
+                                                }}>
+                                                    <ListItemText primary={assignment.name}/>
+                                                </ListItemButton>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Card>
+
+                            ))}
+
+                        </div>
+                    </div>
+
+
+
+
+                    ) : (
+                    <h1>Error fetching Course Information</h1>
+                    )}
+                </PageWrapper>
+            )
+            }
+
+
+            export default CourseDetailPage
