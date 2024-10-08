@@ -121,7 +121,7 @@ const HomePage = () => {
                 <h3>Upcoming</h3>
                 <div className={styles.largeLine}></div>
             </div>
-
+            { <h4>No upcoming courses</h4>}
         </PageWrapper>
     )
 }
