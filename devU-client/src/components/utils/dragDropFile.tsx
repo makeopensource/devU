@@ -2,7 +2,11 @@ import React from "react";
 import styles from './dragDropFile.scss';
 import Button from '@mui/material/Button'
 
-function DragDropFile() {
+interface DragDropFileProps {
+  handleFile : (file : File) => void;
+}
+
+function DragDropFile({handleFile} : DragDropFileProps) {
     const [dragActive, setDragActive] = React.useState(false);
     const inputRef = React.useRef<HTMLInputElement | null>(null);
     
@@ -24,6 +28,7 @@ function DragDropFile() {
       setDragActive(false);
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
         console.log('file dropped');
+        handleFile(e.dataTransfer.files[0]);
       }
     };
     
@@ -32,6 +37,7 @@ function DragDropFile() {
       e.preventDefault();
       if (e.target.files && e.target.files[0]) {
         console.log('file selected');
+        handleFile(e.target.files[0]);
       }
     };
     

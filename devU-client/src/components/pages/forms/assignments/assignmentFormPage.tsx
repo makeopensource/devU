@@ -41,6 +41,7 @@ const AssignmentCreatePage = () => {
     const [dueDate, setDueDate] = useState(new Date())
     const [startDate, setStartDate] = useState(new Date())
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
+    const [files, setFiles] = useState(new Map<string, File>())
 
     useEffect(() => {
         const observer = new MutationObserver(() => setTheme(getCssVariables()))
@@ -116,6 +117,16 @@ const AssignmentCreatePage = () => {
 
     }
 
+    const handleFile = (file : File) => {
+        if(Object.keys(files).length < 5){
+        setFiles(prevState => ({...prevState, [file.name] : file}))
+        } else {
+            //TODO: Add alert
+            console.log('Max files reached')
+        }
+        console.log(files)
+    }
+
     return(
         <PageWrapper>
             <h2>Create Assignment</h2>
@@ -147,7 +158,7 @@ const AssignmentCreatePage = () => {
                                 helpText={invalidFields.get("maxFileSize")}
                                 sx={{width:9/10}}/>
 
-                        <TextField id='maxSubmission' className={formStyles.textField2} onChange={handleChange} label={"Max Submission*"}
+                        <TextField id='maxSubmission' className={formStyles.textField2} onChange={handleChange} label={"Max Submissions*"}
                                 invalidated={!!invalidFields.get("maxSubmission")}
                                 helpText={invalidFields.get("maxSubmission")}
                                 sx={{width:9/10}}/>
@@ -219,10 +230,18 @@ const AssignmentCreatePage = () => {
                     </div>
                 </div>
                 <div className={formStyles.dragDropFile}>
+                    {/*TODO: Whenever file uploads is available on backend, store the files + create Object URLs*/}
                     <h2>Attachments</h2>
                     <p>Add up to 5 attachments with this assignment:</p>
-                    <br/><br/><br/>
-                    <DragDropFile/>
+                    <p>Files Uploaded:</p>
+                    {Object.keys(files).map((file) => {
+                    return (
+                        <div key={file} className={formStyles.fileNameContainer}>
+                            <p className={formStyles.fileName}>{file}</p>
+                        </div>
+                        );
+                    })}
+                    <DragDropFile handleFile={handleFile}/>
                 </div>
             </div>
 

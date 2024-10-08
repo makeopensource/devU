@@ -58,7 +58,7 @@ p {
   background-color: $list-item-background;
   border-radius: 10px;
   margin-left: 0; 
-  margin-right: auto; 
+  margin-right: auto;
 }
 
 .textField1 {
@@ -82,4 +82,14 @@ p {
 .textArea {
   width: 100%;
   flex-direction: none;
+}
+
+.fileNameContainer {
+  width: 400px;
+}
+
+.fileName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
