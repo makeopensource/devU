@@ -28,9 +28,17 @@
   flex-direction: column;
 }
 
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 .datepickerContainer {
   display: flex;
   justify-content: space-between;
+  margin: 10px auto;
+  gap: 10px
 }
 
 .datepicker {
@@ -46,4 +54,32 @@
   padding: 16.5px 14px;
   border: 1px solid #bbbbbb;
   border-radius: 4px;
+}
+
+input[type='date'] {
+  height: 20px;
+  background-color: $input-field-background;
+  color: $input-field-label;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 100px;
+}
+
+// MEDIA QUERIES
+
+@media (max-width: 800px) {
+  .courseFormWrapper {
+    margin: 16px;
+    flex-direction: column;
+  }
+
+  .detailsForm, .addDropForm {
+    width: auto; // take up full container
+  }
+}
+
+@media (max-width: 450px) {
+  .datepickerContainer {
+    flex-direction: column;
+  }
 }

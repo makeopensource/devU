@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
 import RequestService from 'services/request.service'
-import DatePicker from 'react-datepicker'
+// import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import { ExpressValidationError } from 'devu-shared-modules'
@@ -32,8 +32,8 @@ const CourseUpdatePage = ({ }) => {
         number: '',
         semester: '',
     })
-    const [startDate, setStartDate] = useState(new Date())
-    const [endDate, setEndDate] = useState(new Date())
+    const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
+    const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0])
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const { courseId } = useParams() as UrlParams
@@ -46,8 +46,8 @@ const CourseUpdatePage = ({ }) => {
                     number: res.number,
                     semester: res.semester,
                 });
-                setStartDate(new Date(res.startDate));
-                setEndDate(new Date(res.endDate));
+                setStartDate(new Date(res.startDate).toISOString().split("T")[0]);
+                setEndDate(new Date(res.endDate).toISOString().split("T")[0]);
                 isMounted = true;
             });
         }
@@ -58,16 +58,16 @@ const CourseUpdatePage = ({ }) => {
         setInvalidFields(newInvalidFields)
         setFormData(prevState => ({ ...prevState, [key]: value }))
     }
-    const handleStartDateChange = (date: Date) => { setStartDate(date) }
-    const handleEndDateChange = (date: Date) => { setEndDate(date) }
+    const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
+    const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
 
     const handleCourseUpdate = () => {
         const finalFormData = {
             name: formData.name,
             number: formData.number,
             semester: formData.semester,
-            startDate: startDate.toISOString(),
-            endDate: endDate.toISOString(),
+            startDate: startDate,
+            endDate: endDate,
         }
 
         RequestService.put(`/api/courses/${courseId}`, finalFormData)
@@ -104,27 +104,24 @@ const CourseUpdatePage = ({ }) => {
             <div className={formStyles.courseFormWrapper}>
                 <div className={formStyles.detailsForm}>
                     <h2>Course Details</h2>
-                    <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
-                        invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}
-                        defaultValue={formData.name} />
-                    <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
-                        invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
-                    <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
-                        placeholder='e.g. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
-                        helpText={invalidFields.get("semester")} />
+                    <div className={formStyles.inputContainer}>
+                        <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
+                            invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}
+                            defaultValue={formData.name} />
+                        <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
+                            invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
+                        <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
+                            placeholder='e.g. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
+                            helpText={invalidFields.get("semester")} />
+                    </div>
                     <div className={formStyles.datepickerContainer}>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <label htmlFor='start_date'>Start Date *</label>
-                            {/* <br /> */}
-                            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
-                                className={formStyles.datepicker}
-                                startDate={new Date()} />
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                            <label htmlFor='start-date'>Start Date *</label>
+                            <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange}/>
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <label htmlFor='end_date'>End Date *</label>
-                            {/* <br /> */}
-                            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
-                                className={formStyles.datepicker} />
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                            <label htmlFor='end-date'>End Date *</label>
+                            <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange}/>
                         </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>

@@ -74,6 +74,8 @@ const TextField = ({
                         color: theme.textColor,
                         backgroundColor: theme.inputFieldBackground,
                         borderRadius: '100px',
+                        // padding: '0.625rem 1rem',
+                        marginBottom: '0px'
                       },
                       // label text
                       "& .MuiInputLabel-outlined" : {
