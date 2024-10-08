@@ -1,16 +1,16 @@
-import React, {useState} from 'react'
-import DatePicker from 'react-datepicker'
+import React, {useState, useEffect} from 'react'
 import {ExpressValidationError} from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
+import { getCssVariables } from 'utils/theme.utils'
 
 import RequestService from 'services/request.service'
 import {useActionless} from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
 import Button from '@mui/material/Button'
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import DragDropFile from 'components/utils/dragDropFile'
 
 import {SET_ALERT} from 'redux/types/active.types'
@@ -19,8 +19,11 @@ import {applyMessageToErrorFields, removeClassFromField} from "../../../../utils
 import {useHistory, useParams} from 'react-router-dom'
 
 import formStyles from './assignmentFormPage.scss'
+import { Dayjs } from 'dayjs'
 
 const AssignmentCreatePage = () => {
+    const [theme, setTheme] = useState(getCssVariables())
+    const { textColor } = theme
     const [setAlert] = useActionless(SET_ALERT)
     const {courseId} = useParams<{ courseId: string }>()
     const history = useHistory()
@@ -39,6 +42,14 @@ const AssignmentCreatePage = () => {
     const [startDate, setStartDate] = useState(new Date())
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
+    useEffect(() => {
+        const observer = new MutationObserver(() => setTheme(getCssVariables()))
+    
+        observer.observe(document.body, { attributes: true })
+    
+        return () => observer.disconnect()
+      })
+
 
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
@@ -53,9 +64,24 @@ const AssignmentCreatePage = () => {
         setFormData(prevState => ({...prevState,disableHandins : e.target.checked}))
     }
 
-    const handleStartDateChange = (date : Date) => {setStartDate(date)}
-    const handleEndDateChange = (date : Date) => {setEndDate(date)}
-    const handleDueDateChange = (date: Date) => {setDueDate(date)}
+    const handleStartDateChange = (date : Dayjs | null) => {
+        if(date){
+            const newDate = date.toDate()
+            setStartDate(newDate)
+        }
+    }
+    const handleEndDateChange = (date : Dayjs | null) => {
+        if(date){
+            const newDate = date.toDate()
+            setEndDate(newDate)
+        }
+    }
+    const handleDueDateChange = (date: Dayjs | null) => {
+        if(date){
+            const newDate = date.toDate()
+            setDueDate(newDate)
+        }
+    }
 
     const handleSubmit = () => {
         const finalFormData = {
@@ -94,61 +120,90 @@ const AssignmentCreatePage = () => {
         <PageWrapper>
             <h2>Create Assignment</h2>
             <div className={formStyles.grid}>
-                <div className={formStyles.assignmentDropdown}>
-                    <h2>All Assignments</h2>
-                    <Accordion>
-                        <AccordionSummary>
-                            Dropdown 1
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            test
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion>
-                        <AccordionSummary>
-                            Dropdown 2
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            test
-                        </AccordionDetails>
-                    </Accordion>
-                </div>
                 <div className={formStyles.form}>
-                    <TextField id='name' onChange={handleChange} label={"Assignment Name*"}
-                            invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}/>
+                    <h2>Assignment Information</h2>
+                    <div className={formStyles.textFieldContainer}>
+                        <TextField id='name' className={formStyles.textField1} onChange={handleChange} label={"Assignment Name*"}
+                                invalidated={!!invalidFields.get("name")} 
+                                helpText={invalidFields.get("name")} 
+                                sx={{width:9/10}}
+                                />
 
-                    <TextField id='categoryName' onChange={handleChange} label={"Category Name*"}
-                            invalidated={!!invalidFields.get("categoryName")}
-                            helpText={invalidFields.get("categoryName")}/>
+                        <TextField id='categoryName' className={formStyles.textField2} onChange={handleChange} label={"Category Name*"}
+                                invalidated={!!invalidFields.get("categoryName")} 
+                                helpText={invalidFields.get("categoryName")} 
+                                sx={{width:9/10}}
+                                />
+                    </div>
 
-                    <TextField id='description' onChange={handleChange} label={"Description*"}
+                    <TextField id='description' className={formStyles.textArea} onChange={handleChange} label={"Description*"} multiline={true} rows={5}
                             invalidated={!!invalidFields.get("description")}
-                            helpText={invalidFields.get("description")}/>
+                            helpText={invalidFields.get("description")}
+                            sx={{width:1}}/>
 
-                    <TextField id='maxFileSize' onChange={handleChange} label={"Max File Size*"}
-                            invalidated={!!invalidFields.get("maxFileSize")}
-                            helpText={invalidFields.get("maxFileSize")}/>
+                    <div className={formStyles.textFieldContainer}>
+                        <TextField id='maxFileSize' className={formStyles.textField1} onChange={handleChange} label={"Max File Size*"}
+                                invalidated={!!invalidFields.get("maxFileSize")}
+                                helpText={invalidFields.get("maxFileSize")}
+                                sx={{width:9/10}}/>
 
-                    <TextField id='maxSubmission' onChange={handleChange} label={"Max Submission*"}
-                            invalidated={!!invalidFields.get("maxSubmission")}
-                            helpText={invalidFields.get("maxSubmission")}/>
-                    <br/>
+                        <TextField id='maxSubmission' className={formStyles.textField2} onChange={handleChange} label={"Max Submission*"}
+                                invalidated={!!invalidFields.get("maxSubmission")}
+                                helpText={invalidFields.get("maxSubmission")}
+                                sx={{width:9/10}}/>
+                    </div>
 
                     <div className={formStyles.datepickerContainer}>
                         <div>
-                            <label htmlFor='start_date'>Start Date *</label>
-                            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
-                                        className={formStyles.datepicker}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker label="Start Date*" onChange={handleStartDateChange} className={formStyles.datepicker_start}
+                                sx={{
+                                    width: 1,
+                                    "& .MuiOutlinedInput-input" : {
+                                        color: textColor
+                                      },
+                                      "& .MuiInputLabel-outlined" : {
+                                        color: textColor
+                                      },
+                                      "& .MuiOutlinedInput-notchedOutline" : {
+                                        borderColor: textColor
+                                      }
+                                    }}/>
+                            </LocalizationProvider>
                         </div>
                         <div>
-                            <label htmlFor='due_date'>Due Date *</label>
-                            <DatePicker id='due_date' selected={dueDate} onChange={handleDueDateChange}
-                                        className={formStyles.datepicker}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker label="Due Date*" onChange={handleDueDateChange} className={formStyles.datepicker_due}
+                                sx={{
+                                    width: 1,
+                                    "& .MuiOutlinedInput-input" : {
+                                        color: textColor
+                                      },
+                                      "& .MuiInputLabel-outlined" : {
+                                        color: textColor
+                                      },
+                                      "& .MuiOutlinedInput-notchedOutline" : {
+                                        borderColor: textColor
+                                      }
+                                    }}/>
+                            </LocalizationProvider>
                         </div>
                         <div>
-                            <label htmlFor='end_date'>End Date *</label>
-                            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
-                                        className={formStyles.datepicker}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker label="End Date*" onChange={handleEndDateChange} className={formStyles.datepicker_end}
+                                sx={{
+                                    width: 1,
+                                    "& .MuiOutlinedInput-input" : {
+                                        color: textColor
+                                      },
+                                      "& .MuiInputLabel-outlined" : {
+                                        color: textColor
+                                      },
+                                      "& .MuiOutlinedInput-notchedOutline" : {
+                                        borderColor: textColor
+                                      }
+                                    }}/>
+                            </LocalizationProvider>
                         </div>
                     </div>
                     <br/>
@@ -157,6 +212,7 @@ const AssignmentCreatePage = () => {
                         <input type='checkbox' id='disableHandins' checked={formData.disableHandins}
                             onChange={handleCheckbox} className={formStyles.submitBtn}/>
                     </div>
+                    <br/>
                     <div style={{display: 'flex', justifyContent: 'center'}}>
                         <Button variant='contained' onClick={handleSubmit} className={formStyles.submitBtn}>Create
                             assignment</Button>
@@ -167,8 +223,6 @@ const AssignmentCreatePage = () => {
                     <p>Add up to 5 attachments with this assignment:</p>
                     <br/><br/><br/>
                     <DragDropFile/>
-                </div>
-                <div className={formStyles.formButtons}>
                 </div>
             </div>
 
