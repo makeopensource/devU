@@ -110,34 +110,32 @@ const CourseUpdatePage = ({ }) => {
                     <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
                         invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
                     <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
-                        placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
+                        placeholder='e.g. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
                         helpText={invalidFields.get("semester")} />
                     <div className={formStyles.datepickerContainer}>
-                        <div>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <label htmlFor='start_date'>Start Date *</label>
-                            <br />
+                            {/* <br /> */}
                             <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
                                 className={formStyles.datepicker}
                                 startDate={new Date()} />
                         </div>
-                        <div>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <label htmlFor='end_date'>End Date *</label>
-                            <br />
+                            {/* <br /> */}
                             <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
                                 className={formStyles.datepicker} />
                         </div>
                     </div>
-                    <br />
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        {/* <Button variant='contained' onClick={handleCourseUpdate} className={formStyles.submitBtn}>Update Course</Button> */}
                         <button className='btnPrimary' onClick={handleCourseUpdate}>Update Course</button>
                     </div>
                 </div>
                 <div className={formStyles.addDropForm}>
                     <h2>Add/Drop Students</h2>
                     <TextField id='ubit' label={"UBIT*"} onChange={handleChange}
-                        placeholder='Ex. 13045829' invalidated={!!invalidFields.get("ubit")} helpText={invalidFields.get("ubit")} />
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        placeholder='e.g. hartloff' invalidated={!!invalidFields.get("ubit")} helpText={invalidFields.get("ubit")} />
+                    <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 'auto', gap: '1rem'}}>
                         <button className='btnPrimary' onClick={handleAddStudent}>Add Student</button>
                         <button className='btnDelete' onClick={handleDropStudent}>Drop Student</button>
                     </div>

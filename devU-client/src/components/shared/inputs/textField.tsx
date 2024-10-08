@@ -52,7 +52,7 @@ const TextField = ({
     if (onChange) onChange(e.target.value, e)
   }
 
-  const { textColor } = theme
+  // const { textColor } = theme
 
   return (
     <div className={`${styles.textField} ${className}`}>
@@ -71,15 +71,17 @@ const TextField = ({
                       ...sx,
                       // input field text
                       "& .MuiOutlinedInput-input" : {
-                        color: textColor
+                        color: theme.textColor,
+                        backgroundColor: theme.inputFieldBackground,
+                        borderRadius: '100px',
                       },
                       // label text
                       "& .MuiInputLabel-outlined" : {
-                        color: textColor
+                        color: theme.inputFieldLabel,
                       },
                       // border
                       "& .MuiOutlinedInput-notchedOutline" : {
-                        borderColor: textColor
+                        border: 'none',
                       },
 
                     }}

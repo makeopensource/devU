@@ -16,9 +16,6 @@
 
 .detailsForm {
   @extend .form;
-  // background-color: $list-item-background;
-  // border-radius: 20px;
-  // padding: 30px;
   width: 70%;
   margin: 0;
 }
@@ -27,6 +24,8 @@
   @extend .form;
   width: 30%;
   margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .datepickerContainer {

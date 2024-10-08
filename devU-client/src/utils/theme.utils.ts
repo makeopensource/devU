@@ -57,12 +57,16 @@ export function getCssVariables() {
     secondary: body.getPropertyValue('--secondary'),
     secondaryDarker: body.getPropertyValue('--secondary-darker'),
 
+    inputFieldBackground: body.getPropertyValue('--input-field-background'),
+    inputFieldLabel: body.getPropertyValue('--input-field-label'),
+
     focus: body.getPropertyValue('--focus'),
 
     // Other CSS colors
     greyLightest: body.getPropertyValue('--grey-lightest'),
     greyLighter: body.getPropertyValue('--grey-lighter'),
     grey: body.getPropertyValue('--grey'),
+    greyDark: body.getPropertyValue('--grey-dark'),
 
     blueLighter: body.getPropertyValue('--blue-lighter'),
     blue: body.getPropertyValue('--blue'),

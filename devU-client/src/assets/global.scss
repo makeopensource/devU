@@ -15,6 +15,11 @@
 
   h1 {
     margin: 2.25rem auto;
+    text-align: center;
+  }
+
+  h2 {
+    text-align: center;
   }
 
   // general button template, extends to 3 types of buttons - primary, secondary, delete
@@ -82,10 +87,14 @@
     --btn-delete-background: #FFF;
     --btn-delete-text: var(--red);
 
+    --input-field-background: var(--grey-lightest);
+    --input-field-label: var(--grey);
+
     // Non theme colors - will not update with light/dark toggle
-    --grey-lightest: #dfe6e9;
-    --grey-lighter: #b2bec3;
-    --grey: #636e72;
+    --grey-lightest: #e5e5e5;
+    --grey-lighter: #c5c5c5;
+    --grey: #555555;
+    --grey-dark: #333333; 
 
     --blue-lighter: #74b9ff;
     --blue: #0984e3;
@@ -132,6 +141,9 @@
     --btn-delete-border: var(--red-lighter);
     --btn-delete-background: var(--red);
     --btn-delete-text: #FFF;
+
+    --input-field-background: var(--grey);
+    --input-field-label: var(--grey-lightest);
 
     background-color: var(--background);
     color: var(--text-color);
