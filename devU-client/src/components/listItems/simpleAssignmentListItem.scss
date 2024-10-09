@@ -18,10 +18,13 @@
   display: flex;
   text-decoration: none;
   gap: 1rem;
+  font-size:12px;
+  font-weight: 600;
 }
 
 .subText {
-  font-size: 1rem;
+  font-size: 12px;
+  font-weight: 600;
   display: grid;
   justify-content: space-between;
   gap: 1.5rem;
@@ -41,14 +44,14 @@
   display: flex;
   flex-direction: column;
 
-  background: $list-simple-item-background;
+
   border-radius: 0.6rem;
 
-  padding: 0.5rem;
+ 
 
   transition: background-color 0.2s linear;
 
-  color: $text-color;
+  color: #52468A;
 
   &:hover,
   &:focus {

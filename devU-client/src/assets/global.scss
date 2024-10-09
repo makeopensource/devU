@@ -51,7 +51,7 @@
   }
 
   body {
-    font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
+    font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     text-size-adjust: 100%;
@@ -60,12 +60,16 @@
     color: var(--text-color);
 
     --background: white;
-    --text-color: black;
+    --text-color: #52468A;
     --text-color-secondary: #363636;
     --focus: #38c172;
 
     --primary-lighter: #41a8f7;
-    --primary: #52468A;
+
+//     --primary: #52468A;
+
+    --primary: #D9D9D9;
+
     --primary-darker: #054272;
     --secondary-lighter: #cfd1d1;
     --secondary: #a8abab;
@@ -116,12 +120,17 @@
 
   body.dark-mode {
     --background: #1b1f20;
-    --text-color: white;
+    --text-color: #D9D9D9;
     --text-color-secondary: #9b9b9b;
 
     --primary-lighter: #3796bc;
-    --primary: #7257EB;
-    --primary-darker: #2F2363;
+
+//     --primary: #7257EB;
+//     --primary-darker: #2F2363;
+
+    --primary: #636666;
+    --primary-darker: #133441;
+
     --secondary-lighter: #636666;
     --secondary: #3d3f3f;
     --secondary-darker: #1f2020;

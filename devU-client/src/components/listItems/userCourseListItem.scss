@@ -2,8 +2,45 @@
 
 .name {
   font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
+  font-weight: 600;
+  margin: 0; 
+  padding: 15px; /* Add padding to the text inside the name block */
+  background: #b5acdd; /* Background color for the name area */
+  width: 100%; /* Make sure it spans the entire width of the card */
+  text-align: center; 
+  color: #52468a; 
+  border-radius: 5px 5px 0 0; 
+  box-sizing: border-box;
+}
+
+.No_assignments
+{ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-grow: 1;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius:5px;
+  padding: 10px;
+  flex-wrap: wrap;
+  color:#52468A;
+}
+.Buttons{
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  margin-top: auto;
+}
+.gradebook_button ,.coursepage_button {
+  border: 0;
+  color: #52468A; 
+  background: none;
+  font-weight: 600;
+  margin-left: 15px;
+  padding: 10px;
+  cursor: pointer;
 }
 
 .tag {
@@ -43,28 +80,25 @@
 .container {
   text-decoration: none;
 
-  display: flex;
-  flex-direction: row;
-
-  background: $list-item-background;
   border-radius: 0.6rem;
 
-  padding: 1.5rem;
+  padding: 5px;
 
   margin-bottom: 1rem;
 
-  transition: background-color 0.2s linear;
 
   color: $text-color;
 
-  &:hover,
-  &:focus {
-    background: $list-item-background-hover;
-  }
 }
 
 @media (max-width: $medium) {
   .subText {
     display: block;
   }
+  .Buttons {
+    flex-direction: row; 
+    justify-content: space-between; 
+    padding: 10px;
+    margin-top: auto; 
+}
 }
