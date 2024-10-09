@@ -1,23 +1,29 @@
 @import 'variables';
 
 
-h1 {
+h2 {
   text-align: center;
 }
+
+p {
+  text-align: center;
+}
+
 .form {
-  background-color: $list-item-background;
+    background-color: $list-item-background;
+    grid-area: 1 / 1 / 2 / 2;
     border-radius: 10px;
     padding: 20px;
-    width: 50%;
-    left: 0; 
-    right: 0; 
     margin-left: auto; 
-    margin-right: auto; 
+    margin-right: 0; 
   }
 
   .datepickerContainer {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 0px; 
     width: 100%;
   }
 
@@ -27,29 +33,67 @@ h1 {
     align-items: center;
 }
 
-.smallLine {
-    width: 50px; /* adjust this value to set the length of the small line */
-    border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-    margin-right: 10px; /* adjust this value to set the space between the line and the text */
+.datepicker_start {
+  grid-area: 1 / 1 / 2 / 2;
+}
+.datepicker_due {
+  grid-area: 1 / 2 / 2 / 3;
+}
+.datepicker_end {
+  grid-area: 1 / 3 / 2 / 4;
 }
 
-.largeLine {
-    flex-grow: 1;
-    border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-    margin-left: 10px; /* adjust this value to set the space between the line and the text */
-    margin-right: 10px; /* add this line to create some space between the line and the button */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 0.75fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px; 
+  width: 100%;
 }
 
-.datepicker {
-  font: inherit;
-  letter-spacing: inherit;
-  box-sizing: content-box;
-  background: none;
-  height: 1.4375em;
-  -webkit-tap-highlight-color: transparent;
-  width: 85%;
-  animation-duration: 10ms;
-  padding: 16.5px 14px;
-  border: 1px solid #bbbbbb;
-  border-radius: 4px;
+.dragDropFile {
+  grid-area: 1 / 2 / 2 / 3;
+  padding: 20px;
+  background-color: $list-item-background;
+  border-radius: 10px;
+  margin-left: 0; 
+  margin-right: auto;
+}
+
+.textField1 {
+  width: 50%;
+  margin-right: 5%;
+  flex-shrink: 0;
+  flex-direction: none;
+}
+
+.textField2 {
+  width: 50%;
+  flex-shrink: 0;
+  flex-direction: none;
+}
+
+.textFieldContainer {
+  display:flex;
+  width: 100%;
+}
+
+.textArea {
+  width: 100%;
+  flex-direction: none;
+}
+
+.fileNameContainer {
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+}
+
+.fileName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

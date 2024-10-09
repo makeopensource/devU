@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {TextField as MuiTextField} from '@mui/material'
+import { SxProps, Theme } from '@mui/material'
+
+import { getCssVariables } from 'utils/theme.utils'
 import styles from './textField.scss'
 
 type Props = {
@@ -16,6 +19,9 @@ type Props = {
   invalidated?: boolean
   helpText?: string
   variant?: 'outlined' | 'standard' | 'filled'
+  sx?: SxProps<Theme>
+  multiline?: boolean
+  rows?: number
 }
 
 const TextField = ({
@@ -29,11 +35,29 @@ const TextField = ({
   value,
   invalidated,
   helpText,
-  variant = 'outlined'
+  variant = 'outlined',
+  sx,
+  multiline,
+  rows,
 }: Props) => {
+  const [theme, setTheme] = useState(getCssVariables())
+
+  // Needs a custom observer to force an update when the css variables change
+  // Custom observer will update the theme variables when the bodies classes change
+  useEffect(() => {
+    const observer = new MutationObserver(() => setTheme(getCssVariables()))
+
+    observer.observe(document.body, { attributes: true })
+
+    return () => observer.disconnect()
+  })
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) onChange(e.target.value, e)
   }
+
+  const { textColor } = theme
+
   return (
     <div className={`${styles.textField} ${className}`}>
       <MuiTextField {...invalidated && {error: true}}
@@ -46,7 +70,27 @@ const TextField = ({
                     label={label}
                     defaultValue={defaultValue}
                     value={value}
-                    onChange={handleChange}/>
+                    onChange={handleChange}
+                    sx={{
+                      ...sx,
+                      // input field text
+                      "& .MuiOutlinedInput-input" : {
+                        color: textColor
+                      },
+                      // label text
+                      "& .MuiInputLabel-outlined" : {
+                        color: textColor
+                      },
+                      // border
+                      "& .MuiOutlinedInput-notchedOutline" : {
+                        borderColor: textColor
+                      },
+
+                    }}
+                    {...multiline && { multiline: true }}
+                    {...multiline && rows && { minRows: rows }}
+                    {...multiline && rows && { maxRows: rows }}
+                    />
     </div>
   )
 }
