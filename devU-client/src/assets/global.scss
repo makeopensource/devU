@@ -62,7 +62,7 @@
     --background: #FFF;
     --text-color: #000;
     --text-color-secondary: #363636;
-    --focus: #38c172;
+    --focus: var(--blue);
 
     --primary-lighter: #41a8f7;
 
@@ -123,6 +123,7 @@
     --background: #1e1e1e;
     --text-color: #FFF;
     --text-color-secondary: #9b9b9b;
+    --focus: var(--blue-lighter);
 
     --primary-lighter: #3796bc;
 

@@ -80,6 +80,9 @@ const TextField = ({
                       // label text
                       "& .MuiInputLabel-outlined" : {
                         color: theme.inputFieldLabel,
+                        "&.Mui-focused": {
+                          color: theme.focus, // Define this color in your theme
+                        },
                       },
                       // border
                       "& .MuiOutlinedInput-notchedOutline" : {
