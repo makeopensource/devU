@@ -88,13 +88,12 @@ const CourseUpdatePage = ({ }) => {
 
     const handleAddStudent = () => {
         // TODO: get user id by getting email and calling /users --> search through /users --> 
-        // RequestService.put(`/api/courses/${courseId}/users-courses/${id}:`,
-        
+        // RequestService.post(`/api/courses/${courseId}/users-courses/${id}:`,
     }
 
     const handleDropStudent = () => {
-        
-       
+        // get user id by getting email and calling /users --> search through /users --> 
+        // RequestService.delete(`/api/courses/${courseId}/users-courses/${id}:`,  
     }
 
 
