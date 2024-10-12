@@ -86,10 +86,15 @@ const CourseUpdatePage = ({ }) => {
             })
     }
 
+    // const handleFileUpload = () => {
+        // if file uploaded parse file to grab all student emails
+        // note: accepted filetype (enforced by frontend) is csv
+        // for each email parsed from file, call handle add or drop student as needed
+    // }
+
     const handleAddStudent = () => {
         // TODO: get user id by getting email and calling /users --> search through /users --> 
-        // RequestService.put(`/api/courses/${courseId}/users-courses/${id}:`,
-        
+        // RequestService.post(`/api/courses/${courseId}/users-courses/${id}:`,
     }
 
     const handleDropStudent = () => {
@@ -132,7 +137,9 @@ const CourseUpdatePage = ({ }) => {
                     <h2>Add/Drop Students</h2>
                     <TextField id='ubit' label={"UBIT*"} onChange={handleChange}
                         placeholder='e.g. hartloff' invalidated={!!invalidFields.get("ubit")} helpText={invalidFields.get("ubit")} />
-                    <input type="file" id="addDropFile" />
+                    <label htmlFor="addDropFile">Add multiple students by uploading a CSV file below</label>
+                    {/* csv should be a good standard filetype */}
+                    <input type="file" accept='.csv' id="addDropFile" />
                     <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 'auto', gap: '1rem'}}>
                         <button className='btnPrimary' onClick={handleAddStudent}>Add Student</button>
                         <button className='btnDelete' onClick={handleDropStudent}>Drop Student</button>
