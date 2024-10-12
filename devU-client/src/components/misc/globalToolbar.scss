@@ -16,7 +16,7 @@ $font-size: 16px;
   @extend .flex;
 
   text-decoration: none;
-  color: #d9d9d9;
+  color: #FFF;
   font-size: $font-size;
   margin:3vw;
   height: 4vh;
@@ -36,13 +36,12 @@ $font-size: 16px;
 
   font-size: 40px;
   border-radius: 30px;
-  color: #D9D9D9;
   font-weight: 550;
 }
 
 .bar {
   height: 60px;
-  background-color: #52468A;
+  background-color: $primary;
   @extend .flex;
   justify-content: space-between;
 }
@@ -59,7 +58,7 @@ $font-size: 16px;
 
 // Controls turning the menu options into a sidebar
 // As well as whether or not that sidebar is being shown
-@media (max-width: 300px) {
+@media (max-width: 410px) {
   .flex {
     gap: 1rem;
    
