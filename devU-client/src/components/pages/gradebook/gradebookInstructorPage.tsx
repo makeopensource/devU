@@ -18,7 +18,7 @@ type TableProps = {
     assignmentScores: AssignmentScore[]
 }
 type RowProps = {
-    index: Number
+    index: number
     user: User
     userCourse: UserCourse
     assignments: Assignment[]
@@ -26,8 +26,11 @@ type RowProps = {
 }
 
 const TableRow = ({index, user, userCourse, assignments, assignmentScores}: RowProps) => {
+    // TODO: style table row to alternating colors based on index odd?even
+    const rowClass = index % 2 === 0 ? 'even-row' : 'odd-row';
+
     return (
-        <tr>
+        <tr className={rowClass}>
             <td>{index}</td>
             <td>{user.email}</td>
             <td>{user.externalId}</td>
@@ -42,7 +45,7 @@ const TableRow = ({index, user, userCourse, assignments, assignmentScores}: RowP
 
 const GradebookTable = ({users, userCourses, assignments, assignmentScores}: TableProps) => {
     return (
-        <table>
+        <table className={styles.instrGradesTable}>
             <th>#</th> 
             <th>Email</th>
             <th>External ID</th>
@@ -106,9 +109,9 @@ const GradebookInstructorPage = () => {
 
     return (
         <PageWrapper>
-            <div className={styles.header}>
-                <h1>Instructor Gradebook</h1>
-            </div>
+            {/* <div className={styles.header}> */}
+            <h1>Instructor Gradebook</h1>
+            {/* </div> */}
             <div>
                 <GradebookTable 
                     users={users}
