@@ -30,7 +30,18 @@ const CourseDetailPage = () => {
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     const [setAlert] = useActionless(SET_ALERT)
+    const[User, setUser]= useState < User <string>,preferredName>>({})
+
    // const role = useAppSelector((store) => store.roleMode)
+    const fetchUserinfo = async () => {
+        RequestService.get< typeof User>('api/users')
+            .then((User) =>{
+                setUser(User)
+
+    })
+
+
+
     const fetchCourseInfo = async () => {
         RequestService.get<Course>(`/api/courses/${courseId}`)
         .then((course) => {
@@ -74,16 +85,19 @@ const CourseDetailPage = () => {
 
     useEffect(() => {
         fetchCourseInfo()
+        fetchUserinfo()
     }, [])
     const history = useHistory()
     return(
         <PageWrapper>
+            <div className={styles.courseDetailPage}>
 
             {courseInfo ? (
                 <div>
+
                         <div className={styles.header}>
-                            <h1>{courseInfo.name}</h1>
-                            <h2> Section: </h2>
+                            <h1>{courseInfo.name}-{courseInfo.semester}</h1>
+                            <h2> Instructor:{User.name} </h2>
                             <div style={{display: 'flex', justifyContent: 'space-between'}}>
 
 
@@ -112,14 +126,13 @@ const CourseDetailPage = () => {
                              </div>
 
 
+
                             <div className={styles.coursesContainer}>
-
-
                             {Object.keys(categoryMap).map((category, index) => (
 
                                 <Card key={index} className={styles.courseCard}>
                                     <CardContent>
-                                        <Typography variant="h5" className={styles.color}>
+                                        <Typography variant="h5" className={styles.color} style={{ textAlign: 'center' }}>
                                             {category}
                                         </Typography>
                                     </CardContent>
@@ -129,7 +142,23 @@ const CourseDetailPage = () => {
                                                 <ListItemButton onClick={() => {
                                                     history.push(`/course/${courseId}/assignment/${assignment.id}`)
                                                 }}>
-                                                    <ListItemText primary={assignment.name}/>
+                                                    <ListItemText primary={assignment.name}
+                                                                  secondary={
+                                                                      <React.Fragment>
+                                                                          <Typography
+                                                                              sx={{ display: 'inline' }}
+                                                                              component="span"
+                                                                              variant="body2"
+                                                                              color="text.primary"
+                                                                          >
+                                                                              Start Date: {new Date(assignment.startDate).toLocaleDateString()}
+                                                                              <br /> {/* Add a line break */}
+                                                                              Due Date: {new Date(assignment.dueDate).toLocaleDateString()}
+                                                                          </Typography>
+                                                                      </React.Fragment>
+                                                                  }
+                                                    />
+
                                                 </ListItemButton>
                                             </ListItem>
                                         ))}
@@ -147,6 +176,7 @@ const CourseDetailPage = () => {
                     ) : (
                     <h1>Error fetching Course Information</h1>
                     )}
+            </div>
                 </PageWrapper>
             )
             }
