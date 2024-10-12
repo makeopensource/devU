@@ -26,7 +26,7 @@ type RowProps = {
 }
 
 const TableRow = ({index, user, userCourse, assignments, assignmentScores}: RowProps) => {
-    // TODO: style table row to alternating colors based on index odd?even
+    // style table row to alternating colors based on index odd?even
     const rowClass = index % 2 === 0 ? 'evenRow' : 'oddRow';
 
     return (

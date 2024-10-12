@@ -51,5 +51,9 @@ th {
   background-color: $primary;
   color: #FFF;
   font-weight: 600;
-  padding: 0 10px;
+}
+
+td, th {
+  padding: 10px;
+  text-align: center;
 }
