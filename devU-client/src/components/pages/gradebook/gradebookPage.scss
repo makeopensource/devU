@@ -1,6 +1,7 @@
 @import 'variables';
 
 .header {
+  // not necessary since header styling is now global
   color: $text-color;
   display: flex;
   align-items: center;
@@ -28,6 +29,27 @@
   margin-right: 10px; /* add this line to create some space between the line and the button */
 }
 
+.tableWrapper {
+  padding: 0 100px;
+}
+
 table {
   border-radius: 20px;
+  margin: 15px auto;
+  border-collapse: collapse;
+}
+
+tr.evenRow {
+  background-color: $table-row-even;
+}
+
+tr.oddRow {
+  background-color: $table-row-odd;
+}
+
+th {
+  background-color: $primary;
+  color: #FFF;
+  font-weight: 600;
+  padding: 0 10px;
 }

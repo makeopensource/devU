@@ -27,10 +27,10 @@ type RowProps = {
 
 const TableRow = ({index, user, userCourse, assignments, assignmentScores}: RowProps) => {
     // TODO: style table row to alternating colors based on index odd?even
-    const rowClass = index % 2 === 0 ? 'even-row' : 'odd-row';
+    const rowClass = index % 2 === 0 ? 'evenRow' : 'oddRow';
 
     return (
-        <tr className={rowClass}>
+        <tr className={styles[rowClass]}>
             <td>{index}</td>
             <td>{user.email}</td>
             <td>{user.externalId}</td>
@@ -112,7 +112,7 @@ const GradebookInstructorPage = () => {
             {/* <div className={styles.header}> */}
             <h1>Instructor Gradebook</h1>
             {/* </div> */}
-            <div>
+            <div className={styles.tableWrapper}>
                 <GradebookTable 
                     users={users}
                     userCourses={userCourses}

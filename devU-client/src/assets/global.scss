@@ -94,11 +94,15 @@
     --input-field-background: var(--grey-lightest);
     --input-field-label: var(--grey);
 
+    --table-row-even: var(--grey-lighter);
+    --table-row-odd: var(--grey-lightest);
+
     // Non theme colors - will not update with light/dark toggle
     --grey-lightest: #e5e5e5;
     --grey-lighter: #c5c5c5;
     --grey: #555555;
-    --grey-dark: #333333; 
+    --grey-darker: #444444;
+    --grey-darkest: #333333; 
 
     --blue-lighter: #78B7FF;
     --blue: #1F3D7A;
@@ -155,6 +159,9 @@
 
     --input-field-background: var(--grey);
     --input-field-label: var(--grey-lightest);
+
+    --table-row-even: var(--grey-darker);
+    --table-row-odd: var(--grey-darkest);
 
     background-color: var(--background);
     color: var(--text-color);
