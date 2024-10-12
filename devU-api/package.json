@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "DevU API",
   "scripts": {
-    "start": "ts-node-dev src/index.ts",
-    "update-shared": "npm update devu-shared-modules",
+    "start": "npm run typeorm -- migration:run -d src/database.ts && ts-node-dev src/index.ts",
+    "update-shared": "cd ../devU-shared && npm run build-local && npm i",
     "typeorm": "typeorm-ts-node-commonjs",
     "test": "jest --passWithNoTests",
     "clean": "rimraf build/*",
@@ -12,10 +12,9 @@
     "build": "npm-run-all clean lint",
     "format": "prettier --write \"./**/*.{js,ts,json,md}\"",
     "pre-commit": "lint-staged",
-    "generate-config": "docker run --pull always -v $(pwd)/config:/config --user $(id -u):$(id -g) --rm ubautograding/devtools /generateConfig.sh config/default.yml",
     "populate-db": "ts-node-dev ./scripts/populate-db.ts",
     "tango": "ts-node-dev ./src/tango/tests/tango.endpoint.test.ts",
-    "api-services": "docker compose -f ../docker-compose.yml --profile dev-api up -d",
+    "api-services": "docker compose -f ../docker-compose.yml --profile dev-api up",
     "api-services-stop": "docker compose -f ../docker-compose.yml --profile dev-api stop"
   },
   "lint-staged": {
