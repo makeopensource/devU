@@ -1,4 +1,5 @@
 // Libraries
+import multer from 'multer'
 import express from 'express'
 
 // Middleware
@@ -10,6 +11,7 @@ import AssignmentsController from './assignment.controller'
 import { isAuthorized, isAuthorizedByAssignmentStatus } from '../../authorization/authorization.middleware'
 
 const Router = express.Router({ mergeParams: true })
+const upload = multer()
 
 /**
  * @swagger
@@ -50,6 +52,38 @@ Router.get('/released', isAuthorized('assignmentViewReleased'), AssignmentsContr
  *           type: integer
  */
 Router.get('/', isAuthorized('assignmentViewAll'), AssignmentsController.getByCourse)
+
+/**
+ * @swagger
+ * /course/:courseId/assignments/attachments/{assignmentId}/{filename}:
+ *   get:
+ *     summary: Retrieve attachments for a assignments
+ *     tags:
+ *       - Assignments
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         description: Enter course id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *      - name: assignmentId
+ *         in: path
+ *         description: Enter assignment id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *      - name: filename
+ *         in: path
+ *         description: Enter filename to retrieve
+ *         required: true
+ *         schema:
+ *           type: string
+ */
+Router.get('/attachments/:assignmentId/:filename', isAuthorizedByAssignmentStatus, AssignmentsController.handleAttachmentLink)
 
 /**
  * @swagger
@@ -100,7 +134,9 @@ Router.get('/:assignmentId', asInt('assignmentId'), isAuthorizedByAssignmentStat
  *           schema:
  *             $ref: '#/components/schemas/Assignment'
  */
-Router.post('/', isAuthorized('assignmentEditAll'), validator, AssignmentsController.post)
+
+
+Router.post('/', isAuthorized('assignmentEditAll'), upload.array('files'), validator, AssignmentsController.post)
 
 /**
  * @swagger
@@ -135,7 +171,7 @@ Router.put(
   isAuthorized('assignmentEditAll'),
   asInt('assignmentId'),
   validator,
-  AssignmentsController.put
+  AssignmentsController.put,
 )
 
 /**

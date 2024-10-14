@@ -95,4 +95,10 @@ export default class AssignmentModel {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date
+
+  @Column({ name: 'attachmentsHashes', array: true, default: [], type: 'text' })
+  attachmentsHashes: string[]
+
+  @Column({ name: 'attachmentsFilenames', array: true, default: [], type: 'text', nullable: false })
+  attachmentsFilenames: string[]
 }
