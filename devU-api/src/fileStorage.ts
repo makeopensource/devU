@@ -6,6 +6,7 @@ export enum BucketNames {
   GRADERS = 'graders',
   SUBMISSIONS = 'submissions',
   MAKEFILES = 'makefiles',
+  ASSIGNMENTSATTACHMENTS = 'assignmentattachments'
 }
 
 const minioConfiguration: Minio.ClientOptions = {
@@ -43,7 +44,7 @@ export async function initializeMinio(inputBucketName?: string) {
 
 export async function uploadFile(bucketName: string, file: Express.Multer.File, filename: string): Promise<string> {
   try {
-    const objInfo = await minioClient.putObject(bucketName, filename, file.buffer)
+    const objInfo = await minioClient.putObject(bucketName, filename, file.buffer, file.size)
     return objInfo.etag
   } catch (err: Error | any) {
     if (err) {
