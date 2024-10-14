@@ -1,0 +1,4 @@
+{
+  "name": "devu",
+  "workspaces": ["devU-shared", "devU-api", "devU-client"]
+}
