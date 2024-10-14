@@ -1,26 +1,44 @@
 @import 'variables';
 
+.courseFormWrapper {
+  display: flex;
+  margin: 16px 50px;
+  gap: 30px;
+}
+
 .form {
   background-color: $list-item-background;
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 30px;
   width: 50%;
-  left: 0; 
-  right: 0; 
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+}
 
+.detailsForm {
+  @extend .form;
+  width: 70%;
+  margin: 0;
+}
+
+.addDropForm {
+  @extend .form;
+  width: 30%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .datepickerContainer {
   display: flex;
   justify-content: space-between;
-}
-
-
-.submitBtn {
-  display: flex;
-  justify-content: center;
+  margin: 10px auto;
+  gap: 10px
 }
 
 .datepicker {
@@ -36,4 +54,39 @@
   padding: 16.5px 14px;
   border: 1px solid #bbbbbb;
   border-radius: 4px;
+}
+
+input[type='date'] {
+  height: 20px;
+  background-color: $input-field-background;
+  color: $input-field-label;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 100px;
+}
+
+input[type='file']::file-selector-button {
+  background-color: $primary;
+  border-radius: 100px;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+}
+
+// MEDIA QUERIES
+@media (max-width: 800px) {
+  .courseFormWrapper {
+    margin: 16px;
+    flex-direction: column;
+  }
+
+  .detailsForm, .addDropForm {
+    width: auto; // take up full container
+  }
+}
+
+@media (max-width: 450px) {
+  .datepickerContainer {
+    flex-direction: column;
+  }
 }
