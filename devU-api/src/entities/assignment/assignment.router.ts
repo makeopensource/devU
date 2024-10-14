@@ -11,7 +11,7 @@ import AssignmentsController from './assignment.controller'
 import { isAuthorized, isAuthorizedByAssignmentStatus } from '../../authorization/authorization.middleware'
 
 const Router = express.Router({ mergeParams: true })
-const upload = multer()
+const upload = multer({ limits: { fileSize: 1024 * 1024 * 5 } }) // 5MB file size limit
 
 /**
  * @swagger
