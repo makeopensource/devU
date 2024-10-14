@@ -50,6 +50,14 @@ export default class AssignmentModel {
    *          type: string
    *          format: date-time
    *          description: Must be in ISO 8601 format
+   *        fileHashes:
+   *          type: string
+   *          array: true
+   *          description: filename hashes of stored attachments use this to retrieve and query attachments, matches the index of the fileNames, i.e. filename[i] is the name of hash[i]
+   *        fileNames:
+   *          type: string
+   *          array: true
+   *          description: filenames of stored attachments, matches the index of the fileHashes, i.e. filename[i] is the name of hash[i]
    */
 
   @PrimaryGeneratedColumn()

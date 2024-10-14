@@ -57,12 +57,16 @@ Router.get('/', isAuthorized('assignmentViewAll'), AssignmentsController.getByCo
  * @swagger
  * /course/:courseId/assignments/attachments/{assignmentId}/{filename}:
  *   get:
- *     summary: Retrieve attachments for a assignments
+ *     summary: Retrieve an attachment for assignment
  *     tags:
  *       - Assignments
  *     responses:
  *       '200':
  *         description: OK
+ *       '400':
+ *         description: Missing the 'assignment id' or 'course id' or 'filename'
+ *       '404':
+ *         description: file not found or not part of the assigment
  *     parameters:
  *       - name: courseId
  *         in: path
@@ -70,15 +74,15 @@ Router.get('/', isAuthorized('assignmentViewAll'), AssignmentsController.getByCo
  *         required: true
  *         schema:
  *           type: integer
- *      - name: assignmentId
+ *       - name: assignmentId
  *         in: path
  *         description: Enter assignment id
  *         required: true
  *         schema:
  *           type: integer
- *      - name: filename
+ *       - name: filename
  *         in: path
- *         description: Enter filename to retrieve
+ *         description: Enter filename hash
  *         required: true
  *         schema:
  *           type: string
