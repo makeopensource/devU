@@ -140,7 +140,7 @@ Router.get('/:assignmentId', asInt('assignmentId'), isAuthorizedByAssignmentStat
  */
 
 
-Router.post('/', isAuthorized('assignmentEditAll'), upload.array('files'), validator, AssignmentsController.post)
+Router.post('/', isAuthorized('assignmentEditAll'), upload.array('files', 5), validator, AssignmentsController.post)
 
 /**
  * @swagger
