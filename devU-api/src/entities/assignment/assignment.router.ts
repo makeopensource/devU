@@ -174,6 +174,7 @@ Router.put(
   '/:assignmentId',
   isAuthorized('assignmentEditAll'),
   asInt('assignmentId'),
+  upload.array('files', 5),
   validator,
   AssignmentsController.put,
 )

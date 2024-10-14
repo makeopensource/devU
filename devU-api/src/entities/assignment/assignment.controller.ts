@@ -130,7 +130,10 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
-    req.body['attachments'] = await processFiles(req)
+    const { fileNames, fileHashes } = await processFiles(req)
+
+    req.body['attachmentsFilenames'] = fileNames
+    req.body['attachmentsHashes'] = fileHashes
 
     req.body.id = parseInt(req.params.assignmentId)
     const results = await AssignmentService.update(req.body)

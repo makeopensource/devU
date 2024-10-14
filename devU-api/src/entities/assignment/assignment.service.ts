@@ -23,6 +23,8 @@ export async function update(assignment: Assignment) {
     maxFileSize,
     maxSubmissions,
     disableHandins,
+    attachmentsHashes,
+    attachmentsFilenames,
   } = assignment
 
   if (!id) throw new Error('Missing Id')
@@ -37,6 +39,8 @@ export async function update(assignment: Assignment) {
     maxFileSize,
     maxSubmissions,
     disableHandins,
+    attachmentsHashes,
+    attachmentsFilenames
   })
 }
 
