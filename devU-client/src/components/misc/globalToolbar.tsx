@@ -7,10 +7,11 @@ import UserOptionsDropdown from 'components/utils/userOptionsDropdown'
 
 
 import styles from './globalToolbar.scss'
+
 import RoleDispatcher from '../utils/roleDispatcher'
 
 const GlobalToolbar = () => {
-
+ 
   return (
     <div className={styles.bar}>
       <Link to='/' className={styles.header}>
@@ -26,9 +27,11 @@ const GlobalToolbar = () => {
           <div className={styles.menu}>
             <RoleDispatcher/>
             <DarkModeToggle />
-            <Link to={`/courses`} className={styles.link}>
-              Courses
+            {
+            <Link to={`/courses`} className={styles.link} >
+              My Courses
             </Link>
+            }     
             {/*<Link to={`/myCourses`} className={styles.link}>*/}
             {/*  My Courses*/}
             {/*</Link>*/}

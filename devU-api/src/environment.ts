@@ -49,7 +49,7 @@ const refreshTokenBuffer = load('auth.jwt.refreshTokenExpirationBufferSeconds') 
 
 // if the dev env exists then file is running inside docker
 // if it is undefined it is running on dev machine
-const isDocker = !(process.env.dev === undefined)
+const isDocker = !(process.env.IS_DOCKER === undefined)
 
 if (isDocker && process.env.TANGO_KEY === undefined) {
     throw Error(
@@ -63,13 +63,14 @@ const environment = {
     clientUrl: (process.env.CLIENT_URL || load('api.clientUrl') || 'https://devu.app') as string,
     clientUrls: ['http://devu.app', 'https://devu.app', 'http://devu.app:9000', 'https://devu.app:9000','http://devu.app:3000', 'http://fiona.cse.buffalo.edu', 'https://fiona.cse.buffalo.edu', 'http://fiona.cse.buffalo.edu:9000', 'https://fiona.cse.buffalo.edu:9000', 'http://127.0.0.1:3000', 'http://fiona.cse.buffalo.edu:3000', 'http://tango:3000', 'http://localhost:3000'],
 
-    // Database settings
-    dbHost: isDocker ? load('database.host') : ('localhost' as string),
-    dbUsername: (load('database.username') || 'typescript_user') as string,
-    dbPassword: (load('database.password') || 'password') as string,
-    database: (load('database.name') || 'typescript_api') as string,
-
-    // the below one is for local migration, due to some issues with command will not running load function nor 'localhost'
+  // Database settings
+  dbHost: isDocker ? load('database.host') : ('localhost' as string),
+  dbUsername: (load('database.username') || 'typescript_user') as string,
+  dbPassword: (load('database.password') || 'password') as string,
+  database: (load('database.name') || 'typescript_api') as string,
+  // environment info
+  isDocker: isDocker,
+  // the below one is for local migration, due to some issues with command will not running load function nor 'localhost'
 
     // dbHost: ('localhost') as string,
     // dbUsername: ('typescript_user') as string,

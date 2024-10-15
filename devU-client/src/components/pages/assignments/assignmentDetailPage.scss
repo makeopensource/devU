@@ -1,60 +1,121 @@
 @import 'variables';
 
+.wrap {
+	display:flex;
+	align-items: baseline;
+	gap:20px;
+	padding:20px;
+	justify-content:center;
+}
+
+
 .header {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+	color: $text-color;
 }
 
-.smallLine {
-    width: 50px; /* adjust this value to set the length of the small line */
-	border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-    margin-right: 10px; /* adjust this value to set the space between the line and the text */
-}
 
-.largeLine {
-    flex-grow: 1;
-	border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-    margin-left: 10px; /* adjust this value to set the space between the line and the text */
-    margin-right: 10px; /* add this line to create some space between the line and the button */
-}
-
-.buttons {
-	margin : 0 10px;
+.line {
+    border: none;
+    height: 2px;
+    background-color: #ccc;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .card {
-	width: 60%;
-	height: 50%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	margin: 20px;
+}
+
+
+.card_heading {
+    font-size: 20px;
+    font-weight: 550;
+    margin-bottom: 15px;
+    color: #52468a;
+	text-align: center;
+}
+
+
+.options_buttons {
+    display: flex;
+    flex-direction: column; 
 	align-items: center;
-	padding-top: 20px;
+	justify-content: center;
+    gap: 10px; 
+    
+}
+
+.submit_container{
+	display: flex;
+    justify-content: flex-end;
+    align-items: flex-end; 
+    width: 100%; 
+    margin-top: auto; 
+ 
+}
+
+
+.buttons {
+    color: #52468a;
+    background-color: #f9f9f9; 
+    padding: 10px 20px;
+	border-radius:15px;
+    cursor: pointer;
+    font-size: 15px;
+    border: none;
+    width: fit-content;
+	text-align: center;
+	margin-left: 20px;
+}
+
+
+.buttons:hover {
+    background-color: #888;
+
+}
+
+.assignment_card {
+	background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	width:800px;
 }
 
 .accordion {
-	width: 90%;
-	display: flex;
-	flex-direction: column;
-	margin-top: 10px;
-	margin-left: 10px;
-	margin-right: 10px;
-	background-color: $list-item-background;
-	color:$list-item-background
+    background-color: #f9f9f9;
+    box-shadow: none;
+    border: 1px solid #ddd;
+    margin-bottom: 10px; 
 }
 
 .accordionDetails {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background-color: $list-item-background;
-	color:$text-color;
+    background-color: #f9f9f9; 
+    padding: 10px;
+    border-top: 1px solid #ddd;
 }
-
+.typography {
+    font-size: 16px;
+    color: #333;
+}
+.gridContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; 
+}
 .textField {
-	align-items: center;
-	justify-content: center;
+	margin-top: 10px;
+    margin-bottom: 20px; 
 }
 
 .submissionCard {
@@ -62,6 +123,60 @@
 }
 
 .fileInput {
-	margin-top: 10px;
-	margin-bottom: 10px;
+	margin-top: 20px;
+}
+
+.due_date {
+    font-size: 14px;
+    color: #888; 
+    margin-top: 5px; 
+    margin-bottom: 15px; 
+}
+
+
+.submissionsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%; 
+    margin-top: 20px;
+}
+
+
+.submissionCard {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease; 
+}
+
+.submissionCard:hover {
+    transform: scale(1.02); 
+}
+
+.submissionHeading {
+    font-size: 16px;
+    font-weight: bold;
+    color: #52468a;
+}
+
+
+.submissionTime {
+    font-size: 14px;
+    color: #888; 
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column; 
+        align-items: center; 
+    }
+
+    .buttons {
+        width: 100%; 
+        max-width: none; 
+    }
 }
