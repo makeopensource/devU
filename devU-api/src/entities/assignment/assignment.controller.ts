@@ -5,6 +5,8 @@ import AssignmentService from './assignment.service'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 import { serialize } from './assignment.serializer'
+import { BucketNames, downloadFile, uploadFile } from '../../fileStorage'
+import { generateFilename } from '../../utils/fileUpload.utils'
 
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
@@ -22,6 +24,40 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function handleAttachmentLink(req: Request, res: Response, next: NextFunction) {
+  try {
+    const bucketName = BucketNames.ASSIGNMENTSATTACHMENTS
+    const courseId = parseInt(req.params.courseId)
+    const fileName = req.params.filename
+    const assignmentId = parseInt(req.params.assignmentId)
+
+    if (!courseId) return res.status(400).json('Bucket not found')
+    if (!fileName) return res.status(400).json('File name not found')
+    if (!assignmentId) return res.status(400).json('Assignment id not found')
+
+    const assignment = await AssignmentService.retrieve(assignmentId, courseId)
+    if (!assignment) return res.status(404).json('Assignment not found')
+
+    const ind = assignment.attachmentsHashes.findIndex(value => {
+      return value == fileName
+    })
+    if (ind == -1) return res.status(404).json('File not found')
+
+    const file = assignment.attachmentsHashes[ind]
+    const name = assignment.attachmentsFilenames[ind]
+
+    const buffer = await downloadFile(bucketName, file)
+
+    res.setHeader('Content-Disposition', `attachment; filename="${name}"`)
+    res.setHeader('Content-Type', 'application/octet-stream')
+    res.setHeader('Content-Length', buffer.length)
+    res.send(buffer)
+  } catch (error) {
+    console.error('Error retrieving file:', error)
+    res.status(500).send('Error retrieving file')
+  }
+}
+
 export async function getByCourse(req: Request, res: Response, next: NextFunction) {
   try {
     const courseId = parseInt(req.params.courseId)
@@ -34,6 +70,7 @@ export async function getByCourse(req: Request, res: Response, next: NextFunctio
     next(err)
   }
 }
+
 export async function getReleased(req: Request, res: Response, next: NextFunction) {
   try {
     const courseId = parseInt(req.params.courseId)
@@ -47,21 +84,57 @@ export async function getReleased(req: Request, res: Response, next: NextFunctio
   }
 }
 
+
+async function processFiles(req: Request) {
+  let fileHashes: string[] = []
+  let fileNames: string[] = []
+
+  // save files
+  if (req.files) {
+    console.log()
+    if (Array.isArray(req.files)) {
+      for (let index = 0; index < req.files.length; index++) {
+        const item = req.files[index]
+        const filename = generateFilename(item.originalname, item.size)
+        await uploadFile(BucketNames.ASSIGNMENTSATTACHMENTS, item, filename)
+        fileHashes.push(filename)
+        fileNames.push(item.originalname)
+      }
+    } else {
+      console.warn(`Files where not in array format ${req.files}`)
+    }
+  } else {
+    console.warn(`No files where processed`)
+  }
+
+  return { fileHashes, fileNames }
+}
+
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
+    const { fileNames, fileHashes } = await processFiles(req)
+
+    req.body['attachmentsFilenames'] = fileNames
+    req.body['attachmentsHashes'] = fileHashes
+
     const assignment = await AssignmentService.create(req.body)
     const response = serialize(assignment)
 
     res.status(201).json(response)
   } catch (err) {
     if (err instanceof Error) {
-        res.status(400).json(new GenericResponse(err.message))
+      res.status(400).json(new GenericResponse(err.message))
     }
   }
 }
 
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
+    const { fileNames, fileHashes } = await processFiles(req)
+
+    req.body['attachmentsFilenames'] = fileNames
+    req.body['attachmentsHashes'] = fileHashes
+
     req.body.id = parseInt(req.params.assignmentId)
     const results = await AssignmentService.update(req.body)
 
@@ -86,4 +159,4 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { detail, post, put, _delete, getByCourse, getReleased }
+export default { detail, post, put, _delete, getByCourse, getReleased, handleAttachmentLink }
