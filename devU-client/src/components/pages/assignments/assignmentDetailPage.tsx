@@ -11,8 +11,7 @@ import {SET_ALERT} from 'redux/types/active.types'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import {Accordion, AccordionDetails, AccordionSummary, CardActionArea, TextField, Typography} from '@mui/material'
-import Stack from '@mui/material/Stack'
-import Button from '@mui/material/Button'
+
 import Grid from '@mui/material/Unstable_Grid2'
 
 import styles from './assignmentDetailPage.scss'
@@ -143,28 +142,50 @@ const AssignmentDetailPage = () => {
     return(
         <PageWrapper>
             <div className={styles.header}>
-                <div className={styles.smallLine}></div>
-                <h1>{assignment?.name}</h1>
-                <div className={styles.largeLine}></div>
-                <Stack spacing={2} direction='row'>
-                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                <h1 className = {styles.assignment_heading}>{assignment?.name}</h1>
+                <hr className= {styles.line}/> 
+                </div>
+                <div className = {styles.wrap}>
+               
+                {role.isInstructor() && (
+                    <>
+                    <div className={styles.card}>
+                <h2 className={styles.card_heading}>Options</h2>
+                <hr className = {styles.line} />
+                    <div className={styles.options_buttons}>
+                    {role.isInstructor() && <button className={styles.buttons} onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/createNCAG`)
-                    }}>Add NCAG</Button>}
-                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                    }}>Add NCAG</button>}
+                    <hr className = {styles.line} />
+                    {role.isInstructor() && <button  className={styles.buttons} onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/createCAG`)
-                    }}>Add CAG</Button>}
-                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                    }}>Add CAG</button>}
+                    <hr className = {styles.line} />
+                    {role.isInstructor() && <button className={styles.buttons} onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/createProblem`)
-                    }}>Add Problem</Button>}
-                    {role.isInstructor() && <Button variant='contained' className={styles.buttons} onClick={() => {
+                    }}>Add Problem</button>}
+                    <hr className = {styles.line} />
+                    {role.isInstructor() && <button  className={styles.buttons} onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
-                    }}>Edit Assignment</Button>}
-                </Stack>
-            </div>
+                    }}>Edit Assignment</button>}
+                   </div>
+                   </div>
+                   </>
+                    )}
+                
+                   
+              
+              
+            
 
-        
             <Grid display='flex' justifyContent='center' alignItems='center'>
-            <Card className={styles.card}>
+            <Card className={styles.assignment_card}>
+            <Typography className={styles.assignment_description}>{assignment?.description}</Typography>
+            <hr className={styles.line} />
+
+            {assignment?.dueDate && (
+                    <Typography className={styles.due_date}>{`Due Date: ${new Date(assignment.dueDate).toLocaleDateString()}`}</Typography>
+                )}
             {nonContainerAutograders && nonContainerAutograders.length > 0 ? (
                 nonContainerAutograders.map((nonContainer, index) => (
                     <Accordion className={styles.accordion} key={index}>
@@ -182,37 +203,41 @@ const AssignmentDetailPage = () => {
                     <Typography>No Problems Exist</Typography>
                 </CardContent>
             )}
-
+            
             {!(assignment?.disableHandins) && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
-
+           
             {assignmentProblems && assignmentProblems.length > 0 ? (
-                <Button variant='contained' style={{marginTop: 10, marginBottom: 10}} onClick={handleSubmit}>Submit</Button>
+                 <div className = {styles.submit_container}>
+                <button className={styles.buttons} onClick={handleSubmit}>Submit</button>
+                </div>
             ) : null}
             </Card>
             </Grid>
-
+            </div>
 
             <div className={styles.header}>
-                <div className={styles.smallLine}></div>
                 <h1>{`Submissions`}</h1>
-                <div className={styles.largeLine}></div>
+                <hr className = {styles.line}/>
             </div>
 
             {/**Submissions List */}
             <div>
+            <div className={styles.submissionsContainer}>
             {submissions.map((submission, index) => (
                 <Card className={styles.submissionCard} key={index}>
                     <CardActionArea onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
                     }}>
-                        <CardContent>
-                            {`Submission ${submissions.length - index}`}
-                            <Typography>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</Typography>
-                        </CardContent>
+                    <CardContent>
+                    <Typography className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</Typography>
+                    <Typography className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</Typography>
+                     </CardContent>
                     </CardActionArea>
                 </Card>
             ))}
             </div>
+            </div>
+          
         </PageWrapper>
     )
 }
