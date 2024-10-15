@@ -156,6 +156,8 @@ const AssignmentDetailPage = () => {
             setAlert({ autoDelete: false, type: 'error', message })
         } finally {
             setLoading(false)
+            setFormData({})
+            setFile(null)
             await fetchData()
         }
     }
