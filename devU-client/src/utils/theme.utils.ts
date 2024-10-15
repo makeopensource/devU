@@ -50,6 +50,7 @@ export function getCssVariables() {
     // Theme colors
     textColor: body.getPropertyValue('--text-color'),
     background: body.getPropertyValue('--background'),
+    listItemBackground: body.getPropertyValue('--list-item-background'),
 
     primary: body.getPropertyValue('--primary'),
     primaryDarker: body.getPropertyValue('--primary-darker'),

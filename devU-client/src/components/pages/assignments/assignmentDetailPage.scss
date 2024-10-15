@@ -33,14 +33,15 @@
 }
 
 .accordion {
+	background-color: #333333;
 	width: 90%;
 	display: flex;
 	flex-direction: column;
 	margin-top: 10px;
 	margin-left: 10px;
 	margin-right: 10px;
-	background-color: $list-item-background;
-	color:$list-item-background
+	// background-color: $list-item-background;
+	// color:$list-item-background
 }
 
 .accordionDetails {
@@ -48,8 +49,8 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background-color: $list-item-background;
-	color:$text-color;
+	// background-color: $list-item-background;
+	// color:$text-color;
 }
 
 .textField {
@@ -64,4 +65,24 @@
 .fileInput {
 	margin-top: 10px;
 	margin-bottom: 10px;
+}
+
+.submitBtn {
+	width: 100%;
+}
+
+.assignmentProblemTextContainer {
+	width : 100%;
+	overflow-wrap: break-word;
+	white-space: normal;
+}
+
+.marginBottom {
+	margin-bottom: 3%;
+	color: $text-color;
+	// text-overflow: ellipsis;
+}
+
+.textColor {
+	color: $text-color;
 }

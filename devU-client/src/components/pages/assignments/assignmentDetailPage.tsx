@@ -7,6 +7,8 @@ import ErrorPage from '../errorPage/errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import {useActionless, useAppSelector} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
+import {getCssVariables} from 'utils/theme.utils'
+
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -14,11 +16,14 @@ import {Accordion, AccordionDetails, AccordionSummary, CardActionArea, TextField
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Unstable_Grid2'
+import DragDropFile from 'components/utils/dragDropFile'
 
 import styles from './assignmentDetailPage.scss'
 import {prettyPrintDateTime} from "../../../utils/date.utils";
 
 const AssignmentDetailPage = () => {
+    const [theme, setTheme] = useState(getCssVariables())
+    const { listItemBackground,textColor,secondaryDarker } = theme
     const [setAlert] = useActionless(SET_ALERT)
     const history = useHistory()
     const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
@@ -29,19 +34,35 @@ const AssignmentDetailPage = () => {
     const [loading, setLoading] = useState(true)
     const [formData, setFormData] = useState({})
     const [file, setFile] = useState<File | null>()
-    const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
-    const [submissions, setSubmissions] = useState(new Array<Submission>())
+    const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
+    const [submissions, setSubmissions] = useState<Submission[]>([])
     // const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
     // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
+    const [assignmentDueDate, setAssignmentDueDate] = useState<string>()
 
-    // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
-    // const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
-    const [nonContainerAutograders, setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
+    // const [containerAutograder, setContainerAutograder] = useState<Array<ContainerAutoGrader> | null>()
+    // const containerAutograder = false; 
+    //TODO: Use the above commented out code to get the container autograder
+    const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
+
+    useEffect(() => {
+        const observer = new MutationObserver(() => setTheme(getCssVariables()))
+        observer.observe(document.body, { attributes: true })
+        return () => observer.disconnect()
+    })
+
 
     useEffect(() => {
         fetchData()
     }, []);
+
+    useEffect(() => {
+        if (assignment) {
+            var dueDate = assignment.dueDate.substring(0, 10);
+            setAssignmentDueDate(dueDate)
+        }
+    }, [assignment])
 
 
     const fetchData = async () => {
@@ -91,8 +112,8 @@ const AssignmentDetailPage = () => {
         const key = e.target.id
         setFormData(prevState => ({...prevState,[key] : e.target.value}))
     }
-    const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-        setFile(e.target.files?.item(0))
+    const handleFile = (file : File) => {
+        setFile(file);
     }
 
     const handleSubmit = async () => {
@@ -126,7 +147,6 @@ const AssignmentDetailPage = () => {
             
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
 
-            // Now you can use submissionResponse.id here
             await RequestService.post(`/api/course/${courseId}/grade/${response.id}`, {} )
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
 
@@ -164,29 +184,62 @@ const AssignmentDetailPage = () => {
 
         
             <Grid display='flex' justifyContent='center' alignItems='center'>
-            <Card className={styles.card}>
-            {nonContainerAutograders && nonContainerAutograders.length > 0 ? (
-                nonContainerAutograders.map((nonContainer, index) => (
-                    <Accordion className={styles.accordion} key={index}>
-                    <AccordionSummary>
-                        <Typography className={styles.accordionDetails}>{`Assignment Problem ${index + 1}`}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails className={styles.accordionDetails}>
-                        <Typography>{nonContainer.question}</Typography>
-                        <TextField id={nonContainer.question} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
-                    </AccordionDetails>
-                    </Accordion>
-                ))
-                ) : (
-                <CardContent>
-                    <Typography>No Problems Exist</Typography>
-                </CardContent>
-            )}
-
-            {!(assignment?.disableHandins) && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
+            <Card className={styles.card} sx={{bgcolor : secondaryDarker}}>
 
             {assignmentProblems && assignmentProblems.length > 0 ? (
-                <Button variant='contained' style={{marginTop: 10, marginBottom: 10}} onClick={handleSubmit}>Submit</Button>
+                assignmentProblems.map((problem, index) => (
+                    <Accordion className={styles.accordion} key={index} sx={{bgcolor: listItemBackground}}>
+                        <AccordionSummary>
+                            <Typography className={styles.accordionDetails}>
+                                <h3 className={styles.textColor}>{`Assignment Problem ${index + 1}`}</h3>
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails className={styles.accordionDetails}>
+                            <div className={styles.assignmentProblemTextContainer}>
+                                <div className={styles.marginBottom}>{problem.problemName}</div>
+                            </div>
+                            <br/>
+                            <TextField id={problem.problemName} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange} sx={{
+                                "& .MuiOutlinedInput-input" : {
+                                    color: textColor
+                                },
+                                // label text
+                                "& .MuiInputLabel-outlined" : {
+                                    color: textColor
+                                },
+                                // border
+                                "& .MuiOutlinedInput-notchedOutline" : {
+                                    borderColor: textColor
+                                },
+                            }}></TextField>
+                        </AccordionDetails>
+                    </Accordion>
+                )) 
+            ): null}
+
+            {!(assignment?.disableHandins) && (
+                <Accordion className={styles.accordion} sx={{bgcolor : listItemBackground}}>
+                    <AccordionSummary>
+                        <Typography className={styles.accordionDetails}>
+                            <h3 className={styles.textColor}>File Submission</h3>
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails className={styles.accordionDetails}>
+                        {/* <input type="file" className={styles.fileInput} onChange={handleFileChange} /> */}
+                        {file && <div className={styles.marginBottom}>{`File Selected : ${file.name}`}</div>}
+                        <DragDropFile handleFile={handleFile} />
+                    </AccordionDetails>
+                </Accordion>
+                )}
+            
+
+            {assignmentProblems || nonContainerAutograders || !(assignment?.disableHandins) ? (
+                <div style={{marginTop : 10}} className={styles.textColor}>
+                    {/* TODO: Remove split later on when times can be applied in assignment creation */}
+                    {`Due Date : ${assignmentDueDate && prettyPrintDateTime(assignmentDueDate).split(',')[0]}`}
+                    <br/>
+                    <Button variant='contained' style={{marginTop:10, marginBottom:10}} className={styles.submitBtn} onClick={handleSubmit}>Submit</Button>
+                </div>
             ) : null}
             </Card>
             </Grid>
@@ -201,13 +254,15 @@ const AssignmentDetailPage = () => {
             {/**Submissions List */}
             <div>
             {submissions.map((submission, index) => (
-                <Card className={styles.submissionCard} key={index}>
+                <Card className={styles.submissionCard} key={index} sx={{bgcolor : listItemBackground}}>
                     <CardActionArea onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
                     }}>
                         <CardContent>
-                            {`Submission ${submissions.length - index}`}
-                            <Typography>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</Typography>
+                            <Typography>
+                                <h3 className={styles.textColor}>{`Submission ${submissions.length - index}`}</h3>
+                                <div className={styles.textColor}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</div>
+                            </Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>
