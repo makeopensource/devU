@@ -67,10 +67,8 @@
     --primary-lighter: #41a8f7;
 
     --primary: var(--purple);
-
-    // --primary: #D9D9D9;
-
     --primary-darker: #054272;
+
     --secondary-lighter: #cfd1d1;
     --secondary: #a8abab;
     --secondary-darker: #686b6b;
@@ -97,6 +95,9 @@
     --table-row-even: var(--grey-lighter);
     --table-row-odd: var(--grey-lightest);
 
+    --red-text: var(--red);
+    --yellow-text: var(--yellow-dark);
+
     // Non theme colors - will not update with light/dark toggle
     --grey-lightest: #e5e5e5;
     --grey-lighter: #c5c5c5;
@@ -117,7 +118,7 @@
     --green-lighter: #B0EEA2;
     --green: #306025;
 
-    --yellow-lighter: #ffeaa7;
+    --yellow-dark: #664600;
     --yellow: #F8D487;
 
     transition: background-color 150ms linear;
@@ -132,9 +133,6 @@
     --primary-lighter: #3796bc;
 
     --primary: #7257EB;
-//     --primary-darker: #2F2363;
-
-    // --primary: #636666;
     --primary-darker: #133441;
 
     --secondary-lighter: #636666;
@@ -162,6 +160,9 @@
 
     --table-row-even: var(--grey-darker);
     --table-row-odd: var(--grey-darkest);
+
+    --red-text: var(--red-lighter);
+    --yellow-text: var(--yellow);
 
     background-color: var(--background);
     color: var(--text-color);

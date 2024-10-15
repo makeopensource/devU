@@ -57,3 +57,33 @@ td, th {
   padding: 10px;
   text-align: center;
 }
+
+th:first-of-type {
+  border-top-left-radius: 10px;
+}
+
+th:last-of-type {
+  border-top-right-radius: 10px;
+}
+
+tr:last-of-type td:first-of-type {
+  border-bottom-left-radius: 10px;
+}
+
+tr:last-of-type td:last-of-type {
+  border-bottom-right-radius: 10px;
+}
+
+.tableOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tableOptions span:first-child, span.yellow {
+  color: $yellowText;
+}
+
+.tableOptions span:last-child, span.red {
+  color: $redText; 
+}
