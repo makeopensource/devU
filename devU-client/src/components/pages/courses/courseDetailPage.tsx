@@ -30,16 +30,16 @@ const CourseDetailPage = () => {
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     const [setAlert] = useActionless(SET_ALERT)
-    const[User, setUser]= useState < User <string>,preferredName>>({})
+   // const[User, setUser]= useState < User <string>,preferredName>>({})
 
    // const role = useAppSelector((store) => store.roleMode)
-    const fetchUserinfo = async () => {
+   /* const fetchUserinfo = async () => {
         RequestService.get< typeof User>('api/users')
             .then((User) =>{
                 setUser(User)
 
     })
-
+*/
 
 
     const fetchCourseInfo = async () => {
@@ -85,26 +85,31 @@ const CourseDetailPage = () => {
 
     useEffect(() => {
         fetchCourseInfo()
-        fetchUserinfo()
+        //fetchUserinfo()
     }, [])
     const history = useHistory()
     return(
         <PageWrapper>
             <div className={styles.courseDetailPage}>
 
+
             {courseInfo ? (
-                <div>
+                        <div>
 
                         <div className={styles.header}>
-                            <h1>{courseInfo.name}-{courseInfo.semester}</h1>
-                            <h2> Instructor:{User.name} </h2>
+                            <h1>{courseInfo.name}({courseInfo.semester})</h1>
+                            <h2> Instructor: </h2>
+
+
                             <div style={{display: 'flex', justifyContent: 'space-between'}}>
 
 
-                                <button className={styles.actual_button} onClick={() => {
+
+                                <button className={styles.actual_button}  onClick={() => {
                                     history.push(`/course/${courseId}/gradebook`)
                                 }}>Gradebook
                                 </button>
+
 
 
                                 <button className={styles.actual_button} onClick={() => {
@@ -122,8 +127,14 @@ const CourseDetailPage = () => {
                                 <button className={styles.actual_button} onClick={handleDropCourse}
                                     > Drop Course
                                 </button>
-                        </div>
-                             </div>
+
+                            </div>
+
+
+                            </div>
+
+
+                            <h1>Assignments</h1>
 
 
 
@@ -142,7 +153,12 @@ const CourseDetailPage = () => {
                                                 <ListItemButton onClick={() => {
                                                     history.push(`/course/${courseId}/assignment/${assignment.id}`)
                                                 }}>
-                                                    <ListItemText primary={assignment.name}
+                                                    <ListItemText
+                                                        primary={
+                                                            <Typography style={{  textAlign: 'center' }}>
+                                                                {assignment.name}
+                                                            </Typography>
+                                                        }
                                                                   secondary={
                                                                       <React.Fragment>
                                                                           <Typography
@@ -166,9 +182,8 @@ const CourseDetailPage = () => {
                                 </Card>
 
                             ))}
-
+                            </div>
                         </div>
-                    </div>
 
 
 
@@ -176,7 +191,9 @@ const CourseDetailPage = () => {
                     ) : (
                     <h1>Error fetching Course Information</h1>
                     )}
+
             </div>
+
                 </PageWrapper>
             )
             }
