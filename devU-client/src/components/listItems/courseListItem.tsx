@@ -30,6 +30,8 @@ const CourseListItem = ({course, isOpen}: Props) => {
         setIsOpen(isOpen);
     }, [isOpen]);
 
+
+
     return (
         <div className={styles.courseContainer} onClick={toggleOpen}>
             <div className={styles.name}>
