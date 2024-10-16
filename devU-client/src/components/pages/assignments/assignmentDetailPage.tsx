@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import {Assignment, AssignmentProblem, Submission, NonContainerAutoGrader, /*ContainerAutoGrader*/} from 'devu-shared-modules'
+import {Assignment, AssignmentProblem, Submission, /*NonContainerAutoGrader, /*ContainerAutoGrader*/} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from '../errorPage/errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -36,7 +36,7 @@ const AssignmentDetailPage = () => {
 
     // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
     // const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
-    const [nonContainerAutograders, setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
+    // const [ setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
 
     useEffect(() => {
         fetchData()
@@ -70,8 +70,8 @@ const AssignmentDetailPage = () => {
             // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
             // setContainerAutograder(containerAutograder)
 
-            const nonContainers = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
-            setNonContainerAutograders(nonContainers)
+            // const nonContainers = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
+            // setNonContainerAutograders(nonContainers)
 
 
         } catch (err:any) {
@@ -186,18 +186,19 @@ const AssignmentDetailPage = () => {
             {assignment?.dueDate && (
                     <Typography className={styles.due_date}>{`Due Date: ${new Date(assignment.dueDate).toLocaleDateString()}`}</Typography>
                 )}
-            {nonContainerAutograders && nonContainerAutograders.length > 0 ? (
-                nonContainerAutograders.map((nonContainer, index) => (
+            {assignmentProblems && assignmentProblems.length > 0 ? (
+                assignmentProblems.map((assignment, index) => (
                     <Accordion className={styles.accordion} key={index}>
                     <AccordionSummary>
                         <Typography className={styles.accordionDetails}>{`Assignment Problem ${index + 1}`}</Typography>
                     </AccordionSummary>
                     <AccordionDetails className={styles.accordionDetails}>
-                        <Typography>{nonContainer.question}</Typography>
-                        <TextField id={nonContainer.question} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
+                        <Typography>{assignment.problemName}</Typography>
+                        <TextField id={assignment.problemName} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
                     </AccordionDetails>
                     </Accordion>
                 ))
+            
                 ) : (
                 <CardContent>
                     <Typography>No Problems Exist</Typography>
