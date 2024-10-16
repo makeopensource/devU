@@ -1,16 +1,5 @@
 name: devu
 services:
-  db:
-    # Runs the PostgreSQL database
-    image: postgres
-    environment:
-      POSTGRES_DB: typescript_api
-      POSTGRES_USER: typescript_user
-      POSTGRES_PASSWORD: password
-    ports:
-      - '5432:5432'
-    expose:
-      - '5432'
   api:
     # Runs the API
     container_name: api
@@ -20,12 +9,12 @@ services:
     environment:
       TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
       WAIT_HOSTS: db:5432
-      dev: 0 # value here is irrelevant; just here to make sure dev env exists
     ports:
       - '3001:3001'
     profiles:
       - '' # so it starts with normal docker compose
-      - 'dev-client'
+      - 'dev-client' # start when developing client
+
   client:
     # Builds the front end and exports static files to ./dist
     build:
@@ -36,6 +25,7 @@ services:
     profiles:
       - '' # so it starts with normal docker compose
       - 'dev-api' # start when developing api
+
   nginx:
     # Hosts the front end static files from ./dist/local thorough a web server
     build:
@@ -47,7 +37,22 @@ services:
       - '9000:80'
     profiles:
       - '' # so it starts with normal docker compose
-      - 'dev-api' # start when developing api not when developing client
+      - 'dev-api' # start when developing api
+
+  # Database stuff
+  db:
+    # Runs the PostgreSQL database
+    image: postgres
+    environment:
+      POSTGRES_DB: typescript_api
+      POSTGRES_USER: typescript_user
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+    restart: unless-stopped
+
   minio:
     image: minio/minio
     ports:
@@ -61,15 +66,19 @@ services:
       MINIO_ROOT_USER: typescript_user
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
+
+  config:
+    #     Generates a config file for the API
+    build:
+      context: devU-api/scripts
+    command: "./generateConfig.sh config/default.yml"
+    image: ubautograding/devtools
+    volumes:
+      - ./devU-api/config:/config
+    profiles:
+      - 'dev-api' # start when developing api, not needed in production
+
   # tango stuff
-  redis:
-    container_name: redis
-    image: redis:latest
-    ports:
-      - '127.0.0.1:6379:6379'
-    deploy:
-      replicas: 1
-    restart: unless-stopped
   tango:
     container_name: tango
     ports:
@@ -79,12 +88,11 @@ services:
     environment:
       - DOCKER_REDIS_HOSTNAME=redis
       - RESTFUL_KEY=devutangokey
-#      - DOCKER_DEPLOYMENT
+      #      - DOCKER_DEPLOYMENT
       # Path to volumes within the Tango container. Does not need to be modified.
-#      - DOCKER_VOLUME_PATH
+      #      - DOCKER_VOLUME_PATH
       # Modify the below to be the path to volumes on your host machine
       - DOCKER_TANGO_HOST_VOLUME_PATH=/absolute/path/to/tango_files
-
     depends_on:
       - redis
     volumes:
@@ -93,11 +101,20 @@ services:
       - ./logs/tango/:/var/log/tango/
       - ./logs/tangonginx:/var/log/nginx
       - ./tango_files:/opt/TangoService/Tango/volumes
+    restart: unless-stopped
 
-#  certbot:
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - '127.0.0.1:6379:6379'
+    deploy:
+      replicas: 1
+    restart: unless-stopped
+
+    #  certbot:
 #    container_name: certbot
 #    image: certbot/certbot
 #    volumes:
 #      - ./ssl/certbot/conf:/etc/letsencrypt
 #      - ./ssl/certbot/www:/var/www/certbot
-    restart: unless-stopped

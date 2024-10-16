@@ -41,6 +41,8 @@ initializeMinio()
     app.use(morgan('combined'))
     app.use(passport.initialize())
 
+    console.log(`Api: ${environment.isDocker ? '' : 'not'} running in docker`)
+
     // Middleware;
     app.use('/', router)
     app.use(errorHandler)

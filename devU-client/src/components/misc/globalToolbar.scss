@@ -9,7 +9,6 @@ $font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 1.5rem;
 }
 
@@ -29,6 +28,8 @@ $font-size: 16px;
   border-radius: 3vw;
   font-weight: 550;
   //font-size: 14px;
+
+  font-size: 14px;
   padding:0.5vw;
 
   &:hover {
@@ -43,7 +44,6 @@ $font-size: 16px;
   color: #D9D9D9;
   font-weight: 550;
   //font-size: 2em;
-
   //font-weight: bold;
 }
 
@@ -51,6 +51,12 @@ $font-size: 16px;
   height: 80px;
   background-color: $purple;
   //height: $bar-height;
+
+  font-size: 40px;
+  border-radius: 30px;
+  color: #D9D9D9;
+  font-weight: 550;
+}
 
   @extend .flex;
   justify-content: space-between;
@@ -71,6 +77,7 @@ $font-size: 16px;
 @media (max-width: 300px) {
   .flex {
     gap: 1rem;
+   
   }
 
   .menu {
@@ -80,7 +87,7 @@ $font-size: 16px;
     height: 100%;
     width: $sidebar-width;
 
-    background: $primary;
+    background: $text-color;
 
     top: 0;
     left: -$sidebar-width;
@@ -115,5 +122,6 @@ $font-size: 16px;
 @media (max-width: 300px) {
   .flex {
     gap: 0.3rem;
+    
   }
 }
