@@ -59,8 +59,9 @@
     background-color: var(--background);
     color: var(--text-color);
 
-    --background: #FFF;
-    --text-color: #000;
+    --background: white;
+    --text-color: black;
+    --text-color2: white;
     --text-color-secondary: #363636;
     --focus: var(--blue);
 
@@ -83,6 +84,9 @@
     --list-simple-item-background-hover: #a0a0a0;
     --list-simple-item-subtext: #4b4b4b;
 
+    --blue-lighter: #74b9ff;
+    --blue: #0984e3;
+    --blue-darker: #083967;
     --btn-secondary-border: var(--primary);
     --btn-secondary-background: #FFF;
     --btn-secondary-text: var(--primary);
@@ -100,8 +104,8 @@
     --grey: #555555;
     --grey-dark: #333333; 
 
-    --blue-lighter: #78B7FF;
-    --blue: #1F3D7A;
+    //--blue-lighter: #78B7FF;
+    //--blue: #1F3D7A;
 
     --red-lighter: #FFA3A3;
     --red: #8A2626;
@@ -123,11 +127,12 @@
     --background: #1e1e1e;
     --text-color: #FFF;
     --text-color-secondary: #9b9b9b;
-    --focus: var(--blue-lighter);
-
+    --blue-darker: #2767a3;
     --primary-lighter: #3796bc;
+    --primary: #5c36c3;
+   // --primary-darker: rgb(92, 54, 195);
 
-    --primary: #7257EB;
+    //--primary: #7257EB;
 //     --primary-darker: #2F2363;
 
     // --primary: #636666;

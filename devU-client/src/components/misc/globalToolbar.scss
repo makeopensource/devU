@@ -16,13 +16,19 @@ $font-size: 16px;
   @extend .flex;
 
   text-decoration: none;
+
   color: #d9d9d9;
   font-size: $font-size;
+
+  //height: $bar-height;
+
   margin:3vw;
   height: 4vh;
   flex-grow: .05;
   border-radius: 3vw;
   font-weight: 550;
+  //font-size: 14px;
+
   font-size: 14px;
   padding:0.5vw;
 
@@ -33,6 +39,18 @@ $font-size: 16px;
 
 .header {
   @extend .link;
+  font-size: 40px;
+  border-radius: 30px;
+  color: #D9D9D9;
+  font-weight: 550;
+  //font-size: 2em;
+  //font-weight: bold;
+}
+
+.bar {
+  height: 80px;
+  background-color: $purple;
+  //height: $bar-height;
 
   font-size: 40px;
   border-radius: 30px;
@@ -40,9 +58,6 @@ $font-size: 16px;
   font-weight: 550;
 }
 
-.bar {
-  height: 60px;
-  background-color: #52468A;
   @extend .flex;
   justify-content: space-between;
 }
@@ -88,7 +103,7 @@ $font-size: 16px;
     background: transparent;
     border: none;
 
-    color: $text-color;
+    color: $yellow;
     font-size: $font-size;
 
     &:hover {
