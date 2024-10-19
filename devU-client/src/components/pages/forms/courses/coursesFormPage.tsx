@@ -74,45 +74,45 @@ const EditCourseFormPage = () => {
     return (
         <PageWrapper>
             <h1>Course Form</h1>
-            <div className={formStyles.form}>
-                <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
-                    invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")} />
-                <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
-                    invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
-                <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
-                    placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
-                    helpText={invalidFields.get("semester")} />
 
-                {/* <div className = {formStyles.datepickerContainer}>
-                    <div>
-                        <label htmlFor='start_date'>Start Date *</label>
+            <div className={formStyles.courseFormWrapper}>
+                <div className={formStyles.detailsForm}>
+                    <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
+                        invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")} />
+                    <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
+                        invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
+                    <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
+                        placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
+                        helpText={invalidFields.get("semester")} />
+                    {/* <div className = {formStyles.datepickerContainer}>
+                        <div>
+                            <label htmlFor='start_date'>Start Date *</label>
+                            <br/>
+                            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
+                                        className={formStyles.datepicker}/>
+                        </div>
+                        <div>
+                        <label htmlFor='end_date'>End Date *</label>
                         <br/>
-                        <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
-                                    className={formStyles.datepicker}/>
+                            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
+                                        className={formStyles.datepicker}/>
+                        </div>
+                    </div> */}
+                    <div className={formStyles.datepickerContainer}>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                            <label htmlFor='start-date'>Start Date *</label>
+                            <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                            <label htmlFor='end-date'>End Date *</label>
+                            <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
+                        </div>
                     </div>
-                    <div>
-                    <label htmlFor='end_date'>End Date *</label>
-                    <br/>
-                        <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
-                                    className={formStyles.datepicker}/>
-                    </div>
-                </div> */}
-                <div className={formStyles.datepickerContainer}>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
-                        <label htmlFor='start-date'>Start Date *</label>
-                        <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} />
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
-                        <label htmlFor='end-date'>End Date *</label>
-                        <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
+                    {/* <br /> */}
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <button className='btnPrimary' onClick={handleSubmit}>Create Course</button>
                     </div>
                 </div>
-                <br />
-
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <button className='btnPrimary' onClick={handleSubmit}>Create Course</button>
-                </div>
-
             </div>
         </PageWrapper>
     )
