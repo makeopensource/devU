@@ -80,7 +80,7 @@ export function getCssVariables() {
     greenLighter: body.getPropertyValue('--green-lighter'),
     green: body.getPropertyValue('--green'),
 
-    yellowLighter: body.getPropertyValue('--yellow-lighter'),
+    yellowDark: body.getPropertyValue('--yellow-dark'),
     yellow: body.getPropertyValue('--yellow'),
   }
 }
