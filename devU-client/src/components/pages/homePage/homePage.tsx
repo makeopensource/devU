@@ -33,7 +33,7 @@ const HomePage = () => {
                 instructorCourses: Course[];
                 activeCourses: Course[];
                 pastCourses: Course[];
-                upcomingCourses: Course[];//TODO: Add upcoming courses feature
+                upcomingCourses: Course[];
             }>(`/api/courses/user/${userId}`);
             const enrolledCourses: Course[] = allCourses.activeCourses;
             const upcomingCourses: Course[] = allCourses.upcomingCourses;
@@ -46,6 +46,13 @@ const HomePage = () => {
             })
             const assignmentResults = await Promise.all(assignmentPromises)
             assignmentResults.forEach(([course, assignments]) => assignmentMap.set(course, assignments))
+            
+            const assignmentPromises_instructor = instructorCourses.map((course) => {
+                const assignments = RequestService.get<Assignment[]>(`/api/course/${course.id}/assignments/released`)
+                return Promise.all([course, assignments])
+            })
+            const assignmentResults_instructor = await Promise.all(assignmentPromises_instructor)
+            assignmentResults_instructor.forEach(([course, assignments]) => assignmentMap.set(course, assignments))
 
             setAssignments(assignmentMap)
             setPastCourses(pastCourses)
@@ -68,7 +75,7 @@ const HomePage = () => {
         <PageWrapper>
             <div className={styles.header}>
                 <div className={styles.smallLine}></div>
-                <h2>Courses</h2>
+                <h2 className={styles.h2}>Courses</h2>
                 <button className = {styles.create_course} onClick={() => {
                     history.push(`/addCoursesForm`)
                     }}>Create Course
@@ -81,10 +88,10 @@ const HomePage = () => {
                 <div className={styles.largeLine}></div>
             </div>
             <div className={styles.coursesContainer}>
-                {instructorCourses && instructorCourses.map((course) => (
+                {instructorCourses.map((course) => (
                      <div className={styles.courseCard} key={course.id}>
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}
-                                        instructor={true}/>
+                                         instructor = {true}/>
                                         </div>
                 ))}
             </div>
