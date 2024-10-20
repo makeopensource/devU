@@ -76,7 +76,7 @@ const EditCourseFormPage = () => {
             <h1>Course Form</h1>
 
             <div className={formStyles.courseFormWrapper}>
-                <div className={formStyles.detailsForm}>
+                <div className={formStyles.createDetailsForm}>
                     <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
                         invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")} />
                     <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
