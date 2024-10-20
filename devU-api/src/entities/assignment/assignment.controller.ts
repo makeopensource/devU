@@ -5,8 +5,7 @@ import AssignmentService from './assignment.service'
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
 
 import { serialize } from './assignment.serializer'
-import { BucketNames, downloadFile, uploadFile } from '../../fileStorage'
-import { generateFilename } from '../../utils/fileUpload.utils'
+import { BucketNames, downloadFile } from '../../fileStorage'
 
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
@@ -85,34 +84,9 @@ export async function getReleased(req: Request, res: Response, next: NextFunctio
 }
 
 
-async function processFiles(req: Request) {
-  let fileHashes: string[] = []
-  let fileNames: string[] = []
-
-  // save files
-  if (req.files) {
-    console.log()
-    if (Array.isArray(req.files)) {
-      for (let index = 0; index < req.files.length; index++) {
-        const item = req.files[index]
-        const filename = generateFilename(item.originalname, item.size)
-        await uploadFile(BucketNames.ASSIGNMENTSATTACHMENTS, item, filename)
-        fileHashes.push(filename)
-        fileNames.push(item.originalname)
-      }
-    } else {
-      console.warn(`Files where not in array format ${req.files}`)
-    }
-  } else {
-    console.warn(`No files where processed`)
-  }
-
-  return { fileHashes, fileNames }
-}
-
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
-    const { fileNames, fileHashes } = await processFiles(req)
+    const { fileNames, fileHashes } = await AssignmentService.processFiles(req)
 
     req.body['attachmentsFilenames'] = fileNames
     req.body['attachmentsHashes'] = fileHashes
@@ -130,7 +104,7 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
-    const { fileNames, fileHashes } = await processFiles(req)
+    const { fileNames, fileHashes } = await AssignmentService.processFiles(req)
 
     req.body['attachmentsFilenames'] = fileNames
     req.body['attachmentsHashes'] = fileHashes

@@ -4,6 +4,9 @@ import { dataSource } from '../../database'
 import AssignmentModel from './assignment.model'
 
 import { Assignment } from 'devu-shared-modules'
+import { Request } from 'express'
+import { generateFilename } from '../../utils/fileUpload.utils'
+import { BucketNames, uploadFile } from '../../fileStorage'
 
 const connect = () => dataSource.getRepository(AssignmentModel)
 
@@ -40,7 +43,7 @@ export async function update(assignment: Assignment) {
     maxSubmissions,
     disableHandins,
     attachmentsHashes,
-    attachmentsFilenames
+    attachmentsFilenames,
   })
 }
 
@@ -78,6 +81,32 @@ export async function isReleased(id: number) {
   return startDate && startDate < currentDate
 }
 
+async function processFiles(req: Request) {
+  let fileHashes: string[] = []
+  let fileNames: string[] = []
+
+  // save files
+  if (req.files) {
+    console.log()
+    if (Array.isArray(req.files)) {
+      for (let index = 0; index < req.files.length; index++) {
+        const item = req.files[index]
+        const filename = generateFilename(item.originalname, item.size)
+        await uploadFile(BucketNames.ASSIGNMENTSATTACHMENTS, item, filename)
+        fileHashes.push(filename)
+        fileNames.push(item.originalname)
+      }
+    } else {
+      console.warn(`Files where not in array format ${req.files}`)
+    }
+  } else {
+    console.warn(`No files where processed`)
+  }
+
+  return { fileHashes, fileNames }
+}
+
+
 export default {
   create,
   retrieve,
@@ -87,4 +116,5 @@ export default {
   listByCourse,
   listByCourseReleased,
   isReleased,
+  processFiles
 }
