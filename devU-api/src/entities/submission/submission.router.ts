@@ -9,6 +9,7 @@ import { asInt } from '../../middleware/validator/generic.validator'
 
 // Controller
 import SubmissionController from '../submission/submission.controller'
+import { checkSubmissions } from './submission.middleware'
 
 const Router = express.Router({ mergeParams: true })
 const upload = Multer()
@@ -97,7 +98,7 @@ Router.get('/user/:userId', isAuthorized('enrolled'), asInt('userId'), Submissio
  *           schema:
  *             $ref: '#/components/schemas/Submission'
  */
-Router.post('/', isAuthorized('enrolled'), upload.single('files'), validator, SubmissionController.post)
+Router.post('/', isAuthorized('enrolled'), upload.single('files'), validator, checkSubmissions, SubmissionController.post)
 // TODO: submissionCreateSelf or submissionCreateAll
 
 /**
