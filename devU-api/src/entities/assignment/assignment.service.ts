@@ -81,6 +81,10 @@ export async function isReleased(id: number) {
   return startDate && startDate < currentDate
 }
 
+async function getMaxSubmissionsForAssignment(id: number) {
+  return await connect().findOne({ where: { id: id }, select: ['maxSubmissions', 'maxFileSize'] })
+}
+
 async function processFiles(req: Request) {
   let fileHashes: string[] = []
   let fileNames: string[] = []
@@ -116,5 +120,6 @@ export default {
   listByCourse,
   listByCourseReleased,
   isReleased,
-  processFiles
+  getMaxSubmissionsForAssignment,
+  processFiles,
 }
