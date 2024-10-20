@@ -6,9 +6,8 @@ import AssignmentService from '../assignment/assignment.service'
 
 // TODO discuss how to bypass this when an instructor wants to eg bypass for a specific student
 async function checkSubmissions(req: Request, res: Response, next: NextFunction) {
-  const body = req.body
   const userID = req.currentUser?.userId
-  const assignmentId = body.assignmentId
+  const assignmentId = req.body.assignmentId
 
   if (!userID) {
     return res.status(403).send('userid is missing')
