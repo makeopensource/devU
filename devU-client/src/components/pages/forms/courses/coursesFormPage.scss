@@ -9,15 +9,21 @@
 .form {
   background-color: $list-item-background;
   border-radius: 20px;
+  width: 70%;
   padding: 30px;
-  width: 50%;
   margin: 0 auto;
 }
 
-.detailsForm {
+.updateDetailsForm {
   @extend .form;
-  width: 70%;
+  max-width: 900px;
   margin: 0;
+}
+
+.createDetailsForm {
+  @extend .form;
+  margin: auto;
+  max-width: 900px;
 }
 
 .addDropForm {
@@ -80,7 +86,7 @@ input[type='file']::file-selector-button {
     flex-direction: column;
   }
 
-  .detailsForm, .addDropForm {
+  .updateDetailsForm, .addDropForm {
     width: auto; // take up full container
   }
 }
