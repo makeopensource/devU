@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-// import DatePicker from 'react-datepicker'
-// import 'react-datepicker/dist/react-datepicker.css'
 import { useHistory } from 'react-router-dom'
 import { ExpressValidationError } from 'devu-shared-modules'
 
@@ -24,8 +22,7 @@ const EditCourseFormPage = () => {
         number: '',
         semester: '',
     })
-    // const [startDate, setStartDate] = useState(new Date())
-    // const [endDate, setEndDate] = useState(new Date())
+
     const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
     const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0])
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
@@ -37,8 +34,7 @@ const EditCourseFormPage = () => {
         const newInvalidFields = removeClassFromField(invalidFields, key)
         setInvalidFields(newInvalidFields)
     }
-    // const handleStartDateChange = (date : Date) => {setStartDate(date)}
-    // const handleEndDateChange = (date : Date) => {setEndDate(date)}
+
     const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
     const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
 
@@ -48,8 +44,6 @@ const EditCourseFormPage = () => {
             name: formData.name,
             number: formData.number,
             semester: formData.semester,
-            // startDate: startDate.toISOString(),
-            // endDate: endDate.toISOString(),
             startDate: startDate,
             endDate: endDate,
         }
@@ -73,7 +67,7 @@ const EditCourseFormPage = () => {
 
     return (
         <PageWrapper>
-            <h1>Course Form</h1>
+            <h1>Create Course</h1>
 
             <div className={formStyles.courseFormWrapper}>
                 <div className={formStyles.createDetailsForm}>
@@ -84,20 +78,6 @@ const EditCourseFormPage = () => {
                     <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
                         placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
                         helpText={invalidFields.get("semester")} />
-                    {/* <div className = {formStyles.datepickerContainer}>
-                        <div>
-                            <label htmlFor='start_date'>Start Date *</label>
-                            <br/>
-                            <DatePicker id='start_date' selected={startDate} onChange={handleStartDateChange}
-                                        className={formStyles.datepicker}/>
-                        </div>
-                        <div>
-                        <label htmlFor='end_date'>End Date *</label>
-                        <br/>
-                            <DatePicker id='end_date' selected={endDate} onChange={handleEndDateChange}
-                                        className={formStyles.datepicker}/>
-                        </div>
-                    </div> */}
                     <div className={formStyles.datepickerContainer}>
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
                             <label htmlFor='start-date'>Start Date *</label>
@@ -108,7 +88,6 @@ const EditCourseFormPage = () => {
                             <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
                         </div>
                     </div>
-                    {/* <br /> */}
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <button className='btnPrimary' onClick={handleSubmit}>Create Course</button>
                     </div>
