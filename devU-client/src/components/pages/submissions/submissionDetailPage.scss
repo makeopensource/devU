@@ -1,18 +1,22 @@
 @import 'variables';
 
+.heading {
+  text-align: center;
+  margin-left:250px;
+
+}
 .scores {
     padding: 20px;
   }
   
   .submissionsLayout {
     display: flex;
-    gap: 20px;
+    gap: 50px;
   }
   
   .submissionsContainer {
     flex: 1;
     max-width: 250px;
-    border-right: 1px solid lightgray;
     padding-right: 10px;
     overflow-y: auto;
   }
@@ -110,7 +114,7 @@
   .assignmentTable th, .assignmentTable td {
    
     padding: 8px; 
-    text-align: center; 
+    text-align: left; 
   }
   
   .assignmentTable th {
@@ -122,3 +126,16 @@
     background-color: $background; 
   }
   
+  .sub_list{
+    text-align: center;
+
+  }
+  @media (max-width: 768px) {
+    .submissionsContainer {
+      display:none;
+    }
+   .heading {
+    margin:10px;
+   }
+
+}

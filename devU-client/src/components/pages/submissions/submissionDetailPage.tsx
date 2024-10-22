@@ -126,13 +126,13 @@ const SubmissionDetailPage = () => {
                 </div>
             )}
                 <div className={styles.scores}>
-                <h1>Submissions For Assignment {assignment?.name}</h1>
+                <h1 className = {styles.heading}>Submissions For Assignment {assignment?.name}</h1>
   
 
             <div className={styles.submissionsLayout}>
 
            <div className={styles.submissionsContainer}>
-                <h2>Submission List:</h2>
+                <h2 className={styles.sub_list}>Submission List:</h2>
              {submissions.map((submission, index) => (
             <Card className={styles.submissionCard} key={index}>
             <CardActionArea onClick={() => 
