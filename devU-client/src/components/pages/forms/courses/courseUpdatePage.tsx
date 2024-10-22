@@ -24,7 +24,7 @@ type UrlParams = {
 }
 
 type User = {
-    id?: number
+    id: number
     externalId: string // School's unique identifier (the thing that links to the schools auth)
     email: string
     createdAt?: string
@@ -44,6 +44,7 @@ const CourseUpdatePage = ({ }) => {
     const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
     const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0])
     const [studentEmail, setStudentEmail] = useState("")
+    const [studentID, setStudentID] = useState<number>(0)
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const { courseId } = useParams() as UrlParams
@@ -111,41 +112,68 @@ const CourseUpdatePage = ({ }) => {
     // for each email parsed from file, call handle add or drop student as needed
     // }
 
-    const getUserId = (email: string): number | null => {
-        RequestService.get("/api/users/")
-            .then((res) => {
-                const user: User = res.data.find((user: User) => user.email === email);
-                if (user) {
-                    return user.id
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching users:", error);
-            });
-        return null
+    const getUserId = async (email: string): Promise<boolean> => {
+        try {
+            const res: User[] = await RequestService.get("/api/users/");
+            const user: User | undefined = res.find((user: User) => user.email === email);
+            
+            if (user) {
+                console.log("User found");
+                console.log(user);
+                console.log(user.id);
+                setStudentID(user.id);
+                return true;
+            } else {
+                console.log("User not found");
+                return false;
+            }
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            return false;
+        }
     }
 
-    const addSingleStudent = (email: string) => {
-        const userID = getUserId(email)
-        if (!userID) { return }
+    const addSingleStudent = async (email: string) => {
+        const idFound = await getUserId(email)
+        
+        if (!idFound) { 
+            console.log("userID not found")
+            setAlert({ autoDelete: false, type: 'error', message: "userID not found"})
+            return 
+        }
 
         const userCourseData = {
-            userId: userID,
+            userId: 1,
             courseId: courseId,
             role: 'student',
             dropped: false
         }
 
-        RequestService.post(`/api/courses/${courseId}/users-courses`, userCourseData)
-            .catch((error: Error) => {
-                const message = error.message
-                setAlert({ autoDelete: false, type: 'error', message })
-            }).catch((error: Error) => {
-                const message = error.message
-                setAlert({ autoDelete: false, type: 'error', message })
-            }).finally(() => {
-                setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` })
-            })
+        console.log("STUDENT ID BEFORE USER COURSE CALL: ", studentID)
+
+        // RequestService.post(`/api/courses/${courseId}/users-courses`, userCourseData)
+        //     .then(()=>{
+        //         setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` })
+        //         console.log("added")
+        //     })
+        //     .catch((error: Error) => {
+        //         const message = error.message
+        //         setAlert({ autoDelete: false, type: 'error', message })
+        //         console.log(message)
+        //     }).catch((error: Error) => {
+        //         const message = error.message
+        //         setAlert({ autoDelete: false, type: 'error', message })
+        //         console.log(message)
+        //     })
+        try {
+            await RequestService.post(`/api/courses/${courseId}/users-courses`, userCourseData);
+            setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` });
+            console.log("Added");
+        } catch (error: any) { // Use any if the error type isn't strictly defined
+            const message = error.message || "An unknown error occurred";
+            setAlert({ autoDelete: false, type: 'error', message });
+            console.log(message);
+        }
 
     }
 
