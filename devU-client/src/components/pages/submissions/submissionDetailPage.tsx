@@ -1,15 +1,20 @@
 import React, {useEffect, useState} from 'react'
-
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from '../errorPage/errorPage'
 import RequestService from 'services/request.service'
-import {Assignment, AssignmentProblem, Submission, SubmissionProblemScore, SubmissionScore} from 'devu-shared-modules'
-import {Link, useParams} from 'react-router-dom'
+import {Assignment, AssignmentProblem, Submission, SubmissionProblemScore,SubmissionScore} from 'devu-shared-modules'
+import { useParams,/*useHistory*/} from 'react-router-dom'
 import Button from '../../shared/inputs/button'
 import TextField from '../../shared/inputs/textField'
 import {useActionless} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
+import styles from './submissionDetailPage.scss'
+import 'react-datepicker/dist/react-datepicker.css'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import {CardActionArea, Typography} from '@mui/material'
+import {prettyPrintDateTime} from "../../../utils/date.utils";
 
 
 const SubmissionDetailPage = () => {
@@ -21,10 +26,11 @@ const SubmissionDetailPage = () => {
     const { submissionId, assignmentId, courseId } = useParams<{submissionId: string, assignmentId: string, courseId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
-    const [submission, setSubmission] = useState<Submission>()
+    const [selectedSubmission, setSelectedSubmission] = useState<Submission>()
+    //const [submission, setSubmission] = useState<Submission>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [assignment, setAssignment] = useState<Assignment>()
-
+    const [submissions, setSubmissions] = useState(new Array<Submission>())
     const [showManualGrade, setToggleManualGrade] = useState(false)
     const [formData, setFormData] = useState({
         submissionId: submissionId,
@@ -32,23 +38,33 @@ const SubmissionDetailPage = () => {
         feedback: '',
         releasedAt: "2024-10-05T14:48:00.00Z"
     })
+    
 
     const fetchData = async () => {
         try {
-            const submission = await RequestService.get<Submission>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/${submissionId}`)
-            setSubmission(submission)
+            
+            //const submission = await RequestService.get<Submission>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/${submissionId}`)
+            //setSubmission(submission)
 
             const submissionScore = (await RequestService.get<SubmissionScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores?submission=${submissionId}`)).pop() ?? null
             setSubmissionScore(submissionScore)
-
-            const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores/submission/${submissionId}`)
-            setSubmissionProblemScores(submissionProblemScores)
             
-            const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${submission.assignmentId}`)
+            const selectedSubmission = await RequestService.get<Submission>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/${submissionId}`);
+            setSelectedSubmission(selectedSubmission);
+            
+            const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores/submission/${submissionId}`)
+             setSubmissionProblemScores(submissionProblemScores)
+            
+            const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${selectedSubmission.assignmentId}`)
             setAssignment(assignment)
 
             const assignmentProblems = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignment.id}/assignment-problems`)
             setAssignmentProblems(assignmentProblems)  
+
+            const submissionsReq = await RequestService.get<Submission[]>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/`)
+            submissionsReq.sort((a, b) => (Date.parse(b.createdAt ?? '') - Date.parse(a.createdAt ?? '')))
+            setSubmissions(submissionsReq)
+
 
         } catch (error: any) {
             setError(error)
@@ -79,6 +95,7 @@ const SubmissionDetailPage = () => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Updated' })
             
             })
+            
         }
         else {
             // Create a new submission score
@@ -90,9 +107,13 @@ const SubmissionDetailPage = () => {
         }
     }
 
+     
+    
+
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
-
+    //const history = useHistory()
+    //var submission_form = JSON.parse(submission?.content);
     return(
         <PageWrapper>
             <Button onClick={handleClick}>Manually Grade</Button>
@@ -104,27 +125,85 @@ const SubmissionDetailPage = () => {
                     <Button onClick={handleManualGrade}>Submit</Button>
                 </div>
             )}
+                <div className={styles.scores}>
+                <h1>Submissions For Assignment {assignment?.name}</h1>
+  
+
+            <div className={styles.submissionsLayout}>
+
+           <div className={styles.submissionsContainer}>
+                <h2>Submission List:</h2>
+             {submissions.map((submission, index) => (
+            <Card className={styles.submissionCard} key={index}>
+            <CardActionArea onClick={() => 
+           setSelectedSubmission(submission)}>
+            <CardContent>
+              <Typography className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</Typography>
+              <Typography className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ))}
+        </div>
+            <div className={styles.submissionContent}>
+           
+        
+            {selectedSubmission ? (
+                <>
+               
+                 <div className={styles.scoreDisplay}>
+                <h2 className = {styles.content_title}>{submissionScore ? `Score: ${submissionScore.score}` : "Score: N/A"}</h2>
+              </div>
             
-            <h1>Submission Detail for {assignment?.name}</h1>
-            <h2>Submission Grades:</h2>
-            <table>
-                {assignmentProblems.map(ap => (
-                    <th>{ap.problemName} ({ap.maxScore})</th>
-                ))}
-                <th>Total Score</th>
-                <tr>
-                    {assignmentProblems.map(ap => (
-                        <td>{submissionProblemScores.find(sps => sps.assignmentProblemId === ap.id)?.score ?? "N/A"}</td>
-                    ))}
-                    <td>{submissionScore?.score ?? "N/A"}</td>
-                </tr>
+              <div className={styles.feedbackContainer}>
+            <h3 className={styles.content_title}>Feedback:</h3>
+            <div className={styles.problemAnswerContainer}>
+            <table className={styles.assignmentTable}>
+            <thead>
+            <tr>
+             {assignmentProblems.map(ap => (
+                 <th key={ap.id}>{ap.problemName}</th>
+             ))}
+            <th>Total Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            
+            {assignmentProblems.map(ap => (
+             <td key={ap.id}>
+            {submissionProblemScores.find(sps => sps.assignmentProblemId === ap.id)?.score ?? "N/A"}
+            </td>
+            ))}
+             <td>{submissionScore?.score ?? "N/A"}</td>
+            </tr>
+            </tbody>
             </table>
-            <Link to={`/course/${courseId}/assignment/${assignmentId}/submission/${submissionId}/feedback`}>View
-                Feedback</Link>
-            <br/>
+            </div>
+            {submissionScore?.feedback ? (
+              <p>{submissionScore.feedback}</p>
+            ) : (
+              <p>No feedback provided for this submission.</p>
+            )}
+              {submissionProblemScores.map(sps => (
+                <div>
+                    <h2>Feedback for {assignmentProblems.find(ap => ap.id === sps.assignmentProblemId)?.problemName}:</h2>
+                    <pre>{sps.feedback}</pre>
+                </div>
+            ))} 
             
-            <h2>Submission Content:</h2>
-            <pre>{submission?.content}</pre>
+            </div>
+                <h2 className={styles.content_title}>Content</h2>
+                <div className={styles.scrollableContent}>
+               <pre>{selectedSubmission.content}</pre>
+              </div>
+              </>
+           ) : (
+           <p>Select a submission to view its content.</p>
+          )}
+         </div>
+       </div>
+     </div>
         </PageWrapper>
     )
 }
