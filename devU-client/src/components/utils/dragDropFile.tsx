@@ -4,11 +4,17 @@ import Button from '@mui/material/Button'
 
 interface DragDropFileProps {
   handleFile : (file : File) => void;
+  className ?: string;
 }
 
-function DragDropFile({handleFile} : DragDropFileProps) {
+function DragDropFile({handleFile, className} : DragDropFileProps) {
     const [dragActive, setDragActive] = React.useState(false);
     const inputRef = React.useRef<HTMLInputElement | null>(null);
+
+    // set default class name
+    if (className === undefined) {
+      className = "formFileUpload"
+    }
     
     // handle drag events
     const handleDrag = function(e : React.DragEvent) {
@@ -49,7 +55,7 @@ function DragDropFile({handleFile} : DragDropFileProps) {
     };
     
     return (
-      <form id="form-file-upload" className={styles.formFileUpload} onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
+      <form id="form-file-upload" className={className ? styles[className] : ''} onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
         <input ref={inputRef} type="file" id="input-file-upload" className={styles.inputFileUpload} multiple={true} onChange={handleChange} />
         <label id="label-file-upload" className={styles.labelFileUpload} htmlFor="input-file-upload">
           <div>
