@@ -31,10 +31,10 @@ const AssignmentCreatePage = () => {
     const [formData, setFormData] = useState({
         courseId: courseId,
         name: '',
-        categoryName: null,
-        description: null,
+        categoryName: '',
+        description: '',
         maxFileSize: 0,
-        maxSubmissions: null,
+        maxSubmissions: 0,
         disableHandins: false,
     })
     const [endDate, setEndDate] = useState(new Date())
@@ -98,7 +98,23 @@ const AssignmentCreatePage = () => {
             disableHandins: formData.disableHandins,
         }
 
-        RequestService.post(`/api/course/${courseId}/assignments/`, finalFormData)
+        const multipart = new FormData
+        multipart.append('courseId', finalFormData.courseId)
+        multipart.append('name', finalFormData.name)
+        multipart.append('startDate', finalFormData.startDate)
+        multipart.append('dueDate', finalFormData.dueDate)
+        multipart.append('endDate', finalFormData.endDate)
+        multipart.append('categoryName', finalFormData.categoryName)
+        if(finalFormData.description !== null) { multipart.append('description', finalFormData.description)  }
+        multipart.append('maxFileSize', finalFormData.maxFileSize.toString())
+        if(finalFormData.maxSubmissions !== null) { multipart.append('maxSubmissions', finalFormData.maxSubmissions.toString())  }
+        multipart.append('disableHandins', finalFormData.disableHandins.toString())
+        for(const file of files.values()){
+            multipart.append('files', file)
+        }
+
+
+        RequestService.postMultipart(`/api/course/${courseId}/assignments/`, multipart)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
                 history.goBack()
@@ -117,16 +133,6 @@ const AssignmentCreatePage = () => {
 
     }
 
-    // const handleFile = (file : File) => {
-    //     if(Object.keys(files).length < 5){
-    //     setFiles(prevState => ({...prevState, [file.name] : file}))
-    //     } else {
-    //         //TODO: Add alert
-    //         console.log('Max files reached')
-    //     }
-    //     console.log(files)
-    // }
-
     const handleFile = (file: File) => {
         if (files.size < 5) {
             setFiles(prevState => new Map(prevState).set(file.name, file));
@@ -134,7 +140,6 @@ const AssignmentCreatePage = () => {
             // TODO: Add alert
             console.log('Max files reached');
         }
-        console.log(files);
     };
 
     const handleFileRemoval = (e: React.MouseEvent<HTMLButtonElement>) => {

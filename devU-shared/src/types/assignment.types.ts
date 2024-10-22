@@ -12,7 +12,7 @@ export type Assignment = {
   disableHandins: boolean
   createdAt?: string
   updatedAt?: string
-  attachmentsHashes: string[]
-  attachmentsFilenames: string[]
+  attachmentsHashes ?: string[]
+  attachmentsFilenames ?: string[]
 }
 
