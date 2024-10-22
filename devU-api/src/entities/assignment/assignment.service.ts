@@ -82,7 +82,7 @@ export async function isReleased(id: number) {
 }
 
 async function getMaxSubmissionsForAssignment(id: number) {
-  return await connect().findOne({ where: { id: id }, select: ['maxSubmissions', 'maxFileSize'] })
+  return await connect().findOne({ where: { id: id, deletedAt: IsNull() }, select: ['maxSubmissions', 'maxFileSize'] })
 }
 
 async function processFiles(req: Request) {
