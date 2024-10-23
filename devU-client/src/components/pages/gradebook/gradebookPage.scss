@@ -81,6 +81,8 @@ tr:last-of-type td:last-of-type {
   color: $redText; 
 }
 
+// STUDENT GRADEBOOK STYLING
+
 .header {
   color: $text-color;
   display: flex;
@@ -100,6 +102,7 @@ tr:last-of-type td:last-of-type {
   border-radius: 20px !important;
   transform: translateZ(0);
 }
+
 .table {
   color: $text-color;
   width: 100%;
@@ -128,11 +131,13 @@ tr:last-of-type td:last-of-type {
   }
 
   .evenRow {
-    background-color: if(type-of($secondary-lighter) == 'color', lighten($secondary-lighter, 5%), #e0e0e0); // Fallback to #e0e0e0
+    // background-color: if(type-of($secondary-lighter) == 'color', lighten($secondary-lighter, 5%), #e0e0e0); // Fallback to #e0e0e0
+    background-color: $table-row-even;
   }
 
   .oddRow {
-    background-color: if(type-of($secondary-lighter) == 'color', darken($secondary-lighter, 5%), #d0d0d0); // Fallback to #d0d0d0
+    // background-color: if(type-of($secondary-lighter) == 'color', darken($secondary-lighter, 5%), #d0d0d0); // Fallback to #d0d0d0
+    background-color: $table-row-odd;
   }
 
 }
