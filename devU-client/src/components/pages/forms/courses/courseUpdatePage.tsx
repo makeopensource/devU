@@ -23,6 +23,7 @@ type UrlParams = {
     courseId: string
 }
 
+// copied from devU-shared>src>types>user.types.ts and edited from id? to id
 type User = {
     id: number
     externalId: string // School's unique identifier (the thing that links to the schools auth)
@@ -143,7 +144,7 @@ const CourseUpdatePage = ({ }) => {
         }
 
         const userCourseData = {
-            userId: 1,
+            userId: studentID,
             courseId: courseId,
             role: 'student',
             dropped: false
@@ -151,22 +152,8 @@ const CourseUpdatePage = ({ }) => {
 
         console.log("STUDENT ID BEFORE USER COURSE CALL: ", studentID)
 
-        // RequestService.post(`/api/courses/${courseId}/users-courses`, userCourseData)
-        //     .then(()=>{
-        //         setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` })
-        //         console.log("added")
-        //     })
-        //     .catch((error: Error) => {
-        //         const message = error.message
-        //         setAlert({ autoDelete: false, type: 'error', message })
-        //         console.log(message)
-        //     }).catch((error: Error) => {
-        //         const message = error.message
-        //         setAlert({ autoDelete: false, type: 'error', message })
-        //         console.log(message)
-        //     })
         try {
-            await RequestService.post(`/api/courses/${courseId}/users-courses`, userCourseData);
+            await RequestService.post(`/api/course/${courseId}/user-courses`, userCourseData);
             setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` });
             console.log("Added");
         } catch (error: any) { // Use any if the error type isn't strictly defined
