@@ -75,7 +75,7 @@ const HomePage = () => {
         <PageWrapper>
             <div className={styles.header}>
                 <div className={styles.smallLine}></div>
-                <h2 className={styles.h2}>Courses</h2>
+                <h2 className={styles.courses_title}>Courses</h2>
                 <button className = {styles.create_course} onClick={() => {
                     history.push(`/addCoursesForm`)
                     }}>Create Course
@@ -84,7 +84,7 @@ const HomePage = () => {
             </div>
             <div className={styles.header}>
                 <div className={styles.smallLine}></div>
-                <h3>Current</h3>
+                <h3 className = {styles.courses_heading}>Current</h3>
                 <div className={styles.largeLine}></div>
             </div>
             <div className={styles.coursesContainer}>
@@ -101,12 +101,12 @@ const HomePage = () => {
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}/>
                     </div>
                 ))}
-                {enrollCourses.length === 0 && <h4>You do not have current enrollment yet</h4>}
+                {enrollCourses.length === 0 && <h4 className={styles.no_courses}>You do not have current enrollment yet</h4>}
             </div>
 
             <div className={styles.header}>
                 <div className={styles.smallLine}></div>
-                <h3>Completed</h3>
+                <h3 className = {styles.courses_heading}>Completed</h3>
                 <div className={styles.largeLine}></div>
             </div>
 
@@ -122,12 +122,12 @@ const HomePage = () => {
                         />
                         </div>
                 ))}
-                {pastCourses.length === 0 && <h4>No completed courses</h4>}
+                {pastCourses.length === 0 && <h4 className={styles.no_courses}>No completed courses</h4>}
             </div>
 
             <div className={styles.header}>
                 <div className={styles.smallLine}></div>
-                <h3>Upcoming</h3>
+                <h3 className = {styles.courses_heading}>Upcoming</h3>
                 <div className={styles.largeLine}></div>
                 </div>
 
@@ -137,7 +137,7 @@ const HomePage = () => {
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}/>
                     </div>
                 ))}
-                {upcomingCourses.length === 0 && <h4>No upcoming Courses</h4>}
+                {upcomingCourses.length === 0 && <h4 className={styles.no_courses}>No upcoming Courses</h4>}
                 </div>
           
            
