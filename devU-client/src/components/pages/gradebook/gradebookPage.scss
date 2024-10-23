@@ -6,7 +6,7 @@
 }
 
 .assignmentName {
-    color: $blue-darker
+    color: $focus;
 }
 
 .smallLine {
@@ -101,7 +101,7 @@ tr:last-of-type td:last-of-type {
   transform: translateZ(0);
 }
 .table {
-  color: $blue-darker;
+  color: $text-color;
   width: 100%;
   overflow: hidden;
   border-collapse: collapse;
