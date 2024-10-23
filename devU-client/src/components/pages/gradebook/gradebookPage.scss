@@ -1,19 +1,12 @@
 @import 'variables';
 
-.header {
-  // not necessary since header styling is now global
-  color: $text-color;
-  display: flex;
-  align-items: center;
-}
-
 .categoryName {
     color: $text-color;
     font-size: 1.25rem;
 }
 
 .assignmentName {
-    color: $text-color
+    color: $blue-darker
 }
 
 .smallLine {
@@ -87,3 +80,84 @@ tr:last-of-type td:last-of-type {
 .tableOptions span:last-child, span.red {
   color: $redText; 
 }
+
+.header {
+  color: $text-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.gradebook-container {
+  /* Add a container for the gradebook tables */
+  display: flex;
+  flex: 1 0 300px;
+  gap: 20px; /* Space between the tables */
+  overflow: hidden;
+}
+.gradebook-container .table {
+  border-radius: 20px !important;
+  transform: translateZ(0);
+}
+.table {
+  color: $blue-darker;
+  width: 100%;
+  overflow: hidden;
+  border-collapse: collapse;
+  border-radius: 20px;
+  background-color: $secondary-lighter;
+  table-layout: fixed; /* Key for even distribution */
+
+
+  th, td {
+
+    border: none;
+    border-radius: 0;
+    padding: 15px;
+    text-align: left;
+    width: 50%; /* Distribute columns evenly */
+    overflow: hidden; /* Prevent content from overflowing */
+    text-overflow: ellipsis; /* Add ellipsis for long names */
+  }
+
+
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+
+  .evenRow {
+    background-color: if(type-of($secondary-lighter) == 'color', lighten($secondary-lighter, 5%), #e0e0e0); // Fallback to #e0e0e0
+  }
+
+  .oddRow {
+    background-color: if(type-of($secondary-lighter) == 'color', darken($secondary-lighter, 5%), #d0d0d0); // Fallback to #d0d0d0
+  }
+
+}
+.headerRow th { /* Style for the purple header row */
+  background-color: $primary; /* Purple background */
+  color: white;
+}
+.content{
+  padding: 15px;
+  text-align: left;
+}
+
+.actual_button {
+  color: white;
+  display: flex;
+  align-items: flex-end;
+  border: 0; /* Primary button color */
+  /* Button text color */
+  padding: 10px 20px; /* Padding for button */
+  border-radius: 5px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  margin : 0 10px;
+  background-color: $purple !important;
+
+}
+
+

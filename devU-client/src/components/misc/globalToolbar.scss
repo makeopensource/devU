@@ -17,13 +17,18 @@ $font-size: 16px;
 
   text-decoration: none;
   color: #FFF;
+
   font-size: $font-size;
+
+  //height: $bar-height;
+
   margin:3vw;
   height: 4vh;
   flex-grow: .05;
   border-radius: 3vw;
   font-weight: 550;
-  font-size: 14px;
+  //font-size: 14px;
+
   padding:0.5vw;
 
   &:hover {
@@ -33,15 +38,18 @@ $font-size: 16px;
 
 .header {
   @extend .link;
-
   font-size: 40px;
   border-radius: 30px;
   font-weight: 550;
+  //font-size: 2em;
+  //font-weight: bold;
 }
 
 .bar {
   height: 60px;
   background-color: $primary;
+  font-size: 40px;
+  color: #FFF;
   @extend .flex;
   justify-content: space-between;
 }
@@ -87,7 +95,7 @@ $font-size: 16px;
     background: transparent;
     border: none;
 
-    color: $text-color;
+    color: $yellow;
     font-size: $font-size;
 
     &:hover {

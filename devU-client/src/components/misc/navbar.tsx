@@ -81,16 +81,16 @@ const Navbar = ({breadcrumbs}: any) => {
     ]
 
     return (
-        <div>
+        <div className={styles.breadcrumbContainer}>
             {breadcrumbs.map(({breadcrumb, match}: any, index: number) => {
                 let url = match.url
-                if (excludedPaths.includes(match.params.path)) return <div key={index} ></div>
+                if (excludedPaths.includes(match.params.path)) return null
                 if (match.params.home) url = '/'
 
                 return (
                     <span key={match.url}>
                         <Link to={url} className={styles.link}> {breadcrumb} </Link>
-                        {index < (breadcrumbs.length - 1) ? ' > ' : ''}
+                        {index < (breadcrumbs.length - 1) && ( <span className={styles.separator}> &gt; </span> )}
                     </span>
                 )
             })}
