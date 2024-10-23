@@ -10,7 +10,10 @@ const connect = () => dataSource.getRepository(UserCourse)
 export async function create(userCourse: UserCourseType) {
   const userId = userCourse.userId
   const hasEnrolled = await connect().findOneBy({ userId, courseId: userCourse.courseId })
-  if (hasEnrolled) throw new Error('User already enrolled in course')
+  if (hasEnrolled) {
+    console.warn('User already enrolled in course')
+    return null
+  }
   return await connect().save(userCourse)
 }
 
