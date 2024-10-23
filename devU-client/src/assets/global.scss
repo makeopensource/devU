@@ -61,17 +61,11 @@
 
     --background: white;
     --text-color: black;
-    --text-color2: white;
     --text-color-secondary: #363636;
     --focus: var(--blue);
 
-    --primary-lighter: #41a8f7;
-
     --primary: var(--purple);
 
-    // --primary: #D9D9D9;
-
-    --primary-darker: #054272;
     --secondary-lighter: #cfd1d1;
     --secondary: #a8abab;
     --secondary-darker: #686b6b;
@@ -98,14 +92,21 @@
     --input-field-background: var(--grey-lightest);
     --input-field-label: var(--grey);
 
+    --table-row-even: var(--grey-lighter);
+    --table-row-odd: var(--grey-lightest);
+
+    --red-text: var(--red);
+    --yellow-text: var(--yellow-dark);
+
     // Non theme colors - will not update with light/dark toggle
     --grey-lightest: #e5e5e5;
     --grey-lighter: #c5c5c5;
     --grey: #555555;
-    --grey-dark: #333333; 
+    --grey-darker: #444444;
+    --grey-darkest: #333333; 
 
-    //--blue-lighter: #78B7FF;
-    //--blue: #1F3D7A;
+    --blue-lighter: #78B7FF;
+    --blue: #1F3D7A;
 
     --red-lighter: #FFA3A3;
     --red: #8A2626;
@@ -117,7 +118,7 @@
     --green-lighter: #B0EEA2;
     --green: #306025;
 
-    --yellow-lighter: #ffeaa7;
+    --yellow-dark: #664600;
     --yellow: #F8D487;
 
     transition: background-color 150ms linear;
@@ -127,16 +128,9 @@
     --background: #1e1e1e;
     --text-color: #FFF;
     --text-color-secondary: #9b9b9b;
-    --blue-darker: #2767a3;
-    --primary-lighter: #3796bc;
-    --primary: #5c36c3;
-   // --primary-darker: rgb(92, 54, 195);
+    --focus: var(--blue-lighter);
 
-    //--primary: #7257EB;
-//     --primary-darker: #2F2363;
-
-    // --primary: #636666;
-    --primary-darker: #133441;
+    --primary: #7257EB;
 
     --secondary-lighter: #636666;
     --secondary: #3d3f3f;
@@ -160,6 +154,12 @@
 
     --input-field-background: var(--grey);
     --input-field-label: var(--grey-lightest);
+
+    --table-row-even: var(--grey-darker);
+    --table-row-odd: var(--grey-darkest);
+
+    --red-text: var(--red-lighter);
+    --yellow-text: var(--yellow);
 
     background-color: var(--background);
     color: var(--text-color);
