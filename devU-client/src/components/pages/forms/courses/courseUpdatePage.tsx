@@ -48,8 +48,7 @@ const CourseUpdatePage = ({ }) => {
     const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
     const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0])
     const [studentEmail, setStudentEmail] = useState("")
-    const [studentID, setStudentID] = useState<number>(0)
-    const [strvnum, setstr] = useState("")
+    const [studentID, setStudentID] = useState<number>()
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const { courseId } = useParams() as UrlParams
@@ -126,8 +125,7 @@ const CourseUpdatePage = ({ }) => {
                 console.log("User found");
                 console.log("getUserId User: ", user);
                 console.log("getUserId user.id", user.id);
-                setstr("heehoo");
-                setStudentID(user.id);
+                // setStudentID(user.id.toString());
                 return user.id;
             } else {
                 console.log("User not found");
@@ -162,15 +160,13 @@ const CourseUpdatePage = ({ }) => {
         setStudentID(id);
 
         const userCourseData = {
-            userId: studentID,
+            userId: id,
             courseId: courseId,
             role: 'student',
             dropped: false
         }
 
-        console.log("STUDENT ID BEFORE USER COURSE CALL: ", studentID)
-        console.log("strvnum should be heehoo: ", strvnum)
-        // NOTE: strvnum isnt updating --> not updating state in the middle of function
+        console.log("CALLING WITH USER ID: ", userCourseData.userId)
 
         try {
             await RequestService.post(`/api/course/${courseId}/user-courses`, userCourseData)
@@ -181,7 +177,6 @@ const CourseUpdatePage = ({ }) => {
             setAlert({ autoDelete: false, type: 'error', message })
             console.log(message)
         }
-
     }
 
     const handleAddStudent = () => {
