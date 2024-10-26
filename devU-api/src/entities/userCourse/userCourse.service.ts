@@ -60,8 +60,8 @@ export async function update(userCourse: UserCourseType) {
   if (!userCourseData) throw new Error('User not enrolled in course')
   userCourseData.role = role
   userCourseData.dropped = dropped
-  if (!userCourse.id) throw new Error('Missing Id')
-  return await connect().update(userCourse.id, userCourseData)
+  if (!userCourseData.id) throw new Error('Missing Id')
+  return await connect().update(userCourseData.id, userCourseData)
 }
 
 export async function _delete(courseId: number, userId: number) {
