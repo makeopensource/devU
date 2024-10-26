@@ -154,7 +154,6 @@ const CourseUpdatePage = ({ }) => {
         try {
             await RequestService.post(`/api/course/${courseId}/user-courses`, userCourseData)
             setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` })
-            console.log("Added")
         } catch (error: any) { // Use any if the error type isn't strictly defined
             const message = error.message || "An unknown error occurred"
             setAlert({ autoDelete: false, type: 'error', message })
@@ -180,12 +179,10 @@ const CourseUpdatePage = ({ }) => {
 
         try {
             await RequestService.delete(`/api/course/${courseId}/user-courses/${userID}`)
-            setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` })
-            console.log("dropped")
+            setAlert({ autoDelete: true, type: 'success', message: `${email} dropped from course` })
         } catch (error: any) { // Use any if the error type isn't strictly defined
             const message = error.message || "An unknown error occurred"
             setAlert({ autoDelete: false, type: 'error', message })
-            console.log(message)
         }
     }
 
