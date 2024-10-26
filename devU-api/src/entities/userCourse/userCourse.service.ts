@@ -38,7 +38,16 @@ export async function bulkAddDrop(userEmails: string[], courseId: number, drop: 
 
     try {
       if (!drop) {
-        await create(student)
+        try {
+          await create(student)
+        } catch (error) {
+            if (error instanceof Error && error.message === 'User already enrolled in course') {
+              // update student drop to false, since they re-enrolled after being dropped
+              await update(student)
+            } else {
+              throw error; // re-throw if it's a different error
+            }
+        }
         success.push(`${email} enrolled successfully`)
       } else {
         await update(student)
