@@ -48,7 +48,7 @@ const CourseUpdatePage = ({ }) => {
     const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
     const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0])
     const [studentEmail, setStudentEmail] = useState("")
-    const [studentID, setStudentID] = useState<number>()
+    // const [studentID, setStudentID] = useState<number>()
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const { courseId } = useParams() as UrlParams
@@ -125,7 +125,6 @@ const CourseUpdatePage = ({ }) => {
                 console.log("User found");
                 console.log("getUserId User: ", user);
                 console.log("getUserId user.id", user.id);
-                // setStudentID(user.id.toString());
                 return user.id;
             } else {
                 console.log("User not found");
@@ -137,27 +136,13 @@ const CourseUpdatePage = ({ }) => {
         }
     }
 
-    useEffect(() => {
-        if (!studentID) {
-            console.log("userID not found");
-            // setAlert({ autoDelete: false, type: 'error', message: "userID not found" });
-        } else {
-            console.log("studentID after calling getUserID: ", studentID);
-        }
-    }, [studentID]); // Only run this effect when studentID changes
-
     const addSingleStudent = async (email: string) => {
         const id = await getUserId(email)
-        console.log("studendID after calling getUserID: ", studentID)
-        console.log("id after calling getUserID: ", id)
         
         if (!id) { 
-            console.log("userID not found")
             setAlert({ autoDelete: false, type: 'error', message: "userID not found"})
             return
         }
-
-        setStudentID(id);
 
         const userCourseData = {
             userId: id,
@@ -166,14 +151,12 @@ const CourseUpdatePage = ({ }) => {
             dropped: false
         }
 
-        console.log("CALLING WITH USER ID: ", userCourseData.userId)
-
         try {
             await RequestService.post(`/api/course/${courseId}/user-courses`, userCourseData)
             setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` })
             console.log("Added")
         } catch (error: any) { // Use any if the error type isn't strictly defined
-            const message = error.message || "An unknown error occurred";
+            const message = error.message || "An unknown error occurred"
             setAlert({ autoDelete: false, type: 'error', message })
             console.log(message)
         }
@@ -191,21 +174,20 @@ const CourseUpdatePage = ({ }) => {
         dropSingleStudent(studentEmail)
     }
 
-    const dropSingleStudent = (email: string) => {
-        const userID = getUserId(email)
+    const dropSingleStudent = async (email: string) => {
+        const userID = await getUserId(email)
         if (!userID) { return }
-        RequestService.delete(`/api/courses/${courseId}/users-courses/${userID}`)
-            .catch((error: Error) => {
-                const message = error.message
-                setAlert({ autoDelete: false, type: 'error', message })
-            }).catch((error: Error) => {
-                const message = error.message
-                setAlert({ autoDelete: false, type: 'error', message })
-            }).finally(() => {
-                setAlert({ autoDelete: true, type: 'success', message: `${email} dropped from course` })
-            })
-    }
 
+        try {
+            await RequestService.delete(`/api/course/${courseId}/user-courses/${userID}`)
+            setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` })
+            console.log("dropped")
+        } catch (error: any) { // Use any if the error type isn't strictly defined
+            const message = error.message || "An unknown error occurred"
+            setAlert({ autoDelete: false, type: 'error', message })
+            console.log(message)
+        }
+    }
 
     return (
         <PageWrapper>
