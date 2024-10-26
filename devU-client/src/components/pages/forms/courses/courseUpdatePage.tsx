@@ -113,7 +113,6 @@ const CourseUpdatePage = ({ }) => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const uploadedFile = event.target.files?.[0] || null;
         if (uploadedFile) {
-            console.log("file uploaded")
             handleFileUpload(uploadedFile);
         }
     };
@@ -166,7 +165,6 @@ const CourseUpdatePage = ({ }) => {
             const user: User | undefined = res.find((user: User) => user.email === email);
 
             if (user) {
-                console.log("User found");
                 return user.id;
             } else {
                 console.log("User not found");
@@ -181,7 +179,7 @@ const CourseUpdatePage = ({ }) => {
     const addSingleStudent = async (email: string) => {
         const id = await getUserId(email)
 
-        if (!id) {
+        if (id == 0) {
             setAlert({ autoDelete: false, type: 'error', message: "userID not found" })
             return
         }
