@@ -333,7 +333,7 @@ const AssignmentUpdatePage = () => {
             <div key={problem.id} className={styles.problem}>
               <h3 style={{marginRight : '20px'}}>{`Problem ${index + 1}`}</h3>
               <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenModal(problem) } }}>Edit</Button>
-              <Button onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
+              <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
             </div>
           ))}
           <Button onClick={openAddProblemModal} className={styles.button}>Add Problem</Button>
