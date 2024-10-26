@@ -45,8 +45,8 @@ const CourseUpdatePage = ({ }) => {
         number: '',
         semester: '',
     })
-    const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
-    const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0])
+    const [startDate, setStartDate] = useState(new Date().toISOString())
+    const [endDate, setEndDate] = useState(new Date().toISOString())
     const [studentEmail, setStudentEmail] = useState("")
     const [emails, setEmails] = useState<string[]>([])
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
@@ -89,8 +89,8 @@ const CourseUpdatePage = ({ }) => {
             name: formData.name,
             number: formData.number,
             semester: formData.semester,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: startDate + "T16:02:41.849Z",
+            endDate: endDate + "T16:02:41.849Z",
         }
 
         RequestService.put(`/api/courses/${courseId}`, finalFormData)
