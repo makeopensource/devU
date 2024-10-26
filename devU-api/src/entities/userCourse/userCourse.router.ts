@@ -105,7 +105,7 @@ Router.post('/', validator, UserCourseController.post)
 
 /**
  * @swagger
- * /courses/{courseId}/users/add:
+ * /courses/{courseId}/students/add:
  *   put:
  *     summary: Add multiple students to a course
  *     tags:
@@ -153,7 +153,7 @@ Router.post('/students/add', asInt('courseId'), isAuthorized('courseViewAll'), U
 
 /**
  * @swagger
- * /courses/{courseId}/users/drop:
+ * /courses/{courseId}/students/drop:
  *   put:
  *     summary: Drop multiple students from a course
  *     tags:
