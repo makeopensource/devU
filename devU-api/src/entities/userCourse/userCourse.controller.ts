@@ -73,12 +73,16 @@ export async function detailByUser(req: Request, res: Response, next: NextFuncti
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
     const userCourse = await UserCourseService.create(req.body)
+    if (userCourse === null) {
+      return res.status(409).json('User already enrolled')
+    }
+
     const response = serialize(userCourse)
 
     res.status(201).json(response)
   } catch (err) {
     if (err instanceof Error) {
-        res.status(400).json(new GenericResponse(err.message))
+      res.status(400).json(new GenericResponse(err.message))
     }
   }
 }
@@ -88,7 +92,10 @@ export async function put(req: Request, res: Response, next: NextFunction) {
     req.body.courseId = parseInt(req.params.id)
     const currentUser = req.currentUser?.userId
     if (!currentUser) return res.status(401).json({ message: 'Unauthorized' })
-    const results = await UserCourseService.update(req.body, currentUser)
+
+    req.body.userId = currentUser
+
+    const results = await UserCourseService.update(req.body)
     if (!results.affected) return res.status(404).json(NotFound)
 
     res.status(200).json(Updated)
@@ -128,4 +135,42 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { get, getByCourse, getAll, detail, detailByUser, post, put, _delete, checkEnroll }
+export async function addStudents(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userEmails = req.body['users'] as string[]
+    if (!userEmails || userEmails.length == 0) return res.status(422).json({ message: 'users field not found or is empty' })
+    const courseId = parseInt(req.params.courseId)
+
+    const result = await UserCourseService.bulkCreate(userEmails, courseId, false)
+    res.status(201).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function dropStudents(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userEmails = req.body['users'] as string[]
+    if (!userEmails || userEmails.length == 0) return res.status(422).json({ message: 'users field not found or is empty' })
+    const courseId = parseInt(req.params.courseId)
+
+    const result = await UserCourseService.bulkCreate(userEmails, courseId, true)
+    res.status(201).json(result)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export default {
+  get,
+  getByCourse,
+  getAll,
+  detail,
+  detailByUser,
+  post,
+  put,
+  _delete,
+  checkEnroll,
+  addStudents,
+  dropStudents,
+}

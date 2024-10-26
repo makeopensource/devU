@@ -4,23 +4,59 @@ import { dataSource } from '../../database'
 import { UserCourse as UserCourseType } from 'devu-shared-modules'
 
 import UserCourse from './userCourse.model'
+import UserService from '../user/user.service'
 
 const connect = () => dataSource.getRepository(UserCourse)
 
 export async function create(userCourse: UserCourseType) {
   const userId = userCourse.userId
   const hasEnrolled = await connect().findOneBy({ userId, courseId: userCourse.courseId })
-  if (hasEnrolled) {
-    console.warn('User already enrolled in course')
-    return null
-  }
+
+  if (hasEnrolled) throw new Error('User already enrolled in course')
   return await connect().save(userCourse)
 }
 
-export async function update(userCourse: UserCourseType, currentUser: number) {
-  const { courseId, role, dropped } = userCourse
+// Add/drop students based on a list of users,
+// to drop students, set the third param to true
+export async function bulkAddDrop(userEmails: string[], courseId: number, drop: boolean) {
+  const failed: string[] = []
+  const success: string[] = []
+
+  for (const email of userEmails) {
+    const user = await UserService.retrieveByEmail(email)
+    if (user === null) {
+      failed.push(`${email} not found`)
+      continue
+    }
+
+    const student: UserCourseType = {
+      userId: user.id,
+      role: 'student',
+      courseId: courseId,
+      dropped: drop,
+    }
+
+    try {
+      if (!drop) {
+        await create(student)
+        success.push(`${email} enrolled successfully`)
+      } else {
+        await update(student)
+        success.push(`${email} dropped successfully`)
+      }
+    } catch (e) {
+      console.error(`Error occurred while bulk add/drop ${e}`)
+      failed.push(`${email}: ${e}`)
+    }
+  }
+
+  return { 'success': JSON.stringify(success), 'failed': JSON.stringify(failed) }
+}
+
+export async function update(userCourse: UserCourseType) {
+  const { courseId, role, dropped, userId } = userCourse
   if (!courseId) throw new Error('Missing course Id')
-  const userCourseData = await connect().findOneBy({ courseId, userId: currentUser })
+  const userCourseData = await connect().findOneBy({ courseId, userId: userId })
   if (!userCourseData) throw new Error('User not enrolled in course')
   userCourseData.role = role
   userCourseData.dropped = dropped
@@ -46,6 +82,7 @@ export async function list(userId: number) {
   // TODO: look into/test this
   return await connect().findBy({ userId, deletedAt: IsNull() })
 }
+
 export async function listAll() {
   return await connect().findBy({ deletedAt: IsNull() })
 }
@@ -74,4 +111,5 @@ export default {
   listByCourse,
   listByUser,
   checking: checkIfEnrolled,
+  bulkCreate: bulkAddDrop,
 }
