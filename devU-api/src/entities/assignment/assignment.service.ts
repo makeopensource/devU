@@ -81,8 +81,8 @@ export async function isReleased(id: number) {
   return startDate && startDate < currentDate
 }
 
-async function getMaxSubmissionsForAssignment(id: number) {
-  return await connect().findOne({ where: { id: id, deletedAt: IsNull() }, select: ['maxSubmissions', 'maxFileSize'] })
+async function getMaxSubmissionsAndDeadline(id: number) {
+  return await connect().findOne({ where: { id: id, deletedAt: IsNull() }, select: ['maxSubmissions', 'maxFileSize', 'disableHandins', 'endDate'] })
 }
 
 async function processFiles(req: Request) {
@@ -120,6 +120,6 @@ export default {
   listByCourse,
   listByCourseReleased,
   isReleased,
-  getMaxSubmissionsForAssignment,
+  getMaxSubmissionsForAssignment: getMaxSubmissionsAndDeadline,
   processFiles,
 }
