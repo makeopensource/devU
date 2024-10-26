@@ -19,7 +19,9 @@ type Props = {
   invalidated?: boolean
   helpText?: string
   variant?: 'outlined' | 'standard' | 'filled'
-  sx?: SxProps<Theme>;
+  sx?: SxProps<Theme>
+  multiline?: boolean
+  rows?: number
 }
 
 const TextField = ({
@@ -34,7 +36,9 @@ const TextField = ({
   invalidated,
   helpText,
   variant = 'outlined',
-  sx
+  sx,
+  multiline,
+  rows,
 }: Props) => {
   const [theme, setTheme] = useState(getCssVariables())
 
@@ -80,6 +84,9 @@ const TextField = ({
                       // label text
                       "& .MuiInputLabel-outlined" : {
                         color: theme.inputFieldLabel,
+                        "&.Mui-focused": {
+                          color: theme.focus, // Define this color in your theme
+                        },
                       },
                       // border
                       "& .MuiOutlinedInput-notchedOutline" : {
@@ -87,6 +94,9 @@ const TextField = ({
                       },
 
                     }}
+                    {...multiline && { multiline: true }}
+                    {...multiline && rows && { minRows: rows }}
+                    {...multiline && rows && { maxRows: rows }}
                     />
     </div>
   )

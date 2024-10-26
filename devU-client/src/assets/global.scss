@@ -60,15 +60,16 @@
     color: var(--text-color);
 
     --background: white;
-    --text-color: #52468A;
+    --text-color: black;
+    --text-color2: white;
     --text-color-secondary: #363636;
-    --focus: #38c172;
+    --focus: var(--blue);
 
     --primary-lighter: #41a8f7;
 
-//     --primary: #52468A;
+    --primary: var(--purple);
 
-    --primary: #D9D9D9;
+    // --primary: #D9D9D9;
 
     --primary-darker: #054272;
     --secondary-lighter: #cfd1d1;
@@ -83,6 +84,9 @@
     --list-simple-item-background-hover: #a0a0a0;
     --list-simple-item-subtext: #4b4b4b;
 
+    --blue-lighter: #74b9ff;
+    --blue: #0984e3;
+    --blue-darker: #083967;
     --btn-secondary-border: var(--primary);
     --btn-secondary-background: #FFF;
     --btn-secondary-text: var(--primary);
@@ -100,35 +104,38 @@
     --grey: #555555;
     --grey-dark: #333333; 
 
-    --blue-lighter: #74b9ff;
-    --blue: #0984e3;
+    //--blue-lighter: #78B7FF;
+    //--blue: #1F3D7A;
 
     --red-lighter: #FFA3A3;
     --red: #8A2626;
 
-    --purple-lighter: #a29bfe;
-    --purple: #6c5ce7;
+    --purple-lighter: #7257EB;
+    --purple: #52468A;
+    --purple-darker: #2F2363;
 
     --green-lighter: #B0EEA2;
     --green: #306025;
 
     --yellow-lighter: #ffeaa7;
-    --yellow: #fdcb6e;
+    --yellow: #F8D487;
 
     transition: background-color 150ms linear;
   }
 
   body.dark-mode {
-    --background: #1b1f20;
-    --text-color: #D9D9D9;
+    --background: #1e1e1e;
+    --text-color: #FFF;
     --text-color-secondary: #9b9b9b;
-
+    --blue-darker: #2767a3;
     --primary-lighter: #3796bc;
+    --primary: #5c36c3;
+   // --primary-darker: rgb(92, 54, 195);
 
-//     --primary: #7257EB;
+    //--primary: #7257EB;
 //     --primary-darker: #2F2363;
 
-    --primary: #636666;
+    // --primary: #636666;
     --primary-darker: #133441;
 
     --secondary-lighter: #636666;
@@ -144,7 +151,7 @@
     --list-simple-item-subtext: #4b4b4b;
 
     --btn-secondary-border: var(--primary);
-    --btn-secondary-background: var(--primary-darker);
+    --btn-secondary-background: var(--purple-darker);
     --btn-secondary-text: #FFF;
 
     --btn-delete-border: var(--red-lighter);

@@ -23,11 +23,11 @@ const UserCourseListItem = ({course, assignments, past = false, instructor = fal
     return(
     <ListItemWrapper  to={null} tag={course.number} containerStyle={styles.container}>
  
-        <div className={styles.name}>{instructor ? (course.name + " (Instructor)") : course.name.toUpperCase() + " " + course.number + " " + "(" + course.semester + ")" }</div>
+        <div className={styles.name}>{instructor ? (course.name + " " +  course.number + " (" + course.semester + ")" + " Instructor") : course.name.toUpperCase() + " " + course.number + " " + "(" + course.semester + ")" }</div>
         <div className={styles.subText}>
             {assignments && assignments.length > 0 ? (assignments.map((assignment) => (
                 <SimpleAssignmentListItem assignment={assignment} key={assignment.id}/>
-            ))) : ((past || instructor) ? <div></div> : <div className={styles.No_assignments}>No Assignments Due Yet</div>)} 
+            ))) : ((past) ? <div></div> : <div className={styles.No_assignments}>No Assignments Due Yet</div>)} 
             <div className={styles.Buttons}>
             <button className={styles.gradebook_button} onClick={(e) => {
              e.stopPropagation(); 
