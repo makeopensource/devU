@@ -48,7 +48,7 @@ const CourseUpdatePage = ({ }) => {
     const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
     const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0])
     const [studentEmail, setStudentEmail] = useState("")
-    // const [studentID, setStudentID] = useState<number>()
+    const [emails, setEmails] = useState<string[]>([])
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const { courseId } = useParams() as UrlParams
@@ -67,12 +67,12 @@ const CourseUpdatePage = ({ }) => {
             });
         }
     }, []);
-    
+
     const handleChange = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
         const newInvalidFields = removeClassFromField(invalidFields, key)
         setInvalidFields(newInvalidFields)
-        
+
         // Update form data based on input field
         if (key === 'studentEmail') {
             setStudentEmail(value)
@@ -109,22 +109,64 @@ const CourseUpdatePage = ({ }) => {
             })
     }
 
-    // const handleFileUpload = () => {
-    // if file uploaded parse file to grab all student emails
-    // note: accepted filetype (enforced by frontend) is csv
-    // for each email parsed from file, call handle add or drop student as needed
-    // }
+    // update value of file and update parsed values if file uploaded
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const uploadedFile = event.target.files?.[0] || null;
+        if (uploadedFile) {
+            console.log("file uploaded")
+            handleFileUpload(uploadedFile);
+        }
+    };
+
+    // set array of parsed emails from csv file
+    const handleFileUpload = (uploadedFile: File) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const text = e.target?.result as string;
+            const parsedEmails = parseCSV(text);
+            setEmails(parsedEmails); // Store the parsed emails in state
+        };
+        reader.readAsText(uploadedFile); // Read the file
+    };
+
+    // return array of emails
+    const parseCSV = (text: string): string[] => {
+        const lines = text.split('\n');
+        const emails: string[] = [];
+        const headers = lines[0].toLowerCase().split(',');
+
+        // Find the index of the email-related fields
+        const emailIndex = headers.findIndex(header =>
+            ['email', 'e-mail', 'email address', 'e-mail address'].includes(header.trim())
+        );
+
+        if (emailIndex === -1) {
+            console.error("Email field not found in CSV file");
+            setAlert({ autoDelete: false, type: 'error', message: "Email field not found in CSV file" })
+            return [];
+        }
+
+        // Extract emails
+        for (let i = 1; i < lines.length; i++) {
+            const fields = lines[i].split(',');
+            const email = fields[emailIndex].trim();
+            if (email) {
+                emails.push(email);
+            }
+        }
+
+        console.log("Parsed emails: ", emails);
+        return emails;
+    };
 
     const getUserId = async (email: string) => {
-        // default value 0 because userIDs start from 1
+        // default return value 0 because userIDs start from 1
         try {
             const res: User[] = await RequestService.get("/api/users/");
             const user: User | undefined = res.find((user: User) => user.email === email);
-            
+
             if (user) {
                 console.log("User found");
-                console.log("getUserId User: ", user);
-                console.log("getUserId user.id", user.id);
                 return user.id;
             } else {
                 console.log("User not found");
@@ -138,9 +180,9 @@ const CourseUpdatePage = ({ }) => {
 
     const addSingleStudent = async (email: string) => {
         const id = await getUserId(email)
-        
-        if (!id) { 
-            setAlert({ autoDelete: false, type: 'error', message: "userID not found"})
+
+        if (!id) {
+            setAlert({ autoDelete: false, type: 'error', message: "userID not found" })
             return
         }
 
@@ -157,20 +199,7 @@ const CourseUpdatePage = ({ }) => {
         } catch (error: any) { // Use any if the error type isn't strictly defined
             const message = error.message || "An unknown error occurred"
             setAlert({ autoDelete: false, type: 'error', message })
-            console.log(message)
         }
-    }
-
-    const handleAddStudent = () => {
-        // TODO: if file inputted then parse csv file to get emails and for each email addSingleStudent
-        // TODO: if no file inputted then addSingleStudent with email
-        addSingleStudent(studentEmail)
-    }
-
-    const handleDropStudent = () => {
-        // TODO: if file inputted then parse csv file to get emails and for each email dropSingleStudent
-        // TODO: if no file inputted then dropSingleStudent with email
-        dropSingleStudent(studentEmail)
     }
 
     const dropSingleStudent = async (email: string) => {
@@ -183,6 +212,35 @@ const CourseUpdatePage = ({ }) => {
         } catch (error: any) { // Use any if the error type isn't strictly defined
             const message = error.message || "An unknown error occurred"
             setAlert({ autoDelete: false, type: 'error', message })
+        }
+    }
+
+    const handleAddStudent = () => {
+        console.log("emails: ", emails);
+        if (emails.length<1) {
+            // if no file inputted then addSingleStudent with email
+            console.log("adding single user")
+            addSingleStudent(studentEmail)
+        } else {
+            // if file inputted then for each email parsed from csv addSingleStudent
+            console.log("adding multiple users")
+            emails.forEach(email => {
+                addSingleStudent(email)
+            })
+        }
+    }
+
+    const handleDropStudent = () => {
+        if (emails.length<1) {
+            // if no file inputted then dropSingleStudent with email
+            console.log("dropping single user")
+            dropSingleStudent(studentEmail)
+        } else {
+            // if file inputted then for each email parsed from csv dropSingleStudent
+            console.log("dropping multiple users")
+            emails.forEach(email => {
+                dropSingleStudent(email)
+            })
         }
     }
 
@@ -222,7 +280,7 @@ const CourseUpdatePage = ({ }) => {
                         placeholder='e.g. hartloff@buffalo.edu' invalidated={!!invalidFields.get("studentEmail")} helpText={invalidFields.get("studentEmail")} />
                     <label htmlFor="addDropFile">Add multiple students by uploading a CSV file below</label>
                     {/* csv should be a good standard filetype */}
-                    <input type="file" accept='.csv' id="addDropFile" />
+                    <input type="file" accept='.csv' id="addDropFile" onChange={handleFileChange} />
                     <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 'auto', gap: '1rem' }}>
                         <button className='btnPrimary' onClick={handleAddStudent}>Add Student</button>
                         <button className='btnDelete' onClick={handleDropStudent}>Drop Student</button>
