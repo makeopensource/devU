@@ -8,6 +8,15 @@
   position: relative;
 }
 
+.formFileUploadWide {
+  height: 16rem;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  text-align: center;
+  position: relative;
+}
+
 .inputFileUpload {
   display: none;
 }
@@ -51,3 +60,4 @@
   bottom: 0px;
   left: 0px;
 }
+
