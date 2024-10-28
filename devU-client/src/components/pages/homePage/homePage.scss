@@ -1,6 +1,7 @@
 @import 'variables';
 
 
+
 .courses_title {
     text-align: left;
     margin-left: 20px;
@@ -28,6 +29,7 @@
 .no_courses {
     margin-left: 20px;
 }
+
 
 
 .coursesContainer {
@@ -65,6 +67,7 @@
     align-items: center;  
 }
 
+
 .courses_heading::after {
     content: '';
     display: block;
@@ -74,6 +77,7 @@
     font-weight: 600;
     background-color: $text-color; 
   }
+
 
 @media (max-width: 768px) {
     .coursesContainer {
@@ -86,16 +90,3 @@
         max-width: none; 
     }
 }
-
-// .smallLine {
-//     width: 50px; /* adjust this value to set the length of the small line */
-//     border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-//     margin-right: 10px; /* adjust this value to set the space between the line and the text */
-// }
-
-// .largeLine {
-//     flex-grow: 1;
-//     border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-//     margin-left: 10px; /* adjust this value to set the space between the line and the text */
-//     margin-right: 10px; /* add this line to create some space between the line and the button */
-// }

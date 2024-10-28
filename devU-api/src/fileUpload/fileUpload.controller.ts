@@ -26,7 +26,9 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
     if (!file) return res.status(404).json(NotFound)
 
-    res.status(200).json(file)
+    res.setHeader('Content-Type', 'application/octet-stream')
+    res.setHeader('Content-Length', file.length)
+    res.send(file)
   } catch (err) {
     next(err)
   }
