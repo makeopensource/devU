@@ -3,13 +3,16 @@
 .breadcrumbContainer {
     display: flex;
     align-items: center;
+    margin-left: 3.5rem;
+    margin-top:10px;
+    
 }
 
 .link {
     text-decoration: none;
     color: $text-color; /* Breadcrumb link color */
-    
 }
+
 
 .link:hover {
     text-decoration: underline;
