@@ -1,15 +1,12 @@
 @import 'variables';
 
-
-
-
 .categoryName {
     color: $text-color;
     font-size: 1.25rem;
 }
 
 .assignmentName {
-    color: $blue-darker
+    color: $focus;
 }
 
 .smallLine {
@@ -25,6 +22,66 @@
   margin-right: 10px; /* add this line to create some space between the line and the button */
 }
 
+.tableWrapper {
+  padding: 0 100px;
+}
+
+table {
+  border-radius: 20px;
+  margin: 15px auto;
+  border-collapse: collapse;
+}
+
+tr.evenRow {
+  background-color: $table-row-even;
+}
+
+tr.oddRow {
+  background-color: $table-row-odd;
+}
+
+th {
+  background-color: $primary;
+  color: #FFF;
+  font-weight: 600;
+}
+
+td, th {
+  padding: 10px;
+  text-align: center;
+}
+
+th:first-of-type {
+  border-top-left-radius: 10px;
+}
+
+th:last-of-type {
+  border-top-right-radius: 10px;
+}
+
+tr:last-of-type td:first-of-type {
+  border-bottom-left-radius: 10px;
+}
+
+tr:last-of-type td:last-of-type {
+  border-bottom-right-radius: 10px;
+}
+
+.tableOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tableOptions span:first-child, span.yellow {
+  color: $yellowText;
+}
+
+.tableOptions span:last-child, span.red {
+  color: $redText; 
+}
+
+// STUDENT GRADEBOOK STYLING
 
 .header {
   color: $text-color;
@@ -45,8 +102,9 @@
   border-radius: 20px !important;
   transform: translateZ(0);
 }
+
 .table {
-  color: $blue-darker;
+  color: $text-color;
   width: 100%;
   overflow: hidden;
   border-collapse: collapse;
@@ -73,11 +131,13 @@
   }
 
   .evenRow {
-    background-color: if(type-of($secondary-lighter) == 'color', lighten($secondary-lighter, 5%), #e0e0e0); // Fallback to #e0e0e0
+    // background-color: if(type-of($secondary-lighter) == 'color', lighten($secondary-lighter, 5%), #e0e0e0); // Fallback to #e0e0e0
+    background-color: $table-row-even;
   }
 
   .oddRow {
-    background-color: if(type-of($secondary-lighter) == 'color', darken($secondary-lighter, 5%), #d0d0d0); // Fallback to #d0d0d0
+    // background-color: if(type-of($secondary-lighter) == 'color', darken($secondary-lighter, 5%), #d0d0d0); // Fallback to #d0d0d0
+    background-color: $table-row-odd;
   }
 
 }
@@ -104,4 +164,5 @@
   background-color: $purple !important;
 
 }
+
 
