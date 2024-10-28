@@ -122,6 +122,7 @@ export async function checkEnroll(req: Request, res: Response, next: NextFunctio
 export async function _delete(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.courseId)
+    console.log("DELETE PARAMS: ", req.params)
     const currentUser = req.currentUser?.userId
     if (!currentUser) return res.status(401).json({ message: 'Unauthorized' })
 
@@ -134,6 +135,21 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
     next(err)
   }
 }
+
+
+export async function _deleteUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const courseID = parseInt(req.params.courseId)
+    console.log("DELETE PARAMS2: ", req.params)
+    // const currentUser = req.currentUser?.userId
+    const userID = parseInt(req.params.id)
+    if (!userID) return res.status(401).json({ message: 'Unauthorized' })
+
+    const results = await UserCourseService._delete(courseID, userID)
+
+    if (!results.affected) return res.status(404).json(NotFound)
+
+    res.status(204).send()
 
 export async function addStudents(req: Request, res: Response, next: NextFunction) {
   try {
@@ -170,6 +186,7 @@ export default {
   post,
   put,
   _delete,
+  _deleteUser,
   checkEnroll,
   addStudents,
   dropStudents,
