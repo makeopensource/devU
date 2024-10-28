@@ -44,8 +44,8 @@ const EditCourseFormPage = () => {
             name: formData.name,
             number: formData.number,
             semester: formData.semester,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: startDate + "T16:02:41.849Z",
+            endDate: endDate + "T16:02:41.849Z",
         }
 
         RequestService.post('/api/courses/instructor', finalFormData)
