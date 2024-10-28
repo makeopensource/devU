@@ -246,7 +246,7 @@ const CourseUpdatePage = ({ }) => {
         <PageWrapper>
             <h1>Update Course Form</h1>
             <div className={formStyles.courseFormWrapper}>
-                <div className={formStyles.detailsForm}>
+                <div className={formStyles.updateDetailsForm}>
                     <h2>Course Details</h2>
                     <div className={formStyles.inputContainer}>
                         <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
