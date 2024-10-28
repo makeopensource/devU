@@ -150,6 +150,10 @@ export async function _deleteUser(req: Request, res: Response, next: NextFunctio
     if (!results.affected) return res.status(404).json(NotFound)
 
     res.status(204).send()
+  } catch (err) {
+    next(err)
+  }
+}
 
 export async function addStudents(req: Request, res: Response, next: NextFunction) {
   try {
