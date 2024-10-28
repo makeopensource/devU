@@ -29,6 +29,10 @@ export async function retrieve(id: number) {
   return await connect().findOneBy({ id, deletedAt: IsNull() })
 }
 
+export async function retrieveByEmail(email: string) {
+  return await connect().findOneBy({ email: email, deletedAt: IsNull() })
+}
+
 export async function list() {
   return await connect().findBy({ deletedAt: IsNull() })
 }
@@ -56,6 +60,7 @@ export async function ensure(userInfo: User) {
 export default {
   create,
   retrieve,
+  retrieveByEmail,
   update,
   _delete,
   list,
