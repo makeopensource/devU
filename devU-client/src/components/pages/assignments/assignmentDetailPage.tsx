@@ -168,8 +168,16 @@ const AssignmentDetailPage = () => {
                     {role.isInstructor() && <button  className={styles.buttons} onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
                     }}>Edit Assignment</button>}
-                   </div>
-                   </div>
+
+                        <hr className = {styles.line} />
+                        {role.isInstructor() && <button className={styles.buttons} onClick={() => {
+                            history.push
+                            (`/course/${courseId}/assignment/${assignmentId}/submissions`)
+                        }}>Grade Submissions</button>}
+
+
+                    </div>
+                    </div>
                    </>
                     )}
                 

@@ -3,11 +3,13 @@
   display: flex;
   flex-direction: column;
 
+  //navigation bar should be on top of the page each time
   overflow-y: auto;
-  padding: 0vw; //navigation bar should be on top of the page each time
+  padding: 0vw;
 }
 
 .content {
   margin-top: 20px;
   flex-grow: 1;
+  padding: 10px 50px;
 }

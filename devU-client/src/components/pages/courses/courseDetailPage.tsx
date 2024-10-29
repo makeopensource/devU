@@ -18,7 +18,7 @@ import ListItemText from '@mui/material/ListItemText'
 
 import styles from './courseDetailPage.scss'
 import {SET_ALERT} from "../../../redux/types/active.types";
-import {useActionless} from "../../../redux/hooks";
+import {useActionless, useAppSelector} from "../../../redux/hooks";
 //import TextField from "../../shared/inputs/textField";
 //import {useActionless, useAppSelector} from "redux/hooks";
 
@@ -30,6 +30,8 @@ const CourseDetailPage = () => {
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     const [setAlert] = useActionless(SET_ALERT)
+    const role = useAppSelector((store) => store.roleMode);
+
    // const[User, setUser]= useState < User <string>,preferredName>>({})
 
    // const role = useAppSelector((store) => store.roleMode)
@@ -85,7 +87,7 @@ const CourseDetailPage = () => {
 
     useEffect(() => {
         fetchCourseInfo()
-        //fetchUserinfo()
+
     }, [])
     const history = useHistory()
     return(
@@ -97,7 +99,7 @@ const CourseDetailPage = () => {
                         <div>
 
                         <div className={styles.header}>
-                            <h1>{courseInfo.name}({courseInfo.semester})</h1>
+                            <h1>CSE{courseInfo.number}: {courseInfo.name} ({courseInfo.semester})</h1>
                             <h2> Instructor: </h2>
 
 
@@ -111,30 +113,34 @@ const CourseDetailPage = () => {
                                 </button>
 
 
-
+                                {role.isInstructor() &&(
                                 <button className={styles.actual_button} onClick={() => {
                                     history.push(`/course/${courseId}/createAssignment`)
                                 }}>Add Assignment
                                 </button>
+                                    )}
 
-
+                                {role.isInstructor() &&(
                                 <button className={styles.actual_button} onClick={() => {
                                     history.push(`/course/${courseId}/update`)
-                                }}>Course WebSite
+                                }}>Update Course Form
                                 </button>
+                                    )}
 
 
                                 <button className={styles.actual_button} onClick={handleDropCourse}
                                     > Drop Course
                                 </button>
 
-                            </div>
 
 
                             </div>
 
 
-                            <h1>Assignments</h1>
+                            </div>
+
+
+                            <h3>Assignments</h3>
 
 
 
@@ -142,7 +148,7 @@ const CourseDetailPage = () => {
                             {Object.keys(categoryMap).map((category, index) => (
 
                                 <Card key={index} className={styles.courseCard}>
-                                    <CardContent>
+                                    <CardContent sx={{padding:0}}>
                                         <Typography variant="h5" className={styles.color} style={{ textAlign: 'center' }}>
                                             {category}
                                         </Typography>
