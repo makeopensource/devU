@@ -9,7 +9,6 @@ import LoadingOverlay from 'components/shared/loaders/loadingOverlay';
 import ErrorPage from '../errorPage/errorPage';
 
 import RequestService from 'services/request.service';
-//import Button from '@mui/material/Button';
 
 import styles from './gradebookPage.scss';
 

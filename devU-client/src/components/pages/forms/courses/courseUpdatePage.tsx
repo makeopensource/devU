@@ -4,14 +4,12 @@ import { useHistory, useParams } from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
 import RequestService from 'services/request.service'
-// import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import { ExpressValidationError } from 'devu-shared-modules'
 
 import { useActionless } from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
-// import Button from '@mui/material/Button'
 import { SET_ALERT } from 'redux/types/active.types'
 import {
     applyMessageToErrorFields,
@@ -20,9 +18,24 @@ import {
 
 import formStyles from './coursesFormPage.scss'
 
+
 type UrlParams = {
     courseId: string
 }
+
+/* 
+copied from devU-shared>src>types>user.types.ts and edited from id? to id 
+to ensure number type instead of number|undefined 
+*/
+type User = {
+    id: number
+    externalId: string // School's unique identifier (the thing that links to the schools auth)
+    email: string
+    createdAt?: string
+    updatedAt?: string
+    preferredName?: string
+}
+
 
 const CourseUpdatePage = ({ }) => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -32,8 +45,10 @@ const CourseUpdatePage = ({ }) => {
         number: '',
         semester: '',
     })
-    const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
-    const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0])
+    const [startDate, setStartDate] = useState(new Date().toISOString())
+    const [endDate, setEndDate] = useState(new Date().toISOString())
+    const [studentEmail, setStudentEmail] = useState("")
+    const [emails, setEmails] = useState<string[]>([])
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     const { courseId } = useParams() as UrlParams
@@ -52,12 +67,20 @@ const CourseUpdatePage = ({ }) => {
             });
         }
     }, []);
-    const handleChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleChange = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
         const newInvalidFields = removeClassFromField(invalidFields, key)
         setInvalidFields(newInvalidFields)
-        setFormData(prevState => ({ ...prevState, [key]: value }))
+
+        // Update form data based on input field
+        if (key === 'studentEmail') {
+            setStudentEmail(value)
+        } else {
+            setFormData(prevState => ({ ...prevState, [key]: value }))
+        }
     }
+
     const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
     const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
 
@@ -66,8 +89,8 @@ const CourseUpdatePage = ({ }) => {
             name: formData.name,
             number: formData.number,
             semester: formData.semester,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: startDate + "T16:02:41.849Z",
+            endDate: endDate + "T16:02:41.849Z",
         }
 
         RequestService.put(`/api/courses/${courseId}`, finalFormData)
@@ -86,22 +109,144 @@ const CourseUpdatePage = ({ }) => {
             })
     }
 
+    // update value of file and update parsed values if file uploaded
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const uploadedFile = event.target.files?.[0] || null;
+        if (uploadedFile) {
+            handleFileUpload(uploadedFile);
+        }
+    };
+
+    // set array of parsed emails from csv file
+    const handleFileUpload = (uploadedFile: File) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const text = e.target?.result as string;
+            const parsedEmails = parseCSV(text);
+            setEmails(parsedEmails); // Store the parsed emails in state
+        };
+        reader.readAsText(uploadedFile); // Read the file
+    };
+
+    // return array of emails
+    const parseCSV = (text: string): string[] => {
+        const lines = text.split('\n');
+        const emails: string[] = [];
+        const headers = lines[0].toLowerCase().split(',');
+
+        // Find the index of the email-related fields
+        const emailIndex = headers.findIndex(header =>
+            ['email', 'e-mail', 'email address', 'e-mail address'].includes(header.trim())
+        );
+
+        if (emailIndex === -1) {
+            console.error("Email field not found in CSV file");
+            setAlert({ autoDelete: false, type: 'error', message: "Email field not found in CSV file" })
+            return [];
+        }
+
+        // Extract emails
+        for (let i = 1; i < lines.length; i++) {
+            const fields = lines[i].split(',');
+            const email = fields[emailIndex].trim();
+            if (email) {
+                emails.push(email);
+            }
+        }
+
+        console.log("Parsed emails: ", emails);
+        return emails;
+    };
+
+    const getUserId = async (email: string) => {
+        // default return value 0 because userIDs start from 1
+        try {
+            const res: User[] = await RequestService.get("/api/users/");
+            const user: User | undefined = res.find((user: User) => user.email === email);
+
+            if (user) {
+                return user.id;
+            } else {
+                console.log("User not found");
+                return 0;
+            }
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            return 0;
+        }
+    }
+
+    const addSingleStudent = async (email: string) => {
+        const id = await getUserId(email)
+
+        if (id == 0) {
+            setAlert({ autoDelete: false, type: 'error', message: "userID not found" })
+            return
+        }
+
+        const userCourseData = {
+            userId: id,
+            courseId: courseId,
+            role: 'student',
+            dropped: false
+        }
+
+        try {
+            await RequestService.post(`/api/course/${courseId}/user-courses`, userCourseData)
+            setAlert({ autoDelete: true, type: 'success', message: `${email} added to course` })
+        } catch (error: any) { // Use any if the error type isn't strictly defined
+            const message = error.message || "An unknown error occurred"
+            setAlert({ autoDelete: false, type: 'error', message })
+        }
+    }
+
+    const dropSingleStudent = async (email: string) => {
+        const userID = await getUserId(email)
+        if (!userID) { return }
+
+        try {
+            await RequestService.delete(`/api/course/${courseId}/user-courses/${userID}`)
+            setAlert({ autoDelete: true, type: 'success', message: `${email} dropped from course` })
+        } catch (error: any) { // Use any if the error type isn't strictly defined
+            const message = error.message || "An unknown error occurred"
+            setAlert({ autoDelete: false, type: 'error', message })
+        }
+    }
+
     const handleAddStudent = () => {
-        // TODO: get user id by getting email and calling /users --> search through /users --> 
-        // RequestService.post(`/api/courses/${courseId}/users-courses/${id}:`,
+        console.log("emails: ", emails);
+        if (emails.length<1) {
+            // if no file inputted then addSingleStudent with email
+            console.log("adding single user")
+            addSingleStudent(studentEmail)
+        } else {
+            // if file inputted then for each email parsed from csv addSingleStudent
+            console.log("adding multiple users")
+            emails.forEach(email => {
+                addSingleStudent(email)
+            })
+        }
     }
 
     const handleDropStudent = () => {
-        // get user id by getting email and calling /users --> search through /users --> 
-        // RequestService.delete(`/api/courses/${courseId}/users-courses/${id}:`,  
+        if (emails.length<1) {
+            // if no file inputted then dropSingleStudent with email
+            console.log("dropping single user")
+            dropSingleStudent(studentEmail)
+        } else {
+            // if file inputted then for each email parsed from csv dropSingleStudent
+            console.log("dropping multiple users")
+            emails.forEach(email => {
+                dropSingleStudent(email)
+            })
+        }
     }
-
 
     return (
         <PageWrapper>
             <h1>Update Course Form</h1>
             <div className={formStyles.courseFormWrapper}>
-                <div className={formStyles.detailsForm}>
+                <div className={formStyles.updateDetailsForm}>
                     <h2>Course Details</h2>
                     <div className={formStyles.inputContainer}>
                         <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
@@ -116,11 +261,11 @@ const CourseUpdatePage = ({ }) => {
                     <div className={formStyles.datepickerContainer}>
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
                             <label htmlFor='start-date'>Start Date *</label>
-                            <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange}/>
+                            <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
                             <label htmlFor='end-date'>End Date *</label>
-                            <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange}/>
+                            <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
                         </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -129,10 +274,12 @@ const CourseUpdatePage = ({ }) => {
                 </div>
                 <div className={formStyles.addDropForm}>
                     <h2>Add/Drop Students</h2>
-                    <TextField id='ubit' label={"UBIT*"} onChange={handleChange}
-                        placeholder='e.g. hartloff' invalidated={!!invalidFields.get("ubit")} helpText={invalidFields.get("ubit")} />
-                    <input type="file" id="addDropFile" />
-                    <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 'auto', gap: '1rem'}}>
+                    <TextField id='studentEmail' label={"Email"} onChange={handleChange}
+                        placeholder='e.g. hartloff@buffalo.edu' invalidated={!!invalidFields.get("studentEmail")} helpText={invalidFields.get("studentEmail")} />
+                    <label htmlFor="addDropFile">Add multiple students by uploading a CSV file below</label>
+                    {/* csv should be a good standard filetype */}
+                    <input type="file" accept='.csv' id="addDropFile" onChange={handleFileChange} />
+                    <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 'auto', gap: '1rem' }}>
                         <button className='btnPrimary' onClick={handleAddStudent}>Add Student</button>
                         <button className='btnDelete' onClick={handleDropStudent}>Drop Student</button>
                     </div>

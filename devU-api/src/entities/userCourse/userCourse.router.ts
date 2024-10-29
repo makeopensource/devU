@@ -80,7 +80,7 @@ Router.get(
   extractOwnerByPathParam('userId'),
   isAuthorized('courseViewAll', 'enrolled'),
   asInt('userId'),
-  UserCourseController.detailByUser
+  UserCourseController.detailByUser,
 )
 
 /**
@@ -101,6 +101,104 @@ Router.get(
  */
 Router.post('/', validator, UserCourseController.post)
 // TODO: userCourseEditAll eventually. For now, allow self enroll
+
+
+/**
+ * @swagger
+ * /courses/{courseId}/students/add:
+ *   put:
+ *     summary: Add multiple students to a course
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *          200:
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  type: object
+ *                  properties:
+ *                    success:
+ *                      type: string
+ *                      description: Array of successfully enrolled users as a string
+ *                      example: '["test@test1.com enrolled successfully"]'
+ *                    failed:
+ *                      type: string
+ *                      description: Array of failed enrollments with error messages as a string
+ *                      example: '["user@email.com: Error: User already enrolled in course", "user2@email.com not found"]'
+ *                  required:
+ *                    - success
+ *                    - failed
+ *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: A list of emails in a json array
+ *       content:
+ *         application/json:
+ *       schema:
+ *         type: object
+ *         properties:
+ *           users:
+ *             type: array
+ *             items:
+ *               type: string
+ *               format: email
+ *         required:
+ *           - users
+ */
+Router.post('/students/add', asInt('courseId'), isAuthorized('courseViewAll'), UserCourseController.addStudents)
+
+/**
+ * @swagger
+ * /courses/{courseId}/students/drop:
+ *   put:
+ *     summary: Drop multiple students from a course
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *          200:
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  type: object
+ *                  properties:
+ *                    success:
+ *                      type: string
+ *                      description: Array of successfully dropped students as a string
+ *                      example: '["test@test1.com dropped successfully"]'
+ *                    failed:
+ *                      type: string
+ *                      description: Array of failed drops with error messages as a string
+ *                      example: '["user2@email.com not found"]'
+ *                  required:
+ *                    - success
+ *                    - failed
+ *     parameters:
+ *       - name: courseId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: A list of emails in a json array
+ *       content:
+ *         application/json:
+ *       schema:
+ *         type: object
+ *         properties:
+ *           users:
+ *             type: array
+ *             items:
+ *               type: string
+ *               format: email
+ *         required:
+ *           - users
+ */
+Router.post('/students/drop', asInt('courseId'), isAuthorized('courseViewAll'), UserCourseController.dropStudents)
+
 
 /**
  * @swagger
@@ -128,9 +226,9 @@ Router.put('/:id', isAuthorized('userCourseEditAll'), asInt(), validator, UserCo
 
 /**
  * @swagger
- * /course/:courseId/user-courses/{id}:
+ * /course/:courseId/user-courses:
  *   delete:
- *     summary: Delete a user-course association
+ *     summary: Delete a user-course association for current user
  *     tags:
  *       - UserCourses
  *     responses:
@@ -144,5 +242,25 @@ Router.put('/:id', isAuthorized('userCourseEditAll'), asInt(), validator, UserCo
  *           type: integer
  */
 Router.delete('/', UserCourseController._delete)
+// TODO: eventually add authorization to this. For now, everyone can remove anyone
+
+/**
+ * @swagger
+ * /course/:courseId/user-courses/{id}:
+ *   delete:
+ *     summary: Delete a user-course association given a specific user
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ */
+Router.delete('/:id', UserCourseController._deleteUser)
 // TODO: eventually add authorization to this. For now, everyone can remove anyone
 export default Router
