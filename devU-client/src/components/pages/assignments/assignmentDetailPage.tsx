@@ -181,6 +181,7 @@ const AssignmentDetailPage = () => {
             <Grid display='flex' justifyContent='center' alignItems='center'>
             <div className={styles.assignment_card}>
             <Typography className={styles.assignment_description}>{assignment?.description}</Typography>
+            <Typography className={styles.filenames}>Attachments : {assignment?.attachmentsFilenames}</Typography>
             <hr className={styles.line} />
 
             {assignment?.dueDate && (
