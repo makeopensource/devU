@@ -19,6 +19,7 @@ import ContainerAutoGraderForm from './pages/forms/containers/containerAutoGrade
 import CoursePreviewPage from './pages/courses/coursePreviewPage'
 import CoursesListPage from "./pages/listPages/courses/coursesListPage";
 import AssignmentProblemFormPage from './pages/forms/assignments/assignmentProblemFormPage'
+import InstructorSubmissionspage from "./pages/submissions/InstructorSubmissionspage";
 
 const AuthenticatedRouter = () => (
     <Switch>
@@ -45,6 +46,8 @@ const AuthenticatedRouter = () => (
 
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId'
                component={SubmissionDetailPage}/>
+            <Route exact path='/course/:courseId/assignment/:assignmentId/submissions'
+                   component={InstructorSubmissionspage}/>
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId/feedback'
                component={SubmissionFeedbackPage}/>
 

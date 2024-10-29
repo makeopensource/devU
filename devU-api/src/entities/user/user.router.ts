@@ -19,7 +19,9 @@ const Router = express.Router()
  *       '200':
  *         description: OK
  */
-Router.get('/', isAuthorized('admin'), UserController.get)
+Router.get('/', UserController.get)
+// Router.get('/', isAuthorized('admin'), UserController.get)
+
 
 /**
  * @swagger
