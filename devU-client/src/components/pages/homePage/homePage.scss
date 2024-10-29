@@ -2,29 +2,15 @@
 
 
 
-.courses_title {
-    text-align: left;
-    margin-left: 20px;
-    font-size: 30px;
-    font-weight: 550;
-    margin-bottom: 30px;
-}
-
 .courses_heading{
-    align-items:left;
+    text-align: left;
     margin-left: 20px;
     font-size: 30px;
     font-weight: 550;
     margin-bottom: 30px;
     
 }
-// h1 {
-//     align-items:left;
-//     margin-left: 20px;
-//     font-size: 30px;
-//     font-weight: 550;
-//     margin-bottom: 30px;
-// }
+
 
 .no_courses {
     margin-left: 20px;
@@ -43,7 +29,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: stretch;
-    height: 100%;
+    width:400px;
     padding: 0; 
     background-color: #D9D9D9;
     border-radius: 5px; 
@@ -53,7 +39,7 @@
   }
 .create_course {
     border:0; /* Primary button color */
-    color: #52468a;
+    color: $primary;
     padding: 10px 20px; 
     border-radius: 5px;
     text-decoration: none;

@@ -75,7 +75,7 @@ const HomePage = () => {
         <PageWrapper>
             <div className={styles.header}>
                 <div className={styles.smallLine}></div>
-                <h2 className={styles.courses_title}>Courses</h2>
+                <h1 className={styles.courses_title}>Courses</h1>
                 <button className = {styles.create_course} onClick={() => {
                     history.push(`/addCoursesForm`)
                     }}>Create Course
@@ -84,7 +84,7 @@ const HomePage = () => {
             </div>
             <div className={styles.header}>
                 <div className={styles.smallLine}></div>
-                <h3 className = {styles.courses_heading}>Current</h3>
+                <h2 className = {styles.courses_heading}>Current</h2>
                 <div className={styles.largeLine}></div>
             </div>
             <div className={styles.coursesContainer}>
@@ -101,7 +101,7 @@ const HomePage = () => {
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}/>
                     </div>
                 ))}
-                {enrollCourses.length === 0 && <h4 className={styles.no_courses}>You do not have current enrollment yet</h4>}
+                {enrollCourses.length === 0 && instructorCourses.length == 0 && <h4 className={styles.no_courses}>You do not have current enrollment yet</h4>}
             </div>
 
             <div className={styles.header}>
@@ -127,7 +127,7 @@ const HomePage = () => {
 
             <div className={styles.header}>
                 <div className={styles.smallLine}></div>
-                <h3 className = {styles.courses_heading}>Upcoming</h3>
+                <h2 className = {styles.courses_heading}>Upcoming</h2>
                 <div className={styles.largeLine}></div>
                 </div>
 
