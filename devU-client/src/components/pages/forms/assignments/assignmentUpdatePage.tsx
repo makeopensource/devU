@@ -14,6 +14,7 @@ import { applyMessageToErrorFields, removeClassFromField } from 'utils/textField
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import { getCssVariables } from 'utils/theme.utils'
 
 type UrlParams = { assignmentId: string }
 
@@ -29,6 +30,18 @@ const AssignmentUpdatePage = () => {
   const [openModal, setOpenModal] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const history = useHistory()
+
+  const [theme, setTheme] = useState(getCssVariables())
+
+  // Needs a custom observer to force an update when the css variables change
+  // Custom observer will update the theme variables when the bodies classes change
+  useEffect(() => {
+    const observer = new MutationObserver(() => setTheme(getCssVariables()))
+
+    observer.observe(document.body, { attributes: true })
+
+    return () => observer.disconnect()
+  })
 
   const [formData, setFormData] = useState<Assignment>({
     courseId: parseInt(courseId),
@@ -221,8 +234,8 @@ const AssignmentUpdatePage = () => {
     <PageWrapper>
 
       <Dialog open={openModal} onClose={handleCloseModal}>
+        <DialogContent sx={{bgcolor:theme.listItemBackground}}>
         <h3 className={styles.header}>Edit Problem</h3>
-        <DialogContent>
           <TextField id="problemName" label={'Problem Name'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.problemName : ''}/>
           <TextField id="maxScore" label={'Max Score'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.maxScore.toString() : ''}/>
           <DialogActions>
@@ -233,15 +246,15 @@ const AssignmentUpdatePage = () => {
       </Dialog>
 
       <Dialog open={addProblemModal} onClose={handleCloseAddProblemModal}>
-        <h3 className={styles.header}>Add Problem</h3>
-        <DialogContent>
+        <DialogContent sx={{bgcolor:theme.listItemBackground}}>
+          <h3 className={styles.header}>Add Problem</h3>
           <TextField id="problemName" label={'Problem Name'} onChange={handleAddProblemChange}/>
           <TextField id="maxScore" label={'Max Score'} onChange={handleAddProblemChange}/>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleAddProblem}>Add</Button>
-          <Button onClick={handleCloseAddProblemModal}>Close</Button>
+          <DialogActions>
+            <Button onClick={handleAddProblem}>Add</Button>
+            <Button onClick={handleCloseAddProblemModal}>Close</Button>
         </DialogActions>
+        </DialogContent>
       </Dialog>
 
       <h2>Edit Assignment</h2>
@@ -250,7 +263,7 @@ const AssignmentUpdatePage = () => {
           <h2 className={styles.header}>Assignments</h2>
           {assignmentsList.map((assignment) => (
             <div id={assignment.id ? assignment.id.toString() : ''} key={assignment.id} className={styles.assignment} onClick={handleAssignmentChange}>
-              <h3>{assignment.name}</h3>
+              <Button className={styles.assignmentBtn}>{assignment.name}</Button>
             </div>
           ))} 
         </div>
@@ -277,7 +290,10 @@ const AssignmentUpdatePage = () => {
                     className={styles.textField}
                     helpText={invalidFields.get('description')}
                     value={formData.description ? formData.description : ''} 
-                    sx={{width : 9/10, padding : "10px"}}/>
+                    sx={{width : 9/10, 
+                      "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"},
+                      "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root" : {padding : "0px"},
+                    }}/>
 
           <div className={styles.textFieldContainer}>
             <TextField id="maxFileSize" onChange={handleChange} label={'Max File Size'}
