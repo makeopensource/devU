@@ -231,7 +231,7 @@ const AssignmentUpdatePage = () => {
   
   return (
 
-    <PageWrapper>
+    <PageWrapper className={styles.pageWrapper}>
 
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogContent sx={{bgcolor:theme.listItemBackground}}>
