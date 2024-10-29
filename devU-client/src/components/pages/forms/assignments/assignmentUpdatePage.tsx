@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { ExpressValidationError, Assignment } from 'devu-shared-modules'
-import DatePicker from 'react-datepicker'
+import { ExpressValidationError, Assignment, AssignmentProblem } from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useHistory, useParams } from 'react-router-dom'
-
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-
 import RequestService from 'services/request.service'
-
 import { useActionless } from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
-import Button from '@mui/material/Button'
-import formStyles from './assignmentFormPage.scss'
-
+import Button from '../../../shared/inputs/button'
+import styles from './assignmentUpdatePage.scss'
+import DragDropFile from 'components/utils/dragDropFile'
 import { SET_ALERT } from 'redux/types/active.types'
 import { applyMessageToErrorFields, removeClassFromField } from 'utils/textField.utils'
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 
-type UrlParams = {
-  assignmentId: string
-}
+type UrlParams = { assignmentId: string }
 
 const AssignmentUpdatePage = () => {
   const { assignmentId } = useParams() as UrlParams
   const { courseId } = useParams<{ courseId: string }>()
   const [setAlert] = useActionless(SET_ALERT)
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  const [dueDate, setDueDate] = useState(new Date())
+  const [currentAssignmentId, setCurrentAssignmentId] = useState(parseInt(assignmentId))
+  const [assignmentsList, setAssignmentsList] = useState<Assignment[]>([])
+  const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
+  const [allAssignmentProblems, setAllAssignmentProblems] = useState<Map<number, AssignmentProblem[]>>(new Map<number, AssignmentProblem[]>())
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
+  const [openModal, setOpenModal] = useState(false)
+  const [files, setFiles] = useState<File[]>([])
   const history = useHistory()
 
   const [formData, setFormData] = useState<Assignment>({
@@ -36,14 +36,30 @@ const AssignmentUpdatePage = () => {
     categoryName: '',
     description: '',
     maxFileSize: 0,
-    maxSubmissions: null,
+    maxSubmissions: 0,
     disableHandins: false,
     dueDate: '',
     endDate: '',
     startDate: '',
-    attachmentsHashes: [],
-    attachmentsFilenames: [],
   })
+
+  const [assignmentProblemData, setAssignmentProblemData] = useState<AssignmentProblem>({
+    assignmentId: currentAssignmentId,
+    problemName: '',
+    maxScore: -1,
+  })
+
+  const handleOpenModal = (problem : AssignmentProblem) => {
+    if(problem === assignmentProblemData) {
+      setOpenModal(true)
+    } else {    
+      setAssignmentProblemData(problem)
+    }
+  }
+  const handleCloseModal = () => {setOpenModal(false)}
+  useEffect(() => {
+    if (assignmentProblemData.maxScore !== -1) { setOpenModal(true) }
+  }, [assignmentProblemData])
 
   const handleChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
     const key = e.target.id
@@ -52,58 +68,79 @@ const AssignmentUpdatePage = () => {
 
     setFormData(prevState => ({ ...prevState, [key]: value }))
   }
-  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))
-  }
-  const handleStartDateChange = (date: Date) => {
-    setStartDate(date)
-  }
-  const handleEndDateChange = (date: Date) => {
-    setEndDate(date)
-  }
-  const handleDueDateChange = (date: Date) => {
-    setDueDate(date)
+  const handleProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
+    const key = e.target.id
+    setAssignmentProblemData(prevState => ({ ...prevState, [key]: value }))
   }
 
+  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}
+  const handleStartDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, startDate: e.target.value }))}
+  const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, endDate: e.target.value }))}
+  const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, dueDate: e.target.value }))}
+
+  const handleFile = (file: File) => {
+    if(files.length < 5) {
+      setFiles([...files, file])
+    }
+  }
+
+  const fetchAssignmentProblems = () => {
+    RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
+      .then((res) => { setAssignmentProblems(res) })
+  }
+
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignmentsList(res) })}, [])
   useEffect(() => {
-    RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => {
-      // const assignment: Assignment = res
-      // setFormData({
-      //   name: assignment.name,
-      //   categoryName: assignment.categoryName,
-      //   description: assignment.description,
-      //   maxFileSize: assignment.maxFileSize,
-      //   maxSubmissions: assignment.maxSubmissions,
-      //   disableHandins: assignment.disableHandins,
-      //   startDate: assignment.startDate,
-      //   endDate: assignment.endDate,
-      //   dueDate: assignment.dueDate,
-      //   courseId: assignment.courseId,
-      // })
-      setStartDate(new Date(res.startDate))
-      setDueDate(new Date(res.dueDate))
-      setEndDate(new Date(res.endDate))
-    })
-  }, [])
+    for(let i : number = 0; i < assignmentsList.length; i++) {
+      RequestService.get(`/api/course/${courseId}/assignment/${assignmentsList[i].id}/assignment-problems`)
+      .then((res) => {
+        setAllAssignmentProblems(prevState => {
+          const newMap = new Map(prevState);
+          newMap.set(Number(assignmentsList[i].id), res);
+          return newMap;
+        });
+      })
+    }
+  },[assignmentsList])
 
   const handleAssignmentUpdate = () => {
     const finalFormData = {
       courseId: formData.courseId,
       name: formData.name,
-      startDate: startDate.toISOString(),
-      dueDate: dueDate.toISOString(),
-      endDate: endDate.toISOString(),
+      startDate: formData.startDate,
+      dueDate: formData.dueDate,
+      endDate: formData.endDate,
       categoryName: formData.categoryName,
       description: formData.description,
       maxFileSize: formData.maxFileSize,
       maxSubmissions: formData.maxSubmissions,
       disableHandins: formData.disableHandins,
-
     }
 
-    RequestService.put(`/api/course/${courseId}/assignments/${assignmentId}`, finalFormData)
-      .then(() => {
+    const multipart = new FormData()
+    multipart.append('courseId', finalFormData.courseId.toString())
+    multipart.append('name', finalFormData.name)
+    multipart.append('startDate', finalFormData.startDate)
+    multipart.append('dueDate', finalFormData.dueDate)
+    multipart.append('endDate', finalFormData.endDate)
+    multipart.append('categoryName', finalFormData.categoryName)
+    if(finalFormData.description !== null) {
+      multipart.append('description', finalFormData.description)
+    }
+    multipart.append('maxFileSize', finalFormData.maxFileSize.toString())
+    if(finalFormData.maxSubmissions !== null) {
+      multipart.append('maxSubmissions', finalFormData.maxSubmissions.toString())
+    }
+    multipart.append('disableHandins', finalFormData.disableHandins.toString())
+    
+    for(let i = 0; i < files.length; i++) {
+      multipart.append('files', files[i])
+    }
 
+    RequestService.putMultipart(`/api/course/${courseId}/assignments/${currentAssignmentId}`, multipart)
+      .then(() => {
         setAlert({ autoDelete: true, type: 'success', message: 'Assignment Updated' })
         history.goBack()
       })
@@ -118,68 +155,201 @@ const AssignmentUpdatePage = () => {
       })
   }
 
+  const handleProblemUpdate = () => {
+    const finalFormData = {
+      assignmentId: assignmentProblemData.assignmentId,
+      problemName: assignmentProblemData.problemName,
+      maxScore: assignmentProblemData.maxScore,
+    }
+
+    RequestService.put(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${assignmentProblemData.id}`, finalFormData)
+      .then(() => {
+        setAlert({ autoDelete: true, type: 'success', message: 'Problem Updated' })
+        setOpenModal(false)
+        fetchAssignmentProblems()
+    })
+  }
+
+  const handleAssignmentChange = (e: React.MouseEvent<HTMLHeadingElement>) => {
+    const assignmentDetails = assignmentsList.find((assignment) => assignment.id === parseInt(e.currentTarget.id))
+    if (assignmentDetails !== undefined && assignmentDetails.id !== undefined) {
+      setAssignmentProblems(allAssignmentProblems.get(assignmentDetails.id) || [])
+      setCurrentAssignmentId(assignmentDetails.id)
+    } 
+    if (assignmentDetails !== undefined) {
+      setFormData(assignmentDetails)
+    }
+  }
+
+  const [addProblemModal, setAddProblemModal] = useState(false)
+  const [addProblemForm, setAddProblemForm] = useState({
+    assignmentId: currentAssignmentId,
+    problemName: '',
+    maxScore: 0,
+  })
+  const openAddProblemModal = () => {setAddProblemModal(true)}
+  const handleCloseAddProblemModal = () => {setAddProblemModal(false)}
+
+  const handleAddProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
+    const key = e.target.id
+    setAddProblemForm(prevState => ({ ...prevState, [key]: value }))
+  }
+  const handleAddProblem = () => {
+    RequestService.post(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`, addProblemForm)
+      .then(() => {
+        setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' })
+        setAddProblemModal(false)
+        setAddProblemForm({
+          assignmentId: currentAssignmentId,
+          problemName: '',
+          maxScore: 0,
+        })
+        fetchAssignmentProblems()
+    })
+  }
+
+  const handleDeleteProblem = (problemId: number) => {
+    RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
+      .then(() => {
+        setAlert({ autoDelete: true, type: 'success', message: 'Problem Deleted' })
+        fetchAssignmentProblems()
+    })
+  }
+  
   return (
+
     <PageWrapper>
-      <div className={formStyles.header}>
-        <div className={formStyles.smallLine}></div>
-        <h1>Assignment Detail Update</h1>
-        <div className={formStyles.largeLine}></div>
-      </div>
-      <div className={formStyles.form}>
-        <TextField id="name" onChange={handleChange} label={'Assignment Name'}
-                   invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
-                   defaultValue={formData.name} />
 
-        <TextField id="categoryName" onChange={handleChange} label={'Category Name*'}
-                   invalidated={!!invalidFields.get('categoryName')}
-                   helpText={invalidFields.get('categoryName')}
-                   defaultValue={formData.categoryName} />
+      <Dialog open={openModal} onClose={handleCloseModal}>
+        <h3 className={styles.header}>Edit Problem</h3>
+        <DialogContent>
+          <TextField id="problemName" label={'Problem Name'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.problemName : ''}/>
+          <TextField id="maxScore" label={'Max Score'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.maxScore.toString() : ''}/>
+          <DialogActions>
+            <Button onClick={handleProblemUpdate}>Save</Button>
+            <Button onClick={handleCloseModal}>Close</Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
 
-        <TextField id="description" onChange={handleChange} label={'Description*'}
-                   invalidated={!!invalidFields.get('description')}
-                   helpText={invalidFields.get('description')}
-                   defaultValue={formData.description ? formData.description : undefined} />
+      <Dialog open={addProblemModal} onClose={handleCloseAddProblemModal}>
+        <h3 className={styles.header}>Add Problem</h3>
+        <DialogContent>
+          <TextField id="problemName" label={'Problem Name'} onChange={handleAddProblemChange}/>
+          <TextField id="maxScore" label={'Max Score'} onChange={handleAddProblemChange}/>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddProblem}>Add</Button>
+          <Button onClick={handleCloseAddProblemModal}>Close</Button>
+        </DialogActions>
+      </Dialog>
 
-        <TextField id="maxFileSize" onChange={handleChange} label={'Max File Size'}
-                   invalidated={!!invalidFields.get('maxFileSize')}
-                   helpText={invalidFields.get('maxFileSize')}
-                   defaultValue={formData.maxFileSize ? formData.maxFileSize.toString() : ''} />
-
-        <TextField id="maxSubmission" onChange={handleChange} label={'Max Submission'}
-                   invalidated={!!invalidFields.get('maxSubmission')}
-                   helpText={invalidFields.get('maxSubmission')}
-                   defaultValue={formData.maxSubmissions ? (formData.maxSubmissions).toString() : undefined} />
-        <br />
-
-        <div className={formStyles.datepickerContainer}>
-          <div>
-            <label htmlFor="start_date">Start Date *</label>
-            <DatePicker id="start_date" selected={startDate} onChange={handleStartDateChange}
-                        className={formStyles.datepicker} />
-          </div>
-          <div>
-            <label htmlFor="due_date">Due Date *</label>
-            <DatePicker id="due_date" selected={dueDate} onChange={handleDueDateChange}
-                        className={formStyles.datepicker} />
-          </div>
-          <div>
-            <label htmlFor="end_date">End Date *</label>
-            <DatePicker id="end_date" selected={endDate} onChange={handleEndDateChange}
-                        className={formStyles.datepicker} />
-          </div>
+      <h2>Edit Assignment</h2>
+      <div className={styles.grid}>
+        <div className={styles.assignmentsList}>
+          <h2 className={styles.header}>Assignments</h2>
+          {assignmentsList.map((assignment) => (
+            <div id={assignment.id ? assignment.id.toString() : ''} key={assignment.id} className={styles.assignment} onClick={handleAssignmentChange}>
+              <h3>{assignment.name}</h3>
+            </div>
+          ))} 
         </div>
-        <br />
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <label htmlFor="disableHandins">Disable Handins</label>
-          <input type="checkbox" id="disableHandins" checked={formData.disableHandins}
-                 onChange={handleCheckbox} className={formStyles.submitBtn} />
+        <div className={styles.form}>
+          <h2 className={styles.header}>Assignment Information</h2>
+          <br/>
+          <div className={styles.textFieldContainer}>
+            <TextField id="name" onChange={handleChange} label={'Assignment Name'}
+                      invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
+                      className={styles.textField}
+                      value={formData.name} 
+                      sx={{width : 8/10 ,marginRight : 1/10}}/>
+
+            <TextField id="categoryName" onChange={handleChange} label={'Category Name*'}
+                      invalidated={!!invalidFields.get('categoryName')}
+                      className={styles.textField}
+                      helpText={invalidFields.get('categoryName')}
+                      value={formData.categoryName} 
+                      sx={{width : 8/10, marginLeft : 1/10}}/>
+          </div>
+
+          <TextField id="description" onChange={handleChange} label={'Description*'} multiline={true} rows={5}
+                    invalidated={!!invalidFields.get('description')}
+                    className={styles.textField}
+                    helpText={invalidFields.get('description')}
+                    value={formData.description ? formData.description : ''} 
+                    sx={{width : 9/10, padding : "10px"}}/>
+
+          <div className={styles.textFieldContainer}>
+            <TextField id="maxFileSize" onChange={handleChange} label={'Max File Size'}
+                      invalidated={!!invalidFields.get('maxFileSize')}
+                      className={styles.textField}
+                      helpText={invalidFields.get('maxFileSize')}
+                      value={formData.maxFileSize ? formData.maxFileSize.toString() : ''} 
+                      sx={{width : 8/10, marginLeft : 1/10}}/>
+
+            <TextField id="maxSubmissions" onChange={handleChange} label={'Max Submission'}
+                      invalidated={!!invalidFields.get('maxSubmission')}
+                      className={styles.textField}
+                      helpText={invalidFields.get('maxSubmission')}
+                      value={formData.maxSubmissions ? (formData.maxSubmissions).toString() : ''} 
+                      sx={{width : 8/10, marginLeft : 1/10}}/>
+          </div>
+    
+          <br />
+
+          <div className={styles.datepickerContainer}>
+            <div>
+              <label htmlFor="start_date">Start Date *</label>
+              <br/>
+              <input type='date' id="start_date" value={formData.startDate.split("T")[0]} onChange={handleStartDateChange}/>
+            </div>
+            <div>
+              <label htmlFor="due_date">Due Date *</label>
+              <br/>
+              <input type='date' id="due_date" value={formData.dueDate.split("T")[0]} onChange={handleDueDateChange}/>
+            </div>
+            <div>
+              <label htmlFor="end_date">End Date *</label>
+              <br/>
+              <input type='date' id="end_date" value={formData.endDate.split("T")[0]} onChange={handleEndDateChange}/>
+            </div>
+          </div>
+          <br />
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <label htmlFor="disableHandins">Disable Handins</label>
+            <input type="checkbox" id="disableHandins" checked={formData.disableHandins}
+                  onChange={handleCheckbox} className={styles.submitBtn} />
+          </div>
+          <br />
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Button onClick={handleAssignmentUpdate} className={styles.submitBtn}>Update
+              assignment</Button>
+          </div>
+          <br/>
         </div>
-
-        <br />
-
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button variant="contained" onClick={handleAssignmentUpdate} className={formStyles.submitBtn}>Update
-            assignment</Button>
+        <div className={styles.problemsList}>
+          <h2 className={styles.header}>Problems</h2>
+          {assignmentProblems.map((problem, index) => (
+            <div key={problem.id} className={styles.problem}>
+              <h3 style={{marginRight : '20px'}}>{`Problem ${index + 1}`}</h3>
+              <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenModal(problem) } }}>Edit</Button>
+              <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
+            </div>
+          ))}
+          <Button onClick={openAddProblemModal} className={styles.button}>Add Problem</Button>
+        </div>
+        <div className={styles.attachments}>
+          <h2 className={styles.header}>Attachments</h2>
+          <DragDropFile handleFile={handleFile} className='formFileUploadWide'/>
+          <br/>
+          <div className={styles.fileList}>
+            <p>Files: </p>
+            {files.map((file, index) => (
+              <div key={index}>
+                <p>{`${file.name}, `}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </PageWrapper>
