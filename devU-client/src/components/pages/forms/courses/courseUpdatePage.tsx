@@ -202,11 +202,41 @@ const CourseUpdatePage = ({ }) => {
 
     const dropSingleStudent = async (email: string) => {
         const userID = await getUserId(email)
-        if (!userID) { return }
+        
+        if (userID == 0) {
+            setAlert({ autoDelete: false, type: 'error', message: "userID not found" })
+            return
+        }
 
         try {
             await RequestService.delete(`/api/course/${courseId}/user-courses/${userID}`)
             setAlert({ autoDelete: true, type: 'success', message: `${email} dropped from course` })
+        } catch (error: any) { // Use any if the error type isn't strictly defined
+            const message = error.message || "An unknown error occurred"
+            setAlert({ autoDelete: false, type: 'error', message })
+        }
+    }
+
+    const addBulkStudent = async (emails: string[]) => {
+        try {
+            const reqBody = {
+                users: emails
+            }
+            const res = await RequestService.post(`/api/course/${courseId}/user-courses/students/add`, reqBody)
+            setAlert({ autoDelete: true, type: 'success', message: res.success })
+        } catch (error: any) { // Use any if the error type isn't strictly defined
+            const message = error.message || "An unknown error occurred"
+            setAlert({ autoDelete: false, type: 'error', message })
+        }
+    }
+
+    const dropBulkStudent = async (emails: string[]) => {
+        try {
+            const reqBody = {
+                users: emails
+            }
+            const res = await RequestService.post(`/api/course/${courseId}/user-courses/students/drop`, reqBody)
+            setAlert({ autoDelete: true, type: 'success', message: res.success })
         } catch (error: any) { // Use any if the error type isn't strictly defined
             const message = error.message || "An unknown error occurred"
             setAlert({ autoDelete: false, type: 'error', message })
@@ -220,11 +250,12 @@ const CourseUpdatePage = ({ }) => {
             console.log("adding single user")
             addSingleStudent(studentEmail)
         } else {
-            // if file inputted then for each email parsed from csv addSingleStudent
+            // if file inputted then call
             console.log("adding multiple users")
-            emails.forEach(email => {
-                addSingleStudent(email)
-            })
+            // emails.forEach(email => {
+            //     addSingleStudent(email)
+            // })
+            addBulkStudent(emails)
         }
     }
 
@@ -236,9 +267,10 @@ const CourseUpdatePage = ({ }) => {
         } else {
             // if file inputted then for each email parsed from csv dropSingleStudent
             console.log("dropping multiple users")
-            emails.forEach(email => {
-                dropSingleStudent(email)
-            })
+            // emails.forEach(email => {
+            //     dropSingleStudent(email)
+            // })
+            dropBulkStudent(emails)
         }
     }
 
