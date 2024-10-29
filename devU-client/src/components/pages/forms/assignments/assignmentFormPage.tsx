@@ -1,16 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {ExpressValidationError} from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import { getCssVariables } from 'utils/theme.utils'
 
 import RequestService from 'services/request.service'
 import {useActionless} from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
-import Button from '@mui/material/Button'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import Button from '@mui/material/Button'
+import Button from '../../../shared/inputs/button'
 import DragDropFile from 'components/utils/dragDropFile'
 
 import {SET_ALERT} from 'redux/types/active.types'
@@ -19,11 +16,8 @@ import {applyMessageToErrorFields, removeClassFromField} from "../../../../utils
 import {useHistory, useParams} from 'react-router-dom'
 
 import formStyles from './assignmentFormPage.scss'
-import { Dayjs } from 'dayjs'
 
 const AssignmentCreatePage = () => {
-    const [theme, setTheme] = useState(getCssVariables())
-    const { textColor } = theme
     const [setAlert] = useActionless(SET_ALERT)
     const {courseId} = useParams<{ courseId: string }>()
     const history = useHistory()
@@ -37,20 +31,11 @@ const AssignmentCreatePage = () => {
         maxSubmissions: 0,
         disableHandins: false,
     })
-    const [endDate, setEndDate] = useState(new Date())
-    const [dueDate, setDueDate] = useState(new Date())
-    const [startDate, setStartDate] = useState(new Date())
+    const [endDate, setEndDate] = useState('')
+    const [dueDate, setDueDate] = useState('')
+    const [startDate, setStartDate] = useState('')
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
     const [files, setFiles] = useState<Map<string,File>>(new Map())
-
-    useEffect(() => {
-        const observer = new MutationObserver(() => setTheme(getCssVariables()))
-    
-        observer.observe(document.body, { attributes: true })
-    
-        return () => observer.disconnect()
-      })
-
 
     const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
@@ -65,32 +50,17 @@ const AssignmentCreatePage = () => {
         setFormData(prevState => ({...prevState,disableHandins : e.target.checked}))
     }
 
-    const handleStartDateChange = (date : Dayjs | null) => {
-        if(date){
-            const newDate = date.toDate()
-            setStartDate(newDate)
-        }
-    }
-    const handleEndDateChange = (date : Dayjs | null) => {
-        if(date){
-            const newDate = date.toDate()
-            setEndDate(newDate)
-        }
-    }
-    const handleDueDateChange = (date: Dayjs | null) => {
-        if(date){
-            const newDate = date.toDate()
-            setDueDate(newDate)
-        }
-    }
+    const handleStartDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setStartDate(e.target.value)}
+    const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setEndDate(e.target.value)}
+    const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setDueDate(e.target.value)}
 
     const handleSubmit = () => {
         const finalFormData = {
             courseId: courseId,
             name: formData.name,
-            startDate : startDate.toISOString(),
-            dueDate: dueDate.toISOString(),
-            endDate : endDate.toISOString(),
+            startDate : startDate,
+            dueDate: dueDate,
+            endDate : endDate,
             categoryName: formData.categoryName,
             description: formData.description,
             maxFileSize: formData.maxFileSize,
@@ -152,8 +122,9 @@ const AssignmentCreatePage = () => {
     };
 
     return(
-        <PageWrapper>
+        <PageWrapper className={formStyles.pageWrapper}>
             <h2>Create Assignment</h2>
+            <div className={formStyles.flex}>
             <div className={formStyles.grid}>
                 <div className={formStyles.form}>
                     <h2>Assignment Information</h2>
@@ -174,7 +145,10 @@ const AssignmentCreatePage = () => {
                     <TextField id='description' className={formStyles.textArea} onChange={handleChange} label={"Description*"} multiline={true} rows={5}
                             invalidated={!!invalidFields.get("description")}
                             helpText={invalidFields.get("description")}
-                            sx={{width:1}}/>
+                            sx={{ 
+                                "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"},
+                                "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root" : {padding : "0px"},
+                              }}/>
 
                     <div className={formStyles.textFieldContainer}>
                         <TextField id='maxFileSize' className={formStyles.textField1} onChange={handleChange} label={"Max File Size*"}
@@ -190,73 +164,37 @@ const AssignmentCreatePage = () => {
 
                     <div className={formStyles.datepickerContainer}>
                         <div>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker label="Start Date*" onChange={handleStartDateChange} className={formStyles.datepicker_start}
-                                sx={{
-                                    width: 1,
-                                    "& .MuiOutlinedInput-input" : {
-                                        color: textColor
-                                      },
-                                      "& .MuiInputLabel-outlined" : {
-                                        color: textColor
-                                      },
-                                      "& .MuiOutlinedInput-notchedOutline" : {
-                                        borderColor: textColor
-                                      }
-                                    }}/>
-                            </LocalizationProvider>
-                        </div>
-                        <div>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker label="Due Date*" onChange={handleDueDateChange} className={formStyles.datepicker_due}
-                                sx={{
-                                    width: 1,
-                                    "& .MuiOutlinedInput-input" : {
-                                        color: textColor
-                                      },
-                                      "& .MuiInputLabel-outlined" : {
-                                        color: textColor
-                                      },
-                                      "& .MuiOutlinedInput-notchedOutline" : {
-                                        borderColor: textColor
-                                      }
-                                    }}/>
-                            </LocalizationProvider>
-                        </div>
-                        <div>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker label="End Date*" onChange={handleEndDateChange} className={formStyles.datepicker_end}
-                                sx={{
-                                    width: 1,
-                                    "& .MuiOutlinedInput-input" : {
-                                        color: textColor
-                                      },
-                                      "& .MuiInputLabel-outlined" : {
-                                        color: textColor
-                                      },
-                                      "& .MuiOutlinedInput-notchedOutline" : {
-                                        borderColor: textColor
-                                      }
-                                    }}/>
-                            </LocalizationProvider>
+                            <label htmlFor="start_date">Start Date *</label>
+                            <br/>
+                            <input type='date' id="start_date" onChange={handleStartDateChange}/>
+                            </div>
+                            <div>
+                            <label htmlFor="due_date">Due Date *</label>
+                            <br/>
+                            <input type='date' id="due_date" onChange={handleDueDateChange}/>
+                            </div>
+                            <div>
+                            <label htmlFor="end_date">End Date *</label>
+                            <br/>
+                            <input type='date' id="end_date" onChange={handleEndDateChange}/>
                         </div>
                     </div>
                     <br/>
                     <div style={{display: 'flex', justifyContent: 'center'}}>
-                        <label htmlFor='disableHandins'>Disable Handins</label>
+                        <label htmlFor='disableHandins'>Allow Container Autograde</label>
                         <input type='checkbox' id='disableHandins' checked={formData.disableHandins}
                             onChange={handleCheckbox} className={formStyles.submitBtn}/>
                     </div>
                     <br/>
                     <div style={{display: 'flex', justifyContent: 'center'}}>
-                        <Button variant='contained' onClick={handleSubmit} className={formStyles.submitBtn}>Create
+                        <Button onClick={handleSubmit} className={formStyles.submitBtn}>Create
                             assignment</Button>
                     </div>
                 </div>
                 <div className={formStyles.dragDropFile}>
                     {/*TODO: Whenever file uploads is available on backend, store the files + create Object URLs*/}
                     <h2>Attachments</h2>
-                    <p>Add up to 5 attachments with this assignment:</p>
+                    <p style={{textAlign:'center'}}>Add up to 5 attachments with this assignment:</p>
                     <p>Files Uploaded (click to delete) :</p>
                     <div className={formStyles.fileNameContainer}>
                         {Array.from(files.keys()).map((fileName) => {
@@ -274,11 +212,13 @@ const AssignmentCreatePage = () => {
                         })}
                     </div>
                     <div className={formStyles.dragDropFileComponent}>
-                        <DragDropFile handleFile={handleFile}/>
+                        <div className={formStyles.dragDropFileInput}>
+                            <DragDropFile handleFile={handleFile} className='formFileUploadWide'/>
+                        </div>
                     </div>
                 </div>
             </div>
-
+            </div>
         </PageWrapper>
     )
 }

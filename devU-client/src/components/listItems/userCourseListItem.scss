@@ -4,13 +4,15 @@
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0; 
-  padding: 15px; /* Add padding to the text inside the name block */
-  background: #b5acdd; /* Background color for the name area */
-  width: 100%; /* Make sure it spans the entire width of the card */
+  padding: 30px; /* Add padding to the text inside the name block */
+  background: $primary; 
+  width: 100%; 
   text-align: center; 
-  color: #52468a; 
+  color: $text-color; 
   border-radius: 5px 5px 0 0; 
   box-sizing: border-box;
+  text-overflow: ellipsis;
+  overflow-wrap: break-word;
 }
 
 .No_assignments
@@ -23,23 +25,24 @@
   font-size: 12px;
   font-weight: 600;
   border-radius:5px;
-  padding: 10px;
+  padding: 30px;
   flex-wrap: wrap;
-  color:#52468A;
+  color:$primary;
+  text-overflow: ellipsis;
+  overflow-wrap: break-word;
 }
 .Buttons{
   display: flex;
-  justify-content: space-between;
-  padding: 15px;
+  justify-content: space-around;
   margin-top: auto;
+  padding:10px;
 }
 .gradebook_button ,.coursepage_button {
   border: 0;
-  color: #52468A; 
+  color: $primary; 
   background: none;
   font-weight: 600;
   margin-left: 15px;
-  padding: 10px;
   cursor: pointer;
 }
 
@@ -51,7 +54,7 @@
 
 .subText {
   font-size: 1rem;
-  display: grid;
+  display: inline-block;
   justify-content: space-between;
   gap: 1.5rem;
   width: 100%;
@@ -81,12 +84,7 @@
   text-decoration: none;
 
   border-radius: 0.6rem;
-
-  padding: 5px;
-
   margin-bottom: 1rem;
-
-
   color: $text-color;
 
 }

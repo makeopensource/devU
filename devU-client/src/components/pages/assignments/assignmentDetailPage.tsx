@@ -8,9 +8,9 @@ import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import {useActionless, useAppSelector} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
 
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import {Accordion, AccordionDetails, AccordionSummary, CardActionArea, TextField, Typography} from '@mui/material'
+//import Card from '@mui/material/Card'
+//import CardContent from '@mui/material/CardContent'
+import {/*Accordion AccordionDetails, AccordionSummary*/ TextField, Typography} from '@mui/material'
 
 import Grid from '@mui/material/Unstable_Grid2'
 
@@ -187,8 +187,9 @@ const AssignmentDetailPage = () => {
             
 
             <Grid display='flex' justifyContent='center' alignItems='center'>
-            <Card className={styles.assignment_card}>
+            <div className={styles.assignment_card}>
             <Typography className={styles.assignment_description}>{assignment?.description}</Typography>
+            <Typography className={styles.filenames}>Attachments : {assignment?.attachmentsFilenames}</Typography>
             <hr className={styles.line} />
 
             {assignment?.dueDate && (
@@ -196,21 +197,21 @@ const AssignmentDetailPage = () => {
                 )}
             {assignmentProblems && assignmentProblems.length > 0 ? (
                 assignmentProblems.map((assignment, index) => (
-                    <Accordion className={styles.accordion} key={index}>
-                    <AccordionSummary>
-                        <Typography className={styles.accordionDetails}>{`Assignment Problem ${index + 1}`}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails className={styles.accordionDetails}>
+                    <div className={styles.accordion} key={index}>
+                    <div>
+                        <div className={styles.accordionDetails}>{`Assignment Problem ${index + 1}`}</div>
+                    </div>
+                    <div className={styles.accordionDetails}>
                         <Typography>{assignment.problemName}</Typography>
                         <TextField id={assignment.problemName} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
-                    </AccordionDetails>
-                    </Accordion>
+                    </div>
+                    </div>
                 ))
             
                 ) : (
-                <CardContent>
+                <div>
                     <Typography>No Problems Exist</Typography>
-                </CardContent>
+                </div>
             )}
             
             {!(assignment?.disableHandins) && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
@@ -220,7 +221,7 @@ const AssignmentDetailPage = () => {
                 <button className={styles.buttons} onClick={handleSubmit}>Submit</button>
                 </div>
             ) : null}
-            </Card>
+            </div>
             </Grid>
             </div>
 
@@ -233,16 +234,16 @@ const AssignmentDetailPage = () => {
             <div>
             <div className={styles.submissionsContainer}>
             {submissions.map((submission, index) => (
-                <Card className={styles.submissionCard} key={index}>
-                    <CardActionArea onClick={() => {
+                <div className={styles.submissionCard} key={index}>
+                    <div onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
                     }}>
-                    <CardContent>
-                    <Typography className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</Typography>
-                    <Typography className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</Typography>
-                     </CardContent>
-                    </CardActionArea>
-                </Card>
+                    <div>
+                    <div className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</div>
+                    <div className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</div>
+                     </div>
+                    </div>
+                </div>
             ))}
             </div>
             </div>
