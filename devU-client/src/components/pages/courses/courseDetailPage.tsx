@@ -87,7 +87,7 @@ const CourseDetailPage = () => {
 
     useEffect(() => {
         fetchCourseInfo()
-        //fetchUserinfo()
+
     }, [])
     const history = useHistory()
     return(

@@ -139,8 +139,7 @@ const InstructorSubmissionsPage: React.FC = () => {
 
         {assignmentId: string, courseId: string}>()
 
-   // const [originalUsers, setOriginalUsers] = useState<User[]>([]); // Store original users
-    //const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+
 
 
 

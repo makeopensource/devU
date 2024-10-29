@@ -171,7 +171,7 @@ const AssignmentDetailPage = () => {
 
                         <hr className = {styles.line} />
                         {role.isInstructor() && <button className={styles.buttons} onClick={() => {
-                            history.push//`/api/course/${courseId}/assignment/${assignmentId}/submission-scores?submission=${submissionId}`)
+                            history.push
                             (`/course/${courseId}/assignment/${assignmentId}/submissions`)
                         }}>Grade Submissions</button>}
 
