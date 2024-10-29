@@ -4,14 +4,10 @@
   padding: 10px;
   display: flex;
   flex-direction: row;
-
   border-radius: 0.6rem;
-
   justify-content: space-between;
-
   transition: background-color 0.2s linear;
-
-
+  color:$primary;
 }
 
 .meta {
@@ -46,9 +42,6 @@
 
 
   border-radius: 0.6rem;
-
- 
-
   transition: background-color 0.2s linear;
 
   color: #52468A;

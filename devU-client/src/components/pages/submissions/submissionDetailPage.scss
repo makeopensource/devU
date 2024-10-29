@@ -19,11 +19,27 @@
     max-width: 250px;
     padding-right: 10px;
     overflow-y: auto;
+    background-color: $list-item-background;
+    border-radius: 30px;
   }
   
   .submissionCard {
     margin-bottom: 15px;
+    margin-bottom: 15px;
     cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px; 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+    background-color: $list-item-background; 
+    transition: box-shadow 0.3s ease; 
+    padding: 10px;
+    margin: 10px;
+
+   
+    &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); 
+    }
+    
   }
   
   .submissionContent {
@@ -31,11 +47,11 @@
     max-height: 800px;
     overflow-y: auto;
     padding: 0 20px;
-    background-color: $background;
     border: 1px solid #ddd;
     color: $text-color;
     border-radius: 30px;
     padding:30px;
+    background-color: $list-item-background;
   }
   
   pre {
@@ -46,7 +62,7 @@
   }
   
   .feedbackContainer{
-    background-color: $background;
+    background-color: $list-item-background;
    
   }
 
@@ -102,7 +118,7 @@
       max-height: 400px;
       overflow-y: auto;
       padding: 10px;
-      background-color: $background;
+      background-color: $list-item-background;
       border-radius: 5px;
   }
 
@@ -118,12 +134,13 @@
   }
   
   .assignmentTable th {
-    background-color: $background; 
+    background-color: $list-item-background;
     font-weight: bold; 
+    color:$text-color;
   }
   
   .assignmentTable tr:nth-child(even) {
-    background-color: $background; 
+    background-color: $list-item-background; 
   }
   
   .sub_list{
