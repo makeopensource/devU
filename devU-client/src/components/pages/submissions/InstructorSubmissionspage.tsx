@@ -43,7 +43,7 @@ interface RowProps {
 
     user: User;
 
-    submission: Submission;
+    submission: Submission ;
 
     submissionScore: SubmissionScore | undefined;
 
@@ -89,7 +89,8 @@ const SubmissionsTable: React.FC<TableProps> = ({ users, submissions, submission
 
             <th>External ID</th>
 
-            <th>{assignment.name} Score</th> {/* Display assignment name */}
+            <th>{assignment.name} Score</th>
+            {/* Display assignment name + score*/}
 
             <th>Feedback</th>
 
@@ -107,7 +108,7 @@ const SubmissionsTable: React.FC<TableProps> = ({ users, submissions, submission
 
             return user ? (
 
-                <TableRow key={submission.id} user={user} submission={submission} submissionScore={submissionScore} />
+                <TableRow key={submission.id} user={user} submission={submission} submissionScore={submissionScore}/>
 
             ) : null;
 
@@ -118,7 +119,6 @@ const SubmissionsTable: React.FC<TableProps> = ({ users, submissions, submission
     </table>
 
 );
-
 
 
 const InstructorSubmissionsPage: React.FC = () => {
@@ -135,16 +135,12 @@ const InstructorSubmissionsPage: React.FC = () => {
 
     const [assignment, setAssignment] = useState<Assignment | null>(null);
 
-    const {  assignmentId, courseId } = useParams<
+    const {assignmentId, courseId } = useParams<
 
         {assignmentId: string, courseId: string}>()
 
-
-
-
-
-
-
+   // const [originalUsers, setOriginalUsers] = useState<User[]>([]); // Store original users
+    //const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
 
 
@@ -170,6 +166,9 @@ const InstructorSubmissionsPage: React.FC = () => {
                 const users = await RequestService.get<User[]>('/api/users');
 
                 setUsers(users);
+
+                //const enrolledusers = await RequestService.get<User[]>(`/api/course/${courseId}/users`);
+                //setUsers(enrolledusers);
 
 
 
@@ -205,6 +204,9 @@ const InstructorSubmissionsPage: React.FC = () => {
 
                 setAssignment(assignment);
 
+                //setOriginalUsers(users); // Store fetched users in originalUsers
+               // setFilteredUsers(users);
+
             } catch (error: any) {
 
                 console.error("Error fetching data:", error);
@@ -224,9 +226,29 @@ const InstructorSubmissionsPage: React.FC = () => {
         fetchData();
 
     }, [courseId, assignmentId]);
-    const handleStudentSearch = () => {
 
-    }
+    //const [filterUsers, setFilterUsers] = useState<User[]>([]);
+
+
+    const handleStudentSearch = (value:string) /*e : React.ChangeEvent<HTMLInputElement>)*/ => {
+
+        console.log("Search term:", value);
+        //const search = value.toLowerCase();
+
+        const filterusers = users.filter((user) =>{
+            //return(
+            const matchuser =
+                user.email.toLowerCase().includes(value.toLowerCase()) ||
+                    user.externalId.toLowerCase().includes(value.toLowerCase())
+           // );
+            console.log(`User ${user.email} matches:`, matchuser);
+
+            return matchuser;
+        });
+        console.log("Filtered Users:",filterusers);
+        setUsers(filterusers);
+
+    };
 
 
 
@@ -252,13 +274,16 @@ const InstructorSubmissionsPage: React.FC = () => {
                 <TextField
                     onChange={handleStudentSearch}
                     label='Search'
-                    id='preferredName'
+                    id='email'
                     placeholder='search students'
                 />
 
+
                 <SubmissionsTable
 
-                    users={users}
+                    //users={filteredUsers}
+
+                    users = {users}
 
                     submissions={submissions}
 

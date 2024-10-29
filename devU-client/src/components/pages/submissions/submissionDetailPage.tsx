@@ -18,14 +18,18 @@ const SubmissionDetailPage = () => {
     const [error, setError] = useState(null)
     const [setAlert] = useActionless(SET_ALERT)
     
-    const { submissionId, assignmentId, courseId } = useParams<{submissionId: string, assignmentId: string, courseId: string}>()
+    const { submissionId, assignmentId, courseId } = useParams<
+        {submissionId: string, assignmentId: string, courseId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [submission, setSubmission] = useState<Submission>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [assignment, setAssignment] = useState<Assignment>()
-
+   //const [submissions, setSubmissions] = useState<Submission[]>([])
     const [showManualGrade, setToggleManualGrade] = useState(false)
+   // const [users, setUsers] = useState<User>();
+
+
     const [formData, setFormData] = useState({
         submissionId: submissionId,
         score: 0,
@@ -104,7 +108,7 @@ const SubmissionDetailPage = () => {
                     <Button onClick={handleManualGrade}>Submit</Button>
                 </div>
             )}
-            
+
             <h1>Submission Detail for {assignment?.name}</h1>
             <h2>Submission Grades:</h2>
             <table>
@@ -119,11 +123,16 @@ const SubmissionDetailPage = () => {
                     <td>{submissionScore?.score ?? "N/A"}</td>
                 </tr>
             </table>
+
+
             <Link to={`/course/${courseId}/assignment/${assignmentId}/submission/${submissionId}/feedback`}>View
                 Feedback</Link>
             <br/>
-            
+
             <h2>Submission Content:</h2>
+            <h2>All Submissions:</h2>
+
+
             <pre>{submission?.content}</pre>
         </PageWrapper>
     )

@@ -31,6 +31,7 @@
     //flex-direction: row;
     gap: 20px;
     margin-top:20px;
+    justify-content: flex-start;
 }
 .courseCard {
     display: flex;
@@ -91,6 +92,9 @@
     h1 {
         margin: 0 0 10px 0;
         font-size: 2.5rem;
+        text-align: left;
+        font-weight: bold;
+        //font-size: 1.0rem;
     }
 
     h2 {

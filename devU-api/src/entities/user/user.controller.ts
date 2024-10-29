@@ -31,7 +31,7 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
     next(err)
   }
 }
-
+//USE THIS
 export async function getByCourse(req: Request, res: Response, next: NextFunction) {
   try {
     const courseId = parseInt(req.params.id)
@@ -41,7 +41,7 @@ export async function getByCourse(req: Request, res: Response, next: NextFunctio
     const response = users.map(u => {
       if (u) return serialize(u)
     })
-
+    // TODO: This should return users, not userRoles
     res.status(200).json(response)
   } catch (err) {
     next(err)
