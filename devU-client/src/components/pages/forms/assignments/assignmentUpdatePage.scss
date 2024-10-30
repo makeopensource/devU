@@ -113,6 +113,13 @@ input[type='date'] {
     border : 2px solid red;
 }
 
+.problemName {
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media (max-width:1000px) {
     .grid {
         display: grid;

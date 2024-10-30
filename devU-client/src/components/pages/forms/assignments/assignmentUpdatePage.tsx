@@ -345,9 +345,10 @@ const AssignmentUpdatePage = () => {
         </div>
         <div className={styles.problemsList}>
           <h2 className={styles.header}>Problems</h2>
-          {assignmentProblems.map((problem, index) => (
+          {assignmentProblems.map((problem) => (
             <div key={problem.id} className={styles.problem}>
-              <h3 style={{marginRight : '20px'}}>{`Problem ${index + 1}`}</h3>
+              {/* <h3 style={{marginRight : '20px'}}>{`Problem ${index + 1}`}</h3> */}
+              <h3 style={{marginRight : '20px'}} className={styles.problemName}>{problem.problemName}</h3>
               <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenModal(problem) } }}>Edit</Button>
               <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
             </div>
