@@ -10,6 +10,7 @@ import { useActionless } from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
 import { SET_ALERT } from 'redux/types/active.types'
 import formStyles from './coursesFormPage.scss'
+import AutomateDates from './automateDates'
 import { applyMessageToErrorFields, removeClassFromField } from "../../../../utils/textField.utils";
 
 
@@ -75,9 +76,10 @@ const EditCourseFormPage = () => {
                         invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")} />
                     <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
                         invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
-                    <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
+                    {/* <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
                         placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
-                        helpText={invalidFields.get("semester")} />
+                        helpText={invalidFields.get("semester")} /> */}
+                    <AutomateDates />
                     <div className={formStyles.datepickerContainer}>
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
                             <label htmlFor='start-date'>Start Date *</label>
