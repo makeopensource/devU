@@ -21,6 +21,8 @@ import CoursesListPage from "./pages/listPages/courses/coursesListPage";
 import AssignmentProblemFormPage from './pages/forms/assignments/assignmentProblemFormPage'
 import InstructorSubmissionspage from "./pages/submissions/InstructorSubmissionspage";
 
+import webhookURLForm from './pages/webhookURLForm'
+
 const AuthenticatedRouter = () => (
     <Switch>
 
@@ -50,6 +52,7 @@ const AuthenticatedRouter = () => (
                    component={InstructorSubmissionspage}/>
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId/feedback'
                component={SubmissionFeedbackPage}/>
+        <Route exact path='/webhookURLPage' component={webhookURLForm}/>
 
         <Route component={NotFoundPage}/>
     </Switch>
