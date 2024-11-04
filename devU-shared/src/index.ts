@@ -21,6 +21,7 @@ export * from './types/nonContainerAutoGrader.types'
 export * from './types/deadlineExtensions.types'
 export * from './types/grader.types'
 export * from './types/role.types'
+export * from './types/webhooks.types'
 
 export * from './utils/object.utils'
 export * from './utils/string.utils'
