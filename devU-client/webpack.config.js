@@ -73,11 +73,23 @@ module.exports = () => {
           }],
           exclude:/src/
         },
+        {
+          test: /pdf\.worker\.(min\.)?js$/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'pdf.worker.min.js'
+          }
+        }
       ],
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss'],
       modules: [ path.join(__dirname, './src'), 'node_modules' ],
+      fallback: {
+        fs: false,
+        path: false,
+        crypto: false,
+      }
     },
     entry: {
       bundle: "./src/index.tsx",

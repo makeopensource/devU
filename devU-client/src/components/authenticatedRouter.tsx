@@ -21,6 +21,8 @@ import CoursesListPage from "./pages/listPages/courses/coursesListPage";
 import AssignmentProblemFormPage from './pages/forms/assignments/assignmentProblemFormPage'
 import InstructorSubmissionspage from "./pages/submissions/InstructorSubmissionspage";
 
+import pdfViewerTest from './pages/pdfViewerTest'
+
 const AuthenticatedRouter = () => (
     <Switch>
 
@@ -50,8 +52,9 @@ const AuthenticatedRouter = () => (
                    component={InstructorSubmissionspage}/>
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId/feedback'
                component={SubmissionFeedbackPage}/>
-
+       <Route exact path='/pdfviewtest' component={pdfViewerTest}/>
         <Route component={NotFoundPage}/>
+
     </Switch>
 )
 

@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@types/react-pdf": "^7.0.0"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^3.11.174"
+  }
+}

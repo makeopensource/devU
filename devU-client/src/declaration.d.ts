@@ -12,3 +12,8 @@ declare module '*.png' {
   const content: string
   export default content
 }
+
+declare module '*/pdf.worker.min.js' {
+  const content: any;
+  export default content;
+}
