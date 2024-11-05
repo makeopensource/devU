@@ -44,7 +44,17 @@ const CourseListItem = ({course, isOpen}: Props) => {
                     {infoSection("Course Number", course.number)}
                     {infoSection("Semester", prettyPrintSemester(course.semester))}
                     {infoSection("Start/End Date", prettyPrintDate(course.startDate), prettyPrintDate(course.endDate))}
+                    <div className={styles.courseVisibility}>
+             {course && (
+                course.isPublic ? (
+                    <span className={styles.public}>Public Course</span>
+                ) : (
+                    <span className={styles.private}>Private Course</span>
+                )
+            )}
+        </div>
                 </Link>
+                
             }
         </div>
     )
