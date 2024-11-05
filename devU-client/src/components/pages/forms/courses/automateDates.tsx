@@ -21,8 +21,8 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
         Custom: { start: '', end: '' },
       },
       Spring: {
-        '15 week': { start: '2024-09-01', end: '2024-12-15' },
-        '7 week': { start: '2024-09-01', end: '2024-10-20' },
+        '15 week': { start: '2024-02-01', end: '2024-05-15' },
+        '7 week': { start: '2024-02-01', end: '2024-03-20' },
         Custom: { start: '', end: '' },
       },
       Winter: {
@@ -47,8 +47,8 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
         Custom: { start: '', end: '' },
       },
       Spring: {
-        '15 week': { start: '2025-09-01', end: '2025-12-15' },
-        '7 week': { start: '2025-09-01', end: '2025-10-20' },
+        '15 week': { start: '2025-02-01', end: '2025-05-15' },
+        '7 week': { start: '2025-02-01', end: '2025-03-20' },
         Custom: { start: '', end: '' },
       },
       Winter: {
@@ -73,8 +73,8 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
         Custom: { start: '', end: '' },
       },
       Spring: {
-        '15 week': { start: '2026-09-01', end: '2026-12-15' },
-        '7 week': { start: '2026-09-01', end: '2026-10-20' },
+        '15 week': { start: '2026-02-01', end: '2026-05-15' },
+        '7 week': { start: '2026-02-01', end: '2026-03-20' },
         Custom: { start: '', end: '' },
       },
       Winter: {
@@ -99,8 +99,8 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
         Custom: { start: '', end: '' },
       },
       Spring: {
-        '15 week': { start: '2027-09-01', end: '2027-12-15' },
-        '7 week': { start: '2027-09-01', end: '2027-10-20' },
+        '15 week': { start: '2027-02-01', end: '2027-05-15' },
+        '7 week': { start: '2027-02-01', end: '2027-03-20' },
         Custom: { start: '', end: '' },
       },
       Winter: {
@@ -125,8 +125,8 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
         Custom: { start: '', end: '' },
       },
       Spring: {
-        '15 week': { start: '2028-09-01', end: '2028-12-15' },
-        '7 week': { start: '2028-09-01', end: '2028-10-20' },
+        '15 week': { start: '2028-02-01', end: '2028-05-15' },
+        '7 week': { start: '2028-02-01', end: '2028-03-20' },
         Custom: { start: '', end: '' },
       },
       Winter: {
@@ -151,8 +151,8 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
         Custom: { start: '', end: '' },
       },
       Spring: {
-        '15 week': { start: '2029-09-01', end: '2029-12-15' },
-        '7 week': { start: '2029-09-01', end: '2029-10-20' },
+        '15 week': { start: '2029-02-01', end: '2029-05-15' },
+        '7 week': { start: '2029-02-01', end: '2029-03-20' },
         Custom: { start: '', end: '' },
       },
       Winter: {
@@ -172,13 +172,13 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
     },
     2030: {
       Fall: {
-        '15 week': { start: '2030-09-01', end: '2030-12-15' },
-        '7 week': { start: '2030-09-01', end: '2030-10-20' },
+        '15 week': { start: '2030-02-01', end: '2030-05-15' },
+        '7 week': { start: '2030-02-01', end: '2030-10-20' },
         Custom: { start: '', end: '' },
       },
       Spring: {
         '15 week': { start: '2030-09-01', end: '2030-12-15' },
-        '7 week': { start: '2030-09-01', end: '2030-10-20' },
+        '7 week': { start: '2030-09-01', end: '2030-03-20' },
         Custom: { start: '', end: '' },
       },
       Winter: {
@@ -212,7 +212,7 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
         return [
           { value: '15 days', label: '15 days' },
           { value: '14 days', label: '14 days' },
-          { value: '10 days', label: '10 days' },
+          // { value: '10 days', label: '10 days' },
           { value: 'Custom', label: 'Custom' },
         ];
       case 'Summer':

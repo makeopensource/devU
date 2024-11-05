@@ -21,7 +21,7 @@ const EditCourseFormPage = () => {
     const [formData, setFormData] = useState({
         name: '',
         number: '',
-        semester: '',
+        semester: 'f0000',
     })
 
     const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
