@@ -45,12 +45,14 @@ const CourseUpdatePage = ({ }) => {
         name: '',
         number: '',
         semester: 'f0000',
+        isPublic: false 
     })
     const [startDate, setStartDate] = useState(new Date().toISOString())
     const [endDate, setEndDate] = useState(new Date().toISOString())
     const [studentEmail, setStudentEmail] = useState("")
     const [emails, setEmails] = useState<string[]>([])
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
+    const [privateDate, setPrivateDate] = useState(new Date().toISOString().split("T")[0]);
 
     const { courseId } = useParams() as UrlParams
     useEffect(() => {
@@ -61,9 +63,11 @@ const CourseUpdatePage = ({ }) => {
                     name: res.name,
                     number: res.number,
                     semester: res.semester,
+                    isPublic: res.isPublic 
                 });
                 setStartDate(new Date(res.startDate).toISOString().split("T")[0]);
                 setEndDate(new Date(res.endDate).toISOString().split("T")[0]);
+                setPrivateDate(new Date(res.privateDate).toISOString().split("T")[0]); 
                 isMounted = true;
             });
         }
@@ -91,10 +95,15 @@ const CourseUpdatePage = ({ }) => {
             setFormData(prevState => ({ ...prevState, [key]: value }))
         }
     }
-
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData(prevState => ({ ...prevState, isPublic: e.target.checked })); 
+    };
     const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
     const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
 
+    const handlePrivateDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPrivateDate(event.target.value);
+    };
     const handleCourseUpdate = () => {
         const finalFormData = {
             name: formData.name,
@@ -102,6 +111,8 @@ const CourseUpdatePage = ({ }) => {
             semester: formData.semester,
             startDate: startDate + "T16:02:41.849Z",
             endDate: endDate + "T16:02:41.849Z",
+            isPublic: formData.isPublic,
+            privateDate: privateDate + "T16:02:41.849Z",
         }
 
         RequestService.put(`/api/courses/${courseId}`, finalFormData)
@@ -213,11 +224,41 @@ const CourseUpdatePage = ({ }) => {
 
     const dropSingleStudent = async (email: string) => {
         const userID = await getUserId(email)
-        if (!userID) { return }
+        
+        if (userID == 0) {
+            setAlert({ autoDelete: false, type: 'error', message: "userID not found" })
+            return
+        }
 
         try {
             await RequestService.delete(`/api/course/${courseId}/user-courses/${userID}`)
             setAlert({ autoDelete: true, type: 'success', message: `${email} dropped from course` })
+        } catch (error: any) { // Use any if the error type isn't strictly defined
+            const message = error.message || "An unknown error occurred"
+            setAlert({ autoDelete: false, type: 'error', message })
+        }
+    }
+
+    const addBulkStudent = async (emails: string[]) => {
+        try {
+            const reqBody = {
+                users: emails
+            }
+            const res = await RequestService.post(`/api/course/${courseId}/user-courses/students/add`, reqBody)
+            setAlert({ autoDelete: true, type: 'success', message: res.success })
+        } catch (error: any) { // Use any if the error type isn't strictly defined
+            const message = error.message || "An unknown error occurred"
+            setAlert({ autoDelete: false, type: 'error', message })
+        }
+    }
+
+    const dropBulkStudent = async (emails: string[]) => {
+        try {
+            const reqBody = {
+                users: emails
+            }
+            const res = await RequestService.post(`/api/course/${courseId}/user-courses/students/drop`, reqBody)
+            setAlert({ autoDelete: true, type: 'success', message: res.success })
         } catch (error: any) { // Use any if the error type isn't strictly defined
             const message = error.message || "An unknown error occurred"
             setAlert({ autoDelete: false, type: 'error', message })
@@ -231,11 +272,12 @@ const CourseUpdatePage = ({ }) => {
             console.log("adding single user")
             addSingleStudent(studentEmail)
         } else {
-            // if file inputted then for each email parsed from csv addSingleStudent
+            // if file inputted then call
             console.log("adding multiple users")
-            emails.forEach(email => {
-                addSingleStudent(email)
-            })
+            // emails.forEach(email => {
+            //     addSingleStudent(email)
+            // })
+            addBulkStudent(emails)
         }
     }
 
@@ -247,9 +289,10 @@ const CourseUpdatePage = ({ }) => {
         } else {
             // if file inputted then for each email parsed from csv dropSingleStudent
             console.log("dropping multiple users")
-            emails.forEach(email => {
-                dropSingleStudent(email)
-            })
+            // emails.forEach(email => {
+            //     dropSingleStudent(email)
+            // })
+            dropBulkStudent(emails)
         }
     }
 
@@ -278,6 +321,20 @@ const CourseUpdatePage = ({ }) => {
                         <div className={formStyles.fieldContainer}>
                             <label htmlFor='end-date'>End Date *</label>
                             <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                            <label htmlFor='private-date'>Private Date *</label>
+                            <input type="date" id="private-date" value={privateDate} onChange={handlePrivateDateChange} />
+                        </div>
+                        <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={formData.isPublic} 
+                                onChange={handleCheckboxChange}
+                            />
+                            Make this course public
+                        </label>
                         </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>

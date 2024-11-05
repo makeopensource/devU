@@ -18,6 +18,7 @@ import role from '../entities/role/role.router'
 import nonContainerAutoGraderRouter from '../entities/nonContainerAutoGrader/nonContainerAutoGrader.router'
 
 import { asInt } from '../middleware/validator/generic.validator'
+import webhooksRouter from '../entities/webhooks/webhooks.router'
 
 const assignmentRouter = express.Router({ mergeParams: true })
 assignmentRouter.use('/assignment-problems', assignmentProblem)
@@ -40,5 +41,8 @@ Router.use('/course-scores', courseScores)
 Router.use('/file-upload', fileUpload)
 Router.use('/roles', role)
 Router.use('/user-courses', userCourse)
+
+Router.use('/webhooks', webhooksRouter)
+
 
 export default Router

@@ -13,28 +13,29 @@ import formStyles from './coursesFormPage.scss'
 import AutomateDates from './automateDates'
 import { applyMessageToErrorFields, removeClassFromField } from "../../../../utils/textField.utils";
 
-
 const EditCourseFormPage = () => {
-    const [setAlert] = useActionless(SET_ALERT)
+    const [setAlert] = useActionless(SET_ALERT);
     const history = useHistory();
 
     const [formData, setFormData] = useState({
         name: '',
         number: '',
         semester: 'f0000',
-    })
+        isPublic: false 
+    });
 
-    const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0])
-    const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0])
-    const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
+    const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]);
+    const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]);
+    const [privateDate, setPrivateDate] = useState(new Date().toISOString().split("T")[0]);
 
-    const handleChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
-        const key = e.target.id
-        setFormData(prevState => ({ ...prevState, [key]: value }))
+    const handleChange = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
+        const key = e.target.id;
+        setFormData(prevState => ({ ...prevState, [key]: value }));
+    };
 
-        const newInvalidFields = removeClassFromField(invalidFields, key)
-        setInvalidFields(newInvalidFields)
-    }
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData(prevState => ({ ...prevState, isPublic: e.target.checked })); 
+    };
 
     interface Dates {
         startDate: string;
@@ -49,37 +50,42 @@ const EditCourseFormPage = () => {
     const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
     const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
 
+    const handlePrivateDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPrivateDate(event.target.value);
+    };
+
+    const formatDateForSubmission = (date: string) => {
+        return new Date(date).toISOString();
+    };
+
+    const isFormValid = () => {
+        return formData.name && formData.number && formData.semester && startDate && endDate;
+    };
 
     const handleSubmit = () => {
         const finalFormData = {
             name: formData.name,
             number: formData.number,
             semester: formData.semester,
-            startDate: startDate + "T16:02:41.849Z",
-            endDate: endDate + "T16:02:41.849Z",
-        }
+            startDate: formatDateForSubmission(startDate),
+            endDate: formatDateForSubmission(endDate),
+            isPublic: formData.isPublic,
+            privateDate: formatDateForSubmission(privateDate) 
+        };
 
         RequestService.post('/api/courses/instructor', finalFormData)
             .then(() => {
-                setAlert({ autoDelete: true, type: 'success', message: 'Course Added' })
-                history.goBack()
+                setAlert({ autoDelete: true, type: 'success', message: 'Course Added' });
+                history.goBack();
             })
-            .catch((err: ExpressValidationError[] | Error) => {
-                const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
-
-                const newFields = new Map<string, string>()
-                Array.isArray(err) ? err.map((e) => applyMessageToErrorFields(newFields, e.param, e.msg)) : newFields
-                setInvalidFields(newFields);
-                setAlert({ autoDelete: false, type: 'error', message })
-            })
-            .finally(() => {
-            })
-    }
+            .catch((err) => {
+                setAlert({ autoDelete: false, type: 'error', message: err.message });
+            });
+    };
 
     return (
         <PageWrapper>
             <h1>Create Course</h1>
-
             <div className={formStyles.courseFormWrapper}>
                 <div className={formStyles.createDetailsForm}>
                     <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
@@ -99,16 +105,28 @@ const EditCourseFormPage = () => {
                             <label htmlFor='end-date'>End Date *</label>
                             <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
                         </div>
+                        <div>
+                            <label htmlFor='private-date'>Private Date *</label>
+                            <input type="date" id="private-date" value={privateDate} onChange={handlePrivateDateChange} />
+                        </div>
+                    </div>
+                    <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={formData.isPublic} 
+                                onChange={handleCheckboxChange}
+                            />
+                            Make this course public
+                        </label>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <button className='btnPrimary' onClick={handleSubmit}>Create Course</button>
+                        <button className='btnPrimary' onClick={handleSubmit} disabled={!isFormValid()}>Create Course</button>
                     </div>
                 </div>
             </div>
         </PageWrapper>
-    )
+    );
+};
 
-}
-
-
-export default EditCourseFormPage
+export default EditCourseFormPage;
