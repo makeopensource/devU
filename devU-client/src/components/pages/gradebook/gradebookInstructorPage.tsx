@@ -24,7 +24,7 @@ type RowProps = {
     assignments: Assignment[]
     assignmentScores: AssignmentScore[]
 }
-
+//table for style
 const TableRow = ({index, user, userCourse, assignments, assignmentScores}: RowProps) => {
     return (
         <tr>
