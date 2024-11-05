@@ -21,7 +21,7 @@ import CoursesListPage from "./pages/listPages/courses/coursesListPage";
 import AssignmentProblemFormPage from './pages/forms/assignments/assignmentProblemFormPage'
 import InstructorSubmissionspage from "./pages/submissions/InstructorSubmissionspage";
 
-import webhookURLForm from './pages/webhookURLForm'
+import WebhookURLForm from './pages/webhookURLForm'
 
 const AuthenticatedRouter = () => (
     <Switch>
@@ -45,6 +45,7 @@ const AuthenticatedRouter = () => (
                component={NonContainerAutoGraderForm}/>
         <Route exact path='/course/:courseId/assignment/:assignmentId/createCAG' component={ContainerAutoGraderForm}/>
         <Route exact path='/course/:courseId/assignment/:assignmentId/createProblem' component={AssignmentProblemFormPage}/>
+        <Route exact path='/course/:courseId/webhooks' component={WebhookURLForm}/>
 
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId'
                component={SubmissionDetailPage}/>
@@ -52,7 +53,8 @@ const AuthenticatedRouter = () => (
                    component={InstructorSubmissionspage}/>
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId/feedback'
                component={SubmissionFeedbackPage}/>
-        <Route exact path='/webhookURLPage' component={webhookURLForm}/>
+       // TBD, undecided where webhooks should be placed
+        {/*<Route exact path='/webhookURLPage' component={webhookURLForm}/>*/}
 
         <Route component={NotFoundPage}/>
     </Switch>
