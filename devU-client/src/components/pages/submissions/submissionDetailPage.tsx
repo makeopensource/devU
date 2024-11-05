@@ -15,10 +15,13 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import {CardActionArea, Typography} from '@mui/material'
 import {prettyPrintDateTime} from "../../../utils/date.utils";
+//import React, { useState } from 'react';
+//import { Document, Page } from 'react-pdf';
+//import StickyNote from 'react-sticky-notes';
 
 
 const SubmissionDetailPage = () => {
-
+   // const [notes, setNotes] = useState([]);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [setAlert] = useActionless(SET_ALERT)
@@ -107,6 +110,7 @@ const SubmissionDetailPage = () => {
         }
     }
 
+
      
     
 
@@ -114,6 +118,16 @@ const SubmissionDetailPage = () => {
     if (error) return <ErrorPage error={error} />
     //const history = useHistory()
     //var submission_form = JSON.parse(submission?.content);
+
+   /* const handleAddNote = () => {
+        setNotes([
+
+            {
+                id: notes.length + 1,
+                content: '',
+                position: { x: 100, y: 100 }, // Initial position
+            },
+        ]);*/
     return(
         <PageWrapper>
             <Button onClick={handleClick}>Manually Grade</Button>
