@@ -10,12 +10,15 @@ import {SET_ALERT} from 'redux/types/active.types'
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import {Accordion, AccordionDetails, AccordionSummary, CardActionArea, TextField, Typography} from '@mui/material'
+import {Accordion, AccordionDetails, CardActionArea, TextField, Typography} from '@mui/material'
 
 import Grid from '@mui/material/Unstable_Grid2'
 
 import styles from './assignmentDetailPage.scss'
 import {prettyPrintDateTime} from "../../../utils/date.utils";
+
+import { useLocation } from 'react-router-dom';
+import Scoreboard from '../assignments/scoreboard';
 
 const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -37,10 +40,12 @@ const AssignmentDetailPage = () => {
     // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
     // const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
     // const [ setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
+    const [showScoreboard, setShowScoreboard] = useState(false);
+    const location = useLocation();
 
     useEffect(() => {
         fetchData()
-    }, []);
+    }, [location]);
 
 
     const fetchData = async () => {
@@ -90,9 +95,12 @@ const AssignmentDetailPage = () => {
         const key = e.target.id
         setFormData(prevState => ({...prevState,[key] : e.target.value}))
     }
+
+
     const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.item(0))
     }
+
 
     const handleSubmit = async () => {
         let response;
@@ -122,7 +130,7 @@ const AssignmentDetailPage = () => {
             } else {
                 response = await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
             }
-            
+
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
 
             // Now you can use submissionResponse.id here
@@ -139,14 +147,15 @@ const AssignmentDetailPage = () => {
         }
     }
 
+
     return(
         <PageWrapper>
             <div className={styles.header}>
                 <h1 className = {styles.assignment_heading}>{assignment?.name}</h1>
-                <hr className= {styles.line}/> 
+                <hr className= {styles.line}/>
                 </div>
                 <div className = {styles.wrap}>
-               
+
                 {role.isInstructor() && (
                     <>
                     <div className={styles.card}>
@@ -175,16 +184,22 @@ const AssignmentDetailPage = () => {
                             (`/course/${courseId}/assignment/${assignmentId}/submissions`)
                         }}>Grade Submissions</button>}
 
+                        <hr className = {styles.line} />
+                        {role.isInstructor() && <button
+                            className={styles.buttons} onClick={() => {
+                            setShowScoreboard(!showScoreboard)}
+
+                        }>Scoreboard</button>
+                        }
+
+
+
 
                     </div>
                     </div>
                    </>
                     )}
-                
-                   
-              
-              
-            
+
 
             <Grid display='flex' justifyContent='center' alignItems='center'>
             <Card className={styles.assignment_card}>
@@ -195,26 +210,24 @@ const AssignmentDetailPage = () => {
                     <Typography className={styles.due_date}>{`Due Date: ${new Date(assignment.dueDate).toLocaleDateString()}`}</Typography>
                 )}
             {assignmentProblems && assignmentProblems.length > 0 ? (
-                assignmentProblems.map((assignment, index) => (
+                assignmentProblems.map((assignmentProblem, index) => (
                     <Accordion className={styles.accordion} key={index}>
-                    <AccordionSummary>
-                        <Typography className={styles.accordionDetails}>{`Assignment Problem ${index + 1}`}</Typography>
-                    </AccordionSummary>
+
                     <AccordionDetails className={styles.accordionDetails}>
-                        <Typography>{assignment.problemName}</Typography>
-                        <TextField id={assignment.problemName} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
+                        <Typography>{assignmentProblem.problemName}</Typography>
+                        <TextField id={assignmentProblem.problemName} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
                     </AccordionDetails>
                     </Accordion>
                 ))
-            
+
                 ) : (
                 <CardContent>
                     <Typography>No Problems Exist</Typography>
                 </CardContent>
             )}
-            
+
             {!(assignment?.disableHandins) && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
-           
+
             {assignmentProblems && assignmentProblems.length > 0 ? (
                  <div className = {styles.submit_container}>
                 <button className={styles.buttons} onClick={handleSubmit}>Submit</button>
@@ -244,9 +257,16 @@ const AssignmentDetailPage = () => {
                     </CardActionArea>
                 </Card>
             ))}
+
+                {showScoreboard && (
+                    <div className={styles.scoreboardContainer}>
+                        <Scoreboard courseId={courseId} assignmentId={assignmentId} />
+
+                    </div>
+                )}
             </div>
             </div>
-          
+
         </PageWrapper>
     )
 }
