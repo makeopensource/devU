@@ -7,6 +7,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 const TestPage = () => {
     const [file, setFile] = useState<File | null>(null)
+    const [numPages, setNumPages] = useState(0)
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -14,13 +15,23 @@ const TestPage = () => {
         }
     }
 
+    const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+        setNumPages(numPages)
+    }
+
     return (
         <PageWrapper>
+            <div style={{maxWidth:"900px", margin:"auto"}}>
             {file && 
-                <Document file={file}>
-                    <Page pageNumber={1} />
+                <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
+                    {[...Array(numPages)].map((_, index) => (
+                        <div style={{marginBottom:"20px"}}>
+                            <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} scale={1.5}/>
+                        </div>
+                    ))}
                 </Document>
             }
+            </div>
             <br/>
             <input type="file" onChange={handleFileUpload}/>
 
