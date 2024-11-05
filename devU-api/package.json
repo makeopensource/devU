@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run migrate && ts-node-dev src/index.ts",
     "migrate": "npm run typeorm -- migration:run -d src/database.ts",
-    "update-shared": "cd ../devU-shared && npm run build-local && npm i",
+    "update-shared": "cd ../devU-shared && npm run build-local && cd ../devU-api && npm i",
     "typeorm": "typeorm-ts-node-commonjs",
     "test": "jest --passWithNoTests",
     "clean": "rimraf build/*",
