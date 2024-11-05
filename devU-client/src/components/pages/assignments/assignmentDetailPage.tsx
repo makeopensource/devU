@@ -242,7 +242,7 @@ const AssignmentDetailPage = () => {
                 <hr className = {styles.line}/>
             </div>
 
-            {/**Submissions List */}
+
             <div>
             <div className={styles.submissionsContainer}>
             {submissions.map((submission, index) => (
