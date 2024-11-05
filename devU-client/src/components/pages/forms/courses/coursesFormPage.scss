@@ -83,10 +83,9 @@ input[type='date'] {
   gap: 5px;
 }
 
-.fieldContainer>select {
-  // background-color: $input-field-background;
-  // color: $input-field-label;
-  // border-radius: 20px;
+select {
+  background: $input-field-background;
+  color: $input-field-label;
   padding: 0.625rem 1rem;
   border: none;
   border-radius: 100px;
@@ -110,9 +109,17 @@ input[type='file']::file-selector-button {
   .updateDetailsForm, .addDropForm {
     width: auto; // take up full container
   }
+
+  .semesterOptions {
+    flex-direction: column;
+  }
+
+  select {
+    width: 100%;
+  }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 575px) {
   .datepickerContainer {
     flex-direction: column;
   }
