@@ -20,6 +20,7 @@ const EditCourseFormPage = () => {
 
     const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]);
     const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]);
+    const [privateDate, setPrivateDate] = useState(new Date().toISOString().split("T")[0]);
 
     const handleChange = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id;
@@ -27,7 +28,7 @@ const EditCourseFormPage = () => {
     };
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData(prevState => ({ ...prevState, isPublic: e.target.checked })); // Change to isPublic
+        setFormData(prevState => ({ ...prevState, isPublic: e.target.checked })); 
     };
 
     const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +37,10 @@ const EditCourseFormPage = () => {
 
     const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEndDate(event.target.value);
+    };
+
+    const handlePrivateDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPrivateDate(event.target.value);
     };
 
     const formatDateForSubmission = (date: string) => {
@@ -53,7 +58,8 @@ const EditCourseFormPage = () => {
             semester: formData.semester,
             startDate: formatDateForSubmission(startDate),
             endDate: formatDateForSubmission(endDate),
-            isPublic: formData.isPublic 
+            isPublic: formData.isPublic,
+            privateDate: formatDateForSubmission(privateDate) 
         };
 
         RequestService.post('/api/courses/instructor', finalFormData)
@@ -98,12 +104,16 @@ const EditCourseFormPage = () => {
                             <label htmlFor='end-date'>End Date *</label>
                             <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
                         </div>
+                        <div>
+                            <label htmlFor='private-date'>Private Date *</label>
+                            <input type="date" id="private-date" value={privateDate} onChange={handlePrivateDateChange} />
+                        </div>
                     </div>
                     <div>
                         <label>
                             <input
                                 type="checkbox"
-                                checked={formData.isPublic} // Reflect isPublic
+                                checked={formData.isPublic} 
                                 onChange={handleCheckboxChange}
                             />
                             Make this course public

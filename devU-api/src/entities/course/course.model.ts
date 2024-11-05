@@ -61,4 +61,8 @@ export default class CourseModel {
 
   @Column({ type: 'boolean', name: 'is_public', default: false }) 
   isPublic: boolean;
+  
+  @Column({ name: 'private_data', type: 'timestamp', default: () => 'now()' })
+  private_data?: Date;
+
 }

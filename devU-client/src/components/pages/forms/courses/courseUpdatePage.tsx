@@ -44,12 +44,14 @@ const CourseUpdatePage = ({ }) => {
         name: '',
         number: '',
         semester: '',
+        isPublic: false 
     })
     const [startDate, setStartDate] = useState(new Date().toISOString())
     const [endDate, setEndDate] = useState(new Date().toISOString())
     const [studentEmail, setStudentEmail] = useState("")
     const [emails, setEmails] = useState<string[]>([])
     const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
+    const [privateDate, setPrivateDate] = useState(new Date().toISOString().split("T")[0]);
 
     const { courseId } = useParams() as UrlParams
     useEffect(() => {
@@ -60,9 +62,11 @@ const CourseUpdatePage = ({ }) => {
                     name: res.name,
                     number: res.number,
                     semester: res.semester,
+                    isPublic: res.isPublic 
                 });
                 setStartDate(new Date(res.startDate).toISOString().split("T")[0]);
                 setEndDate(new Date(res.endDate).toISOString().split("T")[0]);
+                setPrivateDate(new Date(res.privateDate).toISOString().split("T")[0]); 
                 isMounted = true;
             });
         }
@@ -80,10 +84,15 @@ const CourseUpdatePage = ({ }) => {
             setFormData(prevState => ({ ...prevState, [key]: value }))
         }
     }
-
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData(prevState => ({ ...prevState, isPublic: e.target.checked })); 
+    };
     const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
     const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
 
+    const handlePrivateDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPrivateDate(event.target.value);
+    };
     const handleCourseUpdate = () => {
         const finalFormData = {
             name: formData.name,
@@ -91,6 +100,8 @@ const CourseUpdatePage = ({ }) => {
             semester: formData.semester,
             startDate: startDate + "T16:02:41.849Z",
             endDate: endDate + "T16:02:41.849Z",
+            isPublic: formData.isPublic,
+            privateDate: privateDate + "T16:02:41.849Z",
         }
 
         RequestService.put(`/api/courses/${courseId}`, finalFormData)
@@ -266,6 +277,20 @@ const CourseUpdatePage = ({ }) => {
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
                             <label htmlFor='end-date'>End Date *</label>
                             <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                            <label htmlFor='private-date'>Private Date *</label>
+                            <input type="date" id="private-date" value={privateDate} onChange={handlePrivateDateChange} />
+                        </div>
+                        <div>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={formData.isPublic} 
+                                onChange={handleCheckboxChange}
+                            />
+                            Make this course public
+                        </label>
                         </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>

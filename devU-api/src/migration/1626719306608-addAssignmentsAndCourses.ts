@@ -16,6 +16,7 @@ export class addAssignmentsAndCourses1626719306608 implements MigrationInterface
           "updated_at" TIMESTAMP NOT NULL DEFAULT now(),
           "deleted_at" TIMESTAMP,
           "is_public" boolean NOT NULL DEFAULT false,
+          "private_data" TIMESTAMP NOT NULL DEFAULT now(),
           CONSTRAINT "courses_primary_key_constraint" PRIMARY KEY ("id")
       )`
     )
