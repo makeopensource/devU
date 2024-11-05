@@ -25,7 +25,6 @@ const webhookURLForm = () => {
 
     const handleAddURL = () => {
         if (webhookURL) {
-            setWebhookUrls([...webhookUrls, webhookURL])
             //Handle adding webhook URL to backend here
             RequestService.post(`/course/${courseId}/webhooks`, {
               "destinationUrl": webhookURL,
@@ -33,14 +32,14 @@ const webhookURLForm = () => {
             }).then(
               _ => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Added webhook' })
+                setWebhookUrls([...webhookUrls, webhookURL])
+                // clear field
+                setWebhookURL('')
+                setWatcherUrl('')
               }
             ).catch(reason => {
                 setAlert({ autoDelete: true, type: 'error', message: `Failed to add webhook ${reason.toString()}` })
             })
-
-           // clear field
-            setWebhookURL('')
-            setWatcherUrl('')
         }
     }
 
@@ -52,7 +51,7 @@ const webhookURLForm = () => {
           justifyContent: 'center',
           alignItems: 'center',
           marginTop: '30px'
-        }}>
+        }} className = {styles.formBackground}>
           <TextField id="webhookURL" label={'Webhook URL'} onChange={handleUrlChange} sx={{ width: 1 / 2 }}
                      className={styles.textField}></TextField>
           <TextField id="matcherUrl" label={'Match URL'} helpText={"Url to watch for when sending the webhook "} onChange={handleWatcherUrl} sx={{ width: 1 / 2 }}
@@ -60,11 +59,14 @@ const webhookURLForm = () => {
           <Button onClick={handleAddURL}>Add Webhook URL</Button>
         </div>
 
-        <ul>
+        <div className={styles.webhookURLContainer}>
           {webhookUrls.map((url, index) => (
-            <li key={index}>{url}</li>
+            // <li key={index}>{url}</li>
+            <div className={styles.webhookURLCard} key={index}>
+                <div className={styles.webhookURLHeading}>{url}</div>
+            </div>
           ))}
-        </ul>
+        </div>
       </PageWrapper>
     )
 }
