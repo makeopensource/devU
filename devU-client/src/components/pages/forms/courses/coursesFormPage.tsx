@@ -81,11 +81,11 @@ const EditCourseFormPage = () => {
                         helpText={invalidFields.get("semester")} /> */}
                     <AutomateDates />
                     <div className={formStyles.datepickerContainer}>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                        <div className={formStyles.fieldContainer}>
                             <label htmlFor='start-date'>Start Date *</label>
                             <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} />
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                        <div className={formStyles.fieldContainer}>
                             <label htmlFor='end-date'>End Date *</label>
                             <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
                         </div>

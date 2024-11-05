@@ -65,35 +65,42 @@ function AutomateDates() {
   return (
     <div className={formStyles.semesterOptions}>
       {/* Season Dropdown */}
-      <label htmlFor="season">Season</label>
-      <select id="season" value={season} onChange={handleSeasonChange}>
-        <option value="">Select Season</option>
-        <option value="Fall">Fall</option>
-        <option value="Winter">Winter</option>
-        <option value="Spring">Spring</option>
-        <option value="Summer">Summer</option>
-      </select>
+      <div className={formStyles.fieldContainer}>
+        <label htmlFor="season">Season</label>
+        <select id="season" value={season} onChange={handleSeasonChange}>
+          <option value="">Select Season</option>
+          <option value="Fall">Fall</option>
+          <option value="Winter">Winter</option>
+          <option value="Spring">Spring</option>
+          <option value="Summer">Summer</option>
+        </select>
+      </div>
 
       {/* Year Dropdown */}
-      <label htmlFor="year">Year</label>
-      <select id="year" value={year} onChange={(e) => setYear(e.target.value)}>
-        <option value="">Select Year</option>
-        {Array.from({ length: 7 }, (_, i) => currentYear + i).map((year) => (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        ))}
-      </select>
+      <div className={formStyles.fieldContainer}>
+        <label htmlFor="year">Year</label>
+        <select id="year" value={year} onChange={(e) => setYear(e.target.value)}>
+          <option value="">Select Year</option>
+          {Array.from({ length: 7 }, (_, i) => currentYear + i).map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Session Dropdown */}
-      <label htmlFor="session">Session</label>
-      <select id="session" value={session} onChange={(e) => setSession(e.target.value)}>
-        {getSessionOptions(season).map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <div className={formStyles.fieldContainer}>
+        <label htmlFor="session">Session</label>
+        <select id="session" value={session} onChange={(e) => setSession(e.target.value)}>
+          {getSessionOptions(season).map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      
     </div>
   );
 }

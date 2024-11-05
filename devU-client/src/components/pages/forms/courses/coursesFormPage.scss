@@ -70,6 +70,28 @@ input[type='date'] {
   border-radius: 100px;
 }
 
+.semesterOptions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fieldContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.fieldContainer>select {
+  // background-color: $input-field-background;
+  // color: $input-field-label;
+  // border-radius: 20px;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 100px;
+}
+
 input[type='file']::file-selector-button {
   background-color: $primary;
   border-radius: 100px;
