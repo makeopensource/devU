@@ -36,6 +36,16 @@ const EditCourseFormPage = () => {
         setInvalidFields(newInvalidFields)
     }
 
+    interface Dates {
+        startDate: string;
+        endDate: string;
+    }
+
+    const handleDatesChange = ({ startDate, endDate }: Dates) => {
+        setStartDate(startDate);
+        setEndDate(endDate);
+    };
+
     const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
     const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
 
@@ -79,7 +89,7 @@ const EditCourseFormPage = () => {
                     {/* <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
                         placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
                         helpText={invalidFields.get("semester")} /> */}
-                    <AutomateDates />
+                    <AutomateDates onDatesChange={handleDatesChange} />
                     <div className={formStyles.datepickerContainer}>
                         <div className={formStyles.fieldContainer}>
                             <label htmlFor='start-date'>Start Date *</label>
