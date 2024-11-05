@@ -58,4 +58,7 @@ export default class CourseModel {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date
+
+  @Column({ type: 'boolean', name: 'is_public', default: false }) 
+  isPublic: boolean;
 }
