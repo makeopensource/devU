@@ -7,7 +7,6 @@ import ErrorPage from '../errorPage/errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import {useActionless, useAppSelector} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
-
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import {Accordion, AccordionDetails, CardActionArea, TextField, Typography} from '@mui/material'
@@ -191,10 +190,6 @@ const AssignmentDetailPage = () => {
 
                         }>Scoreboard</button>
                         }
-
-
-
-
                     </div>
                     </div>
                    </>
