@@ -24,7 +24,7 @@ import styles from './Submissionspage.scss';
 import TextField from "../../shared/inputs/textField";
 
 
-
+//tableprops
 interface TableProps {
 
     users: User[];
@@ -37,7 +37,7 @@ interface TableProps {
 
 }
 
-
+//row
 
 interface RowProps {
 
