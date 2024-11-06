@@ -71,6 +71,9 @@ const HomePage = () => {
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
     const history = useHistory();
+    const handleCourseClick = (courseId: any) => {
+                history.push(`/course/${courseId}`); // Assuming your course page route is '/course/:courseId'
+            }
     return(
         <PageWrapper>
             <div className={styles.header}>
@@ -89,15 +92,19 @@ const HomePage = () => {
             </div>
             <div className={styles.coursesContainer}>
                 {instructorCourses.map((course) => (
-                     <div className={styles.courseCard} key={course.id}>
-                    <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}
+                     <div className={styles.courseCard} key={course.id}
+                         onClick={() => handleCourseClick(course.id)} style={{ cursor: 'pointer' }}>
+                         <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}
                                          instructor = {true}/>
                                         </div>
                 ))}
             </div>
             <div className={styles.coursesContainer}>
                 {enrollCourses && enrollCourses.map((course) => (
-                    <div className={styles.courseCard} key={course.id}>
+                    <div className={styles.courseCard}
+                         key={course.id}
+                         onClick={() => handleCourseClick(course.id)} style={{ cursor: 'pointer' }}>
+
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}/>
                     </div>
                 ))}
@@ -114,7 +121,9 @@ const HomePage = () => {
             <div className={styles.coursesContainer}>
                 {pastCourses && pastCourses.map((course) => (
                     
-                    <div className={styles.courseCard} key={course.id}>
+                    <div className={styles.courseCard}
+                         key={course.id}
+                         onClick={() => handleCourseClick(course.id)} style={{ cursor: 'pointer' }}>
                         <UserCourseListItem 
                         course={course} 
                         assignments={assignments.get(course)} 
@@ -133,7 +142,8 @@ const HomePage = () => {
 
                 <div className={styles.coursesContainer}>
                 {upcomingCourses && upcomingCourses.map((course) => (
-                    <div className={styles.courseCard} key={course.id}>
+                    <div className={styles.courseCard} key={course.id}
+                         onClick={() => handleCourseClick(course.id)} style={{ cursor: 'pointer' }}>
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}/>
                     </div>
                 ))}
