@@ -19,6 +19,7 @@ import errorHandler from './middleware/errorHandler.middleware'
 
 // Authentication Handlers
 import './utils/passport.utils'
+import { responseInterceptor } from './entities/webhooks/webhooks.middleware'
 
 const app = express()
 
@@ -42,6 +43,8 @@ initializeMinio()
     app.use(passport.initialize())
 
     console.log(`Api: ${environment.isDocker ? '' : 'not'} running in docker`)
+
+    app.use(responseInterceptor)
 
     // Middleware;
     app.use('/', router)

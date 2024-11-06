@@ -11,9 +11,9 @@ import {useActionless} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
 import styles from './submissionDetailPage.scss'
 import 'react-datepicker/dist/react-datepicker.css'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import {CardActionArea, Typography} from '@mui/material'
+//import Card from '@mui/material/Card'
+//import CardContent from '@mui/material/CardContent'
+import {CardActionArea} from '@mui/material'
 import {prettyPrintDateTime} from "../../../utils/date.utils";
 //import React, { useState } from 'react';
 //import { Document, Page } from 'react-pdf';
@@ -148,15 +148,15 @@ const SubmissionDetailPage = () => {
            <div className={styles.submissionsContainer}>
                 <h2 className={styles.sub_list}>Submission List:</h2>
              {submissions.map((submission, index) => (
-            <Card className={styles.submissionCard} key={index}>
+            <div className={styles.submissionCard} key={index}>
             <CardActionArea onClick={() => 
            setSelectedSubmission(submission)}>
-            <CardContent>
-              <Typography className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</Typography>
-              <Typography className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</Typography>
-            </CardContent>
+            <div>
+              <div className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</div>
+              <div className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</div>
+            </div>
           </CardActionArea>
-        </Card>
+        </div>
       ))}
         </div>
             <div className={styles.submissionContent}>

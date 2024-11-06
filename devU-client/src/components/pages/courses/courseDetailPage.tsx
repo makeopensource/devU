@@ -126,6 +126,14 @@ const CourseDetailPage = () => {
                                 }}>Update Course Form
                                 </button>
                                     )}
+                                
+                                {role.isInstructor() &&(
+                                    <button className={styles.actual_button} onClick={() => {
+                                        history.push(`/course/${courseId}/webhooks`)
+                                    }}>
+                                    Add Webhooks
+                                    </button>
+                                )}
 
 
                                 <button className={styles.actual_button} onClick={handleDropCourse}

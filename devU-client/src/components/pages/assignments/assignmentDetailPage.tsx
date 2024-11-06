@@ -12,6 +12,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import {Accordion, AccordionDetails, CardActionArea, TextField, Typography} from '@mui/material'
 
+
 import Grid from '@mui/material/Unstable_Grid2'
 
 import styles from './assignmentDetailPage.scss'
@@ -202,8 +203,9 @@ const AssignmentDetailPage = () => {
 
 
             <Grid display='flex' justifyContent='center' alignItems='center'>
-            <Card className={styles.assignment_card}>
+            <div className={styles.assignment_card}>
             <Typography className={styles.assignment_description}>{assignment?.description}</Typography>
+            <Typography className={styles.filenames}>Attachments : {assignment?.attachmentsFilenames}</Typography>
             <hr className={styles.line} />
 
             {assignment?.dueDate && (
@@ -221,9 +223,9 @@ const AssignmentDetailPage = () => {
                 ))
 
                 ) : (
-                <CardContent>
+                <div>
                     <Typography>No Problems Exist</Typography>
-                </CardContent>
+                </div>
             )}
 
             {!(assignment?.disableHandins) && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
@@ -233,7 +235,7 @@ const AssignmentDetailPage = () => {
                 <button className={styles.buttons} onClick={handleSubmit}>Submit</button>
                 </div>
             ) : null}
-            </Card>
+            </div>
             </Grid>
             </div>
 
@@ -246,16 +248,16 @@ const AssignmentDetailPage = () => {
             <div>
             <div className={styles.submissionsContainer}>
             {submissions.map((submission, index) => (
-                <Card className={styles.submissionCard} key={index}>
-                    <CardActionArea onClick={() => {
+                <div className={styles.submissionCard} key={index}>
+                    <div onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
                     }}>
-                    <CardContent>
-                    <Typography className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</Typography>
-                    <Typography className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</Typography>
-                     </CardContent>
-                    </CardActionArea>
-                </Card>
+                    <div>
+                    <div className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</div>
+                    <div className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</div>
+                     </div>
+                    </div>
+                </div>
             ))}
 
                 {showScoreboard && (
