@@ -53,7 +53,7 @@ const HomePage = () => {
             })
             const assignmentResults_instructor = await Promise.all(assignmentPromises_instructor)
             assignmentResults_instructor.forEach(([course, assignments]) => assignmentMap.set(course, assignments))
-
+            //set
             setAssignments(assignmentMap)
             setPastCourses(pastCourses)
             setEnrollCourses(enrolledCourses)
@@ -147,6 +147,7 @@ const HomePage = () => {
                     <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id}/>
                     </div>
                 ))}
+
                 {upcomingCourses.length === 0 && <h4 className={styles.no_courses}>No upcoming Courses</h4>}
                 </div>
           

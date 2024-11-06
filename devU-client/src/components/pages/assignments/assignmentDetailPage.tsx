@@ -7,7 +7,6 @@ import ErrorPage from '../errorPage/errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import {useActionless, useAppSelector} from 'redux/hooks'
 import {SET_ALERT} from 'redux/types/active.types'
-
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import {Accordion, AccordionDetails, CardActionArea, TextField, Typography} from '@mui/material'
@@ -39,7 +38,7 @@ const AssignmentDetailPage = () => {
     const [assignment, setAssignment] = useState<Assignment>()
 
     // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
-    // const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
+    // const contaierAutograder = false; //TODO: Use the above commented out code to get the container autograder
     // const [ setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
     const [showScoreboard, setShowScoreboard] = useState(false);
     const location = useLocation();
@@ -69,7 +68,7 @@ const AssignmentDetailPage = () => {
 
             //  const submissionProblemScoresPromises = submissionsReq.map(s => {
             //     return RequestService.get<SubmissionProblemScore[]>(`/api/submission-problem-scores/${s.id}`)
-            //  })
+            //
             //  const submissionProblemScoresReq = (await Promise.all(submissionProblemScoresPromises)).reduce((a, b) => a.concat(b), [])
             //  setSubmissionProblemScores(submissionProblemScoresReq)
 
@@ -192,10 +191,6 @@ const AssignmentDetailPage = () => {
 
                         }>Scoreboard</button>
                         }
-
-
-
-
                     </div>
                     </div>
                    </>
