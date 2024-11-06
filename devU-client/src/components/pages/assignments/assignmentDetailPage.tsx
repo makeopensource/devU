@@ -37,7 +37,7 @@ const AssignmentDetailPage = () => {
     const [assignment, setAssignment] = useState<Assignment>()
 
     // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
-    // const containerAutograder = false; //TODO: Use the above commented out code to get the container autograder
+    // const contaierAutograder = false; //TODO: Use the above commented out code to get the container autograder
     // const [ setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
     const [showScoreboard, setShowScoreboard] = useState(false);
     const location = useLocation();
