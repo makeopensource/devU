@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { ExpressValidationError } from 'devu-shared-modules'
+//import { ExpressValidationError } from 'devu-shared-modules'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
@@ -11,7 +11,7 @@ import TextField from 'components/shared/inputs/textField'
 import { SET_ALERT } from 'redux/types/active.types'
 import formStyles from './coursesFormPage.scss'
 import AutomateDates from './automateDates'
-import { applyMessageToErrorFields, removeClassFromField } from "../../../../utils/textField.utils";
+import { removeClassFromField } from "../../../../utils/textField.utils";
 
 const EditCourseFormPage = () => {
     const [setAlert] = useActionless(SET_ALERT);
@@ -27,11 +27,16 @@ const EditCourseFormPage = () => {
     const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]);
     const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]);
     const [privateDate, setPrivateDate] = useState(new Date().toISOString().split("T")[0]);
+    const [invalidFields,setInvalidFields] = useState(new Map<string, string>());
 
-    const handleChange = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
-        const key = e.target.id;
-        setFormData(prevState => ({ ...prevState, [key]: value }));
-    };
+    const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
+        const key = e.target.id
+        setFormData(prevState => ({...prevState,[key] : value}))
+
+        const newInvalidFields = removeClassFromField(invalidFields, key)
+        setInvalidFields(newInvalidFields)
+    }
+    
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(prevState => ({ ...prevState, isPublic: e.target.checked })); 
@@ -42,6 +47,7 @@ const EditCourseFormPage = () => {
         endDate: string;
     }
 
+    
     const handleDatesChange = ({ startDate, endDate }: Dates) => {
         setStartDate(startDate);
         setEndDate(endDate);
@@ -57,10 +63,12 @@ const EditCourseFormPage = () => {
     const formatDateForSubmission = (date: string) => {
         return new Date(date).toISOString();
     };
+    
 
     const isFormValid = () => {
         return formData.name && formData.number && formData.semester && startDate && endDate;
     };
+    
 
     const handleSubmit = () => {
         const finalFormData = {
