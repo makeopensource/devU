@@ -174,10 +174,12 @@
     padding: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 370px) {
     .header {
         flex-direction: column; 
         align-items: center; 
+        width:400px;
+        
     }
 
     .buttons {

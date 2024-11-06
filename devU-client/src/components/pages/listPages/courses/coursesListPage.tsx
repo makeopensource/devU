@@ -1,70 +1,81 @@
-import React, {useEffect, useState} from 'react'
-import {Course, UserCourse} from 'devu-shared-modules'
-import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-import PageWrapper from 'components/shared/layouts/pageWrapper'
-import Dropdown, {Option} from 'components/shared/inputs/dropdown'
-import ErrorPage from '../../errorPage/errorPage'
-import RequestService from 'services/request.service'
-import styles from './coursesListPage.scss'
+import React, { useEffect, useState } from 'react';
+import { Course } from 'devu-shared-modules';
+import LoadingOverlay from 'components/shared/loaders/loadingOverlay';
+import PageWrapper from 'components/shared/layouts/pageWrapper';
+import Dropdown, { Option } from 'components/shared/inputs/dropdown';
+import ErrorPage from '../../errorPage/errorPage';
+import RequestService from 'services/request.service';
+import styles from './coursesListPage.scss';
 import CourseListItem from "../../../listItems/courseListItem";
-// import {useAppSelector} from "../../../../redux/hooks";
 import Button from "@mui/material/Button";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { useAppSelector } from "../../../../redux/hooks";
 
-type Filter = true | false
+type Filter = true | false;
 
 const filterOptions: Option<Filter>[] = [
-    {label: 'Expand All', value: true},
-    {label: 'Collapse All', value: false},
-]
+    { label: 'Expand All', value: true },
+    { label: 'Collapse All', value: false },
+];
 
 const UserCoursesListPage = () => {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
+    const [allCourses, setAllCourses] = useState<Course[]>([]);
+    const [filter, setFilter] = useState<Filter>(false);
+    const history = useHistory();
 
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [userCourses, setUserCourses] = useState(new Array<UserCourse>())
-    const [filter, setFilter] = useState<Filter>(false )
-    const history = useHistory()
-
-    //Temporary place to store state for all courses
-    const [allCourses, setAllCourses] = useState(new Array<Course>())
+    // Get userId from Redux store
+    const userId = useAppSelector((store) => store.user.id);
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData();
+    }, []);
 
     const fetchData = async () => {
         try {
-            // const userCourses = await RequestService.get<UserCourse[]>(`/api/user-courses?filterBy=${filter}`)
-            const courseRequests = userCourses.map((u) => RequestService.get<Course>(`/api/courses/${u.courseId}`))
-            const courses = await Promise.all(courseRequests)
+            // Fetch user-specific courses
+            const userCourseData = await RequestService.get<{ 
+                instructorCourses: Course[]; 
+                activeCourses: Course[]; 
+                pastCourses: Course[]; 
+                upcomingCourses: Course[]; 
+            }>(`/api/courses/user/${userId}`);
+            
+            // Flatten and combine user course data into a single array
+            const userCoursesList = [
+                ...userCourseData.instructorCourses,
+                ...userCourseData.activeCourses,
+                ...userCourseData.pastCourses,
+                ...userCourseData.upcomingCourses,
+            ];
 
-            // Mapify course ids so we can look them up more easilly via their id
-            const courseMap: Record<string, Course> = {}
-            for (const course of courses) courseMap[course.id || ''] = course
+            // Fetch all courses
+            const allCourseData = await RequestService.get<Course[]>(`/api/courses`);
 
-            // Temporary place to grab and display all courses
-            const allCourses = await RequestService.get('/api/courses')
-            setAllCourses(allCourses)
+            // Filter to get courses the user is not enrolled in
+            const unenrolledCourses = allCourseData.filter(
+                (course) => !userCoursesList.some((userCourse) => userCourse.id === course.id)
+            );
 
-            setUserCourses(userCourses)
+          
+            setAllCourses(unenrolledCourses);
         } catch (error: any) {
-            setError(error)
+            setError(error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     const handleFilterChange = (updatedFilter: Filter) => {
-        setFilter(updatedFilter)
-    }
+        setFilter(updatedFilter);
+    };
 
-    if (loading) return <LoadingOverlay delay={250}/>
-    if (error) return <ErrorPage error={error}/>
+    if (loading) return <LoadingOverlay delay={250} />;
+    if (error) return <ErrorPage error={error} />;
 
-    const defaultOption = filterOptions.find((o) => o.value === filter)
-
+    const defaultOption = filterOptions.find((o) => o.value === filter);
 
     return (
         <PageWrapper>
@@ -73,9 +84,8 @@ const UserCoursesListPage = () => {
                 <h1>All Courses</h1>
                 <div className={styles.largeLine}></div>
 
-                <Button variant="contained" onClick={() => {
-                    history.push(`/addCoursesForm`)
-                    }}>Add Course
+                <Button variant="contained" onClick={() => history.push(`/addCoursesForm`)}>
+                    Add Course
                 </Button>
                 <div className={styles.filters}>
                     <Dropdown
@@ -87,13 +97,11 @@ const UserCoursesListPage = () => {
                     />
                 </div>
             </div>
-            {allCourses.map(course => (
-                <CourseListItem course={course} key={course.id} isOpen={filter}/>
+            {allCourses.map((course) => (
+                <CourseListItem course={course} key={course.id} isOpen={filter} />
             ))}
         </PageWrapper>
-    )
+    );
+};
 
-
-}
-
-export default UserCoursesListPage
+export default UserCoursesListPage;

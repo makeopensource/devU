@@ -7,4 +7,8 @@ export type Course = {
   endDate: string
   createdAt?: string
   updatedAt?: string
+  isPublic?: boolean;
+  private_data?: string;
+  allowlist?: string[]; 
+  blocklist?: string[]; 
 }

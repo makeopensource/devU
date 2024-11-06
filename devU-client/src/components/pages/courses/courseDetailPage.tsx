@@ -13,7 +13,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 //import Button from '@mui/material/Button'
-//import Stack from '@mui/material/Stack'
+
 
 
 import styles from './courseDetailPage.scss'
@@ -103,7 +103,7 @@ const CourseDetailPage = () => {
                             <h2> Instructor: </h2>
 
 
-                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <div style={{display: 'flex', flexWrap:'wrap', justifyContent: 'space-between'}}>
 
 
 
@@ -126,6 +126,14 @@ const CourseDetailPage = () => {
                                 }}>Update Course Form
                                 </button>
                                     )}
+                                
+                                {role.isInstructor() &&(
+                                    <button className={styles.actual_button} onClick={() => {
+                                        history.push(`/course/${courseId}/webhooks`)
+                                    }}>
+                                    Add Webhooks
+                                    </button>
+                                )}
 
 
                                 <button className={styles.actual_button} onClick={handleDropCourse}
@@ -160,6 +168,7 @@ const CourseDetailPage = () => {
                                                     history.push(`/course/${courseId}/assignment/${assignment.id}`)
                                                 }}>
                                                     <ListItemText
+                                                        className = {styles.assignmentName}
                                                         primary={
                                                             <Typography style={{  textAlign: 'center' }}>
                                                                 {assignment.name}
@@ -168,14 +177,14 @@ const CourseDetailPage = () => {
                                                                   secondary={
                                                                       <React.Fragment>
                                                                           <Typography
-                                                                              sx={{ display: 'inline' }}
+                                                                              sx={{ display: 'center' }}
                                                                               component="span"
                                                                               variant="body2"
-                                                                              color="text.primary"
+                                                                              color="grey"
                                                                           >
-                                                                              Start Date: {new Date(assignment.startDate).toLocaleDateString()}
-                                                                              <br /> {/* Add a line break */}
-                                                                              Due Date: {new Date(assignment.dueDate).toLocaleDateString()}
+                                                                              Start: {new Date(assignment.startDate).toLocaleDateString()}
+                                                                                |
+                                                                              Due: {new Date(assignment.dueDate).toLocaleDateString()}
                                                                           </Typography>
                                                                       </React.Fragment>
                                                                   }

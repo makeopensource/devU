@@ -46,7 +46,7 @@ const NonContainerAutoGraderForm = () => {
     const toggleRegex = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(prevState => ({...prevState,isRegex : e.target.checked}))
     }
-    
+
     useEffect(() => {
         RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
             .then((res) => {
@@ -74,8 +74,10 @@ const NonContainerAutoGraderForm = () => {
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Non-Container Auto-Grader Added' })
-                history.goBack()
+               // history.goBack()
+                history.push(`/course/${courseId}/assignment/${assignmentId}?refreshProblems=true`);
             })
+
         .catch((err: ExpressValidationError[] | Error) => {
             const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
             const newFields = applyStylesToErrorFields(err, formData, textStyles.errorField)
@@ -110,13 +112,13 @@ const NonContainerAutoGraderForm = () => {
                 <label htmlFor='score'>Score *</label>
                 <TextField id='score' onChange={handleChange} value={formData.score}
                            className={invalidFields.get('score')}></TextField>
-                
+
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <label htmlFor='regex'>Regex</label>
                     <input  id= 'regex' type='checkbox' checked={formData.isRegex} onChange={toggleRegex}></input>
                 </div>
                 <br/>
-                
+
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Button variant='contained' onClick= { handleSubmit }>Add NCAG</Button>
                 </div>
