@@ -1,4 +1,4 @@
-import { IsNull, MoreThanOrEqual } from 'typeorm'
+import { IsNull } from 'typeorm'
 import { dataSource } from '../../database'
 
 import AssignmentModel from './assignment.model'
@@ -64,22 +64,11 @@ export async function listByCourse(courseId: number) {
 }
 
 export async function listByCourseReleased(courseId: number) {
-  // filter by start date after current time
-  const now = new Date(Date.now())
-  const allAssignments = await connect().findBy({ courseId: courseId, startDate: MoreThanOrEqual(now), deletedAt: IsNull() })
+  // TODO: filter by start date after current time
+  // const now = new Date(Date.now())
+  const allAssignments = await connect().findBy({ courseId: courseId, /*startDate: MoreThanOrEqual(now),*/ deletedAt: IsNull() })
 
-  console.log("ASSIGNMENTS WITH FILTER: ", allAssignments)
-
-  // for each assignment in allAssignments (a list), if the startDate is more than 3 days from now then add it to list releasedAssignments
-  // const now = new Date();
-  // const threeDaysFromNow = new Date();
-  // threeDaysFromNow.setDate(now.getDate() + 3);
-
-  // // Filter assignments where the startDate is within the next 3 days
-  // const releasedAssignments = allAssignments.filter(assignment => {
-  //   const startDate = new Date(assignment.startDate);
-  //   return startDate >= now && startDate <= threeDaysFromNow;
-  // });
+  // console.log("ASSIGNMENTS WITH FILTER: ", allAssignments)
 
   return allAssignments;
 }
