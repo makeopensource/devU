@@ -56,19 +56,38 @@ input[type='date'] {
 .problemsList, .assignmentsList {
     display: flex;
     flex-direction: column;
+    gap: 30px;
     align-items: center;
     width: 100%;
 }
 
-.assignment {
-    padding: 10px;
-    font-weight: bold;
+// .assignment {
+//     padding: 10px;
+//     font-weight: bold;
+//     cursor: pointer;
+//     :hover {
+//         padding: 10px;
+//         background-color: $list-item-background-hover;
+//         border-radius: 10px;
+//     }
+// }
+
+.pageWrapper {
+    padding:0px;
+  }
+
+.assignmentBtn {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
     cursor: pointer;
-    :hover {
-        padding: 10px;
-        background-color: $list-item-background-hover;
-        border-radius: 10px;
-    }
+    overflow: hidden;
+    outline: none;
+}
+
+.assignmentBtn:hover {
+    background-color: $list-item-background-hover;
+    border-radius: 10px;
 }
 
 .problem, .fileList{
@@ -80,6 +99,7 @@ input[type='date'] {
 
 .header {
     text-align: center;
+    color: $text-color;
 }
 
 .editProblem {
@@ -116,7 +136,7 @@ input[type='date'] {
         grid-template-columns: 1fr;
         grid-template-rows: repeat(3, 1fr);
         grid-column-gap: 0px;
-        grid-row-gap: 30px;
+        grid-row-gap: 10px;
         width: 100%;
         justify-content: center;
         align-items: center;

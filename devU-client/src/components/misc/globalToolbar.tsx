@@ -29,7 +29,7 @@ const GlobalToolbar = () => {
             <DarkModeToggle />
             {
             <Link to={`/courses`} className={styles.link} >
-              My Courses
+              Join a Course
             </Link>
             }     
             {/*<Link to={`/myCourses`} className={styles.link}>*/}

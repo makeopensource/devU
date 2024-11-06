@@ -55,16 +55,23 @@ async function SendPOST(path: string, requestBody: string | FormData, requesterE
   return responseBody
 }
 
-async function CreateCourse(name: string, number: string, semester: string) {
+async function CreateCourse(
+  name: string, 
+  number: string, 
+  semester: string, 
+  isPublic: boolean 
+) {
   const courseData = {
-    name: name,
-    semester: semester,
-    number: number,
-    startDate: '2024-01-24T00:00:00-0500',
-    endDate: '2024-05-10T23:59:59-0500',
-  }
-  console.log('Creating course: ', courseData.name)
-  return await SendPOST('/courses/instructor', JSON.stringify(courseData), 'admin')
+      name: name,
+      semester: semester,
+      number: number,
+      startDate: '2024-01-24T00:00:00-0500',
+      endDate: '2024-05-10T23:59:59-0500',
+      is_public: isPublic // Include the public property
+  };
+
+  console.log('Creating course: ', courseData.name);
+  return await SendPOST('/courses/instructor', JSON.stringify(courseData), 'admin');
 }
 
 async function joinCourse(courseId: number, userId: number, role: string) {
@@ -208,8 +215,8 @@ async function runCourseAndSubmission() {
   const jones = await fetchToken('jones@buffalo.edu', 'jones')
 
   //Create courses
-  const courseId1 = (await CreateCourse('Testing Course Name1', 'CSE101', 's2024')).id
-  const courseId2 = (await CreateCourse('Testing Course Name2', 'CSE102', 's2024')).id
+  const courseId1 = (await CreateCourse('Testing Course Name1', 'CSE101', 's2024',true)).id
+  const courseId2 = (await CreateCourse('Testing Course Name2', 'CSE102', 's2024',true)).id
 
   //Enroll students
   await joinCourse(courseId1, billy, 'student')

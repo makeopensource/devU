@@ -57,7 +57,6 @@
   display: block;
 
   animation-duration: 10ms;
-  padding: 16.5px 14px;
   border: 1px solid #bbbbbb;
   border-radius: 4px;
 }
@@ -65,6 +64,27 @@
 input[type='date'] {
   height: 20px;
   background-color: $input-field-background;
+  color: $input-field-label;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 100px;
+}
+
+.semesterOptions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fieldContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+select {
+  background: $input-field-background;
   color: $input-field-label;
   padding: 0.625rem 1rem;
   border: none;
@@ -89,9 +109,17 @@ input[type='file']::file-selector-button {
   .updateDetailsForm, .addDropForm {
     width: auto; // take up full container
   }
+
+  .semesterOptions {
+    flex-direction: column;
+  }
+
+  select {
+    width: 100%;
+  }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 575px) {
   .datepickerContainer {
     flex-direction: column;
   }

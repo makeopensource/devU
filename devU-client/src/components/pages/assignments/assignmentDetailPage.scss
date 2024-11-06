@@ -20,13 +20,13 @@
 .line {
     border: none;
     height: 2px;
-    background-color: #ccc;
+    background-color: $list-item-background;
     width: 100%;
     margin-top: 10px;
 }
 
 .card {
-    background-color: #f9f9f9;
+    background-color: $list-item-background;
     border-radius: 8px;
     padding: 20px;
     width: 300px;
@@ -39,7 +39,7 @@
     font-size: 20px;
     font-weight: 550;
     margin-bottom: 15px;
-    color: #52468a;
+    color: $text-color;
 	text-align: center;
 }
 
@@ -64,8 +64,8 @@
 
 
 .buttons {
-    color: #52468a;
-    background-color: #f9f9f9; 
+    color: $primary;
+    background-color: $list-item-background;
     padding: 10px 20px;
 	border-radius:15px;
     cursor: pointer;
@@ -78,12 +78,12 @@
 
 
 .buttons:hover {
-    background-color: #888;
+    background-color: $list-item-background-hover;
 
 }
 
 .assignment_card {
-	background-color: #f9f9f9;
+	background-color: $list-item-background;
     border-radius: 8px;
     padding: 20px;
     width: 100%;
@@ -92,14 +92,14 @@
 }
 
 .accordion {
-    background-color: #f9f9f9;
+    background-color: $list-item-background;
     box-shadow: none;
     border: 1px solid #ddd;
     margin-bottom: 10px; 
 }
 
 .accordionDetails {
-    background-color: #f9f9f9; 
+    background-color:$list-item-background; 
     padding: 10px;
     border-top: 1px solid #ddd;
 }
@@ -112,7 +112,9 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px; 
+    background-color: $list-item-background;
 }
+
 .textField {
 	margin-top: 10px;
     margin-bottom: 20px; 
@@ -120,6 +122,7 @@
 
 .submissionCard {
 	margin-bottom : 15px;
+    background-color: $list-item-background;
 }
 
 .fileInput {
@@ -128,7 +131,7 @@
 
 .due_date {
     font-size: 14px;
-    color: #888; 
+    color: $text-color; 
     margin-top: 5px; 
     margin-bottom: 15px; 
 }
@@ -137,6 +140,7 @@
 .submissionsContainer {
     display: flex;
     flex-direction: column;
+    padding: 30px;
     width: 100%; 
     margin-top: 20px;
 }
@@ -146,10 +150,11 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-    background-color: #f9f9f9;
+    background-color: $list-item-background;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease; 
+    padding: 10px;
 }
 
 .submissionCard:hover {
@@ -157,16 +162,16 @@
 }
 
 .submissionHeading {
-    font-size: 16px;
-    font-weight: bold;
-    color: #52468a;
+    color: $primary;
+    padding: 10px;
 }
 
 
 .submissionTime {
     font-size: 14px;
-    color: #888; 
+    color: $text-color; 
     margin-top: 5px;
+    padding: 10px;
 }
 
 @media (max-width: 768px) {

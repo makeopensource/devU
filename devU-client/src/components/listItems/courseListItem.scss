@@ -60,13 +60,29 @@
 
   color: $text-color;
 
-
+  &.enrolled {
+    background-color: #dff0d8; // Light green background for enrolled courses
+    border-color: #3c763d; // Darker green border for enrolled courses
+    color: #3c763d; // Change text color to darker green
+  }
   &:hover,
   &:focus {
     background: $list-item-background-hover;
   }
 }
 
+.enrollmentStatus {
+  margin-left: 10px;
+  font-weight: bold; // Make it bold for emphasis
+}
+
+.enrolled {
+  color: green; // Change color for enrolled courses
+}
+
+.notEnrolled {
+  color: red; // Change color for not enrolled courses
+}
 
 @media (max-width: $medium) {
   .subText {
