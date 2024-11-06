@@ -4,12 +4,13 @@ import { useHistory, useParams } from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 
 import RequestService from 'services/request.service'
-import 'react-datepicker/dist/react-datepicker.css'
+// import 'react-datepicker/dist/react-datepicker.css'
 
 import { ExpressValidationError } from 'devu-shared-modules'
 
 import { useActionless } from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
+import AutomateDates from './automateDates'
 import { SET_ALERT } from 'redux/types/active.types'
 import {
     applyMessageToErrorFields,
@@ -43,7 +44,7 @@ const CourseUpdatePage = ({ }) => {
     const [formData, setFormData] = useState({
         name: '',
         number: '',
-        semester: '',
+        semester: 'f0000',
         isPublic: false 
     })
     const [startDate, setStartDate] = useState(new Date().toISOString())
@@ -71,6 +72,16 @@ const CourseUpdatePage = ({ }) => {
             });
         }
     }, []);
+
+    interface Dates {
+        startDate: string;
+        endDate: string;
+    }
+
+    const handleDatesChange = ({ startDate, endDate }: Dates) => {
+        setStartDate(startDate);
+        setEndDate(endDate);
+    };
 
     const handleChange = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
@@ -297,16 +308,17 @@ const CourseUpdatePage = ({ }) => {
                             defaultValue={formData.name} />
                         <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
                             invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
-                        <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
+                        {/* <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
                             placeholder='e.g. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
-                            helpText={invalidFields.get("semester")} />
+                            helpText={invalidFields.get("semester")} /> */}
                     </div>
+                    <AutomateDates onDatesChange={handleDatesChange} />
                     <div className={formStyles.datepickerContainer}>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                        <div className={formStyles.fieldContainer}>
                             <label htmlFor='start-date'>Start Date *</label>
                             <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} />
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
+                        <div className={formStyles.fieldContainer}>
                             <label htmlFor='end-date'>End Date *</label>
                             <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
                         </div>

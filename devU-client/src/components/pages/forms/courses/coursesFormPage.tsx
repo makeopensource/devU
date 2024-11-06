@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import RequestService from 'services/request.service';
-import { useActionless } from 'redux/hooks';
-import TextField from 'components/shared/inputs/textField';
-import { SET_ALERT } from 'redux/types/active.types';
-import formStyles from './coursesFormPage.scss';
-import PageWrapper from 'components/shared/layouts/pageWrapper';
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { ExpressValidationError } from 'devu-shared-modules'
+
+import PageWrapper from 'components/shared/layouts/pageWrapper'
+
+import RequestService from 'services/request.service'
+
+import { useActionless } from 'redux/hooks'
+import TextField from 'components/shared/inputs/textField'
+import { SET_ALERT } from 'redux/types/active.types'
+import formStyles from './coursesFormPage.scss'
+import AutomateDates from './automateDates'
+import { applyMessageToErrorFields, removeClassFromField } from "../../../../utils/textField.utils";
 
 const EditCourseFormPage = () => {
     const [setAlert] = useActionless(SET_ALERT);
@@ -14,7 +20,7 @@ const EditCourseFormPage = () => {
     const [formData, setFormData] = useState({
         name: '',
         number: '',
-        semester: '',
+        semester: 'f0000',
         isPublic: false 
     });
 
@@ -31,13 +37,18 @@ const EditCourseFormPage = () => {
         setFormData(prevState => ({ ...prevState, isPublic: e.target.checked })); 
     };
 
-    const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setStartDate(event.target.value);
+    interface Dates {
+        startDate: string;
+        endDate: string;
+    }
+
+    const handleDatesChange = ({ startDate, endDate }: Dates) => {
+        setStartDate(startDate);
+        setEndDate(endDate);
     };
 
-    const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEndDate(event.target.value);
-    };
+    const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
+    const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
 
     const handlePrivateDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPrivateDate(event.target.value);
@@ -77,30 +88,20 @@ const EditCourseFormPage = () => {
             <h1>Create Course</h1>
             <div className={formStyles.courseFormWrapper}>
                 <div className={formStyles.createDetailsForm}>
-                    <TextField
-                        id='name'
-                        label={"Course Name*"}
-                        onChange={handleChange}
-                        value={formData.name}
-                    />
-                    <TextField
-                        id='number'
-                        label={"Course Number*"}
-                        onChange={handleChange}
-                        value={formData.number}
-                    />
-                    <TextField
-                        id='semester'
-                        label={"Semester*"}
-                        onChange={handleChange}
-                        value={formData.semester}
-                    />
+                    <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
+                        invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")} />
+                    <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
+                        invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
+                    {/* <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
+                        placeholder='Ex. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
+                        helpText={invalidFields.get("semester")} /> */}
+                    <AutomateDates onDatesChange={handleDatesChange} />
                     <div className={formStyles.datepickerContainer}>
-                        <div>
+                        <div className={formStyles.fieldContainer}>
                             <label htmlFor='start-date'>Start Date *</label>
                             <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} />
                         </div>
-                        <div>
+                        <div className={formStyles.fieldContainer}>
                             <label htmlFor='end-date'>End Date *</label>
                             <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
                         </div>
