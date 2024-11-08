@@ -59,7 +59,7 @@ export function responseInterceptor(req: Request, res: Response, next: NextFunct
           console.log('Sent webhook successfully')
         },
       ).catch(err => {
-        console.error('Error sending webhook', err)
+        console.warn('Error sending webhook', err)
       })
     }
   }

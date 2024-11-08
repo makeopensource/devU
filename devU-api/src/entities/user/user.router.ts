@@ -5,6 +5,7 @@ import { asInt } from '../../middleware/validator/generic.validator'
 import { isAuthorized } from '../../authorization/authorization.middleware'
 
 import UserController from './user.controller'
+import { isAdmin } from './user.middlware'
 
 const Router = express.Router()
 
@@ -69,6 +70,69 @@ Router.get('/:id', asInt(), UserController.detail)
  */
 Router.get('/course/:id', /* isAuthorized('courseViewAll'), */ asInt(), UserController.getByCourse)
 // TODO: Removed authorization for now, fix later
+
+const adminRouter = express.Router()
+
+Router.use('/admin', isAdmin, adminRouter)
+
+/**
+ * @swagger
+ * /users/admin/:
+ *   get:
+ *     summary: list admin users
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
+ */
+adminRouter.get('/list', UserController.listAdmins)
+
+/**
+ * @swagger
+ * /users/admin/:
+ *   post:
+ *     summary: Make a user admin
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     requestBody:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - userId
+ *            properties:
+ *              newAdminUserId:
+ *                description: "User id to make admin"
+ *                type: number
+ */
+adminRouter.post('/', UserController.createNewAdmin)
+
+/**
+ * @swagger
+ * /users/admin/:
+ *   delete:
+ *     summary: delete a user admin
+ *     tags:
+ *       - Users
+ *     responses:
+ *       '200':
+ *         description: OK
+ *     requestBody:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - userId
+ *            properties:
+ *              newAdminUserId:
+ *                description: "User id to make admin"
+ *                type: number
+ */
+adminRouter.delete('/', UserController.deleteAdmin)
 
 /**
  * @swagger

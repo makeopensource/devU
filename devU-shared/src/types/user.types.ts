@@ -5,4 +5,5 @@ export type User = {
   createdAt?: string
   updatedAt?: string
   preferredName?: string
+  isAdmin: boolean
 }
