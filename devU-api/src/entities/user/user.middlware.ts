@@ -10,7 +10,7 @@ export async function isAdmin(req: Request, res: Response, next: NextFunction) {
   }
 
   const isAdmin = await UserService.isAdmin(userId)
-  if (!isAdmin) return res.status(403).send('unauthorized')
+  if (!isAdmin!.isAdmin!) return res.status(403).send('unauthorized')
 
   next()
 }
