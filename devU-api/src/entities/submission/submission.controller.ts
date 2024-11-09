@@ -58,7 +58,7 @@ export async function post(req: Request, res: Response, next: NextFunction) {
     if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
 
     const reqSubmission = req.body
-
+    reqSubmission.userId = req.currentUser?.userId
     reqSubmission.submitterIp = req.header('x-forwarded-for') || req.socket.remoteAddress
     reqSubmission.submittedBy = req.currentUser?.userId
 
