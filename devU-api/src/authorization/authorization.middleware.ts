@@ -5,6 +5,7 @@ import UserCourseService from '../entities/userCourse/userCourse.service'
 import RoleService from '../entities/role/role.service'
 import { serialize } from '../entities/role/role.serializer'
 import { Role } from '../../devu-shared-modules'
+import UserService from '../entities/user/user.service'
 
 /**
  * Are you authorized to access this endpoint?
@@ -21,6 +22,14 @@ export function isAuthorized(permission: string, permissionIfSelf?: string) {
 
     if (!courseId || !userId) {
       return res.status(404).json(NotFound)
+    }
+
+    // check if admin
+    const user = await UserService.isAdmin(userId!)
+    if (user && user.isAdmin!) {
+      // no role checks needed
+      // user is admin !
+      return next()
     }
 
     // Pull userCourse
