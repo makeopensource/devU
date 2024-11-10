@@ -1,6 +1,6 @@
 @import 'variables';
 
-$bar-height: 50px;
+$bar-height: 60px;
 $sidebar-width: 260px;
 $hover-effect: 0.7;
 $font-size: 16px;
@@ -37,23 +37,19 @@ $font-size: 16px;
 }
 
 .header {
-  @extend .link;
-  font-size: 40px;
-  border-radius: 30px;
-  font-weight: 550;
-  //font-size: 2em;
-  //font-weight: bold;
+  font-size: 32px;
+  text-decoration: none;
+  color: #FFF;
+  font-weight: 600;
 }
 
 .bar {
-
-  height: 80px;
+  height: $bar-height;
   background-color: $primary;
   font-size: 40px;
   color: #D9D9D9;
   font-weight: 550;
-
-
+  padding: 0 $pagePadding;
 
   @extend .flex;
   justify-content: space-between;
@@ -71,7 +67,7 @@ $font-size: 16px;
 
 // Controls turning the menu options into a sidebar
 // As well as whether or not that sidebar is being shown
-@media (max-width: 410px) {
+@media (max-width: 450px) {
   .flex {
     gap: 1rem;
    
