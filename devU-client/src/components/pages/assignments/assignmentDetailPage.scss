@@ -174,16 +174,61 @@
     padding: 10px;
 }
 
-@media (max-width: 370px) {
-    .header {
-        flex-direction: column; 
-        align-items: center; 
-        width:400px;
-        
+@media (max-width: 768px) {
+    .wrap {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .assignment_card {
+        width: 90%;
+        max-width: 500px;
+        margin: 0 auto; 
+        padding: 20px;
+    }
+
+    .options_buttons {
+        flex-direction: column;
+        justify-content: center; 
+        width: 100%;
+        gap: 10px;
     }
 
     .buttons {
-        width: 100%; 
-        max-width: none; 
+        width: auto; 
+        padding: 10px 20px;
+        font-size: 15px;
+        margin: 0;
+    }
+    .card {
+        background-color: $list-item-background;
+        border-radius: 8px;
+        padding: 20px;
+        width: 200px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	    margin: 20px;
+    }
+}
+
+@media (max-width: 370px) {
+    .header {
+        align-items: center;
+        padding: 10px;
+    }
+
+    .card, .assignment_card {
+        width: 100%;
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .buttons {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .submissionsContainer {
+        padding: 10px;
     }
 }
