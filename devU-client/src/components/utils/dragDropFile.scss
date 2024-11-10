@@ -10,11 +10,11 @@
 
 .formFileUploadWide {
   height: 16rem;
-  width: 80%;
-  margin-left: 10%;
-  margin-right: 10%;
+  width: 100%;
+  // margin-left: 10%;
+  // margin-right: 10%;
   text-align: center;
-  position: relative;
+  // position: relative;
 }
 
 .inputFileUpload {
@@ -29,8 +29,8 @@
   border-width: 2px;
   border-radius: 1rem;
   border-style: dashed;
-  border-color: #cbd5e1;
-  background-color: $list-item-background;
+  border-color: $input-field-label;
+  background-color: $input-field-background;
 
   &.dragActive {
     background-color: #ffffff;
