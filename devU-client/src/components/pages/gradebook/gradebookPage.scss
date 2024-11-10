@@ -26,6 +26,11 @@
   padding: 0 100px;
 }
 
+.tableContainer {
+  overflow-x: scroll;
+  scrollbar-color: $primary;
+}
+
 table {
   border-radius: 20px;
   margin: 15px auto;
@@ -88,7 +93,7 @@ tr:last-of-type td:last-of-type {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
 }
 
 .gradebook-container {
@@ -163,6 +168,12 @@ tr:last-of-type td:last-of-type {
   margin : 0 10px;
   background-color: $purple !important;
 
+}
+
+@media (max-width: 650px) {
+  .pageWrapper {
+    padding: 0 20px;
+  }
 }
 
 
