@@ -20,4 +20,6 @@ export type Role = {
   submissionCreateSelf: boolean
   submissionViewAll: boolean
   userCourseEditAll: boolean
+  stickyNoteViewAll: boolean
+  stickyNoteEditAll: boolean
 }

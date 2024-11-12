@@ -18,6 +18,8 @@ const student: Role = {
   submissionCreateAll: false,
   submissionCreateSelf: true,
   submissionViewAll: false,
+  stickyNoteViewAll: false,
+  stickyNoteEditAll: false,
   userCourseEditAll: false,
 }
 
@@ -39,6 +41,8 @@ const instructor: Role = {
   submissionCreateAll: true,
   submissionCreateSelf: true,
   submissionViewAll: true,
+  stickyNoteViewAll: true,
+  stickyNoteEditAll: true,
   userCourseEditAll: true,
 }
 
