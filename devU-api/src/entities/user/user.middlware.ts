@@ -6,11 +6,11 @@ import UserService from './user.service'
 export async function isAdmin(req: Request, res: Response, next: NextFunction) {
   const userId = req.currentUser?.userId
   if (!userId) {
-    return res.status(403).send('Unauthorized')
+    return res.status(403).json({ 'error': 'Unauthorized' })
   }
 
   const isAdmin = await UserService.isAdmin(userId)
-  if (!isAdmin!.isAdmin!) return res.status(403).send('unauthorized')
+  if (!isAdmin!.isAdmin!) return res.status(403).json({ "error": 'Unauthorized' })
 
   next()
 }
