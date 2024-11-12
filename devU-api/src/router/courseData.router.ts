@@ -14,13 +14,19 @@ import categoryScores from '../entities/categoryScore/categoryScore.router'
 import courseScores from '../entities/courseScore/courseScore.router'
 import assignmentScore from '../entities/assignmentScore/assignmentScore.router'
 import role from '../entities/role/role.router'
+import stickyNotes from '../entities/stickyNote/stickyNote.router'
 
 import nonContainerAutoGraderRouter from '../entities/nonContainerAutoGrader/nonContainerAutoGrader.router'
 
 import { asInt } from '../middleware/validator/generic.validator'
 import webhooksRouter from '../entities/webhooks/webhooks.router'
 
+const submissionRouter = express.Router({ mergeParams: true })
+submissionRouter.use('/sticky-notes', stickyNotes)
+
 const assignmentRouter = express.Router({ mergeParams: true })
+assignmentRouter.use('/submission/:submissionId', asInt('submissionId'), submissionRouter)
+
 assignmentRouter.use('/assignment-problems', assignmentProblem)
 assignmentRouter.use('/container-auto-graders', containerAutoGrader)
 assignmentRouter.use('/deadline-extensions', deadlineExtensions)
