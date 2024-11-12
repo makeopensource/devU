@@ -107,4 +107,10 @@ export default class RoleModel {
 
   @Column({ name: 'user_course_edit_all' }) // TODO: Don't let the last instructor change their role
   userCourseEditAll: boolean
+
+  @Column({ name: 'sticky_note_view_all' })
+  stickyNoteViewAll: boolean
+
+  @Column({ name: 'sticky_note_edit_all' })
+  stickyNoteEditAll: boolean
 }

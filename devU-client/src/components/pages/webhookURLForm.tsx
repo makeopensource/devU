@@ -7,6 +7,7 @@ import RequestService from '../../services/request.service'
 import { useParams } from 'react-router-dom'
 import { SET_ALERT } from 'redux/types/active.types'
 import { useActionless } from '../../redux/hooks'
+import { apiUrl } from '../../config'
 
 const webhookURLForm = () => {
     const [webhookURL, setWebhookURL] = useState<string>()
@@ -26,7 +27,7 @@ const webhookURLForm = () => {
     const handleAddURL = () => {
         if (webhookURL) {
             //Handle adding webhook URL to backend here
-            RequestService.post(`/course/${courseId}/webhooks`, {
+            RequestService.post(`${apiUrl}/course/${courseId}/webhooks`, {
               "destinationUrl": webhookURL,
               "matcherUrl": watcherUrl
             }).then(

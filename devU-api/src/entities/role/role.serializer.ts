@@ -26,5 +26,7 @@ export function serialize(role: RoleModel): Role {
     submissionCreateSelf: role.submissionCreateSelf,
     submissionViewAll: role.submissionViewAll,
     userCourseEditAll: role.userCourseEditAll,
+    stickyNoteViewAll: role.stickyNoteViewAll,
+    stickyNoteEditAll: role.stickyNoteEditAll,
   }
 }
