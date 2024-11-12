@@ -23,6 +23,7 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
     const bucketName = req.params.bucketName
     const fileName = req.params.fileName
     const file: Buffer = await FileUploadService.retrieve(bucketName, fileName)
+    console.log(file)
 
     if (!file) return res.status(404).json(NotFound)
 

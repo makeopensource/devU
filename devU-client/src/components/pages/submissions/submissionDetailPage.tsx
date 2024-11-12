@@ -18,6 +18,7 @@ import {prettyPrintDateTime} from "../../../utils/date.utils";
 //import React, { useState } from 'react';
 //import { Document, Page } from 'react-pdf';
 //import StickyNote from 'react-sticky-notes';
+import { useHistory } from 'react-router-dom'
 
 
 const SubmissionDetailPage = () => {
@@ -25,6 +26,7 @@ const SubmissionDetailPage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [setAlert] = useActionless(SET_ALERT)
+    const history = useHistory()
     
     const { submissionId, assignmentId, courseId } = useParams<{submissionId: string, assignmentId: string, courseId: string}>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
@@ -208,6 +210,7 @@ const SubmissionDetailPage = () => {
             
             </div>
                 <h2 className={styles.content_title}>Content</h2>
+                <Button onClick={() => history.push(`/course/${selectedSubmission.courseId}/assignment/${selectedSubmission.assignmentId}/submission/${submissionId}/fileView`)}>View Submission File</Button>
                 <div className={styles.scrollableContent}>
                <pre>{selectedSubmission.content}</pre>
               </div>
