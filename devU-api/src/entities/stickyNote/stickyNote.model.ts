@@ -3,6 +3,7 @@ import {
     ManyToOne,
     Entity,
     Column,
+    DeleteDateColumn,
     PrimaryGeneratedColumn,
 } from 'typeorm'
 
@@ -21,4 +22,7 @@ export default class StickyNotesModel {
 
     @Column({ name: 'content' })
     content: string
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt?: Date
 }

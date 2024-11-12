@@ -10,16 +10,15 @@ import StickyNoteController from './stickyNote.controller'
 
 const Router = express.Router({ mergeParams: true })
 
+Router.get('/all',validator , StickyNoteController.listBySubmission)
+
 Router.get('/:id' , asInt(), validator , StickyNoteController.retrieve)
 
 Router.post('/', validator, StickyNoteController.post)
 
-Router.put('/', validator, StickyNoteController.put)
+Router.put('/:id', validator, StickyNoteController.put)
 
 Router.delete('/:id', asInt(), validator, StickyNoteController.remove)
-
-Router.get('/all',validator , StickyNoteController.listBySubmission)
-
 
 export default Router
 

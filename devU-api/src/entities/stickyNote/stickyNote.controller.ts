@@ -35,8 +35,10 @@ export async function post(req: Request, res: Response, next: NextFunction) {
 
 export async function put(req: Request, res: Response, next: NextFunction) {
   try {
+    const id = parseInt(req.params.id)
     const reqStickyNote = req.body
-    const stickyNote = await StickyNoteService.update(reqStickyNote)
+    // const stickyNote = await StickyNoteService.update(reqStickyNote)
+    const stickyNote = await StickyNoteService.update(id, reqStickyNote)
 
     if (!stickyNote.affected) return res.status(404).json(NotFound)
 

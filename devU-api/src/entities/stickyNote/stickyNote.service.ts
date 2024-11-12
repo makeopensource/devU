@@ -1,4 +1,4 @@
-// import {IsNull} from 'typeorm'
+import {IsNull} from 'typeorm'
 import {dataSource} from '../../database'
 
 import StickyNotesModel from './stickyNote.model'
@@ -10,15 +10,15 @@ export async function create(stickyNote: StickyNote) {
   return await StickyNoteConn().save(stickyNote)
 }
 
-export async function update(stickyNote: StickyNote) {
-  const {id, submissionId, content} = stickyNote
+export async function update(id : number,stickyNote: StickyNote) {
+  const {submissionId, content} = stickyNote
   if (!id) throw new Error('Missing Id')
   return await StickyNoteConn().update(id, {submissionId, content})
 }
 
 export async function _delete(id: number) {
 //   return await StickyNoteConn().softDelete({id, deletedAt: IsNull()})
-    return await StickyNoteConn().softDelete({id})
+    return await StickyNoteConn().softDelete({id, deletedAt: IsNull()})
 }
 
 export async function retrieve(id: number) {
