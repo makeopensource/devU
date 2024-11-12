@@ -10,7 +10,7 @@ export async function callback(req: Request, res: Response, next: NextFunction) 
   try {
     const { email = '', externalId = '' } = req.body
 
-    const { user } = await UserService.ensure({ email, externalId })
+    const { user } = await UserService.ensure({ email, externalId, isAdmin: false })
     const refreshToken = AuthService.createRefreshToken(user)
 
     res.cookie('refreshToken', refreshToken, refreshCookieOptions)
