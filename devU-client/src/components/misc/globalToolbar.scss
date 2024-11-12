@@ -17,19 +17,8 @@ $font-size: 16px;
 
   text-decoration: none;
   color: #FFF;
-
   font-size: $font-size;
-
-  //height: $bar-height;
-
-  margin:3vw;
-  height: 4vh;
-  flex-grow: .05;
-  border-radius: 3vw;
-  font-weight: 550;
-  //font-size: 14px;
-
-  padding:0.5vw;
+  font-weight: 500;
 
   &:hover {
     opacity: $hover-effect;
@@ -40,7 +29,7 @@ $font-size: 16px;
   font-size: 32px;
   text-decoration: none;
   color: #FFF;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .bar {
@@ -67,7 +56,7 @@ $font-size: 16px;
 
 // Controls turning the menu options into a sidebar
 // As well as whether or not that sidebar is being shown
-@media (max-width: 450px) {
+@media (max-width: 500px) {
   .flex {
     gap: 1rem;
    

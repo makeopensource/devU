@@ -48,49 +48,47 @@ const GradebookStudentPage = () => {
     const categories = [...new Set(assignments.map(a => a.categoryName))];
 
     return (
-        <PageWrapper>
+        <PageWrapper className={styles.pageWrapper}>
             <div className={styles.header}>
                 <h1>Student Gradebook</h1>
-                {role.isInstructor() &&(
-                    <button className={styles.actual_button} onClick={() => {
+                {role.isInstructor() && (
+                    <button className='btnSecondary' onClick={() => {
                         history.push(`/course/${courseId}/gradebook/instructor`)
                     }}>Instructor View
                     </button>
                 )}
-
             </div>
             <div className={styles['gradebook-container']}>
-
-                    {categories.map(category => (
-                        <div key={category}>
-                            <h2>{category}</h2>
-                            <table className={styles.table}> {/* Add table class */}
-                                <thead>
-                                <tr className={styles.headerRow}> {/* Add class for purple header */}
+                {categories.map(category => (
+                    <div key={category} className={styles.category}>
+                        <h2>{category}</h2>
+                        {/* <table className={styles.table}> Add table class */}
+                        <table>
+                            <thead>
+                                {/* <tr className={styles.headerRow}> Add class for purple header */}
                                     <th>Assignment</th>
                                     <th>Score</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                                {/* </tr> */}
+                            </thead>
+                            <tbody>
                                 {assignments.filter(a => a.categoryName === category).map((assignment, index) => (
                                     <tr key={assignment.id} className={index % 2 === 0 ? styles.evenRow : styles.oddRow}>
                                         <td>
-                                            <div className ={styles.content}>
-                                                {assignment.name}</div>
-
-                                            </td>
-
-                                        <td>
-                                            <div className={styles.content}>
-                                            {assignmentScores.find(aScore => aScore.assignmentId === assignment.id)?.score ?? 'N/A'}
+                                            <div className={styles.assignmentName}>
+                                                {assignment.name}
                                             </div>
+                                        </td>
+                                        <td>
+                                            {/* <div className={styles.content}> */}
+                                                {assignmentScores.find(aScore => aScore.assignmentId === assignment.id)?.score ?? 'N/A'}
+                                            {/* </div> */}
                                         </td>
                                     </tr>
                                 ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ))}
             </div>
         </PageWrapper>
     );
