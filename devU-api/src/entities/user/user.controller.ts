@@ -68,12 +68,12 @@ export async function createNewAdmin(req: Request, res: Response, next: NextFunc
 // delete an admin, only an admin can delete an admin
 export async function deleteAdmin(req: Request, res: Response, next: NextFunction) {
   try {
-    let newAdminUserId = req.body.newAdminUserId
-    if (!newAdminUserId) {
+    let deleteAdminUserId = req.body.newAdminUserId
+    if (!deleteAdminUserId) {
       return res.status(404).send('Not found')
     }
-    await UserService.softDeleteAdmin(newAdminUserId)
-    res.status(204).send('User is no longer admin')
+    await UserService.softDeleteAdmin(deleteAdminUserId)
+    res.status(204)
   } catch (e) {
     next(e)
   }
