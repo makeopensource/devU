@@ -40,7 +40,6 @@ const SubmissionFileView = () => {
     }, [])
 
     useEffect(() => {
-        console.log(filename)
         if (bucket && filename) {
             fetchFile()
         }
