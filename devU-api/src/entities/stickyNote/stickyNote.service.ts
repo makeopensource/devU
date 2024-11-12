@@ -17,18 +17,15 @@ export async function update(id : number,stickyNote: StickyNote) {
 }
 
 export async function _delete(id: number) {
-//   return await StickyNoteConn().softDelete({id, deletedAt: IsNull()})
     return await StickyNoteConn().softDelete({id, deletedAt: IsNull()})
 }
 
 export async function retrieve(id: number) {
-//   return await StickyNoteConn().findOneBy({id, deletedAt: IsNull()})
-    return await StickyNoteConn().findOneBy({id})
+    return await StickyNoteConn().findOneBy({id, deletedAt: IsNull()})
 }
 
 export async function listBySubmission(submissionId: number) {
-//   return await StickyNoteConn().findBy({submissionId :submissionId, deletedAt: IsNull()})
-    return await StickyNoteConn().findBy({submissionId: submissionId})
+    return await StickyNoteConn().findBy({submissionId: submissionId , deletedAt: IsNull()})
 }
 
 export default {
