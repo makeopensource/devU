@@ -210,7 +210,7 @@ const SubmissionDetailPage = () => {
             
             </div>
                 <h2 className={styles.content_title}>Content</h2>
-                <Button onClick={() => history.push(`/course/${selectedSubmission.courseId}/assignment/${selectedSubmission.assignmentId}/submission/${submissionId}/fileView`)}>View Submission File</Button>
+                <Button onClick={() => history.push(`/course/${selectedSubmission.courseId}/assignment/${selectedSubmission.assignmentId}/submission/${submissionId}/fileView`)}>View File</Button>
                 <div className={styles.scrollableContent}>
                <pre>{selectedSubmission.content}</pre>
               </div>
