@@ -10,6 +10,13 @@ import UserCourseService from '../userCourse/userCourse.service'
 const connect = () => dataSource.getRepository(UserModel)
 
 export async function create(user: User) {
+  // check if the first account
+  const users = await connect().count({ take: 1 })
+  if (users == 0) {
+    // make first created account admin
+    user.isAdmin = true
+  }
+
   return await connect().save(user)
 }
 
@@ -29,6 +36,35 @@ export async function retrieve(id: number) {
   return await connect().findOneBy({ id, deletedAt: IsNull() })
 }
 
+export async function isAdmin(id: number) {
+  return await connect().findOne({
+    where: { id, deletedAt: IsNull() },
+    select: ['isAdmin'],
+  })
+}
+
+export async function createAdmin(id: number) {
+  return await connect().update(id, { isAdmin: true })
+}
+
+// soft deletes an admin
+export async function softDeleteAdmin(id: number) {
+  let res = await connect().count({ take: 2, where: { isAdmin: true } })
+  // check if this deletes the last admin
+  // there must always be at least 1 admin
+  if (res == 1) {
+    throw Error('Unable to delete, only a single admin remains')
+  }
+
+  return await connect().update(id, { isAdmin: false })
+}
+
+// list all admins
+export async function listAdmin() {
+  return await connect().findBy({ isAdmin: true, deletedAt: IsNull() })
+}
+
+
 export async function retrieveByEmail(email: string) {
   return await connect().findOneBy({ email: email, deletedAt: IsNull() })
 }
@@ -46,13 +82,13 @@ export async function listByCourse(courseId: number, userRole?: string) {
 }
 
 export async function ensure(userInfo: User) {
-  const { externalId, email } = userInfo
+  const { externalId } = userInfo
 
   const user = await connect().findOneBy({ externalId })
 
   if (user) return { user, isNewUser: false }
 
-  const newUser = await create({ email, externalId })
+  const newUser = await create(userInfo)
 
   return { user: newUser, isNewUser: true }
 }
@@ -64,6 +100,10 @@ export default {
   update,
   _delete,
   list,
+  isAdmin,
+  createAdmin,
+  softDeleteAdmin,
+  listAdmin,
   ensure,
   listByCourse,
 }
