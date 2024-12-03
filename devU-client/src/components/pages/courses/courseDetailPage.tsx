@@ -99,8 +99,8 @@ const CourseDetailPage = () => {
                         <div>
 
                         <div className={styles.header}>
-                            <h1>CSE{courseInfo.number}: {courseInfo.name} ({courseInfo.semester})</h1>
-                            <h2> Instructor: </h2>
+                            <h1>{courseInfo.number}: {courseInfo.name} ({courseInfo.semester})</h1>
+                            <h2> Section: </h2>
 
 
                             <div style={{display: 'flex', flexWrap:'wrap', justifyContent: 'space-between'}}>
