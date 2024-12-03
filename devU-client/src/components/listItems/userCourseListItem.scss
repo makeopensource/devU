@@ -3,20 +3,20 @@
 .name {
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 0; 
-  padding: 30px; /* Add padding to the text inside the name block */
-  background: $primary; 
-  width: 100%; 
-  text-align: center; 
-  color: $text-color; 
-  border-radius: 5px 5px 0 0; 
+  margin: 0;
+  padding: 30px;
+  /* Add padding to the text inside the name block */
+  background: $primary;
+  width: 100%;
+  text-align: center;
+  color: #FFF;
+  border-radius: 20px 20px 0 0;
   box-sizing: border-box;
   text-overflow: ellipsis;
   overflow-wrap: break-word;
 }
 
-.No_assignments
-{ 
+.No_assignments {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,22 +24,26 @@
   flex-grow: 1;
   font-size: 12px;
   font-weight: 600;
-  border-radius:5px;
+  border-radius: 5px;
   padding: 30px;
   flex-wrap: wrap;
-  color:$primary;
+  // color: $primary;
+  color: $text-color;
   text-overflow: ellipsis;
   overflow-wrap: break-word;
 }
-.Buttons{
+
+.Buttons {
   display: flex;
   justify-content: space-around;
   margin-top: auto;
-  padding:10px;
+  padding: 10px;
 }
-.gradebook_button ,.coursepage_button {
+
+.gradebook_button,
+.coursepage_button {
   border: 0;
-  color: $primary; 
+  color: $text-color;
   background: none;
   font-weight: 600;
   margin-left: 15px;
@@ -93,10 +97,11 @@
   .subText {
     display: block;
   }
+
   .Buttons {
-    flex-direction: row; 
-    justify-content: space-between; 
+    flex-direction: row;
+    justify-content: space-between;
     padding: 10px;
-    margin-top: auto; 
-}
+    margin-top: auto;
+  }
 }
