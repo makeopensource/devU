@@ -1,35 +1,24 @@
 @import 'variables';
 
 .categoryName {
-    color: $text-color;
-    font-size: 1.25rem;
-}
-
-.assignmentName {
-    color: $focus;
-}
-
-.smallLine {
-  width: 50px; /* adjust this value to set the length of the small line */
-  border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-  margin-right: 10px; /* adjust this value to set the space between the line and the text */
-}
-
-.largeLine {
-  flex-grow: 1;
-  border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-  margin-left: 10px; /* adjust this value to set the space between the line and the text */
-  margin-right: 10px; /* add this line to create some space between the line and the button */
+  color: $text-color;
+  font-size: 1.25rem;
 }
 
 .tableWrapper {
   padding: 0 100px;
 }
 
+.tableContainer {
+  overflow-x: scroll;
+  scrollbar-color: $primary;
+}
+
 table {
   border-radius: 20px;
-  margin: 15px auto;
+  // margin: 15px auto;
   border-collapse: collapse;
+  width: 100%;
 }
 
 tr.evenRow {
@@ -46,7 +35,8 @@ th {
   font-weight: 600;
 }
 
-td, th {
+td,
+th {
   padding: 10px;
   text-align: center;
 }
@@ -73,96 +63,52 @@ tr:last-of-type td:last-of-type {
   align-items: center;
 }
 
-.tableOptions span:first-child, span.yellow {
+.tableOptions span:first-child,
+span.yellow {
   color: $yellowText;
 }
 
-.tableOptions span:last-child, span.red {
-  color: $redText; 
+.tableOptions span:last-child,
+span.red {
+  color: $redText;
 }
 
 // STUDENT GRADEBOOK STYLING
 
-.header {
-  color: $text-color;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+// .header {
+//   color: $text-color;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   // margin-bottom: 20px;
+// }
 
-.gradebook-container {
-  /* Add a container for the gradebook tables */
-  display: flex;
-  flex: 1 0 300px;
-  gap: 20px; /* Space between the tables */
-  overflow: hidden;
-}
-.gradebook-container .table {
-  border-radius: 20px !important;
-  transform: translateZ(0);
-}
-
-.table {
-  color: $text-color;
-  width: 100%;
-  overflow: hidden;
-  border-collapse: collapse;
-  border-radius: 20px;
-  background-color: $secondary-lighter;
-  table-layout: fixed; /* Key for even distribution */
-
-
-  th, td {
-
-    border: none;
-    border-radius: 0;
-    padding: 15px;
-    text-align: left;
-    width: 50%; /* Distribute columns evenly */
-    overflow: hidden; /* Prevent content from overflowing */
-    text-overflow: ellipsis; /* Add ellipsis for long names */
-  }
-
-
-  th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-  }
-
-  .evenRow {
-    // background-color: if(type-of($secondary-lighter) == 'color', lighten($secondary-lighter, 5%), #e0e0e0); // Fallback to #e0e0e0
-    background-color: $table-row-even;
-  }
-
-  .oddRow {
-    // background-color: if(type-of($secondary-lighter) == 'color', darken($secondary-lighter, 5%), #d0d0d0); // Fallback to #d0d0d0
-    background-color: $table-row-odd;
-  }
-
-}
-.headerRow th { /* Style for the purple header row */
-  background-color: $primary; /* Purple background */
-  color: white;
-}
-.content{
-  padding: 15px;
+.assignmentName {
   text-align: left;
 }
 
-.actual_button {
-  color: white;
+.gradebook-container {
   display: flex;
-  align-items: flex-end;
-  border: 0; /* Primary button color */
-  /* Button text color */
-  padding: 10px 20px; /* Padding for button */
-  border-radius: 5px;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-  margin : 0 10px;
-  background-color: $purple !important;
-
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
+.category {
+  width: calc(100%/3 - 14px);
+}
 
+@media (max-width: 650px) {
+  .pageWrapper {
+    padding: 0 20px;
+  }
+
+  .category {
+    width: calc(100%/2 - 14px);
+  }
+}
+
+@media (max-width: 450px) {
+  .category {
+    width: 100%;
+  }
+}

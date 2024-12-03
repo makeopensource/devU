@@ -66,6 +66,8 @@ $medium: 1000px;
 $small: 600px;
 $extreme: 780px;
 
+$pagePadding: 50px;
+
 @mixin ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;

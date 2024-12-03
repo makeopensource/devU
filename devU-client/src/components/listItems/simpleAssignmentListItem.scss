@@ -7,7 +7,8 @@
   border-radius: 0.6rem;
   justify-content: space-between;
   transition: background-color 0.2s linear;
-  color:$primary;
+  // color:$primary;
+  color: $text-color;
 }
 
 .meta {
@@ -44,10 +45,11 @@
   border-radius: 0.6rem;
   transition: background-color 0.2s linear;
 
-  color: #52468A;
+  // color: $primary;
 
-  &:hover,
-  &:focus {
-    background: $list-simple-item-background-hover;
-  }
+  color: $text-color;
+  // &:hover,
+  // &:focus {
+  //   background: $list-simple-item-background-hover;
+  // }
 }
