@@ -62,7 +62,7 @@ const AssignmentDetailPage = () => {
 
             //  const submissionScoresPromises = submissionsReq.map(s => {
             //     return RequestService.get<SubmissionScore[]>(`/api/submission-scores?submission=${s.id}`)
-            //  })
+            //  })kbubobo
             //  const submissionScoresReq = (await Promise.all(submissionScoresPromises)).reduce((a, b) => a.concat(b), [])
             //  setSubmissionScores(submissionScoresReq)
 
