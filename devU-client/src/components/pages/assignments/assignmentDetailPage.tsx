@@ -81,7 +81,7 @@ const AssignmentDetailPage = () => {
 
         } catch (err:any) {
             setError(err)
-            const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+            const message =  "Submission past due date"//Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
             setAlert({autoDelete: false, type: 'error', message})
         } finally {
             setLoading(false)
@@ -146,6 +146,14 @@ const AssignmentDetailPage = () => {
             await fetchData()
         }
     }
+    const isSubmissionDisabled = () => {
+        if (assignment?.dueDate) {
+            const dueDate = new Date(assignment.dueDate);
+            const now = new Date();
+            return now > dueDate;
+        }
+        return false;
+    };
 
 
     return(
@@ -172,7 +180,7 @@ const AssignmentDetailPage = () => {
                     <hr className = {styles.line} />
                     {role.isInstructor() && <button className={styles.buttons} onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/createProblem`)
-                    }}>Add Problem</button>}
+                    }}>Add Assignment Question</button>}
                     <hr className = {styles.line} />
                     {role.isInstructor() && <button  className={styles.buttons} onClick={() => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
@@ -223,11 +231,16 @@ const AssignmentDetailPage = () => {
                 </div>
             )}
 
-            {!(assignment?.disableHandins) && (<input type="file" className={styles.fileInput} onChange={handleFileChange} />)}
+            {!(assignment?.disableHandins) && (<input type="file"
+                                                      className={styles.fileInput}
+                                                      onChange={handleFileChange} />)}
 
-            {assignmentProblems && assignmentProblems.length > 0 ? (
+
+
+            { !(isSubmissionDisabled()) &&assignmentProblems && assignmentProblems.length > 0 ? (
                  <div className = {styles.submit_container}>
-                <button className={styles.buttons} onClick={handleSubmit}>Submit</button>
+                <button className={styles.buttons} onClick={handleSubmit}
+                        >Submit</button>
                 </div>
             ) : null}
             </div>
