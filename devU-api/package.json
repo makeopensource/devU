@@ -15,7 +15,7 @@
     "format": "prettier --write \"./**/*.{js,ts,json,md}\"",
     "pre-commit": "lint-staged",
     "populate-db": "ts-node-dev ./scripts/populate-db.ts",
-    "tango": "ts-node-dev ./src/tango/tests/tango.endpoint.test.ts",
+    "tango": "ts-node-dev src/autograder/tango/tests/tango.endpoint.test.ts",
     "api-services": "docker compose -f ../docker-compose.yml --profile dev-api up",
     "api-services-stop": "docker compose -f ../docker-compose.yml --profile dev-api stop"
   },
@@ -69,6 +69,9 @@
     "express-validator": "^6.14.2",
     "helmet": "^4.6.0",
     "jsonwebtoken": "^9.0.2",
+    "@connectrpc/connect-node": "^2.0.1",
+    "@bufbuild/protobuf": "^2.2.3",
+    "@connectrpc/connect": "^2.0.0",
     "minio": "^8.0.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",

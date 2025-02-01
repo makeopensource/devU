@@ -1,8 +1,16 @@
 import './tango.types'
 import fetch from 'node-fetch'
+import environment from '../../environment'
 
-const tangoHost = `http://tango:3000`
-const tangoKey = process.env.TANGO_KEY ?? 'test'
+const tangoHost = environment.tangoBaseUrl
+const tangoKey = environment.tangoKey
+
+export async function initTango() {
+  const status = await tangoHelloWorld()
+  if (!status) {
+    console.warn(`Unable to connect to tango, ${tangoHost} !`)
+  }
+}
 
 // for more info https://docs.autolabproject.com/tango-rest/
 
@@ -95,7 +103,7 @@ export async function getPoolInfo(image: string): Promise<Object | null> {
 export async function preallocateInstances(
   image: string,
   num: number,
-  request: PreallocRequest
+  request: PreallocRequest,
 ): Promise<PreallocResponse | null> {
   const url = `${tangoHost}/prealloc/${tangoKey}/${image}/${num}/`
   const response = await fetch(url, {

@@ -6,7 +6,7 @@ import containerAutograderService from '../containerAutoGrader/containerAutoGrad
 import assignmentProblemService from '../assignmentProblem/assignmentProblem.service'
 import assignmentScoreService from '../assignmentScore/assignmentScore.service'
 import courseService from '../course/course.service'
-import { addJob, createCourse, uploadFile, pollJob } from '../../tango/tango.service'
+import { addJob, createCourse, uploadFile, pollJob } from '../../autograder/tango/tango.service'
 
 import {
   SubmissionScore,

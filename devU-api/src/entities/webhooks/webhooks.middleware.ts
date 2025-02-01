@@ -42,8 +42,8 @@ export async function processWebhook(statusCode: number, userId: number, path: s
   })
 }
 
-// adds a
-export function responseInterceptor(req: Request, res: Response, next: NextFunction) {
+// adds the webhook interceptor
+export function webhookInterceptor(req: Request, res: Response, next: NextFunction) {
   const originalSend = res.send
 
   // Override function
