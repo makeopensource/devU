@@ -14,6 +14,9 @@ services:
     profiles:
       - '' # so it starts with normal docker compose
       - 'dev-client' # start when developing client
+    depends_on:
+      - leviathan
+      - tango
 
   client:
     # Builds the front end and exports static files to ./dist
@@ -111,6 +114,16 @@ services:
     deploy:
       replicas: 1
     restart: unless-stopped
+
+  leviathan:
+    container_name: leviathan
+    image: ghcr.io/makeopensource/leviathan:master
+    ports:
+      - "127.0.0.1:9221:9221"
+    volumes:
+      - ./leviathan/:/app/appdata
+      - /var/run/docker.sock:/var/run/docker.sock # for local docker
+    restart: "unless-stopped"
 
     #  certbot:
 #    container_name: certbot
