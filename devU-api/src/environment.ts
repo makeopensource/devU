@@ -51,17 +51,21 @@ const refreshTokenBuffer = load('auth.jwt.refreshTokenExpirationBufferSeconds') 
 // if it is undefined it is running on dev machine
 const isDocker = !(process.env.IS_DOCKER === undefined)
 
-if (isDocker && process.env.TANGO_KEY === undefined) {
-  throw Error(
-    'Tango key not found.\nMake sure to set environment variable TANGO_KEY in the api service in docker-compose'
-  )
+// default tango url is different in docker
+const tangoHost = process.env.TANGO_HOST ?? (isDocker ? `http://tango:3000` : 'http://localhost:3000')
+const tangoKey = process.env.TANGO_KEY ?? 'test'
+if (isDocker && tangoKey === 'test') {
+  console.warn(`no TANGO_KEY env found, using default value: test`)
 }
+
+const leviathanBaseUrl = load('autograder.leviathan.baseUrl') as string
+  || process.env.LEVIATHAN_BASEURL
+  || (isDocker ? `http://leviathan:9221` : 'http://localhost:9221')
 
 const environment = {
   port,
   apiUrl,
   clientUrl: (process.env.CLIENT_URL || load('api.clientUrl') || 'http://localhost:9000') as string,
-
   // Database settings
   dbHost: isDocker ? load('database.host') : ('localhost' as string),
   dbUsername: (load('database.username') || 'typescript_user') as string,
@@ -75,6 +79,11 @@ const environment = {
   // dbUsername: ('typescript_user') as string,
   // dbPassword: ('password') as string,
   // database: ('typescript_api') as string,
+
+  // leviathan config
+  leviathanBaseUrl: leviathanBaseUrl,
+  tangoBaseUrl: tangoHost,
+  tangoKey: tangoKey,
 
   // MinIO setting
   minioHost: isDocker ? load('minio.host') : ('localhost' as string),
@@ -93,7 +102,7 @@ const environment = {
   refreshTokenExpirationBufferSeconds: parseInt(refreshTokenBuffer),
 
   // BE CAREFUL WITH PROVIDERS - THEY'RE NOT TOTALLY TYPE SAFE UNLESS PROPERLY CONFIGURED
-  providers: config.get('auth.providers') as Providers
+  providers: config.get('auth.providers') as Providers,
 }
 
 export default environment
