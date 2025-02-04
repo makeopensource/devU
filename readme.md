@@ -97,6 +97,11 @@ cd devU
 docker compose up --build
 ```
 
+If the project doesn't run due to a missing dockerfile, run the following command, then repeat the docker compose step.
+```bash
+git submodule update  --init --recursive
+```
+
 ### 4. Connect to the Web Client
 In your browser, connect to `http://localhost:9000`, and you should see the login screen.
 
