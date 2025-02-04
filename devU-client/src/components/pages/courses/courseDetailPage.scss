@@ -16,10 +16,10 @@
 }
 
 
-.color{
+.courseCardHeading{
     background-color: $primary;
     color: #FFF; // always white against purple bg
-    width: 100%;
+    width: inherit;
     padding: 20px;
     text-align: center;
     font-size: 1.2em;
@@ -87,22 +87,19 @@
         padding: 20px;
         //border-radius: 10px;
         color: $text-color;
-        width: 70%
+        width: fit-content;
     }
 
     h1 {
-        margin: 0 0 10px 0;
         font-size: 1.5rem;
         text-align: left;
         font-weight: bold;
-
+        margin: 5px 5px 5px 10px;    
     }
 
-    .h2 {
-        padding-top: 20px;
-        margin: 0 0 20px 0;
+    h2 {
         font-size: 1.0rem;
-        padding-bottom: 10px;
+        margin: 5px 5px 5px 10px;  
     }
 
     h3{
@@ -129,7 +126,7 @@
                 border-radius: 5px;
                 font-weight: 600;
                 transition: background-color 0.3s ease;
-                margin : 0 10px;
+                margin : 10px;
                 background-color: $purple !important;
                 color: white !important;
             }

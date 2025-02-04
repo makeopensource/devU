@@ -103,7 +103,7 @@ const CourseDetailPage = () => {
                             <h2> Section: </h2>
 
 
-                            <div style={{display: 'flex', flexWrap:'wrap', justifyContent: 'space-between'}}>
+                            <div style={{display: 'flex', flexWrap:'wrap', justifyContent: 'flex-start'}}>
 
 
 
@@ -157,7 +157,7 @@ const CourseDetailPage = () => {
 
                                 <Card key={index} className={styles.courseCard}>
                                     <CardContent sx={{padding:0}}>
-                                        <Typography variant="h5" className={styles.color} style={{ textAlign: 'center' }}>
+                                        <Typography variant="h5" className={styles.courseCardHeading} style={{ textAlign: 'center' }}>
                                             {category}
                                         </Typography>
                                     </CardContent>
