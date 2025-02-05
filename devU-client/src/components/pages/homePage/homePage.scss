@@ -4,10 +4,9 @@
 
 .courses_heading {
     text-align: left;
-    // margin-left: 20px;
+    margin: 20px 0;
     // font-size: 30px;
     // font-weight: 550;
-    margin-bottom: 20px;
 }
 
 // h1 {
@@ -19,9 +18,9 @@
 // }
 
 
-// .no_courses {
-//     margin-left: 20px;
-// }
+ .no_courses {
+     margin: 0 0 10px 0;
+  }
 
 
 
@@ -29,7 +28,7 @@
     display: flex;
     flex-direction: row;
     gap: 20px;
-    // margin: 20px;
+    margin-bottom: 10px;
 }
 
 .courseCard {
@@ -43,7 +42,6 @@
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    margin-bottom: 20px;
 }
 
 // .create_course {

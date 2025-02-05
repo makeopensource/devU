@@ -155,9 +155,9 @@ const CourseDetailPage = () => {
                             <div className={styles.coursesContainer}>
                             {Object.keys(categoryMap).map((category, index) => (
 
-                                <Card key={index} className={styles.courseCard}>
+                                <Card key={index} className={styles.courseCard} style = {{borderRadius: '20px'}}>
                                     <CardContent sx={{padding:0}}>
-                                        <Typography variant="h5" className={styles.courseCardHeading} style={{ textAlign: 'center' }}>
+                                        <Typography variant="h5" className={styles.courseCardHeading} style={{ textAlign : 'center' }}>
                                             {category}
                                         </Typography>
                                     </CardContent>

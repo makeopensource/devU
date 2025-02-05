@@ -43,9 +43,9 @@
     height: 100%;
     padding: 0;
     background-color: rebeccapurple;
-    border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    border-radius: 20px;
     margin-bottom: 20px;
 
     .MuiList-root {
@@ -83,9 +83,8 @@
         justify-content: space-between;
         align-items: flex-start;
         background-color: $secondary;
-        // padding: 30px 60px;
         padding: 20px;
-        //border-radius: 10px;
+        border-radius: 20px;
         color: $text-color;
         width: fit-content;
     }
@@ -94,12 +93,12 @@
         font-size: 1.5rem;
         text-align: left;
         font-weight: bold;
-        margin: 5px 5px 5px 10px;    
+        margin: 0 15px 0 10px;
     }
 
     h2 {
         font-size: 1.0rem;
-        margin: 5px 5px 5px 10px;  
+        margin-left: 10px;
     }
 
     h3{
