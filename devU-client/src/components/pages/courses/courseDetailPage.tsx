@@ -182,9 +182,7 @@ const CourseDetailPage = () => {
                                                                               variant="body2"
                                                                               color="grey"
                                                                           >
-                                                                              Start: {new Date(assignment.startDate).toLocaleDateString()}
-                                                                                |
-                                                                              Due: {new Date(assignment.dueDate).toLocaleDateString()}
+                                                                              Start: {new Date(assignment.startDate).toLocaleDateString()} | Due: {new Date(assignment.dueDate).toLocaleDateString()}
                                                                           </Typography>
                                                                       </React.Fragment>
                                                                   }
