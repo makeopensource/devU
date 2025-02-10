@@ -1,5 +1,4 @@
-@import 'variables';
-
+@use 'src/assets/styles/variables' as *;
 .courseFormWrapper {
     display: flex;
     margin: 16px 50px;

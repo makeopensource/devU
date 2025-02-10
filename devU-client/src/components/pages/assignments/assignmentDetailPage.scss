@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'src/assets/styles/variables' as *;
 
 .wrap {
 	display:flex;

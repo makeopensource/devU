@@ -1,9 +1,10 @@
-@import 'variables';
+@use 'src/assets/styles/variables' as *;
 
 .grid {
     display: grid;
     grid-template-columns: 0.3fr 1fr 0.5fr;
-    grid-template-rows: 1fr 0.75fr;
+    grid-template-rows: 1f
+    r 0.75fr;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
     width: 100%;

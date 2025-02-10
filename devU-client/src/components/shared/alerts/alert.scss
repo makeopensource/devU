@@ -1,5 +1,4 @@
-@import 'variables';
-
+@use 'src/assets/styles/variables' as *;
 .container {
   display: flex;
   justify-content: center;

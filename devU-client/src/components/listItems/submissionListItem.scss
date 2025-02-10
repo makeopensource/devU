@@ -1,4 +1,5 @@
-@import 'variables';
+@use 'src/assets/styles/variables' as *;
+
 
 .course {
   font-size: 1.25rem;
