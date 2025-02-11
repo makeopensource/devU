@@ -103,8 +103,7 @@ const CourseDetailPage = () => {
                             <h2> Section: </h2>
 
 
-                            <div style={{display: 'flex', flexWrap:'wrap', justifyContent: 'flex-start'}}>
-
+                            <div className={styles.buttons_container}>
 
 
                                 <button className={styles.actual_button}  onClick={() => {
