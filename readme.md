@@ -92,14 +92,14 @@ Enter the project repo.
 cd devU
 ```
 
+Run this command to setup submodules.
+```bash
+git submodule update  --init --recursive
+```
+
 ### 3. Run the Project with Docker Compose
 ```bash
 docker compose up --build
-```
-
-If the project doesn't run due to a missing dockerfile, run the following command, then repeat the docker compose step.
-```bash
-git submodule update  --init --recursive
 ```
 
 ### 4. Connect to the Web Client
