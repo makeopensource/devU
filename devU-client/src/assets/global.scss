@@ -33,6 +33,7 @@
   button.btnPrimary {
     @extend .btn;
     background-color: var(--primary);
+    border: 3px solid var(--primary);
     color: #fff; // primary button always white text
   }
 

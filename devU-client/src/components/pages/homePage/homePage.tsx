@@ -78,16 +78,22 @@ const HomePage = () => {
         <PageWrapper>
             <div className={styles.header}>
                 {/* <div className={styles.smallLine}></div> */}
-                <h1 className={styles.courses_title}>Courses</h1>
-                <button className='btnSecondary' id='createCoursBtn' onClick={() => {
-                    history.push(`/addCoursesForm`)
-                }}>Create Course
-                </button>
+                <h1 className={styles.courses_title}>DevU Home</h1>
+                <div className={styles.buttonContainer}>
+                    <button className='btnSecondary' onClick={() => {
+                        history.push(`/addCoursesForm`)
+                    }}>create course
+                    </button>
+                    <button className='btnPrimary' onClick={() => {
+                        history.push(`/courses`)
+                    }}>join course
+                    </button>
+                </div>
                 {/* <div className={styles.largeLine}></div> */}
             </div>
             {/* <div className={styles.header}> */}
                 {/* <div className={styles.smallLine}></div> */}
-                <h2 className={styles.courses_heading}>Current</h2>
+                <h2 className={styles.courses_heading}>Current Courses</h2>
                 {/* <div className={styles.largeLine}></div> */}
             {/* </div> */}
             <div className={styles.coursesContainer}>
@@ -112,7 +118,7 @@ const HomePage = () => {
             </div>
             {/* <div className={styles.header}> */}
                 {/* <div className={styles.smallLine}></div> */}
-                <h2 className={styles.courses_heading}>Completed</h2>
+                <h2 className={styles.courses_heading}>Completed Courses</h2>
                 {/* <div className={styles.largeLine}></div> */}
             {/* </div> */}
             <div className={styles.coursesContainer}>
@@ -132,7 +138,7 @@ const HomePage = () => {
 
             {/* <div className={styles.header}> */}
                 {/* <div className={styles.smallLine}></div> */}
-                <h2 className={styles.courses_heading}>Upcoming</h2>
+                <h2 className={styles.courses_heading}>Upcoming Courses</h2>
                 {/* <div className={styles.largeLine}></div> */}
             {/* </div> */}
 

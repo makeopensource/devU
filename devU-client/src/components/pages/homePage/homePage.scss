@@ -39,9 +39,8 @@
     align-items: stretch;
     width: 400px;
     padding: 0;
-    background-color: $list-item-background;
+    background-color: white;
     border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     margin-bottom: 20px;
 }
@@ -56,17 +55,25 @@
 //     transition: background-color 0.3s ease;
 //     margin: 20px
 // }
-
+.courses_title{
+    margin: 0;
+    width: fit-content;
+    align-self: center;
+    grid-column-start: 2;
+}
 .header {
     color: $text-color;
-    display: block;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    padding: 20px;
 }
-
-#createCourseBtn {
-    display: block;
+.buttonContainer{
+    display: flex;
+    gap: 10px;
     margin-left: auto;
 }
+
 
 // .courses_heading::after {
 //     content: '';

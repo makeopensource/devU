@@ -23,7 +23,7 @@ const UserCourseListItem = ({ course, assignments, past = false, instructor = fa
     return (
         <ListItemWrapper to={null} tag={course.number} containerStyle={styles.container}>
 
-            <div className={styles.name}>{instructor ? (course.name + " " + course.number + " (" + course.semester + ")" + " Instructor") : course.name.toUpperCase() + " " + course.number + " " + "(" + course.semester + ")"}</div>
+            <div className={styles.name}>{instructor ? (course.number + ": " + course.name + " Instructor") : course.number + ": " + course.name}</div>
             <div className={styles.subText}>
                 {assignments && assignments.length > 0 ? (assignments.map((assignment) => (
                     <SimpleAssignmentListItem assignment={assignment} key={assignment.id} />
