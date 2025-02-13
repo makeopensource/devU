@@ -77,14 +77,17 @@ const HomePage = () => {
     return (
         <PageWrapper>
             <div className={styles.header}>
-                {/* <div className={styles.smallLine}></div> */}
                 <h1 className={styles.courses_title}>Courses</h1>
-                <button className='btnSecondary' id='createCoursBtn' onClick={() => {
-                    history.push(`/addCoursesForm`)
-                }}>Create Course
-                </button>
-                {/* <div className={styles.largeLine}></div> */}
+                <div className={styles.buttonContainer}>
+                    <button className='btnSecondary' id='createCoursBtn' onClick={() => {
+                        history.push(`/addCoursesForm`);
+                    }}>Create Course</button>
+                    <button className='btnSecondary' id='joinCoursBtn' onClick={() => {
+                        history.push(`/joinCourseForm`);
+                    }}>Join Course</button>
+                </div>
             </div>
+
             {/* <div className={styles.header}> */}
                 {/* <div className={styles.smallLine}></div> */}
                 <h2 className={styles.courses_heading}>Current</h2>

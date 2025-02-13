@@ -1,4 +1,6 @@
-@use 'src/assets/styles/variables' as *;
+@import 'variables';
+
+
 
 
 
@@ -59,14 +61,34 @@
 // }
 
 .header {
-    color: $text-color;
-    display: block;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
 }
 
-#createCourseBtn {
+.buttonContainer {
+    display: flex;
+    gap: 10px;
+}
+
+#createCourseBtn, #joinCourseBtn {
     display: block;
     margin-left: auto;
+    border: 2px solid $primary;
+    background: transparent;
+    color: $primary;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $primary;
+        color: white;
+    }
 }
 
 // .courses_heading::after {

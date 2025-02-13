@@ -1,4 +1,6 @@
-@use 'src/assets/styles/variables' as *;
+@import 'variables';
+
+
 
 :global  {
   // Libraries
@@ -14,7 +16,7 @@
   }
 
   h1 {
-    margin: 1.75rem auto;
+    margin: 0 auto;
     text-align: center;
   }
 
@@ -41,6 +43,7 @@
     background-color: var(--btn-secondary-background);
     color: var(--btn-secondary-text);
     border: 3px solid var(--btn-secondary-border);
+    margin-left: auto;
   }
 
   button.btnDelete {
