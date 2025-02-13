@@ -1,11 +1,9 @@
 @import 'variables';
 
-
-
-:global  {
+:global {
   // Libraries
   // Import css libraries here as needed
-  @import 'react-toggle/style';
+  @import '~react-toggle/style';
 
   html,
   body,
@@ -16,7 +14,7 @@
   }
 
   h1 {
-    margin: 0 auto;
+    margin: 1.75rem auto;
     text-align: center;
   }
 
@@ -43,7 +41,6 @@
     background-color: var(--btn-secondary-background);
     color: var(--btn-secondary-text);
     border: 3px solid var(--btn-secondary-border);
-    margin-left: auto;
   }
 
   button.btnDelete {
@@ -52,72 +49,7 @@
     color: var(--btn-delete-text);
     border: 3px solid var(--btn-delete-border);
   }
-  // General Error Message
-.error-message {
-  color: var(--error-text);
-  font-size: 0.875rem;
-  font-weight: bold;
-  margin-top: 5px;
-}
 
-// Validation Error Container
-.error-container {
-  background-color: var(--error-background);
-  border-left: 5px solid var(--error-text);
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-}
-
-// Error Page Styling (From `errorPage.scss`)
-.error-page {
-  background-color: var(--error-page-background);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-
-.error-heading {
-  font-size: 2rem;
-  color: var(--error-text);
-}
-
-.error-description {
-  font-size: 1.2rem;
-  color: var(--text-color);
-}
-
-// Global Input Field Styles
-.input-field {
-  width: 100%;
-  padding: 10px 15px;
-  font-size: 1rem;
-  color: var(--text-color);
-  background-color: var(--input-field-background);
-  border: 1px solid var(--input-border);
-  border-radius: var(--border-radius);
-  transition: border-color 0.3s ease;
-}
-
-
-  &:focus {
-      border-color: var(--focus);
-      outline: none;
-  }
-
-  &:disabled {
-      background-color: var(--grey-lightest);
-      color: var(--grey-lighter);
-      cursor: not-allowed;
-  }
-}
-
-// Placeholder Styling
-::placeholder {
-  color: var(--text-color-secondary);
-  font-style: italic;
-}
   body {
     font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;
     margin: 0;
@@ -132,7 +64,7 @@
     --text-color-secondary: #363636;
     --focus: var(--blue);
 
-    --primary-color: var(--purple);
+    --primary: var(--purple);
 
     --secondary-lighter: #cfd1d1;
     --secondary: #a8abab;
@@ -189,12 +121,6 @@
     --yellow-dark: #664600;
     --yellow: #F8D487;
 
-    --cyan: #00587E;
-    --brown-lighter: #876212;
-    --maroon: #8a2626;
-
-    
-
     transition: background-color 150ms linear;
   }
 
@@ -239,6 +165,68 @@
     color: var(--text-color);
   }
 
+    // General Error Message
+  .error-message {
+    color: var(--error-text);
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  // Validation Error Container
+  .error-container {
+    background-color: var(--error-background);
+    border-left: 5px solid var(--error-text);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+  }
+  // Error Page Styling (From `errorPage.scss`)
+  .error-page {
+    background-color: var(--error-page-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .error-heading {
+    font-size: 2rem;
+    color: var(--error-text);
+  }
+  .error-description {
+    font-size: 1.2rem;
+    color: var(--text-color);
+  }
+  // Global Input Field Styles
+  .input-field {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--input-field-background);
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius);
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: var(--focus);
+      outline: none;
+    }
+    &:disabled {
+      background-color: var(--grey-lightest);
+      color: var(--grey-lighter);
+      cursor: not-allowed;
+    }
+  }
+
+  
+  
+  // Placeholder Styling
+  ::placeholder {
+    color: var(--text-color-secondary);
+    font-style: italic;
+  }
+
   *:focus {
     outline-color: var(--focus);
   }
+}
