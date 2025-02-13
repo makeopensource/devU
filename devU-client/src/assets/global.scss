@@ -5,7 +5,7 @@
 :global  {
   // Libraries
   // Import css libraries here as needed
-  @use 'react-toggle/style';
+  @import 'react-toggle/style';
 
   html,
   body,
