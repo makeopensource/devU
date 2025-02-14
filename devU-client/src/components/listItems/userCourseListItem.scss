@@ -4,7 +4,7 @@
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0;
-  padding: 30px;
+  padding: 15px 0;
   /* Add padding to the text inside the name block */
   background: $primary;
   width: 100%;
@@ -23,31 +23,34 @@
   text-align: center;
   flex-grow: 1;
   font-size: 12px;
-  font-weight: 600;
-  border-radius: 5px;
-  padding: 30px;
+  font-weight: 500;
+  padding: 15px;
+  font-style: italic;
   flex-wrap: wrap;
   // color: $primary;
   color: $text-color;
   text-overflow: ellipsis;
   overflow-wrap: break-word;
+  border-bottom: 1px solid #ddd;
+
 }
 
 .Buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   margin-top: auto;
-  padding: 10px;
+  padding: 15px;
+  gap: 20px;
 }
 
-.gradebook_button,
-.coursepage_button {
+.sub_button {
   border: 0;
-  color: $text-color;
+  color: $primary;
   background: none;
   font-weight: 600;
-  margin-left: 15px;
+  margin: 0 10px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .tag {
@@ -86,10 +89,11 @@
 
 .container {
   text-decoration: none;
-
-  border-radius: 0.6rem;
-  margin-bottom: 1rem;
+  border-radius: 25px;
+  border: solid 3px $primary;
+  border-color: $primary;
   color: $text-color;
+  background:none;
 
 }
 

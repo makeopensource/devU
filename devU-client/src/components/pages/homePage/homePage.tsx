@@ -104,17 +104,15 @@ const HomePage = () => {
                             instructor={true} />
                     </div>
                 ))}
-            </div>
-            <div className={styles.coursesContainer}>
+
                 {enrollCourses && enrollCourses.map((course) => (
                     <div className={styles.courseCard}
                         key={course.id}
                         onClick={() => handleCourseClick(course.id)} style={{ cursor: 'pointer' }}>
-
                         <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id} />
                     </div>
                 ))}
-                {enrollCourses.length === 0 && instructorCourses.length == 0 && <h4 className={styles.no_courses}>You do not have current enrollment yet</h4>}
+                {enrollCourses.length === 0 && instructorCourses.length == 0 && <div className={styles.no_courses}>You do not have current enrollment yet</div>}
             </div>
             {/* <div className={styles.header}> */}
                 {/* <div className={styles.smallLine}></div> */}
@@ -133,7 +131,7 @@ const HomePage = () => {
                         />
                     </div>
                 ))}
-                {pastCourses.length === 0 && <h4 className={styles.no_courses}>No completed courses</h4>}
+                {pastCourses.length === 0 && <div className={styles.no_courses}>No completed courses</div>}
             </div>
 
             {/* <div className={styles.header}> */}
@@ -150,7 +148,7 @@ const HomePage = () => {
                     </div>
                 ))}
 
-                {upcomingCourses.length === 0 && <h4 className={styles.no_courses}>No upcoming Courses</h4>}
+                {upcomingCourses.length === 0 && <div className={styles.no_courses}>No upcoming courses</div>}
             </div>
 
 
