@@ -10,8 +10,8 @@
     "build-local": "cross-env NODE_ENV=local webpack --mode=production",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
     "pre-commit": "lint-staged",
-    "dev-backend": "docker compose -f ../compose.yml --profile dev-client up -d",
-    "dev-backend-stop": "docker compose -f ../compose.yml --profile dev-client stop"
+    "dev-backend": "docker compose -f ../docker-compose.yml --profile dev-client up -d",
+    "dev-backend-stop": "docker compose -f ../docker-compose.yml --profile dev-client stop"
   },
   "lint-staged": {
     "./**/*.{js,ts,json,md}": [

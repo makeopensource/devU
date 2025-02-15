@@ -1,7 +1,7 @@
 # Builds DevU images on develop
-# tagged as beta
+# tagged as develop
 
-name: Build DevU beta
+name: Build DevU develop
 on:
   push:
     branches:
@@ -36,24 +36,17 @@ jobs:
           original_string=${{ github.repository }}
           echo "repo_url=$(echo $original_string | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
-      # beta tags
-      - name: API beta image
+      - name: api dev image
         run: |
-          docker build . -f api.Dockerfile -t ghcr.io/${{ env.repo_url }}-api:beta
-          docker push ghcr.io/${{ env.repo_url }}-api:beta
+          docker build . -f api.Dockerfile -t ghcr.io/${{ env.repo_url }}-api:beta --push
+          docker push ghcr.io/${{ env.repo_url }}-api:dev
 
-      - name: client beta image
+      - name: client dev image
         run: |
           docker build . -f client.Dockerfile -t ghcr.io/${{ env.repo_url }}-client:beta
-          docker push ghcr.io/${{ env.repo_url }}-client:beta
-
-      - name: nginx beta image
-        run: |
-          docker build . -f nginx.Dockerfile -t ghcr.io/${{ env.repo_url }}-nginx:beta
-          docker push ghcr.io/${{ env.repo_url }}-nginx:beta
+          docker push ghcr.io/${{ env.repo_url }}-client:dev
 
       - name: build tango image
         run: |
           docker build ./tango -f ./tango/Dockerfile -t ghcr.io/${{ env.repo_url }}-tango:beta
-          docker push ghcr.io/${{ env.repo_url }}-tango:beta
-      
+          docker push ghcr.io/${{ env.repo_url }}-tango:dev

@@ -45,6 +45,7 @@ export const IconLibrary = {
   'caret-down': FaIcons.faCaretDown,
   'user-circle': FaIcons.faUserCircle,
   chalkboard: FaIcons.faChalkboard,
+  chalkboardUser: FaIcons.faChalkboardUser,
 }
 
 export const RegularIconLibrary = {
