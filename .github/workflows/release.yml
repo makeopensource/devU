@@ -67,29 +67,23 @@ jobs:
       - name: Login to GHCR registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: API latest and version image
+      - name: ap latest and version image
         run: |
-          docker build . -f api.Dockerfile -t ghcr.io/${{ env.repo_url }}-api:${{ steps.tagName.outputs.tag }}
-          docker push ghcr.io/${{ env.repo_url }}-api:${{ steps.tagName.outputs.tag }}
+          docker build . -f api.Dockerfile \
+            -t ghcr.io/${{ env.repo_url }}-api:${{ steps.tagName.outputs.tag }} \
+            -t ghcr.io/${{ env.repo_url }}-api:latest
           
-          docker build . -f api.Dockerfile -t ghcr.io/${{ env.repo_url }}-api:latest
+          docker push ghcr.io/${{ env.repo_url }}-api:${{ steps.tagName.outputs.tag }}
           docker push ghcr.io/${{ env.repo_url }}-api:latest
 
       - name: client latest and version image
         run: |
-          docker build . -f client.Dockerfile -t ghcr.io/${{ env.repo_url }}-client:${{ steps.tagName.outputs.tag }}
+          docker build . -f client.Dockerfile \ 
+            -t ghcr.io/${{ env.repo_url }}-client:${{ steps.tagName.outputs.tag }} \
+            -t ghcr.io/${{ env.repo_url }}-client:latest
+           
           docker push ghcr.io/${{ env.repo_url }}-client:${{ steps.tagName.outputs.tag }}
-          
-          docker build . -f client.Dockerfile -t ghcr.io/${{ env.repo_url }}-client:latest
           docker push ghcr.io/${{ env.repo_url }}-client:latest
-
-      - name: nginx latest and version image
-        run: |
-          docker build . -f nginx.Dockerfile -t ghcr.io/${{ env.repo_url }}-nginx:${{ steps.tagName.outputs.tag }}
-          docker push ghcr.io/${{ env.repo_url }}-nginx:${{ steps.tagName.outputs.tag }}
-          
-          docker build . -f nginx.Dockerfile -t ghcr.io/${{ env.repo_url }}-nginx:latest
-          docker push ghcr.io/${{ env.repo_url }}-nginx:latest
 
       - name: tango latest and version image
         run: |
