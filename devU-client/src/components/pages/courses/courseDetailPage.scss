@@ -16,10 +16,10 @@
 }
 
 
-.color{
+.courseCardHeading{
     background-color: $primary;
     color: #FFF; // always white against purple bg
-    width: 100%;
+    width: inherit;
     padding: 20px;
     text-align: center;
     font-size: 1.2em;
@@ -43,9 +43,9 @@
     height: 100%;
     padding: 0;
     background-color: rebeccapurple;
-    border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    border-radius: 20px;
     margin-bottom: 20px;
 
     .MuiList-root {
@@ -83,26 +83,22 @@
         justify-content: space-between;
         align-items: flex-start;
         background-color: $secondary;
-        // padding: 30px 60px;
-        padding: 20px;
-        //border-radius: 10px;
+        padding: 30px;
+        border-radius: 20px;
         color: $text-color;
-        width: 70%
+        width: fit-content;
     }
 
     h1 {
-        margin: 0 0 10px 0;
         font-size: 1.5rem;
         text-align: left;
         font-weight: bold;
-
+        margin: 0;
     }
 
-    .h2 {
-        padding-top: 20px;
-        margin: 0 0 20px 0;
+    h2 {
         font-size: 1.0rem;
-        padding-bottom: 10px;
+        margin: 0;
     }
 
     h3{
@@ -112,27 +108,26 @@
     }
 }
 
-        .buttons-container {
-            display: flex;
-            flex-wrap: wrap;
+.buttons_container {
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: flex-start; 
+    gap: 10px;
+    margin-top: 10px;
+}
 
-            justify-content: space-around;
-            width:100%;
-        }
-
-            .actual_button {
-                display: flex;
-                flex-direction: row;
-                border: 0; /* Primary button color */
-                /* Button text color */
-                padding: 10px 20px; /* Padding for button */
-                border-radius: 5px;
-                font-weight: 600;
-                transition: background-color 0.3s ease;
-                margin : 0 10px;
-                background-color: $purple !important;
-                color: white !important;
-            }
+.actual_button {
+    display: flex;
+    flex-direction: row;
+    border: 0; /* Primary button color */
+    /* Button text color */
+    padding: 10px 20px; /* Padding for button */
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    background-color: $purple !important;
+    color: white !important;
+}
 
 .assignmentName {
     &::after {

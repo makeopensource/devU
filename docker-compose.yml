@@ -15,8 +15,8 @@ services:
       - '' # so it starts with normal docker compose
       - 'dev-client' # start when developing client
 
-  client:
-    # Builds the front end and exports static files to ./dist
+  client-nginx:
+    # Builds the front end and serves the frontend static files using nginx
     build:
       dockerfile: client.Dockerfile
       context: .
@@ -66,17 +66,6 @@ services:
       MINIO_ROOT_USER: typescript_user
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
-
-  config:
-    #     Generates a config file for the API
-    build:
-      context: devU-api/scripts
-    command: "./generateConfig.sh config/default.yml"
-    image: ubautograding/devtools
-    volumes:
-      - ./devU-api/config:/config
-    profiles:
-      - 'dev-api' # start when developing api, not needed in production
 
   # tango stuff
   tango:

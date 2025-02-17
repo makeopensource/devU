@@ -103,8 +103,7 @@ const CourseDetailPage = () => {
                             <h2> Section: </h2>
 
 
-                            <div style={{display: 'flex', flexWrap:'wrap', justifyContent: 'space-between'}}>
-
+                            <div className={styles.buttons_container}>
 
 
                                 <button className={styles.actual_button}  onClick={() => {
@@ -155,9 +154,9 @@ const CourseDetailPage = () => {
                             <div className={styles.coursesContainer}>
                             {Object.keys(categoryMap).map((category, index) => (
 
-                                <Card key={index} className={styles.courseCard}>
+                                <Card key={index} className={styles.courseCard} style = {{borderRadius: '20px'}}>
                                     <CardContent sx={{padding:0}}>
-                                        <Typography variant="h5" className={styles.color} style={{ textAlign: 'center' }}>
+                                        <Typography variant="h5" className={styles.courseCardHeading} style={{ textAlign : 'center' }}>
                                             {category}
                                         </Typography>
                                     </CardContent>
@@ -182,9 +181,7 @@ const CourseDetailPage = () => {
                                                                               variant="body2"
                                                                               color="grey"
                                                                           >
-                                                                              Start: {new Date(assignment.startDate).toLocaleDateString()}
-                                                                                |
-                                                                              Due: {new Date(assignment.dueDate).toLocaleDateString()}
+                                                                              Start: {new Date(assignment.startDate).toLocaleDateString()} | Due: {new Date(assignment.dueDate).toLocaleDateString()}
                                                                           </Typography>
                                                                       </React.Fragment>
                                                                   }
