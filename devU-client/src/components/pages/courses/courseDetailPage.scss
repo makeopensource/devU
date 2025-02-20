@@ -15,14 +15,10 @@
     max-height: 500px;
 }
 .categoryName{
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 0;
     padding: 15px 0;
     /* Add padding to the text inside the name block */
     background: $primary;
     width: 100%;
-    text-align: center;
     color: #FFF;
     border-radius: 10px 10px 0 0;
     box-sizing: border-box;
@@ -58,7 +54,6 @@
     flex-direction: column;
     height: 100%;
     padding: 0;
-    background-color: rebeccapurple;
     overflow: hidden;
     margin-bottom: 20px;
 

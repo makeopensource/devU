@@ -151,13 +151,13 @@ const CourseDetailPage = () => {
                             <div className={styles.coursesContainer}>
                             {Object.keys(categoryMap).map((category, index) => (
 
-                                <Card key={index} className={styles.courseCard} style = {{borderRadius: '15px', height: 'fit-content', boxShadow: 'none'}}>
+                                <Card key={index} className={styles.courseCard} style = {{borderRadius: '15px', height: 'fit-content', boxShadow: 'none', backgroundColor: 'var(--primary)'}}>
                                     <CardContent sx={{padding:'0'}}>
-                                        <Typography variant="h5" className={styles.categoryName} style={{ textAlign : 'center', fontWeight : 600, fontSize: '1.2em' }}>
+                                        <Typography variant="h5" className={styles.categoryName} style={{ textAlign : 'center', fontWeight : 600, fontSize: '1.2rem' }}>
                                             {category}
                                         </Typography>
                                     </CardContent>
-                                    <List style={{padding: 0}}>
+                                    <List disablePadding style={{backgroundColor:'white'}}>
                                         {categoryMap[category].map((assignment, index) => (
                                             <ListItem key={index}  disablePadding>
                                                 <ListItemButton sx={{padding: 0}} onClick={() => {
