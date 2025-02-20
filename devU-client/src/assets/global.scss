@@ -14,7 +14,7 @@
   }
 
   h1 {
-    margin: 20px auto;
+    margin: 10px auto;
     text-align: center;
   }
 
@@ -25,10 +25,12 @@
 
   // general button template, extends to 3 types of buttons - primary, secondary, delete
   .btn {
-    padding: 10px 15px;
+    padding: 5px 15px;
     border-radius: 100px;
+    height: fit-content;
     border: none;
     font-weight: 700;
+    font-size: 15px
   }
 
   button.btnPrimary {

@@ -4,6 +4,8 @@ import RequestService from 'services/request.service'
 import {Assignment, Course} from 'devu-shared-modules'
 //import {useHistory} from "react-router-dom";
 import PageWrapper from 'components/shared/layouts/pageWrapper'
+import {wordPrintDate} from 'utils/date.utils'
+
 
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -19,8 +21,12 @@ import ListItemText from '@mui/material/ListItemText'
 import styles from './courseDetailPage.scss'
 import {SET_ALERT} from "../../../redux/types/active.types";
 import {useActionless, useAppSelector} from "../../../redux/hooks";
+import {prettyPrintSemester} from "../../../utils/semester.utils";
+
 //import TextField from "../../shared/inputs/textField";
 //import {useActionless, useAppSelector} from "redux/hooks";
+
+
 
 
 
@@ -92,71 +98,62 @@ const CourseDetailPage = () => {
     const history = useHistory()
     return(
         <PageWrapper>
-            <div className={styles.courseDetailPage}>
-
-
             {courseInfo ? (
                         <div>
 
                         <div className={styles.header}>
-                            <h1>{courseInfo.number}: {courseInfo.name} ({courseInfo.semester})</h1>
-                            <h2> Section: </h2>
-
-
-                            <div className={styles.buttons_container}>
-
-
-                                <button className={styles.actual_button}  onClick={() => {
-                                    history.push(`/course/${courseId}/gradebook`)
-                                }}>Gradebook
-                                </button>
-
-
-                                {role.isInstructor() &&(
-                                <button className={styles.actual_button} onClick={() => {
-                                    history.push(`/course/${courseId}/createAssignment`)
-                                }}>Add Assignment
-                                </button>
-                                    )}
-
-                                {role.isInstructor() &&(
-                                <button className={styles.actual_button} onClick={() => {
+                            <h1 className={styles.class_title}>{courseInfo.number}: {courseInfo.name}</h1>
+                            {role.isInstructor() ? (
+                                <button className='btnPrimary' style={{marginLeft:'auto'}} onClick={() => {
                                     history.push(`/course/${courseId}/update`)
-                                }}>Update Course Form
+                                }}>edit course
+                                </button>
+                            ) : (<button className='btnPrimary' style={{marginLeft:'auto'}} onClick={handleDropCourse}> 
+                                drop course
+                            </button>)
+                            }
+                        </div>
+                        <div className={styles.subheader}>
+                            <div className={styles.meta_container}>
+                                <div>
+                                    <h4>Instructor:</h4>
+                                </div>
+                                <div>
+                                    <h4>Section:</h4>
+                                </div>
+                                <div>
+                                    <h4>Semester: </h4><span>{prettyPrintSemester(courseInfo.semester)}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h3>Course Links</h3>
+                                <div className={styles.buttons_container}>
+                                    <button className='btnSecondary' onClick={() => {
+                                        history.push(`/course/${courseId}/gradebook`)
+                                    }}>Gradebook
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.subheader}><h3>Assignments</h3>
+                            {role.isInstructor() &&(
+                                <button className='btnPrimary' style={{marginLeft:'auto'}} onClick={() => {
+                                    history.push(`/course/${courseId}/createAssignment`)
+                                }}>add assignment
                                 </button>
                                     )}
-                                
-                                {role.isInstructor() &&(
-                                    <button className={styles.actual_button} onClick={() => {
-                                        history.push(`/course/${courseId}/webhooks`)
-                                    }}>
-                                    Add Webhooks
-                                    </button>
-                                )}
+                        </div>
 
-
-                                <button className={styles.actual_button} onClick={handleDropCourse}
-                                    > Drop Course
-                                </button>
-
-
-
-                            </div>
-
-
-                            </div>
-
-
-                            <h3>Assignments</h3>
+                            
 
 
 
                             <div className={styles.coursesContainer}>
                             {Object.keys(categoryMap).map((category, index) => (
 
-                                <Card key={index} className={styles.courseCard} style = {{borderRadius: '20px'}}>
-                                    <CardContent sx={{padding:0}}>
-                                        <Typography variant="h5" className={styles.courseCardHeading} style={{ textAlign : 'center' }}>
+                                <Card key={index} className={styles.courseCard} style = {{borderRadius: '15px'}}>
+                                    <CardContent sx={{padding:'0'}}>
+                                        <Typography variant="h5" className={styles.categoryName} style={{ textAlign : 'center', fontWeight : 600, fontSize: '1.2em' }}>
                                             {category}
                                         </Typography>
                                     </CardContent>
@@ -169,20 +166,16 @@ const CourseDetailPage = () => {
                                                     <ListItemText
                                                         className = {styles.assignmentName}
                                                         primary={
-                                                            <Typography style={{  textAlign: 'center' }}>
+                                                            <Typography>
                                                                 {assignment.name}
                                                             </Typography>
                                                         }
                                                                   secondary={
                                                                       <React.Fragment>
-                                                                          <Typography
-                                                                              sx={{ display: 'center' }}
-                                                                              component="span"
-                                                                              variant="body2"
-                                                                              color="grey"
-                                                                          >
-                                                                              Start: {new Date(assignment.startDate).toLocaleDateString()} | Due: {new Date(assignment.dueDate).toLocaleDateString()}
-                                                                          </Typography>
+                                                                          <div className={styles.due_end}>
+                                                                            <span style={{fontWeight:'700'}}>Due:&nbsp;</span>{wordPrintDate(assignment.dueDate)} | &nbsp;
+                                                                            <span style={{fontWeight:'700'}}>End:&nbsp;</span>{wordPrintDate(assignment.endDate)}
+                                                                        </div>
                                                                       </React.Fragment>
                                                                   }
                                                     />
@@ -204,7 +197,6 @@ const CourseDetailPage = () => {
                     <h1>Error fetching Course Information</h1>
                     )}
 
-            </div>
 
                 </PageWrapper>
             )

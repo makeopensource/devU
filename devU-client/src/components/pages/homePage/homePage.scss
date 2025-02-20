@@ -20,6 +20,7 @@
 
 .no_courses {
     font-style: italic;
+    margin-right: auto; // Keeps text locked left after hitting 738px
     margin-bottom: 20px;
 }
 
@@ -54,7 +55,6 @@
 //     margin: 20px
 // }
 .courses_title{
-    margin: 0;
     width: fit-content;
     align-self: center;
     grid-column-start: 2;
@@ -64,8 +64,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     justify-items: center;
-    padding: 20px;
+    align-items: center;
 }
+
 .buttonContainer{
     display: flex;
     gap: 20px;
