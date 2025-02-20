@@ -151,19 +151,19 @@ const CourseDetailPage = () => {
                             <div className={styles.coursesContainer}>
                             {Object.keys(categoryMap).map((category, index) => (
 
-                                <Card key={index} className={styles.courseCard} style = {{borderRadius: '15px'}}>
+                                <Card key={index} className={styles.courseCard} style = {{borderRadius: '15px', height: 'fit-content', boxShadow: 'none'}}>
                                     <CardContent sx={{padding:'0'}}>
                                         <Typography variant="h5" className={styles.categoryName} style={{ textAlign : 'center', fontWeight : 600, fontSize: '1.2em' }}>
                                             {category}
                                         </Typography>
                                     </CardContent>
-                                    <List sx={{maxHeight: 200, overflow: 'auto', '& ul': {padding: 0}}}>
+                                    <List style={{padding: 0}}>
                                         {categoryMap[category].map((assignment, index) => (
-                                            <ListItem key={index} disablePadding>
-                                                <ListItemButton onClick={() => {
+                                            <ListItem key={index}  disablePadding>
+                                                <ListItemButton sx={{padding: 0}} onClick={() => {
                                                     history.push(`/course/${courseId}/assignment/${assignment.id}`)
                                                 }}>
-                                                    <ListItemText
+                                                    <ListItemText style={{margin : 0}}
                                                         className = {styles.assignmentName}
                                                         primary={
                                                             <Typography>
