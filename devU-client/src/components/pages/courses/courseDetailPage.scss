@@ -115,12 +115,12 @@ h4 {
 
 .assignmentName {
     padding: 10px;
-        content: '';
-        display: block;
-        width: 100%;
-        margin: 5px auto;
-        border-bottom: 1px solid #ccc;
-    
+    color: $text-color;
+    display: block;
+    width: 100%;
+    margin: 5px auto;
+    border-bottom: 1px solid #ddd;
+
 }
 .due_end{
     text-decoration: none;

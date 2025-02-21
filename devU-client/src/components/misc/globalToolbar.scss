@@ -30,7 +30,8 @@ $font-size: 16px;
   text-decoration: none;
   color: #FFF;
   font-weight: 700;
-  height: 51px; // Centers text in navbar
+  height: 100%; // Centers text in navbar
+  line-height: 60px;
 }
 
 .bar {

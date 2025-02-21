@@ -157,7 +157,7 @@ const CourseDetailPage = () => {
                                             {category}
                                         </Typography>
                                     </CardContent>
-                                    <List disablePadding style={{backgroundColor:'white'}}>
+                                    <List disablePadding style={{backgroundColor:'var(--background)'}}>
                                         {categoryMap[category].map((assignment, index) => (
                                             <ListItem key={index}  disablePadding>
                                                 <ListItemButton sx={{padding: 0}} onClick={() => {
