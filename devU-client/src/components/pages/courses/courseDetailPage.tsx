@@ -186,7 +186,10 @@ const CourseDetailPage = () => {
                                     </List>
                                 </Card>
 
-                            ))}
+                            ))} 
+                            </div>
+                            <div>
+                                {Object.keys(categoryMap).length === 0 && <div className='no_items'>No assignments yet</div>}
                             </div>
                         </div>
 

@@ -9,7 +9,7 @@
   body,
   #main {
     height: 100%;
-    overflow: hidden;
+    //overflow: hidden;
     position: relative;
   }
 
@@ -32,6 +32,12 @@
     font-weight: 700;
     font-size: 15px
   }
+
+  .no_items {
+    font-style: italic;
+    margin-right: auto; // Keeps text locked left after hitting 738px
+    margin-bottom: 20px;
+}
 
   button.btnPrimary {
     @extend .btn;

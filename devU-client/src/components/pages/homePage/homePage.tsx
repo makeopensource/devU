@@ -131,7 +131,7 @@ const HomePage = () => {
                         />
                     </div>
                 ))}
-                {pastCourses.length === 0 && <div className={styles.no_courses}>No completed courses</div>}
+                {pastCourses.length === 0 && <div className='no_items'>No completed courses</div>}
             </div>
 
             {/* <div className={styles.header}> */}
@@ -148,7 +148,7 @@ const HomePage = () => {
                     </div>
                 ))}
 
-                {upcomingCourses.length === 0 && <div className={styles.no_courses}>No upcoming courses</div>}
+                {upcomingCourses.length === 0 && <div className='no_items'>No upcoming courses</div>}
             </div>
 
 
