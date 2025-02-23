@@ -43,7 +43,12 @@ const CourseDetailPage = () => {
 
     useEffect(() => {
         fetchCourseInfo();
+        console.log("User Role:", role);
+        console.log("Is Instructor?", role.isInstructor ? role.isInstructor() : "role.isInstructor() is undefined");
     }, []);
+
+
+    
 
     return (
         <PageWrapper>
@@ -69,16 +74,16 @@ const CourseDetailPage = () => {
                                 </button>
 
                                 {role.isInstructor() &&(
-                                <button className={styles.actual_button} onClick={() => {
+                                <button className={styles.assignment_actual_button} onClick={() => {
                                     history.push(`/course/${courseId}/createAssignment`)
                                 }}>Add Assignment
                                 </button>
                                     )}
                                 
                                 {role.isInstructor() &&(
-                                <button className={styles.actual_button} onClick={() => {
+                                <button className={styles.edit_actual_button} onClick={() => {
                                     history.push(`/course/${courseId}/createAssignment`)
-                                }}>Add Assignment
+                                }}>Edit Course
                                 </button>
                                     )}
                             </div>

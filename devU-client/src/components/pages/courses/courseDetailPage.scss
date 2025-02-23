@@ -70,15 +70,17 @@
 
 .courseDetailPage {
     padding: 40px;
+    position: relative; // Ensures absolute positioning works within this container
 
     .header {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        background-color: $secondary;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
         padding: 20px;
         color: $text-color;
-        width: 70%;
+        width: 100%;
+        position: relative;
     }
 
     h1 {
@@ -86,13 +88,6 @@
         font-size: 1.5rem;
         text-align: left;
         font-weight: bold;
-    }
-
-    h2 {
-        padding-top: 20px;
-        margin: 0 0 20px 0;
-        font-size: 1.0rem;
-        padding-bottom: 10px;
     }
 
     h3 {
@@ -105,9 +100,11 @@
 /* Updated Button Layout */
 .buttonContainer {
     display: flex;
-    justify-content: flex-end; // Align buttons slightly to the right
-    gap: 15px; // Space between buttons
-    margin-top: 10px;
+    justify-content: flex-start; // Align buttons to left under Course Links
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+
 }
 
 /* Button Styling to Match the New UI */
@@ -128,9 +125,39 @@
     }
 }
 
-/* Remove old button styles */
-.actual_button {
-    display: none;
+.edit_actual_button {
+    display: flex;
+    flex-direction: row;
+    border: 0; /* Primary button color */
+    /* Button text color */
+    padding: 10px 20px; /* Padding for button */
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    margin : 0 10px;
+    background-color: $purple !important;
+    color: white !important;
+    min-width: 160px;
+    position: relative;
+    bottom: 66px;
+    right: 100px;
+}
+.assignment_actual_button {
+    display: flex;
+    flex-direction: row;
+    border: 0; /* Primary button color */
+    /* Button text color */
+    padding: 10px 20px; /* Padding for button */
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    margin : 0 10px;
+    background-color: $purple !important;
+    color: white !important;
+    min-width: 160px;
+    position: relative;
+    bottom: -57px;
+    left: 89px;
 }
 
 /* Assignments Formatting */
@@ -146,27 +173,74 @@
 /* Instructor Buttons */
 .instructorActions {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 15px;
     margin-top: 20px;
 }
 
-.editCourse, 
-.addAssignment {
+/* Course Links - Move to the Right */
+.courseLinks {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* Style for each link button */
+.linkButton {
+    background: white;
+    color: #4b0082;
+    border: 2px solid #4b0082;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: #4b0082;
+        color: white;
+    }
+}
+
+/* Move "Edit Course" to the top-right just below account info */
+.editCourse {
+    position: absolute;
+    top: -60px;  // Moves it higher to match the layout
+    right: 0;
     background-color: $primary;
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 8px 16px;
+    border-radius: 20px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: $purple-darker;
+    }
 }
 
-.editCourse:hover, 
-.addAssignment:hover {
-    background-color: $purple-darker;
+/* Move "Add Assignment" to the bottom right */
+.addAssignment {
+    position: absolute;
+    bottom: -60px; // Pushes it downward
+    right: 0;
+    background-color: $primary;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: $purple-darker;
+    }
 }
-
-
-
 
