@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAppSelector } from 'redux/hooks';
 
-import { Assignment, AssignmentScore } from 'devu-shared-modules';
+import { Assignment, AssignmentScore, Course } from 'devu-shared-modules';
 
 import PageWrapper from 'components/shared/layouts/pageWrapper';
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay';
@@ -21,6 +21,7 @@ const GradebookStudentPage = () => {
     const { courseId } = useParams<{ courseId: string }>();
     const userId = useAppSelector((store) => store.user.id);
     const history = useHistory();
+    const [courseName, setCourseName] = useState<string>(""); 
 
     useEffect(() => {
         fetchData();
@@ -33,6 +34,10 @@ const GradebookStudentPage = () => {
 
             const assignmentScores = await RequestService.get<AssignmentScore[]>(`/api/course/${courseId}/assignment-scores/user/${userId}`);
             setAssignmentScores(assignmentScores);
+            
+            const courseData = await RequestService.get<Course>(`/api/courses/${courseId}`);
+            setCourseName(courseData.name);
+        
         } catch (error: any) {
             setError(error);
         } finally {
@@ -64,9 +69,9 @@ const GradebookStudentPage = () => {
         <PageWrapper className={styles.pageWrapper}>
             {/* Top Section with Back to Course Button */}
             <div className={styles.topSection}>
-                <h1 className={styles.gradebookTitle}>CSE 312 Gradebook</h1>
+                <h1 className={styles.gradebookTitle}>{courseName} Gradebook</h1> 
                 {role.isInstructor() && (
-                    <button className={styles.backToCourseButton} onClick={() => history.push(`/course/${courseId}/courses/courseDetailPage`)}>
+                    <button className={styles.backToCourseButton} onClick={() => history.push(`/course/${courseId}/courses`)}>
                         Back to Course
                     </button>
                 )}
