@@ -25,6 +25,7 @@
 
   // general button template, extends to 3 types of buttons - primary, secondary, delete
   .btn {
+    cursor: pointer;
     padding: 5px 15px;
     border-radius: 100px;
     height: fit-content;
