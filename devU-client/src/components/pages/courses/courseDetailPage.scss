@@ -55,7 +55,6 @@
     height: 100%;
     padding: 0;
     overflow: hidden;
-
     text-decoration: none;
     border-radius: 200px;
     border: 3px solid $primary;
@@ -69,7 +68,7 @@
 .header {
     color: $text-color;
     display: grid;
-    grid-template-columns: 1fr 5fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
     justify-items: center;
     align-items: center;
 }
@@ -93,6 +92,7 @@ h4 {
 }
 .class_title{
     grid-column-start: 2;
+    padding: 0 20px;
 }
 
 .meta_container{
@@ -101,16 +101,15 @@ h4 {
     align-items: flex-start;
 }
 
-#larger_button{
-    height: fit-content;
-    margin-left: auto;
-}
 .buttons_container {
     display: flex; 
     flex-wrap: wrap; 
     justify-content: flex-start; 
     gap: 10px;
     margin-top: 10px;
+}
+#parallel_button{
+    margin-left: auto;
 }
 
 .assignmentName {
