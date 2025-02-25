@@ -1,3 +1,5 @@
+@import 'variables';
+
 .page {
   //height: 100%;
   display: flex;
@@ -12,4 +14,10 @@
   // margin-top: 20px;
   flex-grow: 1;
   padding: 0px 100px;
+}
+
+@media (max-width: $extreme){
+  .content{
+    padding: 0 $phonePadding;
+  }
 }
