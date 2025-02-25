@@ -76,8 +76,8 @@ const TextField = ({
                       // input field text
                       "& .MuiOutlinedInput-input" : {
                         color: theme.textColor,
-                        backgroundColor: theme.inputFieldBackground,
                         borderRadius: '10px',
+                        border: '2px solid #ccc',
                         // padding: '0.625rem 1rem',
                         marginBottom: '0px'
                       },

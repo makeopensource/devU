@@ -264,18 +264,22 @@ setFiles;
           <h2 className={styles.header}>Edit Info</h2>
           <br/>
           <div className={styles.textFieldContainer}>
-            <TextField id="name" onChange={handleChange} label={'Assignment Name'}
-                      invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
-                      className={styles.textField}
-                      value={formData.name} 
-                      sx={{width : 8/10 ,marginRight : 1/10}}/>
-
-            <TextField id="categoryName" onChange={handleChange} label={'Category Name*'}
+          <div className={styles.textFieldHeader}>Category</div>
+          <TextField id="categoryName" onChange={handleChange} 
                       invalidated={!!invalidFields.get('categoryName')}
                       className={styles.textField}
                       helpText={invalidFields.get('categoryName')}
                       value={formData.categoryName} 
-                      sx={{width : 8/10, marginLeft : 1/10}}/>
+                      sx={{"& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"}, 
+                      width : '100%', marginLeft : 1/10}}/>
+                      
+            <TextField id="name" onChange={handleChange}
+                      invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
+                      className={styles.textField}
+                      value={formData.name} 
+                      sx={{"& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"}, 
+                        width : '100%', marginRight : 1/10}}/>
+
           </div>
 
           <TextField id="description" onChange={handleChange} label={'Description*'} multiline={true} rows={5}

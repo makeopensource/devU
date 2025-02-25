@@ -16,13 +16,16 @@
 
 .textFieldContainer {
     display:flex;
+    flex-direction: column;
     width: 100%;
-    justify-content: center;
-    align-items: center;
+    font-size: 16px;
 }
 
 .textField {
     align-items: center;
+}
+.textFieldHeader{
+    margin: 5px 0;
 }
 
 .datepickerContainer {
@@ -118,11 +121,6 @@ input[type='date'] {
         width: 100%;
         }
 
-        .assignmentsList, .form, .problemsList, .attachments {background-color: $list-item-background;}
-        .assignmentsList { display: none; }
-        .form { grid-area: 1 / 1 / 2 / 2; }
-        .problemsList { grid-area: 2 / 1 / 3 / 2; }
-        .attachments { grid-area: 3 / 1 / 4 / 2; } 
 }
 
 @media (max-width:450px) {
