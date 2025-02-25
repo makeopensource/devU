@@ -78,7 +78,7 @@ const HomePage = () => {
         <PageWrapper>
             <div className={styles.header}>
                 {/* <div className={styles.smallLine}></div> */}
-                <h1 className={styles.courses_title}>DevU Home</h1>
+                <h1 className={styles.page_title}>DevU Home</h1>
                 <div className={styles.buttonContainer}>
                     <button className='btnSecondary' onClick={() => {
                         history.push(`/addCoursesForm`)
