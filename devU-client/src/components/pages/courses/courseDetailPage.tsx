@@ -19,8 +19,8 @@ import ListItemText from '@mui/material/ListItemText'
 
 
 import styles from './courseDetailPage.scss'
-import {SET_ALERT} from "../../../redux/types/active.types";
-import {useActionless, useAppSelector} from "../../../redux/hooks";
+//import {SET_ALERT} from "../../../redux/types/active.types";
+import {useAppSelector} from "../../../redux/hooks"; //useActionless, 
 import {prettyPrintSemester} from "../../../utils/semester.utils";
 
 //import TextField from "../../shared/inputs/textField";
@@ -35,7 +35,7 @@ const CourseDetailPage = () => {
     const { courseId } = useParams<{courseId: string}>()
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
-    const [setAlert] = useActionless(SET_ALERT)
+    //const [setAlert] = useActionless(SET_ALERT)
     const role = useAppSelector((store) => store.roleMode);
 
    // const[User, setUser]= useState < User <string>,preferredName>>({})
@@ -74,7 +74,7 @@ const CourseDetailPage = () => {
 
     }
 
-    const handleDropCourse = () => {
+    /*const handleDropCourse = () => {
         //confirmation to drop course or not
         var confirm = window.confirm("Are you sure you want to drop?");
         if (confirm)
@@ -88,7 +88,7 @@ const CourseDetailPage = () => {
             const message = error.message
             setAlert({autoDelete: false, type: 'error', message})  })
         }
-    }
+    }*/
 
 
     useEffect(() => {
@@ -103,15 +103,12 @@ const CourseDetailPage = () => {
 
                         <div className={styles.header}>
                             <h1 className={styles.class_title}>{courseInfo.number}: {courseInfo.name}</h1>
-                            {role.isInstructor() ? (
+                            {role.isInstructor() && (
                                 <button className='btnPrimary' style={{marginLeft:'auto'}} onClick={() => {
                                     history.push(`/course/${courseId}/update`)
                                 }}>edit course
                                 </button>
-                            ) : (<button className='btnPrimary' style={{marginLeft:'auto'}} onClick={handleDropCourse}> 
-                                drop course
-                            </button>)
-                            }
+                            )}
                         </div>
                         <div className={styles.subheader}>
                             <div className={styles.meta_container}>

@@ -112,7 +112,7 @@ const HomePage = () => {
                         <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id} />
                     </div>
                 ))}
-                {enrollCourses.length === 0 && instructorCourses.length == 0 && <div className={styles.no_courses}>You do not have current enrollment yet</div>}
+                {enrollCourses.length === 0 && instructorCourses.length == 0 && <div className='no_items'>You do not have current enrollment yet</div>}
             </div>
             {/* <div className={styles.header}> */}
                 {/* <div className={styles.smallLine}></div> */}
