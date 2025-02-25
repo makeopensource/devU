@@ -8,7 +8,7 @@ import { useActionless } from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
 import Button from '../../../shared/inputs/button'
 import styles from './assignmentUpdatePage.scss'
-import DragDropFile from 'components/utils/dragDropFile'
+//import DragDropFile from 'components/utils/dragDropFile'
 import { SET_ALERT } from 'redux/types/active.types'
 import { applyMessageToErrorFields, removeClassFromField } from 'utils/textField.utils'
 import Dialog from '@mui/material/Dialog';
@@ -22,7 +22,7 @@ const AssignmentUpdatePage = () => {
   const { assignmentId } = useParams() as UrlParams
   const { courseId } = useParams<{ courseId: string }>()
   const [setAlert] = useActionless(SET_ALERT)
-  const [currentAssignmentId, setCurrentAssignmentId] = useState(parseInt(assignmentId))
+  const currentAssignmentId = parseInt(assignmentId)
   const [assignmentsList, setAssignmentsList] = useState<Assignment[]>([])
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [allAssignmentProblems, setAllAssignmentProblems] = useState<Map<number, AssignmentProblem[]>>(new Map<number, AssignmentProblem[]>())
@@ -32,7 +32,8 @@ const AssignmentUpdatePage = () => {
   const history = useHistory()
 
   const [theme, setTheme] = useState(getCssVariables())
-
+allAssignmentProblems; // Very Bad JS Work, yell at me if i leave these till the Pull Request
+setFiles;
   // Needs a custom observer to force an update when the css variables change
   // Custom observer will update the theme variables when the bodies classes change
   useEffect(() => {
@@ -91,11 +92,11 @@ const AssignmentUpdatePage = () => {
   const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, endDate: e.target.value }))}
   const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, dueDate: e.target.value }))}
 
-  const handleFile = (file: File) => {
+  /*const handleFile = (file: File) => {
     if(files.length < 5) {
       setFiles([...files, file])
     }
-  }
+  }*/
 
   const fetchAssignmentProblems = () => {
     RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
@@ -183,7 +184,7 @@ const AssignmentUpdatePage = () => {
     })
   }
 
-  const handleAssignmentChange = (e: React.MouseEvent<HTMLHeadingElement>) => {
+  /*const handleAssignmentChange = (e: React.MouseEvent<HTMLHeadingElement>) => {
     const assignmentDetails = assignmentsList.find((assignment) => assignment.id === parseInt(e.currentTarget.id))
     if (assignmentDetails !== undefined && assignmentDetails.id !== undefined) {
       setAssignmentProblems(allAssignmentProblems.get(assignmentDetails.id) || [])
@@ -192,7 +193,7 @@ const AssignmentUpdatePage = () => {
     if (assignmentDetails !== undefined) {
       setFormData(assignmentDetails)
     }
-  }
+  }*/
 
   const [addProblemModal, setAddProblemModal] = useState(false)
   const [addProblemForm, setAddProblemForm] = useState({
@@ -231,7 +232,7 @@ const AssignmentUpdatePage = () => {
   
   return (
 
-    <PageWrapper className={styles.pageWrapper}>
+    <PageWrapper>
 
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogContent sx={{bgcolor:theme.listItemBackground}}>
@@ -257,18 +258,10 @@ const AssignmentUpdatePage = () => {
         </DialogContent>
       </Dialog>
 
-      <h2>Edit Assignment</h2>
+      <h1>Edit Assignment</h1>
       <div className={styles.grid}>
-        <div className={styles.assignmentsList}>
-          <h2 className={styles.header}>Assignments</h2>
-          {assignmentsList.map((assignment) => (
-            <div id={assignment.id ? assignment.id.toString() : ''} key={assignment.id} className={styles.assignment} onClick={handleAssignmentChange}>
-              <Button className={styles.assignmentBtn}>{assignment.name}</Button>
-            </div>
-          ))} 
-        </div>
         <div className={styles.form}>
-          <h2 className={styles.header}>Assignment Information</h2>
+          <h2 className={styles.header}>Edit Info</h2>
           <br/>
           <div className={styles.textFieldContainer}>
             <TextField id="name" onChange={handleChange} label={'Assignment Name'}
@@ -354,7 +347,13 @@ const AssignmentUpdatePage = () => {
           ))}
           <Button onClick={openAddProblemModal} className={styles.button}>Add Problem</Button>
         </div>
-        <div className={styles.attachments}>
+      </div>
+    </PageWrapper>
+  )
+}
+
+/* yell at me if i forget to delete this
+<div className={styles.attachments}>
           <h2 className={styles.header}>Attachments</h2>
           <DragDropFile handleFile={handleFile} className='formFileUploadWide'/>
           <br/>
@@ -366,10 +365,5 @@ const AssignmentUpdatePage = () => {
               </div>
             ))}
           </div>
-        </div>
-      </div>
-    </PageWrapper>
-  )
-}
-
+        </div>*/ 
 export default AssignmentUpdatePage
