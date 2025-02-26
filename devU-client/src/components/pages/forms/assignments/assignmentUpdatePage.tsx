@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ExpressValidationError, Assignment, AssignmentProblem } from 'devu-shared-modules'
+import { ExpressValidationError, Assignment, AssignmentProblem, Category } from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useHistory, useParams } from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
@@ -15,6 +15,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { getCssVariables } from 'utils/theme.utils'
+import Dropdown from 'components/shared/inputs/dropdown'
 
 type UrlParams = { assignmentId: string }
 
@@ -26,6 +27,8 @@ const AssignmentUpdatePage = () => {
   const [assignmentsList, setAssignmentsList] = useState<Assignment[]>([])
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [allAssignmentProblems, setAllAssignmentProblems] = useState<Map<number, AssignmentProblem[]>>(new Map<number, AssignmentProblem[]>())
+  const [allCategories, setAllCategories] = useState<Assignment[]>([])
+
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
   const [openModal, setOpenModal] = useState(false)
   const [files, setFiles] = useState<File[]>([])
@@ -99,6 +102,11 @@ setFiles;
   }*/
 
   const fetchAssignmentProblems = () => {
+    RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
+      .then((res) => { setAssignmentProblems(res) })
+  }
+
+  const fetchCategories = () => {
     RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
       .then((res) => { setAssignmentProblems(res) })
   }
@@ -265,7 +273,7 @@ setFiles;
           <br/>
           <div className={styles.textFieldContainer}>
           <div className={styles.textFieldHeader}>Category</div>
-          <TextField id="categoryName" onChange={handleChange} 
+          <Dropdown id="categoryName" onChange={handleChange} 
                       invalidated={!!invalidFields.get('categoryName')}
                       className={styles.textField}
                       helpText={invalidFields.get('categoryName')}
