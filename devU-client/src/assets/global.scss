@@ -29,6 +29,7 @@
     border-radius: 100px;
     border: none;
     font-weight: 700;
+    transition: background-color 100ms linear;
   }
 
   button.btnPrimary {
@@ -36,6 +37,10 @@
     background-color: var(--primary);
     border: 3px solid var(--primary);
     color: #fff; // primary button always white text
+    &:hover{
+      background-color: var(--hover-darker);
+      border: 3px solid var(--hover-darker);
+    }
   }
 
   button.btnSecondary {
@@ -43,6 +48,9 @@
     background-color: var(--btn-secondary-background);
     color: var(--btn-secondary-text);
     border: 3px solid var(--btn-secondary-border);
+    &:hover{
+      background-color: var(--hover-lighter);
+    }
   }
 
   button.btnDelete {
@@ -87,6 +95,10 @@
     --btn-secondary-background: #FFF;
     --btn-secondary-text: var(--primary);
 
+    --hover-darker: var(--purple-darker);
+    --hover-lighter: var(--purple-lightest);
+
+
     --btn-delete-border: var(--red);
     --btn-delete-background: #FFF;
     --btn-delete-text: var(--red);
@@ -113,6 +125,8 @@
     --red-lighter: #FFA3A3;
     --red: #8A2626;
 
+    --purple-lightest: #efecfd;
+    --purple-lighterer: #9885f0;
     --purple-lighter: #7257EB;
     --purple: #52468A;
     --purple-darker: #2F2363;
@@ -149,6 +163,9 @@
     --btn-secondary-border: var(--primary);
     --btn-secondary-background: var(--purple-darker);
     --btn-secondary-text: #FFF;
+
+    --hover-darker: var(--purple-lighterer);
+    --hover-lighter: var(--purple);
 
     --btn-text-color: var(--purple-lighter)
 
