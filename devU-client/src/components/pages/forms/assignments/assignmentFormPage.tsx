@@ -218,4 +218,11 @@ const AssignmentCreatePage = () => {
     )
 }
 
-export default AssignmentCreatePage
+const AddAssignmentModal = () => {
+    
+    return (
+        <></>
+    )
+}
+
+export default { AssignmentCreatePage, AddAssignmentModal }

@@ -2,7 +2,7 @@
 
 Dev Deployment: https://devu.app
 
-Figma: https://www.figma.com/design/Ei3nuzCcGCtorXXYCZxiwS/DevU---Fall-2024?node-id=0-1&p=f&m=dev
+Figma: https://www.figma.com/design/I1p68BKK7w1E0JgfxWE2x0/devu-2.0?node-id=199-2&p=f&t=9Bq5OiHqK8mNlKHt-0
 
 DevU is an automated software-grading platform being developed at the University at Buffalo. DevU aims to be incredibly
 extensible, allowing professors to add any functionality they desire without reaching a dead end. It will eventually
