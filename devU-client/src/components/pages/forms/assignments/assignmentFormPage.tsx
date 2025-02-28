@@ -122,7 +122,7 @@ const AssignmentCreatePage = () => {
 
     return (
         <PageWrapper className={formStyles.pageWrapper}>
-            <h2>Create Assignment</h2>
+            <h1>Create Assignment</h1>
             <div className={formStyles.flex}>
                 <div className={formStyles.form}>
                     <h2>Assignment Information</h2>

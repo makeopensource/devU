@@ -52,6 +52,7 @@ const CourseDetailPage = () => {
                     <div>
                         {/* Course Title */}
                         <div className={styles.header}>
+
                             <h1>
                                 {courseInfo.number}: {courseInfo.name} ({courseInfo.semester})
                             </h1>

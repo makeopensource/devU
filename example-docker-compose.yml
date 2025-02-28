@@ -1,12 +1,12 @@
-# example production compose file,
-# remember to copy tango.config.py to the working directory from where the compose file is ran
+# example compose file
+# remember to copy tango.config.py to the working directory from where the compose file is run
 
 name: devu
 services:
   api:
     # Runs the API
     container_name: api
-    image: ghcr.io/makeopensource/devu-api:beta
+    image: ghcr.io/makeopensource/devu-api:dev
     environment:
       TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
       WAIT_HOSTS: db:5432
@@ -19,16 +19,8 @@ services:
       - '3001:3001'
 
   client:
-    # Builds the front end and exports static files to ./dist
-    image: ghcr.io/makeopensource/devu-client:beta
-    volumes:
-      - ./dist:/out
-
-  nginx:
-    # Hosts the front end static files from ./dist/local thorough a web server
-    image: ghcr.io/makeopensource/devu-nginx:beta
-    volumes:
-      - ./dist/local:/usr/share/nginx/html
+    # Builds the front end and serves the frontend static files using nginx
+    image: ghcr.io/makeopensource/devu-client:dev
     ports:
       - '9000:80'
 
@@ -72,7 +64,7 @@ services:
     container_name: tango
     ports:
       - '127.0.0.1:3000:3000'
-    image: ghcr.io/makeopensource/devu-tango:beta
+    image: ghcr.io/makeopensource/devu-tango:dev
     environment:
       - DOCKER_REDIS_HOSTNAME=redis
       - RESTFUL_KEY=devutangokey

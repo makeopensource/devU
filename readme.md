@@ -92,6 +92,11 @@ Enter the project repo.
 cd devU
 ```
 
+Run this command to setup submodules.
+```bash
+git submodule update  --init --recursive
+```
+
 ### 3. Run the Project with Docker Compose
 ```bash
 docker compose up --build
