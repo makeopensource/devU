@@ -4,7 +4,6 @@
 name: devu
 services:
   api:
-    # Runs the API
     container_name: api
     image: ghcr.io/makeopensource/devu-api:dev
     environment:
@@ -13,8 +12,6 @@ services:
     depends_on:
       db:
         condition: service_started
-#      config:
-#        condition: service_completed_successfully
     ports:
       - '3001:3001'
 
@@ -23,6 +20,39 @@ services:
     image: ghcr.io/makeopensource/devu-client:dev
     ports:
       - '9000:80'
+
+  tango:
+    container_name: tango
+    ports:
+      - '127.0.0.1:3000:3000'
+    image: ghcr.io/makeopensource/devu-tango:dev
+    environment:
+      - DOCKER_REDIS_HOSTNAME=redis
+      - RESTFUL_KEY=devutangokey
+      #      - DOCKER_DEPLOYMENT
+      # Path to volumes within the Tango container. Does not need to be modified.
+      #      - DOCKER_VOLUME_PATH
+      # TODO remember to modify the below to be the path to the absolute path of tango_files` on your host machine
+      - DOCKER_TANGO_HOST_VOLUME_PATH=/absolute/path/to/tango_files
+
+    depends_on:
+      - redis
+    volumes:
+      - ./tango.config.py:/opt/TangoService/Tango/config.py
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./logs/tango/:/var/log/tango/
+      - ./logs/tangonginx:/var/log/nginx
+      - ./tango_files:/opt/TangoService/Tango/volumes
+    restart: unless-stopped
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - '127.0.0.1:6379:6379'
+    deploy:
+      replicas: 1
+    restart: unless-stopped
 
   db:
     # Runs the PostgreSQL database
@@ -50,49 +80,15 @@ services:
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
 
-  # tango stuff
-  redis:
-    container_name: redis
-    image: redis:latest
-    ports:
-      - '127.0.0.1:6379:6379'
-    deploy:
-      replicas: 1
-    restart: unless-stopped
-
-  tango:
-    container_name: tango
-    ports:
-      - '127.0.0.1:3000:3000'
-    image: ghcr.io/makeopensource/devu-tango:dev
-    environment:
-      - DOCKER_REDIS_HOSTNAME=redis
-      - RESTFUL_KEY=devutangokey
-#      - DOCKER_DEPLOYMENT
-      # Path to volumes within the Tango container. Does not need to be modified.
-#      - DOCKER_VOLUME_PATH
-      # TODO remember to modify the below to be the path to the absolute path of tango_files` on your host machine
-      - DOCKER_TANGO_HOST_VOLUME_PATH=/absolute/path/to/tango_files
-
-    depends_on:
-      - redis
-    volumes:
-      - ./tango.config.py:/opt/TangoService/Tango/config.py
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./logs/tango/:/var/log/tango/
-      - ./logs/tangonginx:/var/log/nginx
-      - ./tango_files:/opt/TangoService/Tango/volumes
-    restart: unless-stopped
-
-  # autoupdate containers
+  # auto update containers
   watchtower:
     container_name: watchtower
     image: containrrr/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - TZ=${TZ}
-      - WATCHTOWER_POLL_INTERVAL=30
+      - WATCHTOWER_POLL_INTERVAL=900 # check for new image every 15 min
+      - WATCHTOWER_REMOVE_VOLUMES=true
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_STOPPED=true
     restart: unless-stopped
