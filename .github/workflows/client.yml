@@ -9,7 +9,7 @@ on:
       - develop
 
 jobs:
-  build-api-docker:
+  build-client-docker:
     runs-on: ubuntu-latest
     permissions:
       contents: write # to be able to publish a GitHub release
