@@ -1,14 +1,16 @@
 # example compose file
 # remember to copy tango.config.py to the working directory from where the compose file is run
+# or use the setup script in repo
 
 name: devu
 services:
   api:
     container_name: api
-    image: ghcr.io/makeopensource/devu-api:dev
+    image: ghcr.io/makeopensource/devu/api:develop
     environment:
       TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
       WAIT_HOSTS: db:5432
+      CLIENT_URL: https://client.devu.app # TODO change the client url here if needed
     depends_on:
       db:
         condition: service_started
@@ -17,7 +19,7 @@ services:
 
   client:
     # Builds the front end and serves the frontend static files using nginx
-    image: ghcr.io/makeopensource/devu-client:dev
+    image: ghcr.io/makeopensource/devu/client:develop
     ports:
       - '9000:80'
 
@@ -25,16 +27,12 @@ services:
     container_name: tango
     ports:
       - '127.0.0.1:3000:3000'
-    image: ghcr.io/makeopensource/devu-tango:dev
+    image: ghcr.io/makeopensource/devu/tango:develop
     environment:
       - DOCKER_REDIS_HOSTNAME=redis
       - RESTFUL_KEY=devutangokey
-      #      - DOCKER_DEPLOYMENT
-      # Path to volumes within the Tango container. Does not need to be modified.
-      #      - DOCKER_VOLUME_PATH
       # TODO remember to modify the below to be the path to the absolute path of tango_files` on your host machine
       - DOCKER_TANGO_HOST_VOLUME_PATH=/absolute/path/to/tango_files
-
     depends_on:
       - redis
     volumes:
@@ -52,6 +50,26 @@ services:
       - '127.0.0.1:6379:6379'
     deploy:
       replicas: 1
+    restart: unless-stopped
+
+  # leviathan stuff
+  # testing frontend for leviathan
+  kraken:
+    container_name: kraken
+    image: ghcr.io/makeopensource/leviathan/kraken:dev
+    ports:
+      - "3022:3000"
+    environment:
+      - LEVIATHAN_URL=http://levi:9221
+    restart: unless-stopped
+
+  levi:
+    container_name: leviathan
+    image: ghcr.io/makeopensource/leviathan:dev
+    ports:
+      - "9221:9221"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
 
   db:
