@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ExpressValidationError, Assignment, AssignmentProblem, Category } from 'devu-shared-modules'
+import { ExpressValidationError, Assignment, AssignmentProblem } from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useHistory, useParams } from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
@@ -15,7 +15,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { getCssVariables } from 'utils/theme.utils'
-import Dropdown from 'components/shared/inputs/dropdown'
+//import Dropdown, { Option } from 'components/shared/inputs/dropdown';
+//import Select from 'react-select/src/Select'
 
 type UrlParams = { assignmentId: string }
 
@@ -27,7 +28,7 @@ const AssignmentUpdatePage = () => {
   const [assignmentsList, setAssignmentsList] = useState<Assignment[]>([])
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [allAssignmentProblems, setAllAssignmentProblems] = useState<Map<number, AssignmentProblem[]>>(new Map<number, AssignmentProblem[]>())
-  const [allCategories, setAllCategories] = useState<Assignment[]>([])
+  //const [allCategories, setAllCategories] = useState<Category[]>([])
 
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
   const [openModal, setOpenModal] = useState(false)
@@ -90,7 +91,8 @@ setFiles;
     setAssignmentProblemData(prevState => ({ ...prevState, [key]: value }))
   }
 
-  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}
+  // taken out of the design for the moment, should get incorporated later
+  /*const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}*/ 
   const handleStartDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, startDate: e.target.value }))}
   const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, endDate: e.target.value }))}
   const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, dueDate: e.target.value }))}
@@ -106,13 +108,14 @@ setFiles;
       .then((res) => { setAssignmentProblems(res) })
   }
 
-  const fetchCategories = () => {
+  /*const fetchCategories = () => {
     RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
-      .then((res) => { setAssignmentProblems(res) })
-  }
+      .then((res) => { setAllCategories(res) })
+  }*/
 
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
+  //useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setAllCategories(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignmentsList(res) })}, [])
   useEffect(() => {
     for(let i : number = 0; i < assignmentsList.length; i++) {
@@ -270,86 +273,75 @@ setFiles;
       <div className={styles.grid}>
         <div className={styles.form}>
           <h2 className={styles.header}>Edit Info</h2>
-          <br/>
           <div className={styles.textFieldContainer}>
-          <div className={styles.textFieldHeader}>Category</div>
-          <Dropdown id="categoryName" onChange={handleChange} 
+            <div>
+              <div className={styles.textFieldHeader}>AssignmentCategory: </div>
+              <TextField id="categoryName" onChange={handleChange}
                       invalidated={!!invalidFields.get('categoryName')}
                       className={styles.textField}
                       helpText={invalidFields.get('categoryName')}
                       value={formData.categoryName} 
-                      sx={{"& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"}, 
-                      width : '100%', marginLeft : 1/10}}/>
-                      
-            <TextField id="name" onChange={handleChange}
-                      invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
-                      className={styles.textField}
-                      value={formData.name} 
-                      sx={{"& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"}, 
-                        width : '100%', marginRight : 1/10}}/>
+                      sx={{width: '100%'}}/>
+            </div>
+            <div>
+              <div className={styles.textFieldHeader}>Assignment Name: </div>
 
+                <TextField id="name" onChange={handleChange}
+                          invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
+                          className={styles.textField}
+                          value={formData.name} 
+                          sx={{ width: '100%',
+                            "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"}
+                              }}/>
+            </div>
+            <div>
+              <div className={styles.textFieldHeader}>Description: <span style={{fontStyle:'italic', color: 'var(--grey)'}}>(optional)</span> </div>
+                <TextField id="description" onChange={handleChange} multiline={true} rows={5}
+                        invalidated={!!invalidFields.get('description')}
+                        className={styles.textField}
+                        placeholder='Provide an optional description...'
+                        helpText={invalidFields.get('description')}
+                        value={formData.description ? formData.description : ''} 
+                        sx={{width: '100%',
+                          "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"},
+                          "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root" : {padding : "0px"},
+                        }}/>
+              </div>
           </div>
 
-          <TextField id="description" onChange={handleChange} label={'Description*'} multiline={true} rows={5}
-                    invalidated={!!invalidFields.get('description')}
-                    className={styles.textField}
-                    helpText={invalidFields.get('description')}
-                    value={formData.description ? formData.description : ''} 
-                    sx={{width : 9/10, 
-                      "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"},
-                      "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root" : {padding : "0px"},
-                    }}/>
-
-          <div className={styles.textFieldContainer}>
-            <TextField id="maxFileSize" onChange={handleChange} label={'Max File Size'}
-                      invalidated={!!invalidFields.get('maxFileSize')}
-                      className={styles.textField}
-                      helpText={invalidFields.get('maxFileSize')}
-                      value={formData.maxFileSize ? formData.maxFileSize.toString() : ''} 
-                      sx={{width : 8/10, marginLeft : 1/10}}/>
-
-            <TextField id="maxSubmissions" onChange={handleChange} label={'Max Submission'}
-                      invalidated={!!invalidFields.get('maxSubmission')}
-                      className={styles.textField}
-                      helpText={invalidFields.get('maxSubmission')}
-                      value={formData.maxSubmissions ? (formData.maxSubmissions).toString() : ''} 
-                      sx={{width : 8/10, marginLeft : 1/10}}/>
+          <div className={styles.submissionsContainer}>
+            <div>
+              <div className={styles.textFieldHeader}>Max Submissions: </div>
+              <TextField id="maxSubmissions" onChange={handleChange} 
+                        invalidated={!!invalidFields.get('maxSubmission')}
+                        className={styles.textField}
+                        helpText={invalidFields.get('maxSubmission')}
+                        value={formData.maxSubmissions ? (formData.maxSubmissions).toString() : ''} 
+                        sx={{width: '100%', marginLeft : 1/10}}/>
+            </div>
+            <div>
+              <div className={styles.textFieldHeader}>Max File Size: </div>
+              <TextField id="maxFileSize" onChange={handleChange}
+                        invalidated={!!invalidFields.get('maxFileSize')}
+                        className={styles.textField}
+                        helpText={invalidFields.get('maxFileSize')}
+                        value={formData.maxFileSize ? formData.maxFileSize.toString() : ''} 
+                        sx={{width: '100%', marginLeft : 1/10}}/>
+            </div>
           </div>
     
-          <br />
-
           <div className={styles.datepickerContainer}>
-            <div>
               <label htmlFor="start_date">Start Date *</label>
-              <br/>
-              <input type='date' id="start_date" value={formData.startDate.split("T")[0]} onChange={handleStartDateChange}/>
-            </div>
-            <div>
               <label htmlFor="due_date">Due Date *</label>
-              <br/>
-              <input type='date' id="due_date" value={formData.dueDate.split("T")[0]} onChange={handleDueDateChange}/>
-            </div>
-            <div>
               <label htmlFor="end_date">End Date *</label>
-              <br/>
-              <input type='date' id="end_date" value={formData.endDate.split("T")[0]} onChange={handleEndDateChange}/>
-            </div>
+
+              <input type='datetime-local' id="start_date" style={{textWrap:'wrap'}} value={formData.startDate.slice(0,-1)} onChange={handleStartDateChange}/>
+              <input  type='datetime-local' id="due_date" value={formData.dueDate.slice(0,-1)} onChange={handleDueDateChange}/>
+              <input type='datetime-local' id="end_date" value={formData.startDate.slice(0,-1)} onChange={handleEndDateChange}/>
           </div>
-          <br />
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <label htmlFor="disableHandins">Disable Handins</label>
-            <input type="checkbox" id="disableHandins" checked={formData.disableHandins}
-                  onChange={handleCheckbox} className={styles.submitBtn} />
-          </div>
-          <br />
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button onClick={handleAssignmentUpdate} className={styles.submitBtn}>Update
-              assignment</Button>
-          </div>
-          <br/>
         </div>
         <div className={styles.problemsList}>
-          <h2 className={styles.header}>Problems</h2>
+        <h2 className={styles.header}>Add Problems</h2>
           {assignmentProblems.map((problem, index) => (
             <div key={problem.id} className={styles.problem}>
               <h3 style={{marginRight : '20px'}}>{`Problem ${index + 1}`}</h3>
@@ -357,9 +349,12 @@ setFiles;
               <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
             </div>
           ))}
-          <Button onClick={openAddProblemModal} className={styles.button}>Add Problem</Button>
+          <Button onClick={openAddProblemModal} className='btnSecondary'>Add Problem</Button>
         </div>
       </div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
+            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>save and exit</Button>
+          </div>
     </PageWrapper>
   )
 }

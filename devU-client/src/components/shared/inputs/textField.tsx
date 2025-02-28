@@ -78,6 +78,7 @@ const TextField = ({
                         color: theme.textColor,
                         borderRadius: '10px',
                         border: '2px solid #ccc',
+                        //backgroundColor: theme.inputFieldBackground,
                         // padding: '0.625rem 1rem',
                         marginBottom: '0px'
                       },
