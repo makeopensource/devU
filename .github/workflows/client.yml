@@ -6,7 +6,7 @@ on:
     paths:
       - 'devU-client/**'
     branches:
-      - develop
+      - develop # add more branches as needed
 
 jobs:
   build-client-docker:
