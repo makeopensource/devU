@@ -1,4 +1,4 @@
-FROM node:16 AS module_builder
+FROM node:20 AS module_builder
 
 WORKDIR /tmp
 
@@ -20,7 +20,12 @@ COPY ./devU-client/ .
 
 COPY --from=module_builder /tmp/devu-shared-modules ./devu-shared-modules
 
-RUN npm run build-local
+# Pass API_URL and ROOT_PATH as build arguments
+ARG API_URL
+ARG ROOT_PATH
+
+# Use build arguments in the build command
+RUN API_URL=$API_URL ROOT_PATH=$ROOT_PATH npm run build-docker
 
 # final stage serve frontend files
 FROM nginx:1.23.3
