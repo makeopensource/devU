@@ -37,7 +37,7 @@ jobs:
 
       - name: build api docker
         run: |
-          IMAGE_NAME=ghcr.io/${{ env.repo_url }}/client:${{ steps.get_branch.outputs.branch_name }}
+          IMAGE_NAME=ghcr.io/${{ env.repo_url }}/api:${{ steps.get_branch.outputs.branch_name }}
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
 
           docker build . -f api.Dockerfile -t $IMAGE_NAME
