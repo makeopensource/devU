@@ -8,13 +8,13 @@ import { useActionless } from 'redux/hooks'
 import TextField from 'components/shared/inputs/textField'
 import Button from '../../../shared/inputs/button'
 import styles from './assignmentUpdatePage.scss'
-//import DragDropFile from 'components/utils/dragDropFile'
 import { SET_ALERT } from 'redux/types/active.types'
 import { applyMessageToErrorFields, removeClassFromField } from 'utils/textField.utils'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { getCssVariables } from 'utils/theme.utils'
+import { Button as MuiButton, StyledEngineProvider } from '@mui/material'
 //import Dropdown, { Option } from 'components/shared/inputs/dropdown';
 //import Select from 'react-select/src/Select'
 
@@ -100,11 +100,14 @@ setFiles;
   const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, endDate: e.target.value }))}
   const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, dueDate: e.target.value }))}
 
-  /*const handleFile = (file: File) => {
-    if(files.length < 5) {
-      setFiles([...files, file])
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files){
+      const file = e.target.files[0]
+      if(files.length < 5) {
+        setFiles([...files, file])
+      }
     }
-  }*/
+  }
 
   const fetchAssignmentProblems = () => {
     RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
@@ -119,7 +122,7 @@ setFiles;
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
-  useEffect(() => {RequestService.get( `/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignmentsList(res) })}, [])
   useEffect(() => {
     // for(let i : number = 0; i < assignmentsList.length; i++) { // this is used for swapping between assignments on edit page, which i think is no longer part of the design
@@ -272,8 +275,10 @@ setFiles;
         </DialogActions>
         </DialogContent>
       </Dialog>
-
-      <h1>Edit Assignment</h1>
+      <div className={styles.pageHeader}>
+        <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
+        <Button className={styles.backToCourse} onClick={() => {history.goBack()}}>back to course</Button>
+      </div>
       <div className={styles.grid}>
         <div className={styles.form}>
           <h2 className={styles.header}>Edit Info</h2>
@@ -300,7 +305,7 @@ setFiles;
             </div>
             <div>
               <div className={styles.textFieldHeader}>Description: <span style={{fontStyle:'italic', color: 'var(--grey)'}}>(optional)</span> </div>
-                <TextField id="description" onChange={handleChange} multiline={true} rows={5}
+                <TextField id="description" onChange={handleChange} multiline={true} rows={3}
                         invalidated={!!invalidFields.get('description')}
                         className={styles.textField}
                         placeholder='Provide an optional description...'
@@ -342,6 +347,30 @@ setFiles;
               <input type='datetime-local' id="due_date" value={formData.dueDate.slice(0,-1)} onChange={handleDueDateChange}/>
               <input type='datetime-local' id="end_date" value={formData.startDate.slice(0,-1)} onChange={handleEndDateChange}/>
           </div>
+          <h2 className={styles.header}>Attachments</h2>
+            {(files.length != 0) ? (
+              <div className={styles.filesList}>
+                <span>Files:</span> 
+                {files.slice(0,-1).map((file, index) => (
+                <div key={index}>
+                  <span>&nbsp;{`${file.name},`}</span>
+                </div>))}
+                <div key={files.length-1}>
+                  <span>&nbsp;{`${files[files.length-1].name}`}</span>
+              </div>
+                
+              </div>) 
+           : <div className={styles.filesList} style={{fontStyle:'italic'}}>No files attached</div>}
+          <input type='file' id='fileUp' onChange={handleFile} hidden/>
+          <label htmlFor="fileUp">
+          <StyledEngineProvider injectFirst>
+            <MuiButton disableRipple component="span" className={styles.fileUpload}>
+              add files
+            </MuiButton>
+          </StyledEngineProvider>
+          </label> 
+          
+
         </div>
         <div className={styles.problemsList}>
         <h2 className={styles.header}>Add Problems</h2>
@@ -360,15 +389,16 @@ setFiles;
                     }} className='btnSecondary'>Non-code Grader</Button>
           </div>  
           <h2 className={styles.header}>Graders</h2>
-            {nonContainerAutograders.map((nonContainerAutograder) => (<div>
+            {nonContainerAutograders.length != 0 && nonContainerAutograders.map((nonContainerAutograder) => (<div>
               <span style={{fontStyle:'italic'}}>{nonContainerAutograder.question}</span> - 
               <span style={{color: 'var(--grey)'}}> Non-Code Grader</span></div>))}
-            {containerAutograders.map((containerAutograders) => (<div>
-            <span style={{fontStyle:'italic'}}>{containerAutograders.autogradingImage}</span> - 
+            {containerAutograders.length != 0 && containerAutograders.map((containerAutograder) => (<div>
+            <span style={{fontStyle:'italic'}}>{containerAutograder.autogradingImage}</span> - 
             <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}
+            {nonContainerAutograders.length == 0 && containerAutograders.length == 0 && <div style={{fontStyle:'italic'}}>No graders yet</div>}
           <h2 className={styles.header}>Problems</h2>
 
-          { assignmentProblems.map((problem) => (
+          {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
             <div key={problem.id} className={styles.problem}>
               <h3 style={{margin: '0 0 10px 0'}}>{problem.problemName}</h3>
               <TextField className={styles.textField}
@@ -379,7 +409,7 @@ setFiles;
                 <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>delete</Button>
               </div>
             </div>
-          ))}
+          ))) : <div style={{fontStyle:'italic'}}>No problems yet</div>}
 
         </div>
       </div>

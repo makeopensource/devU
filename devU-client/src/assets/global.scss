@@ -26,10 +26,13 @@
   // general button template, extends to 3 types of buttons - primary, secondary, delete
   .btn {
     padding: 10px 15px;
-    max-width: fit-content;
+    cursor: pointer;
+    padding: 5px 15px;
     border-radius: 100px;
+    height: fit-content;
     border: none;
     font-weight: 700;
+    font-size: 15px
   }
 
   button.btnPrimary {
