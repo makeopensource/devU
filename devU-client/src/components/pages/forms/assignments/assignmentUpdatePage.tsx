@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ExpressValidationError, Assignment, AssignmentProblem } from 'devu-shared-modules'
+import { ExpressValidationError, Assignment, AssignmentProblem, NonContainerAutoGrader, ContainerAutoGrader } from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useHistory, useParams } from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
@@ -27,16 +27,18 @@ const AssignmentUpdatePage = () => {
   const currentAssignmentId = parseInt(assignmentId)
   const [assignmentsList, setAssignmentsList] = useState<Assignment[]>([])
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
-  const [allAssignmentProblems, setAllAssignmentProblems] = useState<Map<number, AssignmentProblem[]>>(new Map<number, AssignmentProblem[]>())
+  const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
+  const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
+
+
   //const [allCategories, setAllCategories] = useState<Category[]>([])
 
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
-  const [openModal, setOpenModal] = useState(false)
+  const [openEditModal, setOpenEditModal] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const history = useHistory()
 
   const [theme, setTheme] = useState(getCssVariables())
-allAssignmentProblems; // Very Bad JS Work, yell at me if i leave these till the Pull Request
 setFiles;
   // Needs a custom observer to force an update when the css variables change
   // Custom observer will update the theme variables when the bodies classes change
@@ -67,16 +69,17 @@ setFiles;
     maxScore: -1,
   })
 
-  const handleOpenModal = (problem : AssignmentProblem) => {
+
+  const handleOpenEditModal = (problem : AssignmentProblem) => {
     if(problem === assignmentProblemData) {
-      setOpenModal(true)
+      setOpenEditModal(true)
     } else {    
       setAssignmentProblemData(problem)
     }
   }
-  const handleCloseModal = () => {setOpenModal(false)}
+  const handleCloseModal = () => {setOpenEditModal(false)}
   useEffect(() => {
-    if (assignmentProblemData.maxScore !== -1) { setOpenModal(true) }
+    if (assignmentProblemData.maxScore !== -1) { setOpenEditModal(true) }
   }, [assignmentProblemData])
 
   const handleChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,19 +118,20 @@ setFiles;
 
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
-  //useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setAllCategories(res) })}, [])
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
+  useEffect(() => {RequestService.get( `/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignmentsList(res) })}, [])
   useEffect(() => {
-    for(let i : number = 0; i < assignmentsList.length; i++) {
-      RequestService.get(`/api/course/${courseId}/assignment/${assignmentsList[i].id}/assignment-problems`)
-      .then((res) => {
-        setAllAssignmentProblems(prevState => {
-          const newMap = new Map(prevState);
-          newMap.set(Number(assignmentsList[i].id), res);
-          return newMap;
-        });
-      })
-    }
+    // for(let i : number = 0; i < assignmentsList.length; i++) { // this is used for swapping between assignments on edit page, which i think is no longer part of the design
+    //   RequestService.get(`/api/course/${courseId}/assignment/${assignmentsList[i].id}/assignment-problems`)
+    //   .then((res) => {
+    //     setAllAssignmentProblems(prevState => {
+    //       const newMap = new Map(prevState);
+    //       newMap.set(Number(assignmentsList[i].id), res);
+    //       return newMap;
+    //     });
+    //   })
+    // }
   },[assignmentsList])
 
   const handleAssignmentUpdate = () => {
@@ -190,7 +194,7 @@ setFiles;
     RequestService.put(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${assignmentProblemData.id}`, finalFormData)
       .then(() => {
         setAlert({ autoDelete: true, type: 'success', message: 'Problem Updated' })
-        setOpenModal(false)
+        setOpenEditModal(false)
         fetchAssignmentProblems()
     })
   }
@@ -245,7 +249,7 @@ setFiles;
 
     <PageWrapper>
 
-      <Dialog open={openModal} onClose={handleCloseModal}>
+      <Dialog open={openEditModal} onClose={handleCloseModal}>
         <DialogContent sx={{bgcolor:theme.listItemBackground}}>
         <h3 className={styles.header}>Edit Problem</h3>
           <TextField id="problemName" label={'Problem Name'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.problemName : ''}/>
@@ -275,7 +279,7 @@ setFiles;
           <h2 className={styles.header}>Edit Info</h2>
           <div className={styles.textFieldContainer}>
             <div>
-              <div className={styles.textFieldHeader}>AssignmentCategory: </div>
+              <div className={styles.textFieldHeader}>Assignment Category: </div>
               <TextField id="categoryName" onChange={handleChange}
                       invalidated={!!invalidFields.get('categoryName')}
                       className={styles.textField}
@@ -329,27 +333,54 @@ setFiles;
                         sx={{width: '100%', marginLeft : 1/10}}/>
             </div>
           </div>
-    
           <div className={styles.datepickerContainer}>
               <label htmlFor="start_date">Start Date *</label>
               <label htmlFor="due_date">Due Date *</label>
               <label htmlFor="end_date">End Date *</label>
 
               <input type='datetime-local' id="start_date" style={{textWrap:'wrap'}} value={formData.startDate.slice(0,-1)} onChange={handleStartDateChange}/>
-              <input  type='datetime-local' id="due_date" value={formData.dueDate.slice(0,-1)} onChange={handleDueDateChange}/>
+              <input type='datetime-local' id="due_date" value={formData.dueDate.slice(0,-1)} onChange={handleDueDateChange}/>
               <input type='datetime-local' id="end_date" value={formData.startDate.slice(0,-1)} onChange={handleEndDateChange}/>
           </div>
         </div>
         <div className={styles.problemsList}>
         <h2 className={styles.header}>Add Problems</h2>
-          {assignmentProblems.map((problem, index) => (
+          <div className={styles.buttonContainer}>
+            <Button onClick={openAddProblemModal} className='btnSecondary'>Code/File Input</Button>
+            <Button onClick={openAddProblemModal} className='btnSecondary'>Text Input</Button>
+            <Button onClick={openAddProblemModal} className='btnSecondary'>Multiple Choice</Button>
+          </div>
+          <h2 className={styles.header}>Add Graders</h2>
+          <div className={styles.buttonContainer}>
+            <Button onClick={() => {
+                        history.push(`createCAG`)
+                    }} className='btnSecondary'>Code Grader</Button>
+            <Button onClick={() => {
+                        history.push(`createNCAG`)
+                    }} className='btnSecondary'>Non-code Grader</Button>
+          </div>  
+          <h2 className={styles.header}>Graders</h2>
+            {nonContainerAutograders.map((nonContainerAutograder) => (<div>
+              <span style={{fontStyle:'italic'}}>{nonContainerAutograder.question}</span> - 
+              <span style={{color: 'var(--grey)'}}> Non-Code Grader</span></div>))}
+            {containerAutograders.map((containerAutograders) => (<div>
+            <span style={{fontStyle:'italic'}}>{containerAutograders.autogradingImage}</span> - 
+            <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}
+          <h2 className={styles.header}>Problems</h2>
+
+          { assignmentProblems.map((problem) => (
             <div key={problem.id} className={styles.problem}>
-              <h3 style={{marginRight : '20px'}}>{`Problem ${index + 1}`}</h3>
-              <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenModal(problem) } }}>Edit</Button>
-              <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
+              <h3 style={{margin: '0 0 10px 0'}}>{problem.problemName}</h3>
+              <TextField className={styles.textField}
+                        placeholder='Answer'
+                        sx={{width: '100%', marginLeft : 1/10, pointerEvents: 'none'}}/>
+              <div style={{margin: '5px 0 10px 0'}}>
+                <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>edit</Button>|
+                <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>delete</Button>
+              </div>
             </div>
           ))}
-          <Button onClick={openAddProblemModal} className='btnSecondary'>Add Problem</Button>
+
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
@@ -359,18 +390,4 @@ setFiles;
   )
 }
 
-/* yell at me if i forget to delete this
-<div className={styles.attachments}>
-          <h2 className={styles.header}>Attachments</h2>
-          <DragDropFile handleFile={handleFile} className='formFileUploadWide'/>
-          <br/>
-          <div className={styles.fileList}>
-            <p>Files: </p>
-            {files.map((file, index) => (
-              <div key={index}>
-                <p>{`${file.name}, `}</p>
-              </div>
-            ))}
-          </div>
-        </div>*/ 
 export default AssignmentUpdatePage
