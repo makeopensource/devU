@@ -39,11 +39,14 @@ jobs:
         run: |
           IMAGE_NAME=ghcr.io/${{ env.repo_url }}/client:${{ steps.get_branch.outputs.branch_name }}
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
-        
-          docker build . \
-          -f client.Dockerfile \
-          --build-arg API_URL=${{ secrets.prod_api_url }} \
-          --build-arg ROOT_PATH=${{ secrets.prod_api_path }} \
-          -t $IMAGE_NAME
-    
+      
+          docker build . -f client.Dockerfile -t $IMAGE_NAME
+          docker push $IMAGE_NAME
+
+      - name: build nginx
+        run: |
+          IMAGE_NAME=ghcr.io/${{ env.repo_url }}/nginx:${{ steps.get_branch.outputs.branch_name }}
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+          
+          docker build . -f nginx.Dockerfile -t $IMAGE_NAME          
           docker push $IMAGE_NAME
