@@ -1,4 +1,4 @@
-FROM node:20 AS module_builder
+FROM node:22-alpine AS module_builder
 
 WORKDIR /tmp
 
