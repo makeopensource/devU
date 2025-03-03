@@ -109,6 +109,6 @@ module.exports = () => {
       },
       historyApiFallback: true,
     },
-    devtool: 'inline-source-map',
+    devtool: 'cheap-source-map',
   };
 };

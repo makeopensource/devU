@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import RequestService from 'services/request.service'
 import {Assignment, Course} from 'devu-shared-modules'
-//import {useHistory} from "react-router-dom";
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import {wordPrintDate} from 'utils/date.utils'
 
@@ -29,74 +28,38 @@ import {prettyPrintSemester} from "../../../utils/semester.utils";
 
 
 
-
 const CourseDetailPage = () => {
-    //const history = useHistory()
     const { courseId } = useParams<{courseId: string}>()
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     //const [setAlert] = useActionless(SET_ALERT)
+
     const role = useAppSelector((store) => store.roleMode);
 
-   // const[User, setUser]= useState < User <string>,preferredName>>({})
-
-   // const role = useAppSelector((store) => store.roleMode)
-   /* const fetchUserinfo = async () => {
-        RequestService.get< typeof User>('api/users')
-            .then((User) =>{
-                setUser(User)
-
-    })
-*/
-
-
     const fetchCourseInfo = async () => {
-        RequestService.get<Course>(`/api/courses/${courseId}`)
-        .then((course) => {
-            setCourseInfo(course)
+        RequestService.get<Course>(`/api/courses/${courseId}`).then((course) => {
+            setCourseInfo(course);
+        });
 
-        })
-        RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`)
-        .then((assignments) => {
-            console.log(assignments)
-            let categoryMap : Record<string, Assignment[]> = {}
-            assignments.forEach((assignment : Assignment) => {
+        RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`).then((assignments) => {
+            let categoryMap: Record<string, Assignment[]> = {};
+            assignments.forEach((assignment: Assignment) => {
                 if (assignment.categoryName in categoryMap) {
-                    categoryMap[assignment.categoryName].push(assignment)
+                    categoryMap[assignment.categoryName].push(assignment);
+                } else {
+                    categoryMap[assignment.categoryName] = [assignment];
                 }
-                else {
-                    categoryMap[assignment.categoryName] = [assignment]
-                }
+
             })
-            setCategoryMap(categoryMap)
+            setCategoryMap(categoryMap);
         })
-
-
     }
 
-    /*const handleDropCourse = () => {
-        //confirmation to drop course or not
-        var confirm = window.confirm("Are you sure you want to drop?");
-        if (confirm)
-        {
-            RequestService.delete(`/api/course/${courseId}/user-courses`).then(() => {
-           
-                setAlert({autoDelete: true, type: 'success', message: 'Course Dropped'})
-                history.push('/courses')
-
-        }).catch((error: Error) => {
-            const message = error.message
-            setAlert({autoDelete: false, type: 'error', message})  })
-        }
-    }*/
-
-
     useEffect(() => {
-        fetchCourseInfo()
+        fetchCourseInfo();
+    }, []);
 
-    }, [])
-    const history = useHistory()
-    return(
+    return (
         <PageWrapper>
             {courseInfo ? (
                         <div>
@@ -106,7 +69,7 @@ const CourseDetailPage = () => {
                             {role.isInstructor() && (
                                 <button className='btnPrimary' style={{marginLeft:'auto'}} onClick={() => {
                                     history.push(`/course/${courseId}/update`)
-                                }}>edit course
+                                }}>Edit Course
                                 </button>
                             )}
                         </div>
@@ -190,17 +153,50 @@ const CourseDetailPage = () => {
                             </div>
                         </div>
 
+                        <h3>Assignments</h3>
 
-
-
-                    ) : (
+                        <div className={styles.assignmentsContainer}>
+                            {Object.keys(categoryMap).length > 0 ? (
+                                <div className={styles.coursesContainer}>
+                                    {Object.keys(categoryMap).map((category, index) => (
+                                        <Card key={index} className={styles.courseCard}>
+                                            <CardContent>
+                                                <Typography variant="h5" className={styles.color} style={{ textAlign: 'center' }}>
+                                                    {category}
+                                                </Typography>
+                                            </CardContent>
+                                            <List>
+                                                {categoryMap[category].map((assignment, index) => (
+                                                    <ListItem key={index} disablePadding>
+                                                        <ListItemButton onClick={() => history.push(`/course/${courseId}/assignment/${assignment.id}`)}>
+                                                            <ListItemText
+                                                                className={styles.assignmentName}
+                                                                primary={
+                                                                    <Typography style={{ textAlign: 'center' }}>{assignment.name}</Typography>
+                                                                }
+                                                                secondary={
+                                                                    <Typography variant="body2" color="grey">
+                                                                        Start: {new Date(assignment.startDate).toLocaleDateString()} | Due: {new Date(assignment.dueDate).toLocaleDateString()}
+                                                                    </Typography>
+                                                                }
+                                                            />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                ))}
+                                            </List>
+                                        </Card>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p>No assignments available</p>
+                            )}
+                        </div>
+                    </div>
+                ) : (
                     <h1>Error fetching Course Information</h1>
                     )}
+        </PageWrapper>
+    );
+};
 
-
-                </PageWrapper>
-            )
-            }
-
-
-            export default CourseDetailPage
+export default CourseDetailPage;
