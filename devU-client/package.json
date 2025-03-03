@@ -8,7 +8,7 @@
     "build-development": "cross-env NODE_ENV=development webpack --mode=production",
     "build-all": "concurrently \"npm run build-development\" \"npm run build\"",
     "build-local": "cross-env NODE_ENV=local webpack --mode=production",
-    "build-docker": "webpack --mode=production",
+    "build-docker": "SASS_DEPRECATE_IMPORT=no webpack --mode=production --no-stats",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
     "pre-commit": "lint-staged",
     "dev-backend": "docker compose -f ../docker-compose.yml --profile dev-client up -d",
@@ -79,7 +79,7 @@
     "sass-loader": "^10.2.0",
     "style-loader": "^2.0.0",
     "ts-loader": "^8.0.15",
-    "webpack": "^5.91.0",
+    "webpack": "^5.98.0",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
