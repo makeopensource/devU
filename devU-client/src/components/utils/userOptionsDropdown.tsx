@@ -47,7 +47,7 @@ const UserOptionsDropdown = () => {
                 <Link to={`/user/${userId}/update`} className={styles.option}>
                     Account
                 </Link>
-                <button className={styles.actual_button} onClick={handleDropCourse}>
+                <button className={styles.option} onClick={handleDropCourse}>
                    Drop Course
                 </button>
                 <button onClick={handleLogout} className={styles.option}>
