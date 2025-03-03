@@ -22,6 +22,8 @@ import {useActionless, useAppSelector} from "../../../redux/hooks";
 //import TextField from "../../shared/inputs/textField";
 //import {useActionless, useAppSelector} from "redux/hooks";
 
+import AddAssignmentModal from '../forms/assignments/assignmentFormPage'
+
 
 
 const CourseDetailPage = () => {
@@ -31,6 +33,12 @@ const CourseDetailPage = () => {
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     const [setAlert] = useActionless(SET_ALERT)
     const role = useAppSelector((store) => store.roleMode);
+
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
 
    // const[User, setUser]= useState < User <string>,preferredName>>({})
 
@@ -114,7 +122,8 @@ const CourseDetailPage = () => {
 
                                 {role.isInstructor() &&(
                                 <button className={styles.actual_button} onClick={() => {
-                                    history.push(`/course/${courseId}/createAssignment`)
+                                    // history.push(`/course/${courseId}/createAssignment`)
+                                    setOpenModal(true)
                                 }}>Add Assignment
                                 </button>
                                     )}
@@ -142,6 +151,7 @@ const CourseDetailPage = () => {
 
 
                             </div>
+                            <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
 
 
                             </div>

@@ -52,6 +52,30 @@
     border: 3px solid var(--btn-delete-border);
   }
 
+  .modal {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .input-group>input, .input-group>textarea{
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #555;
+  }
+
+  .modal-header, .input-subgroup-2col {
+    display: flex;
+    justify-content: space-between;
+  }
+
   body {
     font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;
     margin: 0;

@@ -2,7 +2,7 @@ import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 
 import AssignmentDetailPage from 'components/pages/assignments/assignmentDetailPage'
-import AssignmentCreatePage from 'components/pages/forms/assignments/assignmentFormPage'
+import AddAssignmentModal from 'components/pages/forms/assignments/assignmentFormPage'
 import AssignmentUpdatePage from 'components/pages/forms/assignments/assignmentUpdatePage'
 import CourseDetailPage from 'components/pages/courses/courseDetailPage'
 import EditCourseFormPage from 'components/pages/forms/courses/coursesFormPage'
@@ -23,6 +23,7 @@ import InstructorSubmissionspage from "./pages/submissions/InstructorSubmissions
 import SubmissionFileView from './pages/submissions/submissionFileView'
 
 import WebhookURLForm from './pages/webhookURLForm'
+// import AddAssignmentModal from 'components/pages/forms/assignments/assignmentFormPage'
 
 const AuthenticatedRouter = () => (
     <Switch>
@@ -37,7 +38,7 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/preview' component={CoursePreviewPage}/>
         <Route exact path='/course/:courseId/update' component={CourseUpdatePage}/>
         <Route exact path='/course/:courseId/gradebook' component={GradebookStudentPage}/>
-        <Route exact path='/course/:courseId/createAssignment' component={AssignmentCreatePage}/>
+        <Route exact path='/course/:courseId/createAssignment' component={AddAssignmentModal}/>
         <Route exact path='/course/:courseId/gradebook/instructor' component={GradebookInstructorPage}/>
 
         <Route exact path='/course/:courseId/assignment/:assignmentId' component={AssignmentDetailPage}/>
