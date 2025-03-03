@@ -15,7 +15,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { getCssVariables } from 'utils/theme.utils'
 import { Button as MuiButton, StyledEngineProvider } from '@mui/material'
-//import Dropdown, { Option } from 'components/shared/inputs/dropdown';
+/*import Dropdown, { Option } from 'components/shared/inputs/dropdown';*/
 //import Select from 'react-select/src/Select'
 
 type UrlParams = { assignmentId: string }
@@ -30,8 +30,9 @@ const AssignmentUpdatePage = () => {
   const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
 
+  /*const [categories, setCategories] = useState<Category[]>([])
+  const [categoryOptions, setAllCategoryOptions] = useState<Option<Category>[]>([])*/
 
-  //const [allCategories, setAllCategories] = useState<Category[]>([])
 
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
   const [openEditModal, setOpenEditModal] = useState(false)
@@ -114,18 +115,22 @@ setFiles;
       .then((res) => { setAssignmentProblems(res) })
   }
 
-  /*const fetchCategories = () => {
-    RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
-      .then((res) => { setAllCategories(res) })
-  }*/
+
 
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignmentsList(res) })}, [])
+  
+  /*useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setCategories(res) }).finally(convertToOptions)}, [])
+  const convertToOptions = () => {
+    setAllCategoryOptions(categories.map((category) => ({label: category.name, value: category}))) 
+  }*/
+
+
   useEffect(() => {
-    // for(let i : number = 0; i < assignmentsList.length; i++) { // this is used for swapping between assignments on edit page, which i think is no longer part of the design
+    // for(let i : number = 0; i < assignmentsList.length; i++) { // this is used for swapping between assignments on edit page, which is no longer part of the design
     //   RequestService.get(`/api/course/${courseId}/assignment/${assignmentsList[i].id}/assignment-problems`)
     //   .then((res) => {
     //     setAllAssignmentProblems(prevState => {
@@ -277,7 +282,7 @@ setFiles;
       </Dialog>
       <div className={styles.pageHeader}>
         <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
-        <Button className={styles.backToCourse} onClick={() => {history.goBack()}}>back to course</Button>
+        <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>back to course</Button>
       </div>
       <div className={styles.grid}>
         <div className={styles.form}>
@@ -375,9 +380,9 @@ setFiles;
         <div className={styles.problemsList}>
         <h2 className={styles.header}>Add Problems</h2>
           <div className={styles.buttonContainer}>
-            <Button onClick={openAddProblemModal} className='btnSecondary'>Code/File Input</Button>
+            <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Code/File Input creation modal' })} className='btnSecondary'>Code/File Input</Button>
             <Button onClick={openAddProblemModal} className='btnSecondary'>Text Input</Button>
-            <Button onClick={openAddProblemModal} className='btnSecondary'>Multiple Choice</Button>
+            <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Multiple Choice creation modal' })} className='btnSecondary'>Multiple Choice</Button>
           </div>
           <h2 className={styles.header}>Add Graders</h2>
           <div className={styles.buttonContainer}>
@@ -413,9 +418,9 @@ setFiles;
 
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px'}}>
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
             <Button onClick={handleAssignmentUpdate} className='btnPrimary'>save and exit</Button>
-          </div>
+      </div>
     </PageWrapper>
   )
 }
