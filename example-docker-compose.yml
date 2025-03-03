@@ -5,7 +5,7 @@
 name: devu
 services:
   api:
-    container_name: api
+    container_name: devu-api
     image: ghcr.io/makeopensource/devu/api:develop
     environment:
       TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
@@ -16,12 +16,28 @@ services:
         condition: service_started
     ports:
       - '3001:3001'
+    restart: unless-stopped
 
   client:
-    # Builds the front end and serves the frontend static files using nginx
     image: ghcr.io/makeopensource/devu/client:develop
+    environment:
+      - API_URL=https://devu.app # todo change this to prod api url
+      - ROOT_PATH=/
+    volumes:
+      - ./dist:/out
+
+  # Hosts the front end static files from ./dist/local thorough a web server
+  nginx:
+    container_name: devu-client-nginx
+    image: ghcr.io/makeopensource/devu/nginx:develop
+    volumes:
+      - ./dist/local:/usr/share/nginx/html
+    depends_on:
+      client:
+        condition: service_completed_successfully
     ports:
       - '9000:80'
+    restart: unless-stopped
 
   tango:
     container_name: tango
@@ -83,6 +99,7 @@ services:
       - '5432:5432'
     expose:
       - '5432'
+    restart: unless-stopped
 
   minio:
     image: minio/minio
@@ -97,6 +114,7 @@ services:
       MINIO_ROOT_USER: typescript_user
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
+    restart: unless-stopped
 
   # auto update containers
   watchtower:
