@@ -370,7 +370,7 @@ setFiles;
           <label htmlFor="fileUp">
           <StyledEngineProvider injectFirst>
             <MuiButton disableRipple component="span" className={styles.fileUpload}>
-              add files
+              choose files
             </MuiButton>
           </StyledEngineProvider>
           </label> 

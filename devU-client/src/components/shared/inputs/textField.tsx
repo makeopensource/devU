@@ -87,7 +87,7 @@ const TextField = ({
                         color: theme.inputFieldLabel,
                         padding: '0', 
                         "&.Mui-focused": {
-                          color: theme.focus, // Define this color in your theme                                                                     
+                          color: theme.focus, // Define this color in your theme
                         },
                       },
                       // border
