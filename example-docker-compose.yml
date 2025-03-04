@@ -127,7 +127,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - WATCHTOWER_POLL_INTERVAL=900 # check for new image every 15 min
-      - WATCHTOWER_REMOVE_VOLUMES=true
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_STOPPED=true
     restart: unless-stopped
