@@ -31,23 +31,12 @@ import {prettyPrintSemester} from "../../../utils/semester.utils";
 
 
 const CourseDetailPage = () => {
-    //const history = useHistory()
     const { courseId } = useParams<{courseId: string}>()
     const [courseInfo, setCourseInfo] = useState<Course | null>(null)
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
     //const [setAlert] = useActionless(SET_ALERT)
     const role = useAppSelector((store) => store.roleMode);
-
-   // const[User, setUser]= useState < User <string>,preferredName>>({})
-
-   // const role = useAppSelector((store) => store.roleMode)
-   /* const fetchUserinfo = async () => {
-        RequestService.get< typeof User>('api/users')
-            .then((User) =>{
-                setUser(User)
-
-    })
-*/
+    const history = useHistory()
 
 
     const fetchCourseInfo = async () => {
@@ -74,28 +63,11 @@ const CourseDetailPage = () => {
 
     }
 
-    /*const handleDropCourse = () => {
-        //confirmation to drop course or not
-        var confirm = window.confirm("Are you sure you want to drop?");
-        if (confirm)
-        {
-            RequestService.delete(`/api/course/${courseId}/user-courses`).then(() => {
-           
-                setAlert({autoDelete: true, type: 'success', message: 'Course Dropped'})
-                history.push('/courses')
-
-        }).catch((error: Error) => {
-            const message = error.message
-            setAlert({autoDelete: false, type: 'error', message})  })
-        }
-    }*/
-
 
     useEffect(() => {
         fetchCourseInfo()
 
     }, [])
-    const history = useHistory()
     return(
         <PageWrapper>
             {courseInfo ? (

@@ -31,7 +31,8 @@
     height: fit-content;
     border: none;
     font-weight: 700;
-    font-size: 15px
+    font-size: 15px;
+    transition: background-color 0.3s ease;
   }
 
   .no_items {
