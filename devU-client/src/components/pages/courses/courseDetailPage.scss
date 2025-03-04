@@ -47,25 +47,6 @@
     border-radius: 20px;
     margin-bottom: 20px;
 
-    .MuiList-root {
-        padding: 20px;
-
-        .MuiListItemButton-root {
-            display: flex;
-            padding-top: 0;
-            padding-left: 0;
-            justify-content: center; // Center horizontally
-            align-items: center;
-        }
-
-        .MuiListItemText-primary {
-            text-align: center;
-        }
-
-        .MuiListItemText-secondary {
-            text-align: center; // Center the dates
-        }
-    }
 }
 
 .courseDetailPage {
@@ -106,33 +87,11 @@
 /* Updated Button Layout */
 .buttonContainer {
     display: flex;
-    justify-content: flex-end; // Align buttons slightly to the right
     gap: 15px; // Space between buttons
     margin-top: 10px;
 }
 
-/* Button Styling to Match the New UI */
-.outlinedButton {
-    background: white;
-    color: #4b0082;
-    border: 2px solid #4b0082;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
 
-    &:hover {
-        background: #4b0082;
-        color: white;
-    }
-}
-
-/* Remove old button styles */
-.actual_button {
-    display: none;
-}
 
 /* Assignments Formatting */
 .assignmentName {

@@ -13,6 +13,8 @@
 .tableContainer {
   overflow-x: scroll;
   scrollbar-color: $primary;
+  border-radius: 10px;
+  border: 3px solid $primary;
 }
 
 table {
@@ -22,12 +24,11 @@ table {
   width: 100%;
 }
 
-tr.evenRow {
-  background-color: $table-row-even;
+tr.row {
+  border-bottom: 2px solid #ccc;
 }
-
-tr.oddRow {
-  background-color: $table-row-odd;
+tr.row:last-of-type {
+  border-bottom: none;
 }
 
 th {
@@ -42,21 +43,6 @@ th {
   text-align: center;
 }
 
-th:first-of-type {
-  border-top-left-radius: 10px;
-}
-
-th:last-of-type {
-  border-top-right-radius: 10px;
-}
-
-tr:last-of-type td:first-of-type {
-  border-bottom-left-radius: 10px;
-}
-
-tr:last-of-type td:last-of-type {
-  border-bottom-right-radius: 10px;
-}
 
 .tableOptions {
   display: flex;

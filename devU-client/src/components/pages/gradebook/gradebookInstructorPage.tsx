@@ -18,28 +18,19 @@ type TableProps = {
     assignmentScores: AssignmentScore[]
 }
 type RowProps = {
-    index: number
     user: User
     userCourse: UserCourse
     assignments: Assignment[]
     assignmentScores: AssignmentScore[]
 }
 //table for style
-const TableRow = ({ index, user, userCourse, assignments, assignmentScores }: RowProps) => {
-    // style table row to alternating colors based on index odd?even
-    const rowClass = index % 2 === 0 ? 'evenRow' : 'oddRow';
-
-    // dont show row if dropped
-    // if (userCourse.dropped) {
-    //     return (<></>)
-    // }
+const TableRow = ({ user, userCourse, assignments, assignmentScores }: RowProps) => {
 
     return (
-        <tr className={styles[rowClass]}>
-            <td>{index}</td>
+        <tr className={styles.row}>
+            <td>{user.preferredName}</td>
             <td>{user.email}</td>
             {/* <td>{user.externalId}</td> */}
-            <td>{user.preferredName}</td>
             <td>{userCourse.dropped.toString()}</td>
             {assignments.map(a => (
                 <td>{assignmentScores.find(as => as.assignmentId === a.id)?.score ?? 'N/A'}</td>
@@ -51,17 +42,14 @@ const TableRow = ({ index, user, userCourse, assignments, assignmentScores }: Ro
 const GradebookTable = ({ users, userCourses, assignments, assignmentScores }: TableProps) => {
     return (
         <table>
-            <th>#</th>
+            <th>Name</th>
             <th>Email</th>
-            {/* <th>External ID</th> */}
-            <th>Preferred Name</th>
             <th>Dropped</th>
             {assignments.map((a) => {
                 return (<th>{a.name}</th>)
             })}
-            {users.map((u, index) => (
+            {users.map((u) => (
                 <TableRow
-                    index={index + 1}
                     user={u}
                     userCourse={userCourses.find(uc => uc.userId === u.id) as UserCourse}
                     assignments={assignments}

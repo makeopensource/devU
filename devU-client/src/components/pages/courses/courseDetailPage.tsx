@@ -14,14 +14,14 @@ import ListItemText from '@mui/material/ListItemText';
 
 import styles from './courseDetailPage.scss';
 //import { SET_ALERT } from '../../../redux/types/active.types';
-import { useAppSelector} from "../../../redux/hooks";
+//import { useAppSelector} from "../../../redux/hooks";
 
 const CourseDetailPage = () => {
     const { courseId } = useParams<{ courseId: string }>();
     const [courseInfo, setCourseInfo] = useState<Course | null>(null);
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({});
     const history = useHistory();
-    const role = useAppSelector((store) => store.roleMode);
+    //const role = useAppSelector((store) => store.roleMode);
 
     const fetchCourseInfo = async () => {
         RequestService.get<Course>(`/api/courses/${courseId}`).then((course) => {
@@ -58,29 +58,17 @@ const CourseDetailPage = () => {
 
                             {/* Updated Buttons Below the Course Title */}
                             <div className={styles.buttonContainer}>
-                                <button className={styles.outlinedButton} onClick={() => history.push(`/course/${courseId}/gradebook`)}>
+                                <button className='btnSecondary' onClick={() => history.push(`/course/${courseId}/gradebook`)}>
                                     Gradebook
                                 </button>
-                                <button className={styles.outlinedButton} onClick={() => window.open('URL_TO_COURSE_WEBSITE', '_blank')}>
+                                <button className='btnSecondary' onClick={() => window.open('URL_TO_COURSE_WEBSITE', '_blank')}>
                                     Course Website
                                 </button>
-                                <button className={styles.outlinedButton} onClick={() => window.open('URL_TO_PIAZZA', '_blank')}>
+                                <button className='btnSecondary' onClick={() => window.open('URL_TO_PIAZZA', '_blank')}>
                                     Piazza
                                 </button>
 
-                                {role.isInstructor() &&(
-                                <button className={styles.actual_button} onClick={() => {
-                                    history.push(`/course/${courseId}/createAssignment`)
-                                }}>Add Assignment
-                                </button>
-                                    )}
                                 
-                                {role.isInstructor() &&(
-                                <button className={styles.actual_button} onClick={() => {
-                                    history.push(`/course/${courseId}/createAssignment`)
-                                }}>Add Assignment
-                                </button>
-                                    )}
                             </div>
                         </div>
 
