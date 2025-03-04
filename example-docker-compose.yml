@@ -86,6 +86,7 @@ services:
       - "9221:9221"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./leviathan:/app/appdata 
     restart: unless-stopped
 
   db:
@@ -95,6 +96,8 @@ services:
       POSTGRES_DB: typescript_api
       POSTGRES_USER: typescript_user
       POSTGRES_PASSWORD: password
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data 
     ports:
       - '5432:5432'
     expose:
@@ -108,8 +111,8 @@ services:
       - '9001:9001'
     expose:
       - '9000'
-    #    volumes:
-    #      - /tmp/data:/data
+    volumes:
+        - ./minio:/data
     environment:
       MINIO_ROOT_USER: typescript_user
       MINIO_ROOT_PASSWORD: changeMe
