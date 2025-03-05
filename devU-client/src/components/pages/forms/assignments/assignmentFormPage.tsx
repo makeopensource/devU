@@ -149,6 +149,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                     <input type='date' id="end_date" onChange={handleEndDateChange} />
                 </div>
             </div>
+            <label htmlFor="disableHandins">Disable Submissions?<input type="checkbox" id="disableHandins" /></label>
         </Modal>
     )
 }
