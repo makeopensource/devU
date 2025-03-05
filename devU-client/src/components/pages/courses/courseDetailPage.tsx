@@ -14,14 +14,14 @@ import ListItemText from '@mui/material/ListItemText';
 
 import styles from './courseDetailPage.scss';
 //import { SET_ALERT } from '../../../redux/types/active.types';
-//import { useAppSelector} from "../../../redux/hooks";
+import { useAppSelector} from "../../../redux/hooks";
 
 const CourseDetailPage = () => {
     const { courseId } = useParams<{ courseId: string }>();
     const [courseInfo, setCourseInfo] = useState<Course | null>(null);
     const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({});
     const history = useHistory();
-    //const role = useAppSelector((store) => store.roleMode);
+    const role = useAppSelector((store) => store.roleMode);
 
     const fetchCourseInfo = async () => {
         RequestService.get<Course>(`/api/courses/${courseId}`).then((course) => {
@@ -67,6 +67,12 @@ const CourseDetailPage = () => {
                                 <button className='btnSecondary' onClick={() => window.open('URL_TO_PIAZZA', '_blank')}>
                                     Piazza
                                 </button>
+                                
+                                {role.isInstructor() &&(
+                                <button className='btnPrimary' style={{marginLeft:'auto'}} onClick={() => {
+                                    history.push(`/course/${courseId}/createAssignment`)
+                                }}>Add Assignment
+                                </button>)}
 
                                 
                             </div>
