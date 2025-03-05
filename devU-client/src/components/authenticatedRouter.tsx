@@ -38,7 +38,7 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/preview' component={CoursePreviewPage}/>
         <Route exact path='/course/:courseId/update' component={CourseUpdatePage}/>
         <Route exact path='/course/:courseId/gradebook' component={GradebookStudentPage}/>
-        <Route exact path='/course/:courseId/createAssignment' component={AddAssignmentModal}/>
+        {/* <Route exact path='/course/:courseId/createAssignment' component={AddAssignmentModal}/> */}
         <Route exact path='/course/:courseId/gradebook/instructor' component={GradebookInstructorPage}/>
 
         <Route exact path='/course/:courseId/assignment/:assignmentId' component={AssignmentDetailPage}/>

@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react'
-import { Dialog, IconButton } from "@mui/material"
-import FaIcon from 'components/shared/icons/faIcon'
+import React, { ReactNode, useState, useEffect } from 'react'
+import { Dialog } from "@mui/material"
+import { getCssVariables } from 'utils/theme.utils'
 
 interface ModalProps {
     title: string;
@@ -11,26 +11,33 @@ interface ModalProps {
 }
 
 const Modal = ({ title, children, buttonAction, open, onClose }: ModalProps) => {
+    const [theme, setTheme] = useState(getCssVariables)
+
+    useEffect(() => {
+        const observer = new MutationObserver(() => setTheme(getCssVariables()))
+        observer.observe(document.body, { attributes: true })
+        return () => observer.disconnect()
+    })
 
     return (
-        <Dialog open={open} onClose={onClose} id='modal'
-        sx={{
-            "& .MuiPaper-root": {
-                padding: "20px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-                borderRadius: "10px",
-            },
-        }}>
+        <Dialog open={open} onClose={onClose} className='modal'
+            sx={{
+                "& .MuiPaper-root": {
+                    padding: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "20px",
+                    borderRadius: "10px",
+                    border: `2px solid ${theme.primary}`,
+                    background: theme.modalBackground
+                },
+            }}>
             <div className='modal-header'>
                 <h3> {title} </h3>
-                <IconButton aria-label="close" onClick={onClose}>
-                    <FaIcon icon='times' />
-                </IconButton>
+                <button onClick={onClose} aria-label='close' title='close'>✕</button>
             </div>
             {children}
-            <button onClick={buttonAction} className='btnPrimary'>{title.toLowerCase()}</button>
+            <button onClick={buttonAction} className='btnPrimary modalAction'>{title.toLowerCase()}</button>
         </Dialog>
     )
 }

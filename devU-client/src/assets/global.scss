@@ -52,28 +52,57 @@
     border: 3px solid var(--btn-delete-border);
   }
 
-  .modal {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  label {
+    color: var(--text-color);
+  }
+
+  label>span {
+    color: var(--input-field-label);
+    margin-left: 3px;
+    font-style: italic;
   }
 
   .input-group {
     display: flex;
     flex-direction: column;
     gap: 7px;
+    width: 100%
   }
 
   .input-group>input, .input-group>textarea{
     padding: 10px;
     border-radius: 10px;
-    border: 1px solid #555;
+    // border: 1px solid var(--input-field-label);
+    border: none;
+    background-color: var(--input-field-background);
+    color: var(--text-color);
+    font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;;
+  }
+
+  .input-group>input::placeholder, .input-group>textarea::placeholder {
+    color: var(--input-field-label);
   }
 
   .modal-header, .input-subgroup-2col {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
+  }
+
+  .modal-header>h3 {
+    color: var(--text-color);
+    margin: 0;
+  }
+
+  .modal-header>button {
+    background: var(--input-field-background);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+  }
+
+  button.modalAction {
+    align-self: center;
   }
 
   body {
@@ -104,6 +133,8 @@
     --list-simple-item-background-hover: #a0a0a0;
     --list-simple-item-subtext: #4b4b4b;
 
+    --modal-background: var(--grey-lightest);
+
     --blue-lighter: #74b9ff;
     --blue: #0984e3;
     --blue-darker: #083967;
@@ -115,7 +146,7 @@
     --btn-delete-background: #FFF;
     --btn-delete-text: var(--red);
 
-    --input-field-background: var(--grey-lightest);
+    --input-field-background: #fff;
     --input-field-label: var(--grey);
 
     --table-row-even: var(--grey-lighter);
@@ -125,7 +156,7 @@
     --yellow-text: var(--yellow-dark);
 
     // Non theme colors - will not update with light/dark toggle
-    --grey-lightest: #e5e5e5;
+    --grey-lightest: #efefef;
     --grey-lighter: #c5c5c5;
     --grey: #555555;
     --grey-darker: #444444;
@@ -170,6 +201,8 @@
     --list-simple-item-background-hover: #626262;
     --list-simple-item-subtext: #4b4b4b;
 
+    --modal-background: var(--grey-darkest);
+
     --btn-secondary-border: var(--primary);
     --btn-secondary-background: var(--purple-darker);
     --btn-secondary-text: #FFF;
@@ -181,7 +214,7 @@
     --btn-delete-text: #FFF;
 
     --input-field-background: var(--grey);
-    --input-field-label: var(--grey-lightest);
+    --input-field-label: var(--grey-lighter);
 
     --table-row-even: var(--grey-darker);
     --table-row-odd: var(--grey-darkest);
