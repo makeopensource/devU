@@ -76,14 +76,15 @@ const TextField = ({
                       // input field text
                       "& .MuiOutlinedInput-input" : {
                         color: theme.textColor,
-                        backgroundColor: theme.inputFieldBackground,
                         borderRadius: '10px',
-                        // padding: '0.625rem 1rem',
+                        backgroundColor: theme.inputFieldBackground,
+                        padding: '0.625rem 1rem',
                         marginBottom: '0px'
                       },
                       // label text
                       "& .MuiInputLabel-outlined" : {
                         color: theme.inputFieldLabel,
+
                         "&.Mui-focused": {
                           color: theme.focus, // Define this color in your theme
                         },

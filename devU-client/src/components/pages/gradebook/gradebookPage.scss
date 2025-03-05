@@ -6,6 +6,14 @@
   font-size: 1.25rem;
 }
 
+.late {
+  color: #876212;
+}
+
+.no_submission{
+  color: #8A2626;
+}
+.no_submission
 .tableWrapper {
   padding: 0 100px;
 }
@@ -17,7 +25,6 @@
   border: 3px solid $primary;
 }
 
-
 table {
   border-radius: 20px;
   gap:10px;
@@ -28,18 +35,36 @@ table {
   text-wrap: nowrap;
 
 }
+
+.subheader{
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+.textField{
+  max-width: 300px;
+  border-radius: 20px;
+  margin: 0;
+  & .MuiOutlinedInput-input{
+    background-color: #FFF;
+  }
+}
+.key{
+  
+  margin-right: auto;
+}
 .name{ //couldn't find a good way for these to stick without magic numbers that
   // position: sticky; don't translate accross devices.
   // left: 0;
   // width: 100px;
   text-align: left;
+  min-width: 180px;
 }
 
 .email{
   // position: sticky;
-  border-right: #ddd 2px solid;
   text-align: left;
-
+  min-width: 180px;
 }
 
 tr.row {
@@ -60,6 +85,7 @@ td,
 th {
   padding: 10px 20px;
   text-align: center;
+  min-width: 100px
 }
 
 td{
@@ -84,14 +110,6 @@ span.red {
 }
 
 // STUDENT GRADEBOOK STYLING
-
-// .header {
-//   color: $text-color;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   // margin-bottom: 20px;
-// }
 
 .assignmentName {
   text-align: left;
