@@ -1,3 +1,4 @@
 /**/node_modules
 /logs
 /devU-api/src/tango/tests/test_files
+.env.*
