@@ -1,5 +1,6 @@
 @import 'variables';
 
+
 $bar-height: 60px;
 $sidebar-width: 260px;
 $hover-effect: 0.7;
@@ -30,7 +31,8 @@ $font-size: 16px;
   text-decoration: none;
   color: #FFF;
   font-weight: 700;
-  height: 51px; // Centers text in navbar
+  height: 60%; // Centers text in navbar
+  line-height: 100%;
 }
 
 .bar {
@@ -105,6 +107,5 @@ $font-size: 16px;
 @media (max-width: 300px) {
   .flex {
     gap: 0.3rem;
-    
   }
 }

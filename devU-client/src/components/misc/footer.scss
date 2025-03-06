@@ -1,0 +1,36 @@
+@import 'variables';
+
+.footer {
+  background-color: $primary;
+  color: #fff;
+  text-align: left;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  font-size: 14px;
+  font-size: 16px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 84px;
+
+
+  nav {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-start; /* Ensure it aligns left */
+    align-items: center;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 10px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

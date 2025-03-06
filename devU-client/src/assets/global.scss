@@ -9,12 +9,12 @@
   body,
   #main {
     height: 100%;
-    overflow: hidden;
+    //overflow: hidden;
     position: relative;
   }
 
   h1 {
-    margin: 20px auto;
+    margin: 10px auto;
     text-align: center;
   }
 
@@ -25,12 +25,21 @@
 
   // general button template, extends to 3 types of buttons - primary, secondary, delete
   .btn {
-    padding: 10px 15px;
+    cursor: pointer;
+    padding: 5px 15px;
     border-radius: 100px;
+    height: fit-content;
     border: none;
     font-weight: 700;
-    transition: background-color 100ms linear;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
   }
+
+  .no_items {
+    font-style: italic;
+    margin-right: auto; // Keeps text locked left after hitting 738px
+    margin-bottom: 20px;
+}
 
   button.btnPrimary {
     @extend .btn;
@@ -184,6 +193,67 @@
 
     background-color: var(--background);
     color: var(--text-color);
+  }
+
+    // General Error Message
+  .error-message {
+    color: var(--error-text);
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  // Validation Error Container
+  .error-container {
+    background-color: var(--error-background);
+    border-left: 5px solid var(--error-text);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+  }
+  // Error Page Styling (From `errorPage.scss`)
+  .error-page {
+    background-color: var(--error-page-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .error-heading {
+    font-size: 2rem;
+    color: var(--error-text);
+  }
+  .error-description {
+    font-size: 1.2rem;
+    color: var(--text-color);
+  }
+  // Global Input Field Styles
+  .input-field {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--input-field-background);
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius);
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: var(--focus);
+      outline: none;
+    }
+    &:disabled {
+      background-color: var(--grey-lightest);
+      color: var(--grey-lighter);
+      cursor: not-allowed;
+    }
+  }
+
+  
+  
+  // Placeholder Styling
+  ::placeholder {
+    color: var(--text-color-secondary);
+    font-style: italic;
   }
 
   *:focus {
