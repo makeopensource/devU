@@ -15,11 +15,27 @@ services:
       - '' # so it starts with normal docker compose
       - 'dev-client' # start when developing client
 
-  client-nginx:
-    # Builds the front end and serves the frontend static files using nginx
+  client:
+    # Builds the front end and exports static files to ./dist
     build:
-      dockerfile: client.Dockerfile
       context: .
+      dockerfile: client.Dockerfile
+    volumes:
+      - ./dist:/out
+    profiles:
+      - '' # so it starts with normal docker compose
+      - 'dev-api' # start when developing api
+
+  nginx:
+    # Hosts the front end static files from ./dist/local thorough a web server
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    volumes:
+      - ./dist/local:/usr/share/nginx/html
+    depends_on:
+      client:
+        condition: service_completed_successfully
     ports:
       - '9000:80'
     profiles:
@@ -53,6 +69,16 @@ services:
       MINIO_ROOT_USER: typescript_user
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
+
+#  leviathan:
+#    container_name: leviathan
+#    image: ghcr.io/makeopensource/leviathan:dev
+#    ports:
+#      - "9221:9221"
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - ./levi/:/app/appdata
+#    restart: unless-stopped
 
   # tango stuff
   tango:
