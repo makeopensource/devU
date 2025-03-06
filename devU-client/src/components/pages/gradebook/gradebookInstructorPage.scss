@@ -1,0 +1,102 @@
+@import 'variables';
+
+.pageWrapper{
+    height: 90vh;
+    .categoryName {
+        color: $text-color;
+        font-size: 1.25rem;
+    }
+
+    .late {
+        color: #876212;
+    }
+
+    .no_submission{
+        color: #8A2626;
+    }
+    .no_submission
+    .tableWrapper {
+        padding: 0 100px;
+    }
+
+    .tableContainer {
+        overflow: scroll;
+        scrollbar-color: $primary;
+        border-radius: 10px;
+        border: 3px solid $primary;
+        background: linear-gradient($primary 43px,#fff 0,  #fff) // makes table header color consistent on rubberband
+    }
+
+    table {
+        border-radius: 20px;
+        gap:10px;
+        // margin: 15px auto;
+        border-collapse: collapse;
+        width: 100%;
+        position: relative;
+        text-wrap: nowrap;
+    }
+
+    .subheader{
+        display: flex;
+        align-items: center;
+        margin: 20px 0;
+        gap: 10px;
+    }
+    .textField{
+        width: 300px;
+        border-radius: 20px;
+        margin: 0;
+    }
+    .dropdown{
+        width: 300px;
+        border-radius: 20px;
+        margin: 0;
+    }
+    .key{
+        margin-right: auto;
+    }
+    .name{ //couldn't find a good way for these to stick without magic numbers that
+        // position: sticky; don't translate accross devices.
+        // left: 0;
+        // width: 100px;
+        text-align: left;
+        min-width: 180px;
+    } 
+    .noName{
+        text-align: left;
+        min-width: 180px;
+        font-style: italic;
+    }
+
+    .email{
+        // position: sticky;
+        text-align: left;
+        min-width: 180px;
+    }
+
+    tr.row {
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr.row:last-of-type {
+        border-bottom: none;
+    }
+
+    th {
+        background-color: $primary;
+        color: #FFF;
+        font-weight: 600;
+    }
+
+    td,
+    th {
+        padding: 10px 20px;
+        text-align: center;
+        min-width: 100px
+    }
+
+    td{
+        background-color: $background;
+    }
+}

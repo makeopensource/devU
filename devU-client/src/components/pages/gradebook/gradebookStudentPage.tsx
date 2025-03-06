@@ -10,7 +10,7 @@ import ErrorPage from '../errorPage/errorPage';
 
 import RequestService from 'services/request.service';
 
-import styles from './gradebookPage.scss';
+import styles from './gradebookStudentPage.scss';
 
 const GradebookStudentPage = () => {
     const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ const GradebookStudentPage = () => {
     return (
         <PageWrapper className={styles.pageWrapper}>
             <div className={styles.header}>
-                <h1>Student Gradebook</h1>
+                <h1 className={styles.pageTitle}>Student Gradebook</h1>
                 {role.isInstructor() && (
                     <button className='btnSecondary' onClick={() => {
                         history.push(`/course/${courseId}/gradebook/instructor`)

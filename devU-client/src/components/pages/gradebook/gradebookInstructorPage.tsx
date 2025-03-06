@@ -6,55 +6,98 @@ import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from '../errorPage/errorPage'
 import FaIcon from 'components/shared/icons/faIcon'
+import Select, {Styles, GroupTypeBase} from 'react-select'
 
 
 import RequestService from 'services/request.service'
 
-import styles from './gradebookPage.scss'
+import styles from './gradebookInstructorPage.scss'
 import { useParams } from 'react-router-dom'
 import TextField from 'components/shared/inputs/textField'
+import { Option } from 'components/shared/inputs/dropdown'
+
+
+const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
+    menu: (provided) => ({ ...provided, 
+        backgroundColor: 'var(--background)', 
+        border: '2px solid #ddd',
+    }),
+    
+    input: (provided) => ({ ...provided, 
+        backgroundColor: 'var(--input-field-background)',
+        borderRadius: '20px',
+        }),
+    placeholder: (provided) => ({ ...provided,
+        fontStyle:'italic'
+    }),
+    control: (provided) => ({ ...provided, 
+        backgroundColor: 'var(--input-field-background)', cursor: 'pointer',
+        borderRadius: '20px', padding: '10px',
+        border: 'none'}),
+    singleValue: (provided) => ({ ...provided, 
+        color: 'var(--color)', 
+    }),
+    
+    option: (provided) => ({
+      ...provided,
+      cursor: 'pointer',
+      background: 'var(--background)',
+    }),
+  }
 
 type TableProps = {
     users: User[]
     assignments: Assignment[]
     assignmentScores: AssignmentScore[]
+    maxScores: Map<number, number>
 }
+
 type RowProps = {
     user: User
     assignments: Assignment[]
     assignmentScores: AssignmentScore[]
+    maxScores: Map<number, number>
 }
+
 //table for style
-const TableRow = ({ user, assignments, assignmentScores }: RowProps) => {
+const TableRow = ({ user, assignments, assignmentScores, maxScores }: RowProps) => {
 
     return (
         <tr className={styles.row}>
-                <td className={styles.name}>{user.preferredName ? user.preferredName : "No_Name Available"}</td>
-                <td className={styles.email} style={{borderRight: '#ddd 2px solid'}}><a href={`mailto:${user.email}`}>{user.email}</a></td>
-            {/* <td>{user.externalId}</td> */}
+                {user.preferredName ? <td className={styles.name} key={user.preferredName}>{user.preferredName}</td> : <td className={styles.noName}>No Name Set</td>}
+                <td className={styles.email} key={user.email} style={{borderRight: '#ddd 2px solid'}}><a href={`mailto:${user.email}`}>{user.email}</a></td>
             
             {assignments.map(a => (
-                <td>{assignmentScores.find(as => as.assignmentId === a.id)?.score ?? 'N/A'}</td>
+                assignmentScores.find(as => as.assignmentId === a.id)?.score ? <td >{assignmentScores.find(as => as.assignmentId === a.id)?.score}</td> :// If there's a submission, display that grade
+                    ((a.id && maxScores.has(a.id)) ?  <td className={styles.no_submission} >0/{maxScores.get(a.id)} <strong>-</strong></td> // Otherwise, check if the assignment has problems and show score as 0/Max(NoSubmissions), if it has no problems, show N/A.
+                        : <td>N/A</td>) 
             ))}
         </tr>
     )
 }
 
-const GradebookTable = ({ users, assignments, assignmentScores }: TableProps) => {
+const GradebookTable = ({ users, assignments, assignmentScores, maxScores }: TableProps) => {
     return (
         <table>
-            <th className={styles.name}>Name</th>
-            <th className={styles.email}>Email</th>
-            {assignments.map((a) => {
-                return (<th>{a.name}</th>)
-            })}
+            <thead>
+                <tr>
+                    <th className={styles.name} key='name_head'>Name</th>
+                    <th className={styles.email} key='email_head'>Email</th>
+                    {assignments.map((a) => {
+                        return (<th key={a.id + "_head"}>{a.name}</th>)
+                    })}
+                </tr>
+            </thead>
+            <tbody>
             {users.map((u) => (
                 <TableRow
                     user={u}
                     assignments={assignments}
                     assignmentScores={assignmentScores.filter(as => as.userId === u.id)}
+                    maxScores={maxScores}
                 />
             ))}
+            </tbody>
         </table>
     )
 }
@@ -68,17 +111,55 @@ const GradebookInstructorPage = () => {
     const [displayedUsers, setDisplayedUsers] = useState(new Array<User>()) //All users in the course
     const [allUsers, setAllUsers] = useState(new Array<User>()) //All users in the course
     //const [userCourses, setUserCourses] = useState(new Array<UserCourse>()) //All user-course connections for the course
-    const [allAssignmentProblems, setAllAssignmentProblems] = useState<Map<number, AssignmentProblem[]>>(new Map<number, AssignmentProblem[]>())
-    //const [maxScores, setMaxScores] = useState<Map<number, number>>(new Map<number, number>())
+    const [assignmentProblems, setAssignmentProblems] = useState<Map<number, AssignmentProblem[]>>(new Map<number, AssignmentProblem[]>())
+    const [maxScores, setMaxScores] = useState<Map<number, number>>(new Map<number, number>())
+    const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
 
     const [assignments, setAssignments] = useState(new Array<Assignment>()) //All assignments in the course
     const [assignmentScores, setAssignmentScores] = useState(new Array<AssignmentScore>()) //All assignment scores for assignments in the course
-
     const { courseId } = useParams<{ courseId: string }>()
 
     useEffect(() => {
         fetchData()
     }, [])
+
+    useEffect(() => { // get all assignment problems, map assignment ID to array containing its problems
+        for(let i : number = 0; i < assignments.length; i++) {
+            RequestService.get(`/api/course/${courseId}/assignment/${assignments[i].id}/assignment-problems`)
+               .then((res) => {
+                   setAssignmentProblems(prevState => {
+                       const newMap = new Map(prevState);
+                       newMap.set(Number(assignments[i].id), res);
+                       return newMap
+               });
+           })
+    }}, [assignments]);
+
+    useEffect(() => { // add all maxScores of assignment problems to create a maxScore for the entire assignment
+        for (let [assignmentId, problems] of assignmentProblems.entries()) {             
+            if (problems.length != 0) { // only show possible score for assignments which have problems defined.
+                const maxScore = problems.reduce((sum, problem) => sum + problem.maxScore, 0);
+                    setMaxScores(prevState => {
+                            const newMap = new Map(prevState);
+                            newMap.set(assignmentId, maxScore);
+                            return newMap;
+                    });
+                }
+        }  
+       }
+    , [assignmentProblems]);
+
+    useEffect(() => {
+        const categories = [...new Set(assignments.map(a => a.categoryName))];
+        const options = categories.map((category) => ({
+            value: category,
+            label: category
+          }));
+        
+        setAllCategoryOptions(options);
+    }
+        
+        , [assignments])
 
     const fetchData = async () => {
         try {
@@ -93,18 +174,7 @@ const GradebookInstructorPage = () => {
             assignments.sort((a, b) => (Date.parse(a.startDate) - Date.parse(b.startDate))) //Sort by assignment's start date
             setAssignments(assignments)
 
-            for(let i : number = 0; i < assignments.length; i++) {
-                RequestService.get(`/api/course/${courseId}/assignment/${assignments[i].id}/assignment-problems`)
-                    .then((res) => {
-                        setAllAssignmentProblems(prevState => {
-                            const newMap = new Map(prevState);
-                            const list : AssignmentProblem[] = res;
-                            newMap.set(Number(assignments[i].id), list);
-                            return newMap
-                    });
-                })
-            }
-            console.log(allAssignmentProblems);
+
 
             const assignmentScores = await RequestService.get<AssignmentScore[]>(`/api/course/${courseId}/assignment-scores`)
             setAssignmentScores(assignmentScores)
@@ -117,33 +187,29 @@ const GradebookInstructorPage = () => {
         }
     }
 
-    const handleStudentSearch = (value:string) /*e : React.ChangeEvent<HTMLInputElement>)*/ => {
-        console.log("Search term:", value);
+    const handleStudentSearch = (value:string)  => {
         if(value.length === 0){
             setDisplayedUsers(allUsers)
             return;
         }
 
-        console.log("Search term:", value);
         //const search = value.toLowerCase();
 
         const filterusers = allUsers.filter((user) =>{
-            //return(
-            console.log(user.preferredName);
             const matchuser =
                 user.preferredName?.toLowerCase().includes(value.toLowerCase()) ||
                 user.email.toLowerCase().includes(value.toLowerCase())
-           // );
-
             return matchuser;
         });
-        console.log("Filtered Users:",filterusers);
         setDisplayedUsers(filterusers);
 
     };
 
+    
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
+
+    //setAllCategoryOptions(categories.map((cat) => ({label: cat, value: String(cat)})));
 
     return (
         <PageWrapper className={styles.pageWrapper}>
@@ -155,6 +221,16 @@ const GradebookInstructorPage = () => {
                     <span className={styles.late}><strong> !</strong> <FaIcon icon='arrow-left'/> Late</span>,&nbsp;
                     <span className={styles.no_submission}><strong>- </strong><FaIcon icon='arrow-left'/> No Submission</span> 
                 </div>
+                 <Select
+                    className={styles.dropdown}
+                    options={categoryOptions}
+                    styles={customStyles}
+                    components={{
+                        IndicatorSeparator: () => null
+                      }}
+                    placeholder="Assignment Category"
+                    onChange={() => console.log("Tell Diego to Update This!")}
+                /> 
                     <TextField
                         onChange={handleStudentSearch}
                         className={styles.textField}                
@@ -167,6 +243,7 @@ const GradebookInstructorPage = () => {
                     users={displayedUsers}
                     assignments={assignments}
                     assignmentScores={assignmentScores}
+                    maxScores={maxScores}
                 />
             </div>
         </PageWrapper>

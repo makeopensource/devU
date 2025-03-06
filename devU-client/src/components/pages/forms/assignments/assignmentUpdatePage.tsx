@@ -130,17 +130,18 @@ setFiles;
 
 
   useEffect(() => {
-    // for(let i : number = 0; i < assignmentsList.length; i++) { // this is used for swapping between assignments on edit page, which is no longer part of the design
-    //   RequestService.get(`/api/course/${courseId}/assignment/${assignmentsList[i].id}/assignment-problems`)
-    //   .then((res) => {
-    //     setAllAssignmentProblems(prevState => {
-    //       const newMap = new Map(prevState);
-    //       newMap.set(Number(assignmentsList[i].id), res);
-    //       return newMap;
-    //     });
-    //   })
-    // }
+  //   for(let i : number = 0; i < assignmentsList.length; i++) { // this is used for swapping between assignments on edit page, which is no longer part of the design
+  //     RequestService.get(`/api/course/${courseId}/assignment/${assignmentsList[i].id}/assignment-problems`)
+  //     .then((res) => {
+  //       setAllAssignmentProblems(prevState => {
+  //         const newMap = new Map(prevState);
+  //         newMap.set(Number(assignmentsList[i].id), res);
+  //         return newMap;
+  //       });
+  //     })
+  //   }
   },[assignmentsList])
+
 
   const handleAssignmentUpdate = () => {
     const finalFormData = {

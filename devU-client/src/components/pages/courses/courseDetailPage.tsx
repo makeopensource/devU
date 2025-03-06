@@ -99,6 +99,7 @@ const CourseDetailPage = () => {
                                 <h3>Course Links</h3>
                                 <div className={styles.buttons_container}>
                                     <button className='btnSecondary' onClick={() => {
+                                        role.isInstructor() ?  history.push(`/course/${courseId}/gradebook/instructor`) : 
                                         history.push(`/course/${courseId}/gradebook`)
                                     }}>Gradebook
                                     </button>
