@@ -9,7 +9,7 @@
   body,
   #main {
     height: 100%;
-    overflow: hidden;
+    //overflow: hidden;
     position: relative;
   }
 
@@ -25,14 +25,20 @@
 
   // general button template, extends to 3 types of buttons - primary, secondary, delete
   .btn {
-    padding: 5px 15px;
     cursor: pointer;
+    padding: 5px 15px;
     border-radius: 100px;
     height: fit-content;
     border: none;
     font-weight: 700;
-    font-size: 15px
+    transition: background-color 0.3s ease;
   }
+
+  .no_items {
+    font-style: italic;
+    margin-right: auto; // Keeps text locked left after hitting 738px
+    margin-bottom: 20px;
+}
 
   button.btnPrimary {
     @extend .btn;
