@@ -76,7 +76,7 @@ const CourseDetailPage = () => {
                         <div className={styles.header}>
                             <h1 className={styles.class_title}>{courseInfo.number}: {courseInfo.name}</h1>
                             {role.isInstructor() && (
-                                <button className='btnPrimary' style={{marginLeft:'auto'}} onClick={() => {
+                                <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
                                     history.push(`/course/${courseId}/update`)
                                 }}>edit course
                                 </button>
@@ -106,7 +106,7 @@ const CourseDetailPage = () => {
                         </div>
                         <div className={styles.subheader}><h3>Assignments</h3>
                             {role.isInstructor() &&(
-                                <button className='btnPrimary' style={{marginLeft:'auto'}} onClick={() => {
+                                <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
                                     history.push(`/course/${courseId}/createAssignment`)
                                 }}>add assignment
                                 </button>

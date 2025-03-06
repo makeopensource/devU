@@ -22,3 +22,9 @@
     color: #888; /* Separator color */
     margin: 0 5px; /* Add spacing between breadcrumbs */
 }
+
+@media (max-width: $extreme) {
+    .breadcrumbContainer{
+        margin-left: $phonePadding;
+    }
+}

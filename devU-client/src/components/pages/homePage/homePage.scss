@@ -118,4 +118,12 @@
         flex-direction: column;
         align-items: center;
     }
+    .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .buttonContainer{
+        margin-left: 0;
+    }
 }
