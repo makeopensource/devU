@@ -31,7 +31,6 @@
     height: fit-content;
     border: none;
     font-weight: 700;
-    font-size: 15px;
     transition: background-color 0.3s ease;
   }
 
@@ -54,6 +53,7 @@
 
   button.btnSecondary {
     @extend .btn;
+    
     background-color: var(--btn-secondary-background);
     color: var(--btn-secondary-text);
     border: 3px solid var(--btn-secondary-border);
