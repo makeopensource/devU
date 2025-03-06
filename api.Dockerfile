@@ -38,9 +38,6 @@ COPY --from=module_builder /tmp/devu-shared-modules ./devu-shared-modules
 # Indicate that the api is running in docker; value here is irrelevant
 ENV IS_DOCKER=0
 
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
-RUN chmod +x /wait
-
 # TypeORM Migrations
-CMD /wait && npm run typeorm -- migration:run -d src/database.ts && npm start
+CMD npm run typeorm -- migration:run -d src/database.ts && npm run start
 
