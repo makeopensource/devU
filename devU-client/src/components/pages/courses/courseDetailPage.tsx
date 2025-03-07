@@ -1,78 +1,77 @@
-import React, {useEffect, useState} from 'react'
-import {useHistory, useParams} from 'react-router-dom'
-import RequestService from 'services/request.service'
-import {Assignment, Course} from 'devu-shared-modules'
-//import {useHistory} from "react-router-dom";
-import PageWrapper from 'components/shared/layouts/pageWrapper'
-import {wordPrintDate} from 'utils/date.utils'
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import RequestService from 'services/request.service';
+import { Assignment, Course } from 'devu-shared-modules';
+import PageWrapper from 'components/shared/layouts/pageWrapper';
 
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemText from '@mui/material/ListItemText'
-//import Button from '@mui/material/Button'
-
-
-
-import styles from './courseDetailPage.scss'
-//import {SET_ALERT} from "../../../redux/types/active.types";
-import {useAppSelector} from "../../../redux/hooks"; //useActionless, 
-import {prettyPrintSemester} from "../../../utils/semester.utils";
-
-//import TextField from "../../shared/inputs/textField";
-//import {useActionless, useAppSelector} from "redux/hooks";
-
-
-
-
+import styles from './courseDetailPage.scss';
+//import { SET_ALERT } from '../../../redux/types/active.types';
+import { useAppSelector} from "../../../redux/hooks";
+import AddAssignmentModal from '../forms/assignments/assignmentFormPage';
+import { prettyPrintSemester } from 'utils/semester.utils';
+import { wordPrintDate } from 'utils/date.utils';
 
 const CourseDetailPage = () => {
-    const { courseId } = useParams<{courseId: string}>()
-    const [courseInfo, setCourseInfo] = useState<Course | null>(null)
-    const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({})
-    //const [setAlert] = useActionless(SET_ALERT)
+    const { courseId } = useParams<{ courseId: string }>();
+    const [courseInfo, setCourseInfo] = useState<Course | null>(null);
+    const [categoryMap, setCategoryMap] = useState<Record<string, Assignment[]>>({});
+    const history = useHistory();
     const role = useAppSelector((store) => store.roleMode);
-    const history = useHistory()
+
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
+
+   // const[User, setUser]= useState < User <string>,preferredName>>({})
+
+   // const role = useAppSelector((store) => store.roleMode)
+   /* const fetchUserinfo = async () => {
+        RequestService.get< typeof User>('api/users')
+            .then((User) =>{
+                setUser(User)
+
+    })
+*/
 
 
     const fetchCourseInfo = async () => {
-        RequestService.get<Course>(`/api/courses/${courseId}`)
-        .then((course) => {
-            setCourseInfo(course)
+        RequestService.get<Course>(`/api/courses/${courseId}`).then((course) => {
+            setCourseInfo(course);
+        });
 
-        })
-        RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`)
-        .then((assignments) => {
-            console.log(assignments)
-            let categoryMap : Record<string, Assignment[]> = {}
-            assignments.forEach((assignment : Assignment) => {
+        RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`).then((assignments) => {
+            let categoryMap: Record<string, Assignment[]> = {};
+            assignments.forEach((assignment: Assignment) => {
                 if (assignment.categoryName in categoryMap) {
-                    categoryMap[assignment.categoryName].push(assignment)
+                    categoryMap[assignment.categoryName].push(assignment);
+                } else {
+                    categoryMap[assignment.categoryName] = [assignment];
                 }
-                else {
-                    categoryMap[assignment.categoryName] = [assignment]
-                }
-            })
-            setCategoryMap(categoryMap)
-        })
-
-
-    }
-
+            });
+            setCategoryMap(categoryMap);
+        });
+    };
 
     useEffect(() => {
-        fetchCourseInfo()
+        fetchCourseInfo();
+    }, []);
 
-    }, [])
-    return(
+    return (
         <PageWrapper>
-            {courseInfo ? (
-                        <div>
-
+            <div className={styles.courseDetailPage}>
+                {courseInfo ? (
+                    <div>
+                        {/* Course Title */}
                         <div className={styles.header}>
                             <h1 className={styles.class_title}>{courseInfo.number}: {courseInfo.name}</h1>
                             {role.isInstructor() && (
@@ -102,22 +101,22 @@ const CourseDetailPage = () => {
                                     }}>Gradebook
                                     </button>
                                 </div>
+                                <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
                             </div>
                         </div>
                         <div className={styles.subheader}><h3>Assignments</h3>
                             {role.isInstructor() &&(
                                 <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
-                                    history.push(`/course/${courseId}/createAssignment`)
-                                }}>add assignment
+                                    setOpenModal(true)}}>add assignment
                                 </button>
                                     )}
                         </div>
 
-                            
 
 
 
-                            <div className={styles.coursesContainer}>
+
+                        <div className={styles.coursesContainer}>
                             {Object.keys(categoryMap).map((category, index) => (
 
                                 <Card key={index} className={styles.courseCard} style = {{borderRadius: '15px', height: 'fit-content', boxShadow: 'none', backgroundColor: 'var(--primary)'}}>
@@ -148,7 +147,6 @@ const CourseDetailPage = () => {
                                                                       </React.Fragment>
                                                                   }
                                                     />
-
                                                 </ListItemButton>
                                             </ListItem>
                                         ))}
@@ -163,16 +161,12 @@ const CourseDetailPage = () => {
                         </div>
 
 
-
-
-                    ) : (
+                ) : (
                     <h1>Error fetching Course Information</h1>
-                    )}
+                )}
+            </div>
+        </PageWrapper>
+    );
+};
 
-
-                </PageWrapper>
-            )
-            }
-
-
-            export default CourseDetailPage
+export default CourseDetailPage;
