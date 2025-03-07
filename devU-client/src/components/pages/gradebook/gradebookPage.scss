@@ -32,9 +32,11 @@ th, td {
   padding: 10px;
   text-align: left;
 }
+
 tr{
   border-bottom: 1px solid #ccc;
 } 
+
 tr:last-of-type{
   border-bottom-right-radius: 10px;
   border-bottom: none;
