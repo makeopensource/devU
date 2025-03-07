@@ -60,9 +60,7 @@
     @extend .btn;
     
     background-color: var(--btn-secondary-background);
-    border: 3px solid var(--primary);
     color: var(--btn-secondary-text);
-
     border: 3px solid var(--btn-secondary-border);
     &:hover{
       background-color: var(--hover-lighter);

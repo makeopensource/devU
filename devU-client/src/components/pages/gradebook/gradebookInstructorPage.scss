@@ -24,7 +24,7 @@
         scrollbar-color: $primary;
         border-radius: 10px;
         border: 3px solid $primary;
-        background: linear-gradient($primary 43px,#fff 0,  #fff) // makes table header color consistent on rubberband
+        background: linear-gradient($primary 43px, $background 0,  $background) // makes table header color consistent on rubberband
     }
 
     table {
