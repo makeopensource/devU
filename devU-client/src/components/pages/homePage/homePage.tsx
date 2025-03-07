@@ -82,11 +82,9 @@ const HomePage = () => {
                     <button className='btnSecondary' id='createCoursBtn' onClick={() => {
                         history.push(`/addCoursesForm`);
                     }}>Create Course</button>
-                    <button className='btnSecondary' id='joinCoursBtn' onClick={() => history.push({
-                        pathname: "/joinCourseForm",state: { updateUserHomepage: fetchData } 
-                        })}>Join Course
-                    </button>
-
+                    <button className='btnSecondary' id='joinCoursBtn' onClick={() => {
+                        history.push(`/courses`);
+                    }}>Join Course</button>
                 </div>
             </div>
 
