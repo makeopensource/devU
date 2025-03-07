@@ -28,16 +28,21 @@ const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
     input: (provided) => ({ ...provided, 
         backgroundColor: 'var(--input-field-background)',
         borderRadius: '20px',
+        color: 'var(--text-color)', 
         }),
+
     placeholder: (provided) => ({ ...provided,
-        fontStyle:'italic'
+        fontStyle:'italic',
+        color: '#9c9c9c',
+        margin: '0'
     }),
     control: (provided) => ({ ...provided, 
         backgroundColor: 'var(--input-field-background)', cursor: 'pointer',
         borderRadius: '20px', padding: '10px',
         border: 'none'}),
+
     singleValue: (provided) => ({ ...provided, 
-        color: 'var(--color)', 
+        color: 'var(--text-color)', 
     }),
     
     option: (provided) => ({
@@ -251,7 +256,13 @@ const GradebookInstructorPage = () => {
                     <span className={styles.late}><strong> !</strong> <FaIcon icon='arrow-left'/> Late</span>,&nbsp;
                     <span className={styles.no_submission}><strong>- </strong><FaIcon icon='arrow-left'/> No Submission</span> 
                 </div>
-                 <Select
+                    <TextField
+                        onChange={handleStudentSearch}
+                        className={styles.textField}                
+                        id='name'
+                        placeholder='Search students'
+                    />
+                    <Select
                     className={styles.dropdown}
                     options={categoryOptions}
                     styles={customStyles}
@@ -262,12 +273,6 @@ const GradebookInstructorPage = () => {
                     isClearable={true}
                     onChange={handleCategoryChange}
                 /> 
-                    <TextField
-                        onChange={handleStudentSearch}
-                        className={styles.textField}                
-                        id='name'
-                        placeholder='Search students'
-                    />
             </div>
             <div className={styles.tableContainer}>
                 <GradebookTable
