@@ -29,6 +29,7 @@ const CourseDetailPage = () => {
     const [openModal, setOpenModal] = useState(false);
 
     const handleCloseModal = () => {
+        fetchNewAssignments()
         setOpenModal(false);
     };
 
@@ -49,6 +50,10 @@ const CourseDetailPage = () => {
             setCourseInfo(course);
         });
 
+        fetchNewAssignments();
+    };
+
+    const fetchNewAssignments = async () => {
         RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`).then((assignments) => {
             let categoryMap: Record<string, Assignment[]> = {};
             assignments.forEach((assignment: Assignment) => {
@@ -61,6 +66,7 @@ const CourseDetailPage = () => {
             setCategoryMap(categoryMap);
         });
     };
+
 
     useEffect(() => {
         fetchCourseInfo();

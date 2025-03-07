@@ -25,7 +25,6 @@ const AssignmentUpdatePage = () => {
   const { courseId } = useParams<{ courseId: string }>()
   const [setAlert] = useActionless(SET_ALERT)
   const currentAssignmentId = parseInt(assignmentId)
-  const [assignmentsList, setAssignmentsList] = useState<Assignment[]>([])
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
@@ -40,7 +39,6 @@ const AssignmentUpdatePage = () => {
   const history = useHistory()
 
   const [theme, setTheme] = useState(getCssVariables())
-setFiles;
   // Needs a custom observer to force an update when the css variables change
   // Custom observer will update the theme variables when the bodies classes change
   useEffect(() => {
@@ -127,20 +125,6 @@ setFiles;
   const convertToOptions = () => {
     setAllCategoryOptions(categories.map((category) => ({label: category.name, value: category}))) 
   }*/
-
-
-  useEffect(() => {
-    // for(let i : number = 0; i < assignmentsList.length; i++) { // this is used for swapping between assignments on edit page, which is no longer part of the design
-    //   RequestService.get(`/api/course/${courseId}/assignment/${assignmentsList[i].id}/assignment-problems`)
-    //   .then((res) => {
-    //     setAllAssignmentProblems(prevState => {
-    //       const newMap = new Map(prevState);
-    //       newMap.set(Number(assignmentsList[i].id), res);
-    //       return newMap;
-    //     });
-    //   })
-    // }
-  },[assignmentsList])
 
   const handleAssignmentUpdate = () => {
     const finalFormData = {
