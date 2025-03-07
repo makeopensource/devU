@@ -65,30 +65,50 @@ const CourseDetailPage = () => {
 
 
     useEffect(() => {
-        fetchCourseInfo();
-        console.log("User Role:", role);
-        console.log("Is Instructor?", role.isInstructor ? role.isInstructor() : "role.isInstructor() is undefined");
-    }, []);
+        fetchCourseInfo()
 
-
-    
-
-    return (
+    }, [])
+    return(
         <PageWrapper>
             {courseInfo ? (
                         <div>
-1.
-                                {role.isInstructor() &&(
-                                <button className={styles.assignment_actual_button} onClick={() => {
-                                    history.push(`/course/${courseId}/createAssignment`)
-                                }}>Add Assignment
+
+                        <div className={styles.header}>
+                            <h1 className={styles.class_title}>{courseInfo.number}: {courseInfo.name}</h1>
+                            {role.isInstructor() && (
+                                <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
+                                    history.push(`/course/${courseId}/update`)
+                                }}>edit course
                                 </button>
-                                    )}
-                                
-                                {role.isInstructor() &&(
-                                <button className={styles.edit_actual_button} onClick={() => {
+                            )}
+                        </div>
+                        <div className={styles.subheader}>
+                            <div className={styles.meta_container}>
+                                <div>
+                                    <h4>Instructor:</h4>
+                                </div>
+                                <div>
+                                    <h4>Section:</h4>
+                                </div>
+                                <div>
+                                    <h4>Semester: </h4><span>{prettyPrintSemester(courseInfo.semester)}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h3>Course Links</h3>
+                                <div className={styles.buttons_container}>
+                                    <button className='btnSecondary' onClick={() => {
+                                        history.push(`/course/${courseId}/gradebook`)
+                                    }}>Gradebook
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.subheader}><h3>Assignments</h3>
+                            {role.isInstructor() &&(
+                                <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
                                     history.push(`/course/${courseId}/createAssignment`)
-                                }}>Edit Course
+                                }}>add assignment
                                 </button>
                                     )}
                         </div>

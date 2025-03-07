@@ -62,45 +62,20 @@
     color: $text-color;
     background:none;
     }
+
+.header {
+    color: $text-color;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    justify-items: center;
+    align-items: center;
 }
-
-.courseDetailPage {
-    padding: 40px;
-    position: relative; // Ensures absolute positioning works within this container
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        padding: 20px;
-        color: $text-color;
-        width: 100%;
-        position: relative;
-    }
-
-    h1 {
-        margin: 0 0 10px 0;
-        font-size: 1.5rem;
-        text-align: left;
-        font-weight: bold;
-    }
-
-    h3 {
-        font-size: 1.5rem;
-        border-bottom: 1px solid;
-        color: $text-color;
-    }
-}
-
-/* Updated Button Layout */
-.buttonContainer {
-    display: flex;
-    justify-content: flex-start; // Align buttons to left under Course Links
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 20px;
-
+.subheader{
+    color: $text-color;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 h3 {
@@ -108,39 +83,10 @@ h3 {
     margin: 10px 0 0 0;
 }
 
-.edit_actual_button {
-    display: flex;
-    flex-direction: row;
-    border: 0; /* Primary button color */
-    /* Button text color */
-    padding: 10px 20px; /* Padding for button */
-    border-radius: 5px;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    margin : 0 10px;
-    background-color: $purple !important;
-    color: white !important;
-    min-width: 160px;
-    position: relative;
-    bottom: 66px;
-    right: 100px;
-}
-.assignment_actual_button {
-    display: flex;
-    flex-direction: row;
-    border: 0; /* Primary button color */
-    /* Button text color */
-    padding: 10px 20px; /* Padding for button */
-    border-radius: 5px;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    margin : 0 10px;
-    background-color: $purple !important;
-    color: white !important;
-    min-width: 160px;
-    position: relative;
-    bottom: -57px;
-    left: 89px;
+h4 {
+    font-size: 1.0rem;
+    margin: 0;
+    display: inline;
 }
 .class_title{
     grid-column-start: 2;
@@ -149,75 +95,41 @@ h3 {
 
 .meta_container{
     display: flex;
-    justify-content: flex-start;
-    gap: 15px;
-    margin-top: 20px;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
-/* Course Links - Move to the Right */
-.courseLinks {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
+.buttons_container {
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: flex-start; 
+    gap: 10px;
     margin-top: 10px;
 }
-
-/* Style for each link button */
-.linkButton {
-    background: white;
-    color: #4b0082;
-    border: 2px solid #4b0082;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-        background: #4b0082;
-        color: white;
-    }
+#parallel_button{
+    margin-left: auto;
 }
 
-/* Move "Edit Course" to the top-right just below account info */
-.editCourse {
-    position: absolute;
-    top: -60px;  // Moves it higher to match the layout
-    right: 0;
-    background-color: $primary;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: all 0.3s ease;
+.assignmentName {
+    padding: 10px;
+    color: $text-color;
+    display: block;
+    width: 100%;
+    margin: 5px auto;
+    border-bottom: 1px solid #ddd;
 
-    &:hover {
-        background-color: $purple-darker;
-    }
 }
 
-/* Move "Add Assignment" to the bottom right */
-.addAssignment {
-    position: absolute;
-    bottom: -60px; // Pushes it downward
-    right: 0;
-    background-color: $primary;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: all 0.3s ease;
+.due_end{
+    text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  font-size:11px;
+  flex-wrap: wrap;
+  color: $text-color-secondary;
+  font-family: monospace;
+  font-weight: 500;
 
-    &:hover {
-        background-color: $purple-darker;
-    }
 }
 
 @media (max-width: $medium) {
