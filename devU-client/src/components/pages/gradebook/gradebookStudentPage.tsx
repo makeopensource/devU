@@ -71,7 +71,7 @@ const GradebookStudentPage = () => {
             <div className={styles.topSection}>
                 <h1 className={styles.gradebookTitle}>{courseName} Gradebook</h1> 
                 {role.isInstructor() && (
-                    <button className={styles.backToCourseButton} onClick={() => history.push(`/course/${courseId}/courses`)}>
+                    <button className='btnPrimary' onClick={() => history.goBack()}>
                         Back to Course
                     </button>
                 )}

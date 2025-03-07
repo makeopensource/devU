@@ -2,32 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { Course } from 'devu-shared-modules';
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay';
 import PageWrapper from 'components/shared/layouts/pageWrapper';
-import Dropdown, { Option } from 'components/shared/inputs/dropdown';
 import ErrorPage from '../../errorPage/errorPage';
 import RequestService from 'services/request.service';
 import styles from './coursesListPage.scss';
-import CourseListItem from "../../../listItems/courseListItem";
-import Button from "@mui/material/Button";
+import { useAppSelector, useActionless } from "../../../../redux/hooks";
+import { SET_ALERT } from "../../../../redux/types/active.types";
+import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
-import { useAppSelector } from "../../../../redux/hooks";
-
-type Filter = true | false;
-
-const filterOptions: Option<Filter>[] = [
-    { label: 'Expand All', value: true },
-    { label: 'Collapse All', value: false },
-];
 
 const UserCoursesListPage = () => {
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
+    const [error, setError] = useState<Error | null>(null);
+    const [searchQuery, setSearchQuery] = useState<string>("");
     const [allCourses, setAllCourses] = useState<Course[]>([]);
-    const [filter, setFilter] = useState<Filter>(false);
+    const [joinedCourses, setJoinedCourses] = useState<Set<number>>(new Set());
     const history = useHistory();
 
-    // Get userId from Redux store
     const userId = useAppSelector((store) => store.user.id);
+    const [setAlert] = useActionless(SET_ALERT); // ✅ Fix: Correct way to set alerts
 
     useEffect(() => {
         fetchData();
@@ -35,15 +27,13 @@ const UserCoursesListPage = () => {
 
     const fetchData = async () => {
         try {
-            // Fetch user-specific courses
             const userCourseData = await RequestService.get<{ 
                 instructorCourses: Course[]; 
                 activeCourses: Course[]; 
                 pastCourses: Course[]; 
                 upcomingCourses: Course[]; 
             }>(`/api/courses/user/${userId}`);
-            
-            // Flatten and combine user course data into a single array
+
             const userCoursesList = [
                 ...userCourseData.instructorCourses,
                 ...userCourseData.activeCourses,
@@ -51,55 +41,106 @@ const UserCoursesListPage = () => {
                 ...userCourseData.upcomingCourses,
             ];
 
-            // Fetch all courses
             const allCourseData = await RequestService.get<Course[]>(`/api/courses`);
 
-            // Filter to get courses the user is not enrolled in
-            const unenrolledCourses = allCourseData.filter(
-                (course) => !userCoursesList.some((userCourse) => userCourse.id === course.id)
-            );
+            setAllCourses(allCourseData);
 
-          
-            setAllCourses(unenrolledCourses);
-        } catch (error: any) {
-            setError(error);
+            
+            setJoinedCourses(new Set(userCoursesList.map(course => course.id ?? -1)));
+        } catch (error: unknown) {
+            setError(error as Error);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleFilterChange = (updatedFilter: Filter) => {
-        setFilter(updatedFilter);
+    const handleJoinCourse = async (courseId: number) => {
+        const userCourseData = {
+            userId: userId,
+            courseId: courseId,
+            role: 'student',
+            dropped: false
+        };
+
+        try {
+            await RequestService.post(`/api/course/${courseId}/user-courses`, userCourseData);
+
+            
+            setJoinedCourses((prev) => new Set(prev).add(courseId));
+
+            setAlert({ autoDelete: true, type: 'success', message: 'Course Joined' });
+        } catch (error: unknown) {
+            setAlert({ autoDelete: false, type: 'error', message: (error as Error).message });
+        }
     };
+
+    const filteredCourses = allCourses.filter((course) =>
+        course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.number.toLowerCase().includes(searchQuery.toLowerCase()) 
+    );
 
     if (loading) return <LoadingOverlay delay={250} />;
     if (error) return <ErrorPage error={error} />;
 
-    const defaultOption = filterOptions.find((o) => o.value === filter);
-
     return (
         <PageWrapper>
-            <div className={styles.header}>
-                <div className={styles.smallLine}></div>
-                <h1>All Courses</h1>
-                <div className={styles.largeLine}></div>
-
-                <Button variant="contained" onClick={() => history.push(`/addCoursesForm`)}>
-                    Add Course
-                </Button>
-                <div className={styles.filters}>
-                    <Dropdown
-                        label='Courses Display Options'
-                        className={styles.dropdown}
-                        options={filterOptions}
-                        onChange={handleFilterChange}
-                        defaultOption={defaultOption}
+            <div className={styles.coursesListPage}>
+                <h1 className={styles.pageTitle}>Join Course</h1>
+                <div className={styles.searchSection}>
+                    <input
+                        type="text"
+                        placeholder="Search for courses by name or code"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
+                    <button className={styles.searchButton}>Search</button>
+                    <button className={styles.joinWithCodeButton} onClick={() => history.push("/join-course")}>
+                        Join with Code
+                        </button>
+
+                </div>
+
+                <div className={styles.tableContainer}>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Course Code</th>
+                                {/* <th>Instructor</th> */}
+                                <th>Semester</th>
+                                {/* <th>Seats Open</th> */}
+                                <th>Join</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredCourses.length > 0 ? (
+                                filteredCourses.map((course) => (
+                                    <tr key={course.id}>
+                                        <td>{course.name}</td> 
+                                        <td>{course.number}</td> 
+                                        {/* <td>{course.instructor}</td> */}
+                                        <td>{course.semester}</td> 
+                                        <td>
+                                            <Button 
+                                                variant="contained"
+                                                className={styles.joinButton}
+                                                onClick={() => course.id !== undefined && handleJoinCourse(course.id)}
+                                                disabled={joinedCourses.has(course.id ?? -1)} // ✅ Fix: Prevents undefined issues
+                                            >
+                                                {joinedCourses.has(course.id ?? -1) ? "Joined" : "Join Course"}
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={4} className={styles.noResults}>No courses found.</td> 
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            {allCourses.map((course) => (
-                <CourseListItem course={course} key={course.id} isOpen={filter} />
-            ))}
         </PageWrapper>
     );
 };
