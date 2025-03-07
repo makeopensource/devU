@@ -71,14 +71,9 @@
 
 .buttonContainer{
     display: flex;
-    gap: 20px;
+    gap: 10px;
     margin-left: auto;
-    background: transparent;
-    color: $primary;
     padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 600;
 }
 
 #joinCourseBtn {

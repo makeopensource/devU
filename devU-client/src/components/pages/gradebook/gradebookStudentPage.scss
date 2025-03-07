@@ -87,6 +87,13 @@
     grid-column-start: 2;
   }
 
+  .buttonContainer{
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    padding: 10px 20px;
+  }
+
   .assignmentName {
     text-align: left;
   }

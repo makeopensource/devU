@@ -51,12 +51,16 @@ const GradebookStudentPage = () => {
         <PageWrapper className={styles.pageWrapper}>
             <div className={styles.header}>
                 <h1 className={styles.pageTitle}>Student Gradebook</h1>
-                {role.isInstructor() && (
-                    <button className='btnSecondary' onClick={() => {
+
+                <div className={styles.buttonContainer}>
+                    {role.isInstructor() && <button className='btnSecondary' id='createCoursBtn' onClick={() => {
                         history.push(`/course/${courseId}/gradebook/instructor`)
-                    }}>Instructor View
-                    </button>
-                )}
+                    }}>Instructor View</button>}
+                    <button className='btnPrimary' id='backToCourse' onClick={() => {
+                        history.goBack();
+                    }}>Back to Course</button>
+                </div>
+                
             </div>
             <div className={styles['gradebook-container']}>
                 {categories.map(category => (

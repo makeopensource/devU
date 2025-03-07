@@ -12,7 +12,8 @@ import Select, {Styles, GroupTypeBase} from 'react-select'
 import RequestService from 'services/request.service'
 
 import styles from './gradebookInstructorPage.scss'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
+
 import TextField from 'components/shared/inputs/textField'
 import { Option } from 'components/shared/inputs/dropdown'
 
@@ -21,6 +22,7 @@ const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
     menu: (provided) => ({ ...provided, 
         backgroundColor: 'var(--background)', 
         border: '2px solid #ddd',
+        borderRadius: '10px'
     }),
     
     input: (provided) => ({ ...provided, 
@@ -41,7 +43,9 @@ const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
     option: (provided) => ({
       ...provided,
       cursor: 'pointer',
-      background: 'var(--background)',
+      color: 'var(--color)', 
+      background: 'none',
+      borderBottom: '1px solid #ddd'
     }),
   }
 
@@ -116,6 +120,7 @@ const GradebookInstructorPage = () => {
     const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
 
     const [assignments, setAssignments] = useState(new Array<Assignment>()) //All assignments in the course
+    const [displayedAssignments, setDisplayedAssignments] = useState(new Array<Assignment>()) //All assignments in the course
     const [assignmentScores, setAssignmentScores] = useState(new Array<AssignmentScore>()) //All assignment scores for assignments in the course
     const { courseId } = useParams<{ courseId: string }>()
 
@@ -173,8 +178,7 @@ const GradebookInstructorPage = () => {
             const assignments = await RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments`)
             assignments.sort((a, b) => (Date.parse(a.startDate) - Date.parse(b.startDate))) //Sort by assignment's start date
             setAssignments(assignments)
-
-
+            setDisplayedAssignments(assignments)
 
             const assignmentScores = await RequestService.get<AssignmentScore[]>(`/api/course/${courseId}/assignment-scores`)
             setAssignmentScores(assignmentScores)
@@ -205,17 +209,43 @@ const GradebookInstructorPage = () => {
 
     };
 
+    const handleCategoryChange = (value:Option)  => {
+        if(!value){
+            setDisplayedAssignments(assignments)
+            return;
+        }
+        const label = value.label;
+
+
+        const filterAssignments = assignments.filter((a) =>{
+            const matchuser = a.categoryName === label;
+            return matchuser;
+        });
+        setDisplayedAssignments(filterAssignments);
+
+    };
+
     
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
+
+    const history = useHistory();
 
     //setAllCategoryOptions(categories.map((cat) => ({label: cat, value: String(cat)})));
 
     return (
         <PageWrapper className={styles.pageWrapper}>
-            {/* <div className={styles.header}> */}
-            <h1>Instructor Gradebook</h1>
-            {/* </div> */}
+            <div className={styles.header}> 
+                <h1 className={styles.pageTitle}>Instructor Gradebook</h1>
+                <div className={styles.buttonContainer}>
+                    <button className='btnSecondary' id='createCoursBtn' onClick={() => {
+                        history.push(`/course/${courseId}/gradebook`)
+                    }}>Student View</button>
+                    <button className='btnPrimary' id='backToCourse' onClick={() => {
+                        history.goBack();
+                    }}>Back to Course</button>
+                </div>
+            </div>
             <div className={styles.subheader}>
                 <div className={styles.key}>Key:  
                     <span className={styles.late}><strong> !</strong> <FaIcon icon='arrow-left'/> Late</span>,&nbsp;
@@ -229,7 +259,8 @@ const GradebookInstructorPage = () => {
                         IndicatorSeparator: () => null
                       }}
                     placeholder="Assignment Category"
-                    onChange={() => console.log("Tell Diego to Update This!")}
+                    isClearable={true}
+                    onChange={handleCategoryChange}
                 /> 
                     <TextField
                         onChange={handleStudentSearch}
@@ -241,7 +272,7 @@ const GradebookInstructorPage = () => {
             <div className={styles.tableContainer}>
                 <GradebookTable
                     users={displayedUsers}
-                    assignments={assignments}
+                    assignments={displayedAssignments}
                     assignmentScores={assignmentScores}
                     maxScores={maxScores}
                 />
