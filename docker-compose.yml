@@ -18,8 +18,8 @@ services:
   client:
     # Builds the front end and exports static files to ./dist
     build:
-      dockerfile: client.Dockerfile
       context: .
+      dockerfile: client.Dockerfile
     volumes:
       - ./dist:/out
     profiles:
@@ -33,6 +33,9 @@ services:
       dockerfile: nginx.Dockerfile
     volumes:
       - ./dist/local:/usr/share/nginx/html
+    depends_on:
+      client:
+        condition: service_completed_successfully
     ports:
       - '9000:80'
     profiles:
@@ -67,16 +70,15 @@ services:
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
 
-  config:
-    #     Generates a config file for the API
-    build:
-      context: devU-api/scripts
-    command: "./generateConfig.sh config/default.yml"
-    image: ubautograding/devtools
-    volumes:
-      - ./devU-api/config:/config
-    profiles:
-      - 'dev-api' # start when developing api, not needed in production
+#  leviathan:
+#    container_name: leviathan
+#    image: ghcr.io/makeopensource/leviathan:dev
+#    ports:
+#      - "9221:9221"
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - ./levi/:/app/appdata
+#    restart: unless-stopped
 
   # tango stuff
   tango:

@@ -9,38 +9,57 @@
   body,
   #main {
     height: 100%;
-    overflow: hidden;
+    //overflow: hidden;
     position: relative;
   }
 
   h1 {
-    margin: 1.75rem auto;
+    margin: 10px auto;
     text-align: center;
   }
 
   h2 {
+    margin: 20px 0;
     text-align: center;
   }
 
   // general button template, extends to 3 types of buttons - primary, secondary, delete
   .btn {
-    padding: 10px 15px;
+    cursor: pointer;
+    padding: 5px 15px;
     border-radius: 100px;
+    height: fit-content;
     border: none;
     font-weight: 700;
+    transition: background-color 0.3s ease;
   }
+
+  .no_items {
+    font-style: italic;
+    margin-right: auto; // Keeps text locked left after hitting 738px
+    margin-bottom: 20px;
+}
 
   button.btnPrimary {
     @extend .btn;
     background-color: var(--primary);
+    border: 3px solid var(--primary);
     color: #fff; // primary button always white text
+    &:hover{
+      background-color: var(--hover-darker);
+      border: 3px solid var(--hover-darker);
+    }
   }
 
   button.btnSecondary {
     @extend .btn;
+    
     background-color: var(--btn-secondary-background);
     color: var(--btn-secondary-text);
     border: 3px solid var(--btn-secondary-border);
+    &:hover{
+      background-color: var(--hover-lighter);
+    }
   }
 
   button.btnDelete {
@@ -85,6 +104,10 @@
     --btn-secondary-background: #FFF;
     --btn-secondary-text: var(--primary);
 
+    --hover-darker: var(--purple-darker);
+    --hover-lighter: var(--purple-lightest);
+
+
     --btn-delete-border: var(--red);
     --btn-delete-background: #FFF;
     --btn-delete-text: var(--red);
@@ -111,6 +134,8 @@
     --red-lighter: #FFA3A3;
     --red: #8A2626;
 
+    --purple-lightest: #efecfd;
+    --purple-lighterer: #9885f0;
     --purple-lighter: #7257EB;
     --purple: #52468A;
     --purple-darker: #2F2363;
@@ -147,6 +172,11 @@
     --btn-secondary-border: var(--primary);
     --btn-secondary-background: var(--purple-darker);
     --btn-secondary-text: #FFF;
+
+    --hover-darker: var(--purple-lighterer);
+    --hover-lighter: var(--purple);
+
+    --btn-text-color: var(--purple-lighter)
 
     --btn-delete-border: var(--red-lighter);
     --btn-delete-background: var(--red);
