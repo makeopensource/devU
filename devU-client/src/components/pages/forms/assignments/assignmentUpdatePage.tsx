@@ -119,7 +119,6 @@ const AssignmentUpdatePage = () => {
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignmentsList(res) })}, [])
   
   /*useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setCategories(res) }).finally(convertToOptions)}, [])
   const convertToOptions = () => {

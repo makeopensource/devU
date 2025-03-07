@@ -24,14 +24,14 @@ const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
     const history = useHistory()
     const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
-    //const userId = useAppSelector((store) => store.user.id)
+    const userId = useAppSelector((store) => store.user.id)
     const role = useAppSelector((store) => store.roleMode)
     role;
 
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
-    // const [formData, setFormData] = useState({})
-    // const [file, setFile] = useState<File | null>()
+    const [formData, setFormData] = useState({})
+    const [file, setFile] = useState<File | null>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [submissions, setSubmissions] = useState(new Array<Submission>())
     const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
@@ -99,75 +99,82 @@ const AssignmentDetailPage = () => {
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
 
-    // const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    //     const key = e.target.id
-    //     setFormData(prevState => ({...prevState,[key] : e.target.value}))
-    // }
+    const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+        const key = e.target.id
+        setFormData(prevState => ({...prevState,[key] : e.target.value}))
+    }
 
 
-    // const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    //     setFile(e.target.files?.item(0))
-    // }
+    const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+        setFile(e.target.files?.item(0))
+    }
 
 
-    // const handleSubmit = async () => {
-    //     let response;
-    //     const contentField = {
-    //         filepaths : [],
-    //         form : formData,
-    //     }
-    //     const submission = {
-    //         userId : userId,
-    //         assignmentId : assignmentId,
-    //         courseId : courseId,
-    //         content : JSON.stringify(contentField),
-    //     }
+    const handleSubmit = async () => {
+        let response;
+        const contentField = {
+            filepaths : [],
+            form : formData,
+        }
+        const submission = {
+            userId : userId,
+            assignmentId : assignmentId,
+            courseId : courseId,
+            content : JSON.stringify(contentField),
+        }
 
-    //     setLoading(true)
+        setLoading(true)
 
-    //     try {
-    //         if (file) {
-    //             const submission = new FormData
-    //             submission.append('userId', String(userId))
-    //             submission.append('assignmentId', assignmentId)
-    //             submission.append('courseId', courseId)
-    //             submission.append('content', JSON.stringify(contentField))
-    //             submission.append('files', file)
+        try {
+            if (file) {
+                const submission = new FormData
+                submission.append('userId', String(userId))
+                submission.append('assignmentId', assignmentId)
+                submission.append('courseId', courseId)
+                submission.append('content', JSON.stringify(contentField))
+                submission.append('files', file)
 
-    //             response = await RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
-    //         } else {
-    //             response = await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
-    //         }
+                response = await RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
+            } else {
+                response = await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
+            }
 
-    //         setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
+            setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
 
-    //         // Now you can use submissionResponse.id here
-    //         await RequestService.post(`/api/course/${courseId}/grade/${response.id}`, {} )
-    //         setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
+            // Now you can use submissionResponse.id here
+            await RequestService.post(`/api/course/${courseId}/grade/${response.id}`, {} )
+            setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
 
-    //         await fetchData()
-    //     } catch (err: any) {
-    //         const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
-    //         setAlert({ autoDelete: false, type: 'error', message })
-    //     } finally {
-    //         setLoading(false)
-    //         await fetchData()
-    //     }
-    // }
-    // const isSubmissionDisabled = () => {
-    //     if (assignment?.dueDate) {
-    //         const dueDate = new Date(assignment.dueDate);
-    //         const now = new Date();
-    //         return now > dueDate;
-    //     }
-    //     return false;
-    // };
+            await fetchData()
+        } catch (err: any) {
+            const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+            setAlert({ autoDelete: false, type: 'error', message })
+        } finally {
+            setLoading(false)
+            await fetchData()
+        }
+    }
+
+    const isSubmissionDisabled = () => {
+        if (assignment?.dueDate) {
+            const dueDate = new Date(assignment.dueDate);
+            const now = new Date();
+            return now > dueDate;
+        }
+        return false;
+    };
+
+    handleChange;
+    isSubmissionDisabled;
+    handleFileChange;
+    handleSubmit;
 
 
     return(
         <PageWrapper>
             <div className={styles.header}>
-                <h1>Submit Assignment</h1>
+                <h1 style={{gridColumnStart:2}}>Submit Assignment</h1> 
+                <button style={{marginLeft:'auto'}} className='btnPrimary' onClick={() => {history.goBack()}}>Back to Course</button>
             </div>
 
                 {/* {role.isInstructor() && (
@@ -228,12 +235,14 @@ const AssignmentDetailPage = () => {
                 </div>
             </div>
             <div className={styles.details}>
-                    <span className={styles.metaText}>
+                <div className={styles.assignmentDetails}>
+                <span className={styles.metaText}>
                         <strong>Assignment Category:&nbsp;</strong>{assignment?.categoryName}
                     </span>
                     <span className={styles.metaText}>
                         <strong>Attachments:&nbsp;</strong>{assignment?.attachmentsFilenames}
                     </span>
+                </div>
             </div>
 
             
@@ -277,11 +286,6 @@ const AssignmentDetailPage = () => {
             ) : null}
             </div>
             </Grid> */}
-
-            <div className={styles.header}>
-                <h1>{`Submissions`}</h1>
-                <hr className = {styles.line}/>
-            </div>
 
 
             <div>
