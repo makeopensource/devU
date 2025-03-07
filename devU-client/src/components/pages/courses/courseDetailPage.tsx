@@ -14,7 +14,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 import styles from './courseDetailPage.scss';
 //import { SET_ALERT } from '../../../redux/types/active.types';
-import { useAppSelector} from "../../../redux/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 import AddAssignmentModal from '../forms/assignments/assignmentFormPage';
 
 const CourseDetailPage = () => {
@@ -30,16 +30,16 @@ const CourseDetailPage = () => {
         setOpenModal(false);
     };
 
-   // const[User, setUser]= useState < User <string>,preferredName>>({})
+    // const[User, setUser]= useState < User <string>,preferredName>>({})
 
-   // const role = useAppSelector((store) => store.roleMode)
-   /* const fetchUserinfo = async () => {
-        RequestService.get< typeof User>('api/users')
-            .then((User) =>{
-                setUser(User)
-
-    })
-*/
+    // const role = useAppSelector((store) => store.roleMode)
+    /* const fetchUserinfo = async () => {
+         RequestService.get< typeof User>('api/users')
+             .then((User) =>{
+                 setUser(User)
+ 
+     })
+ */
 
 
     const fetchCourseInfo = async () => {
@@ -86,15 +86,13 @@ const CourseDetailPage = () => {
                                 <button className={styles.outlinedButton} onClick={() => window.open('URL_TO_PIAZZA', '_blank')}>
                                     Piazza
                                 </button>
-
-                                {role.isInstructor() &&(
-                                <button className={styles.outlinedButton} onClick={() => {
-                                    // history.push(`/course/${courseId}/createAssignment`)
-                                    setOpenModal(true)
-                                }}>Add Assignment
-                                </button>
-                                    )}
-                                
+                                {role.isInstructor() && (
+                                    <button className={styles.outlinedButton} onClick={() => {
+                                        // history.push(`/course/${courseId}/createAssignment`)
+                                        setOpenModal(true)
+                                    }}>Add Assignment
+                                    </button>
+                                )}
                                 {/* {role.isInstructor() &&(
                                 <button className={styles.actual_button} onClick={() => {
                                     history.push(`/course/${courseId}/createAssignment`)
@@ -103,13 +101,8 @@ const CourseDetailPage = () => {
                                     )} */}
                             </div>
                             <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
-
-
-                            </div>
-
-
+                        </div>
                         <h3>Assignments</h3>
-
                         <div className={styles.assignmentsContainer}>
                             {Object.keys(categoryMap).length > 0 ? (
                                 <div className={styles.coursesContainer}>
