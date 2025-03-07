@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "DevU API",
   "scripts": {
-    "start": "npm run migrate && ts-node-dev src/index.ts",
+    "start": "npm run migrate && ts-node src/index.ts",
+    "dev": "npm run migrate && ts-node-dev src/index.ts",
     "migrate": "npm run typeorm -- migration:run -d src/database.ts",
     "create-migrate": "npx typeorm-ts-node-commonjs migration:generate -d src/database.ts",
     "update-shared": "cd ../devU-shared && npm run build-local && cd ../devU-api && npm i",

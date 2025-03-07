@@ -108,7 +108,7 @@ async function runContainerAutograders(filepaths: string[], submission: Submissi
   let jobResponse = null
 
   const { graderData, makefileData, autogradingImage, timeout } =
-    await containerAutograderService.getGraderByAssignmentId(assignmentId)
+    await containerAutograderService.loadGrader(assignmentId)
   if (!graderData || !makefileData || !autogradingImage || !timeout) {
     containerGrading = false
   } else {
