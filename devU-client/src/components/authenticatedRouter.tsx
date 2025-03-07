@@ -2,7 +2,6 @@ import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 
 import AssignmentDetailPage from 'components/pages/assignments/assignmentDetailPage'
-import AssignmentCreatePage from 'components/pages/forms/assignments/assignmentFormPage'
 import AssignmentUpdatePage from 'components/pages/forms/assignments/assignmentUpdatePage'
 import CourseDetailPage from 'components/pages/courses/courseDetailPage'
 import EditCourseFormPage from 'components/pages/forms/courses/coursesFormPage'
@@ -21,8 +20,11 @@ import CoursesListPage from "./pages/listPages/courses/coursesListPage";
 import AssignmentProblemFormPage from './pages/forms/assignments/assignmentProblemFormPage'
 import InstructorSubmissionspage from "./pages/submissions/InstructorSubmissionspage";
 import SubmissionFileView from './pages/submissions/submissionFileView'
+import UserCoursesListPage from "./pages/listPages/courses/coursesListPage";
+import JoinCoursePage from "./pages/listPages/joinwithcodepage";
 
 import WebhookURLForm from './pages/webhookURLForm'
+// import AddAssignmentModal from 'components/pages/forms/assignments/assignmentFormPage'
 
 const AuthenticatedRouter = () => (
     <Switch>
@@ -37,7 +39,6 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/preview' component={CoursePreviewPage}/>
         <Route exact path='/course/:courseId/update' component={CourseUpdatePage}/>
         <Route exact path='/course/:courseId/gradebook' component={GradebookStudentPage}/>
-        <Route exact path='/course/:courseId/createAssignment' component={AssignmentCreatePage}/>
         <Route exact path='/course/:courseId/gradebook/instructor' component={GradebookInstructorPage}/>
 
         <Route exact path='/course/:courseId/assignment/:assignmentId' component={AssignmentDetailPage}/>
@@ -55,6 +56,8 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId/feedback'
                component={SubmissionFeedbackPage}/>
        <Route exact path ='/course/:courseId/assignment/:assignmentId/submission/:submissionId/fileView' component={SubmissionFileView}/>
+       <Route path="/join-course" component={JoinCoursePage} />
+            <Route path="/" component={UserCoursesListPage} />
        // TBD, undecided where webhooks should be placed
         {/*<Route exact path='/webhookURLPage' component={webhookURLForm}/>*/}
 

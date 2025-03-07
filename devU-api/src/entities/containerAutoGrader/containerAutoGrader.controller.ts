@@ -30,10 +30,12 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function getObjectByAssignment(req: Request, res: Response, next: NextFunction) {
+export async function getAllByAssignment(req: Request, res: Response, next: NextFunction) {
   try {
     const assignmentId = parseInt(req.params.id)
-    const containerAutoGrader = await ContainerAutoGraderService.getGraderObjectByAssignmentId(assignmentId)
+    if (!assignmentId) return res.status(404).json({ message: 'invalid assignment ID' })
+
+    const containerAutoGrader = await ContainerAutoGraderService.getAllGradersByAssignment(assignmentId)
 
     res.status(200).json(containerAutoGrader.map(serialize))
   } catch (err) {
@@ -110,5 +112,5 @@ export default {
   post,
   put,
   _delete,
-  getObjectByAssignment,
+  getAllByAssignment,
 }
