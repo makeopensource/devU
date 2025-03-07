@@ -7,10 +7,10 @@
 
 .courses_heading {
     text-align: left;
-    // margin-left: 20px;
+    margin: 20px 0;
     // font-size: 30px;
     // font-weight: 550;
-    margin-bottom: 30px;
+    margin: 10px 0;
 }
 
 // h1 {
@@ -22,16 +22,14 @@
 // }
 
 
-// .no_courses {
-//     margin-left: 20px;
-// }
-
-
-
 .coursesContainer {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    justify-items: center;
+    grid-template-columns: 1fr 1fr 1fr;
+    //flex-direction: row;
     gap: 20px;
+    margin-top:20px;
+    justify-content: flex-start;
     // margin: 20px;
 }
 
@@ -40,13 +38,10 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: stretch;
-    width: 400px;
+    width: 100%;
     padding: 0;
-    background-color: $list-item-background;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 // .create_course {
@@ -59,36 +54,31 @@
 //     transition: background-color 0.3s ease;
 //     margin: 20px
 // }
+.courses_title{
+    margin-top: 20px;
+    width: fit-content;
+    align-self: center;
+    grid-column-start: 2;
+}
 
 .header {
-    display: flex;
-    justify-content: space-between;
+    color: $text-color;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
     align-items: center;
-    margin-bottom: 20px;
 }
 
-.buttonContainer {
+.buttonContainer{
     display: flex;
-    gap: 10px;
-}
-
-#createCourseBtn {
-    display: block;
+    gap: 20px;
     margin-left: auto;
-    border: 2px solid $primary;
     background: transparent;
     color: $primary;
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: 600;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    cursor: pointer;
-
-    &:hover {
-        background-color: $primary;
-        color:white;
-    }
 }
 
 #joinCourseBtn {
@@ -111,6 +101,7 @@
 
 }
 
+
 // .courses_heading::after {
 //     content: '';
 //     display: block;
@@ -121,14 +112,18 @@
 //     background-color: $text-color;
 // }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
     .coursesContainer {
+        display: flex;
         flex-direction: column;
         align-items: center;
     }
-
-    .courseCard {
-        width: 100%;
-        max-width: none;
+    .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .buttonContainer{
+        margin-left: 0;
     }
 }

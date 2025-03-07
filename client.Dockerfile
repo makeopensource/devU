@@ -1,4 +1,4 @@
-FROM node:16 as module_builder
+FROM node:22-alpine AS module_builder
 
 WORKDIR /tmp
 
@@ -8,12 +8,11 @@ RUN npm install && \
     npm run clean-directory && \
     npm run build-docker
 
-FROM node:16
+FROM node:22-alpine
 
 WORKDIR /app
 
 COPY ./devU-client/package.json ./
-
 
 RUN npm install
 
@@ -21,5 +20,5 @@ COPY ./devU-client/ .
 
 COPY --from=module_builder /tmp/devu-shared-modules ./devu-shared-modules
 
-RUN npm run build-local
-CMD cp -r /app/dist/* /out
+# build frontend during run so that we can modify baseurl via docker envoirment
+CMD npm run --silent build-docker && rm -rf /out/* && cp -r /app/dist/* /out

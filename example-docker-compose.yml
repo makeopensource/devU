@@ -1,0 +1,132 @@
+# example compose file
+# remember to copy tango.config.py to the working directory from where the compose file is run
+# or use the setup script in repo
+
+name: devu
+services:
+  api:
+    container_name: devu-api
+    image: ghcr.io/makeopensource/devu/api:develop
+    environment:
+      TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
+      WAIT_HOSTS: db:5432
+      CLIENT_URL: https://client.devu.app # TODO change the client url here if needed
+    depends_on:
+      db:
+        condition: service_started
+    ports:
+      - '3001:3001'
+    restart: unless-stopped
+
+  client:
+    image: ghcr.io/makeopensource/devu/client:develop
+    environment:
+      - API_URL=https://devu.app # todo change this to prod api url
+      - ROOT_PATH=/
+    volumes:
+      - ./dist:/out
+
+  # Hosts the front end static files from ./dist/local thorough a web server
+  nginx:
+    container_name: devu-client-nginx
+    image: ghcr.io/makeopensource/devu/nginx:develop
+    volumes:
+      - ./dist/local:/usr/share/nginx/html
+    depends_on:
+      client:
+        condition: service_completed_successfully
+    ports:
+      - '9000:80'
+    restart: unless-stopped
+
+  tango:
+    container_name: tango
+    ports:
+      - '127.0.0.1:3000:3000'
+    image: ghcr.io/makeopensource/devu/tango:develop
+    environment:
+      - DOCKER_REDIS_HOSTNAME=redis
+      - RESTFUL_KEY=devutangokey
+      # TODO remember to modify the below to be the path to the absolute path of tango_files` on your host machine
+      - DOCKER_TANGO_HOST_VOLUME_PATH=/absolute/path/to/tango_files
+    depends_on:
+      - redis
+    volumes:
+      - ./tango.config.py:/opt/TangoService/Tango/config.py
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./logs/tango/:/var/log/tango/
+      - ./logs/tangonginx:/var/log/nginx
+      - ./tango_files:/opt/TangoService/Tango/volumes
+    restart: unless-stopped
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - '127.0.0.1:6379:6379'
+    deploy:
+      replicas: 1
+    restart: unless-stopped
+
+  # leviathan stuff
+  # testing frontend for leviathan
+  kraken:
+    container_name: kraken
+    image: ghcr.io/makeopensource/leviathan/kraken:dev
+    ports:
+      - "3022:3000"
+    environment:
+      - LEVIATHAN_URL=http://levi:9221
+    restart: unless-stopped
+
+  levi:
+    container_name: leviathan
+    image: ghcr.io/makeopensource/leviathan:dev
+    ports:
+      - "9221:9221"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./leviathan:/app/appdata 
+    restart: unless-stopped
+
+  db:
+    # Runs the PostgreSQL database
+    image: postgres
+    environment:
+      POSTGRES_DB: typescript_api
+      POSTGRES_USER: typescript_user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data 
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio
+    ports:
+      - '9002:9000'
+      - '9001:9001'
+    expose:
+      - '9000'
+    volumes:
+        - ./minio:/data
+    environment:
+      MINIO_ROOT_USER: typescript_user
+      MINIO_ROOT_PASSWORD: changeMe
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+  # auto update containers
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=900 # check for new image every 15 min
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+    restart: unless-stopped

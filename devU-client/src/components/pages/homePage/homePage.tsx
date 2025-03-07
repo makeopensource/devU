@@ -90,7 +90,7 @@ const HomePage = () => {
 
             {/* <div className={styles.header}> */}
                 {/* <div className={styles.smallLine}></div> */}
-                <h2 className={styles.courses_heading}>Current</h2>
+                <h2 className={styles.courses_heading}>Current Courses</h2>
                 {/* <div className={styles.largeLine}></div> */}
             {/* </div> */}
             <div className={styles.coursesContainer}>
@@ -101,21 +101,19 @@ const HomePage = () => {
                             instructor={true} />
                     </div>
                 ))}
-            </div>
-            <div className={styles.coursesContainer}>
+
                 {enrollCourses && enrollCourses.map((course) => (
                     <div className={styles.courseCard}
                         key={course.id}
                         onClick={() => handleCourseClick(course.id)} style={{ cursor: 'pointer' }}>
-
                         <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id} />
                     </div>
                 ))}
-                {enrollCourses.length === 0 && instructorCourses.length == 0 && <h4 className={styles.no_courses}>You do not have current enrollment yet</h4>}
+                {enrollCourses.length === 0 && instructorCourses.length == 0 && <div className='no_items'>You do not have current enrollment yet</div>}
             </div>
             {/* <div className={styles.header}> */}
                 {/* <div className={styles.smallLine}></div> */}
-                <h2 className={styles.courses_heading}>Completed</h2>
+                <h2 className={styles.courses_heading}>Completed Courses</h2>
                 {/* <div className={styles.largeLine}></div> */}
             {/* </div> */}
             <div className={styles.coursesContainer}>
@@ -130,12 +128,12 @@ const HomePage = () => {
                         />
                     </div>
                 ))}
-                {pastCourses.length === 0 && <h4 className={styles.no_courses}>No completed courses</h4>}
+                {pastCourses.length === 0 && <div className='no_items'>No completed courses</div>}
             </div>
 
             {/* <div className={styles.header}> */}
                 {/* <div className={styles.smallLine}></div> */}
-                <h2 className={styles.courses_heading}>Upcoming</h2>
+                <h2 className={styles.courses_heading}>Upcoming Courses</h2>
                 {/* <div className={styles.largeLine}></div> */}
             {/* </div> */}
 
@@ -147,7 +145,7 @@ const HomePage = () => {
                     </div>
                 ))}
 
-                {upcomingCourses.length === 0 && <h4 className={styles.no_courses}>No upcoming Courses</h4>}
+                {upcomingCourses.length === 0 && <div className='no_items'>No upcoming courses</div>}
             </div>
 
 
