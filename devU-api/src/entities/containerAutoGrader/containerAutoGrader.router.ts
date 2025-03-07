@@ -12,19 +12,6 @@ const upload = multer()
 
 /**
  * @swagger
- * /course/:courseId/assignment/:assignmentId/container-auto-graders:
- *   get:
- *     summary: Retrieve a list of all container auto graders
- *     tags:
- *       - ContainerAutoGraders
- *     responses:
- *       '200':
- *         description: OK
- */
-Router.get('/', isAuthorized('assignmentViewAll'), ContainerAutoGraderController.get)
-
-/**
- * @swagger
  * /course/:courseId/assignment/:assignmentId/container-auto-graders/{id}:
  *   get:
  *     summary: Retrieve a single container auto grader
@@ -59,7 +46,7 @@ Router.get('/:id', isAuthorized('assignmentViewAll'), asInt(), ContainerAutoGrad
  *         schema:
  *           type: integer
  */
-Router.get('/assignment/:id', asInt(), ContainerAutoGraderController.getObjectByAssignment)
+Router.get('/assignment/:id', asInt(), ContainerAutoGraderController.getAllByAssignment)
 
 /**
  * @swagger
