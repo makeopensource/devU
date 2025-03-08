@@ -26,21 +26,21 @@ services:
       - '' # so it starts with normal docker compose
       - 'dev-api' # start when developing api
 
-  nginx:
-    # Hosts the front end static files from ./dist/local thorough a web server
-    build:
-      context: .
-      dockerfile: nginx.Dockerfile
-    volumes:
-      - ./dist/local:/usr/share/nginx/html
-    depends_on:
-      client:
-        condition: service_completed_successfully
-    ports:
-      - '9000:80'
-    profiles:
-      - '' # so it starts with normal docker compose
-      - 'dev-api' # start when developing api
+#  nginx:
+#    # Hosts the front end static files from ./dist/local thorough a web server
+#    build:
+#      context: .
+#      dockerfile: nginx.Dockerfile
+#    volumes:
+#      - ./dist/local:/usr/share/nginx/html
+#    depends_on:
+#      client:
+#        condition: service_completed_successfully
+#    ports:
+#      - '9000:80'
+#    profiles:
+#      - '' # so it starts with normal docker compose
+#      - 'dev-api' # start when developing api
 
   # Database stuff
   db:
