@@ -6,7 +6,7 @@ import { ContainerAutoGrader, FileUpload } from 'devu-shared-modules'
 import ContainerAutoGraderModel from './containerAutoGrader.model'
 import FileModel from '../../fileUpload/fileUpload.model'
 
-import { uploadFile, downloadFile } from '../../fileStorage'
+import { downloadFile, uploadFile } from '../../fileStorage'
 import { generateFilename } from '../../utils/fileUpload.utils'
 
 const connect = () => dataSource.getRepository(ContainerAutoGraderModel)
@@ -105,14 +105,11 @@ export async function list() {
   return await connect().findBy({ deletedAt: IsNull() })
 }
 
-//The grader has not changed to the new function, so the fake function keep here for now to avoid error
-//But need to be deleted when the grader entity changed to the getGraderByAssignmentId
-export async function getGraderObjectByAssignmentId(assignmentId: number) {
-  if (!assignmentId) throw new Error('Missing AssignmentId')
+export async function getAllGradersByAssignment(assignmentId: number) {
   return await connect().findBy({ assignmentId: assignmentId, deletedAt: IsNull() })
 }
 
-export async function getGraderByAssignmentId(assignmentId: number) {
+export async function loadGrader(assignmentId: number) {
   const containerAutoGraders = await connect().findOneBy({ assignmentId: assignmentId, deletedAt: IsNull() })
   if (!containerAutoGraders) return { graderData: null, makefileData: null, autogradingImage: null, timeout: null }
 
@@ -135,6 +132,6 @@ export default {
   update,
   _delete,
   list,
-  getGraderByAssignmentId,
-  getGraderObjectByAssignmentId,
+  loadGrader,
+  getAllGradersByAssignment,
 }

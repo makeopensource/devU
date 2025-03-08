@@ -1,7 +1,10 @@
+@import 'variables';
+
 .textField {
   display: flex;
   flex-direction: column;
-
+  background-color: $input-field-background;
+  border-radius: 10px;
   margin-bottom: 30px;
   width: 100%;
 }

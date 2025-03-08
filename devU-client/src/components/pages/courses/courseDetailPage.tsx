@@ -16,6 +16,8 @@ import styles from './courseDetailPage.scss';
 //import { SET_ALERT } from '../../../redux/types/active.types';
 import { useAppSelector } from "../../../redux/hooks";
 import AddAssignmentModal from '../forms/assignments/assignmentFormPage';
+import { prettyPrintSemester } from 'utils/semester.utils';
+import { wordPrintDate } from 'utils/date.utils';
 
 const CourseDetailPage = () => {
     const { courseId } = useParams<{ courseId: string }>();
@@ -71,75 +73,94 @@ const CourseDetailPage = () => {
                     <div>
                         {/* Course Title */}
                         <div className={styles.header}>
-                            <h1>
-                                {courseInfo.number}: {courseInfo.name} ({courseInfo.semester})
-                            </h1>
-
-                            {/* Updated Buttons Below the Course Title */}
-                            <div className={styles.buttonContainer}>
-                                <button className={styles.outlinedButton} onClick={() => history.push(`/course/${courseId}/gradebook`)}>
-                                    Gradebook
+                            <h1 className={styles.class_title}>{courseInfo.number}: {courseInfo.name}</h1>
+                            {role.isInstructor() && (
+                                <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
+                                    history.push(`/course/${courseId}/update`)
+                                }}>edit course
                                 </button>
-                                <button className={styles.outlinedButton} onClick={() => window.open('URL_TO_COURSE_WEBSITE', '_blank')}>
-                                    Course Website
-                                </button>
-                                <button className={styles.outlinedButton} onClick={() => window.open('URL_TO_PIAZZA', '_blank')}>
-                                    Piazza
-                                </button>
-                                {role.isInstructor() && (
-                                    <button className={styles.outlinedButton} onClick={() => {
-                                        // history.push(`/course/${courseId}/createAssignment`)
-                                        setOpenModal(true)
-                                    }}>Add Assignment
-                                    </button>
-                                )}
-                                {/* {role.isInstructor() &&(
-                                <button className={styles.actual_button} onClick={() => {
-                                    history.push(`/course/${courseId}/createAssignment`)
-                                }}>Add Assignment
-                                </button>
-                                    )} */}
-                            </div>
-                            <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
-                        </div>
-                        <h3>Assignments</h3>
-                        <div className={styles.assignmentsContainer}>
-                            {Object.keys(categoryMap).length > 0 ? (
-                                <div className={styles.coursesContainer}>
-                                    {Object.keys(categoryMap).map((category, index) => (
-                                        <Card key={index} className={styles.courseCard}>
-                                            <CardContent>
-                                                <Typography variant="h5" className={styles.color} style={{ textAlign: 'center' }}>
-                                                    {category}
-                                                </Typography>
-                                            </CardContent>
-                                            <List>
-                                                {categoryMap[category].map((assignment, index) => (
-                                                    <ListItem key={index} disablePadding>
-                                                        <ListItemButton onClick={() => history.push(`/course/${courseId}/assignment/${assignment.id}`)}>
-                                                            <ListItemText
-                                                                className={styles.assignmentName}
-                                                                primary={
-                                                                    <Typography style={{ textAlign: 'center' }}>{assignment.name}</Typography>
-                                                                }
-                                                                secondary={
-                                                                    <Typography variant="body2" color="grey">
-                                                                        Start: {new Date(assignment.startDate).toLocaleDateString()} | Due: {new Date(assignment.dueDate).toLocaleDateString()}
-                                                                    </Typography>
-                                                                }
-                                                            />
-                                                        </ListItemButton>
-                                                    </ListItem>
-                                                ))}
-                                            </List>
-                                        </Card>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p>No assignments available</p>
                             )}
                         </div>
-                    </div>
+                        <div className={styles.subheader}>
+                            <div className={styles.meta_container}>
+                                <div>
+                                    <h4>Instructor:</h4>
+                                </div>
+                                <div>
+                                    <h4>Section:</h4>
+                                </div>
+                                <div>
+                                    <h4>Semester: </h4><span>{prettyPrintSemester(courseInfo.semester)}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h3>Course Links</h3>
+                                <div className={styles.buttons_container}>
+                                    <button className='btnSecondary' onClick={() => {
+                                        history.push(`/course/${courseId}/gradebook`)
+                                    }}>Gradebook
+                                    </button>
+                                </div>
+                                <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
+                            </div>
+                        </div>
+                        <div className={styles.subheader}><h3>Assignments</h3>
+                            {role.isInstructor() &&(
+                                <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
+                                    setOpenModal(true)}}>add assignment
+                                </button>
+                                    )}
+                        </div>
+
+
+
+
+
+                        <div className={styles.coursesContainer}>
+                            {Object.keys(categoryMap).map((category, index) => (
+
+                                <Card key={index} className={styles.courseCard} style = {{borderRadius: '15px', height: 'fit-content', boxShadow: 'none', backgroundColor: 'var(--primary)'}}>
+                                    <CardContent sx={{padding:'0'}}>
+                                        <Typography variant="h5" className={styles.categoryName} style={{ textAlign : 'center', fontWeight : 600, fontSize: '1.2rem' }}>
+                                            {category}
+                                        </Typography>
+                                    </CardContent>
+                                    <List disablePadding style={{backgroundColor:'var(--background)'}}>
+                                        {categoryMap[category].map((assignment, index) => (
+                                            <ListItem key={index}  disablePadding>
+                                                <ListItemButton sx={{padding: 0}} onClick={() => {
+                                                    history.push(`/course/${courseId}/assignment/${assignment.id}`)
+                                                }}>
+                                                    <ListItemText style={{margin : 0}}
+                                                        className = {styles.assignmentName}
+                                                        primary={
+                                                            <Typography>
+                                                                {assignment.name}
+                                                            </Typography>
+                                                        }
+                                                                  secondary={
+                                                                      <React.Fragment>
+                                                                          <div className={styles.due_end}>
+                                                                            <span style={{fontWeight:'700'}}>Due:&nbsp;</span>{wordPrintDate(assignment.dueDate)} | &nbsp;
+                                                                            <span style={{fontWeight:'700'}}>End:&nbsp;</span>{wordPrintDate(assignment.endDate)}
+                                                                        </div>
+                                                                      </React.Fragment>
+                                                                  }
+                                                    />
+                                                </ListItemButton>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Card>
+
+                            ))} 
+                            </div>
+                            <div>
+                                {Object.keys(categoryMap).length === 0 && <div className='no_items'>No assignments yet</div>}
+                            </div>
+                        </div>
+
+
                 ) : (
                     <h1>Error fetching Course Information</h1>
                 )}

@@ -37,6 +37,40 @@ Router.get('/', isAuthorized('courseViewAll'), UserCourseController.getByCourse)
 
 /**
  * @swagger
+ * /course/:courseId/user-courses/instructor:
+ *   get:
+ *     summary: Retrieve first instructor of the course
+ *     tags:
+ *       - UserCourses
+ *     responses:
+ *       '200':
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       '404':
+ *         description: no instructor found associated with course
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     description: error message
+ *       parameters:
+ *       - name: courseId
+ *         description: Enter Course Id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ */
+Router.get('/instructor', isAuthorized('courseViewAll'), UserCourseController.getInstructor)
+
+/**
+ * @swagger
  * /course/:courseId/user-courses/{id}:
  *   get:
  *     summary: Retrieve a single user-course association

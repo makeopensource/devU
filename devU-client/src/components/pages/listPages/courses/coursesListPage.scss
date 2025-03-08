@@ -1,65 +1,160 @@
 @import 'variables';
 
-
-
-
-.addCourseBtn {
-
-  background-color: $primary;
+.coursesListPage {
+  font-family: $font-family;
+  background-color: $background;
   color: $text-color;
-  border: 0px;
-  padding: 10px 40px;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.courseName {
-  color: $text-color;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.filters {
+  min-height: 100vh;
   display: flex;
-  justify-content: flex-end;
-
-  margin-bottom: 1rem;
-}
-
-.dropdown {
-  width: 300px;
-}
-
-.header {
-  color: $text-color;
-  display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  cursor: default;
-}
 
-@media (max-width: 700px) {
-  .dropdown {
-    width: 100%;
+  /* Breadcrumbs & Navigation */
+  .navigation {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    max-width: 1000px;
+    justify-content: space-between;
+    margin: 15px 0;
+
+    .homeLink {
+      font-size: 1rem;
+      font-weight: bold;
+      color: $primary;
+      text-decoration: none;
+      transition: 0.2s;
+
+      &:hover {
+        color: $secondary;
+      }
+    }
+
+    .breadcrumbs {
+      font-size: 0.9rem;
+      color: $text-color-secondary;
+    }
   }
 
-  .header {
-    display: block;
+  /* Page Title */
+  .pageTitle {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
   }
-}
 
-.smallLine {
-  width: 50px; /* adjust this value to set the length of the small line */
-  border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-  margin-right: 10px; /* adjust this value to set the space between the line and the text */
-}
+  /* Search Section */
+  .searchSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1000px;
+    margin-bottom: 20px;
+    gap: 12px;
 
-.largeLine {
-  flex-grow: 1;
-  border-top: 3px solid $text-color; /* adjust this value to set the color and thickness of the line */
-  margin-left: 10px; /* adjust this value to set the space between the line and the text */
-  margin-right: 10px; /* add this line to create some space between the line and the button */
+    input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid $input-border;
+      background-color: $input-field-background;
+      color: $text-color;
+      border-radius: 12px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 10px 16px;
+      background-color: $primary;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+
+    }
+
+    .joinWithCodeButton {
+      margin-left: auto; 
+      background-color: $primary;
+    }
+  }
+
+  /* Table Styling */
+  .tableContainer {
+    width: 96%;
+    max-width: 1200px;
+    margin: 10px auto;
+    border-radius: 8px;
+    overflow: hidden;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th, td {
+            text-align: center;
+            padding: 12px;
+            border-bottom: 1px solid $grey;
+        }
+
+        th {
+            background-color: $primary;
+            color: white;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        tr:nth-child(even) {
+            background-color: $table-row-even;
+        }
+
+        tr:nth-child(odd) {
+            background-color: $table-row-odd;
+        }
+
+        tr:hover {
+            background-color: $list-item-background-hover;
+        }
+    }
+
+    /* Join Button */
+    .joinButton {
+        background-color: $primary;
+        color: white;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 20px; /* ✅ Makes button rounded */
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: 0.2s;
+        box-shadow: $box-shadow;
+
+        &:hover {
+            background-color: $secondary-darker;
+        }
+
+        &:disabled {
+            background-color: $grey-lighter; 
+            cursor: not-allowed;
+        }
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: $medium) {
+    .tableContainer {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .searchSection {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
 }

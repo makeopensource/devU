@@ -20,6 +20,8 @@ import CoursesListPage from "./pages/listPages/courses/coursesListPage";
 import AssignmentProblemFormPage from './pages/forms/assignments/assignmentProblemFormPage'
 import InstructorSubmissionspage from "./pages/submissions/InstructorSubmissionspage";
 import SubmissionFileView from './pages/submissions/submissionFileView'
+import UserCoursesListPage from "./pages/listPages/courses/coursesListPage";
+import JoinCoursePage from "./pages/listPages/joinwithcodepage";
 
 import WebhookURLForm from './pages/webhookURLForm'
 // import AddAssignmentModal from 'components/pages/forms/assignments/assignmentFormPage'
@@ -54,6 +56,8 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId/feedback'
                component={SubmissionFeedbackPage}/>
        <Route exact path ='/course/:courseId/assignment/:assignmentId/submission/:submissionId/fileView' component={SubmissionFileView}/>
+       <Route path="/join-course" component={JoinCoursePage} />
+            <Route path="/" component={UserCoursesListPage} />
        // TBD, undecided where webhooks should be placed
         {/*<Route exact path='/webhookURLPage' component={webhookURLForm}/>*/}
 

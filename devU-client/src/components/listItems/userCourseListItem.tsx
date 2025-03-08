@@ -21,6 +21,7 @@ type Props = {
 
 const UserCourseListItem = ({ course, assignments, past = false, instructor = false }: Props) => {
     const history = useHistory()
+    const currentTime = new Date()
     return (
         <ListItemWrapper to={null} tag={course.number} containerStyle={styles.container}>
 
@@ -30,7 +31,7 @@ const UserCourseListItem = ({ course, assignments, past = false, instructor = fa
             </div>
             <div className={styles.subText}>
                 {assignments && assignments.length > 0 ? (assignments.map((assignment) => (
-                    <SimpleAssignmentListItem assignment={assignment} key={assignment.id} />
+                    (new Date(assignment.dueDate) > currentTime) && <SimpleAssignmentListItem assignment={assignment} key={assignment.id} />
                 ))) : past && <div></div> }
                 <div className={styles.Buttons}>
                     <button className={styles.sub_button} onClick={(e) => {
