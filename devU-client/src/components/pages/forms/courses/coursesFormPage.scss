@@ -1,5 +1,6 @@
 @import 'variables';
 
+
 .courseFormWrapper {
   display: flex;
   margin: 16px 50px;
@@ -78,7 +79,6 @@ input[type='date'] {
 .fieldContainer {
   display: flex;
   justify-content: center;
-  align-items: center;
   flex-direction: column;
   gap: 5px;
 }
@@ -86,9 +86,10 @@ input[type='date'] {
 select {
   background: $input-field-background;
   color: $input-field-label;
-  padding: 0.625rem 1rem;
+  padding: 10px;
   border: none;
-  border-radius: 100px;
+  border-radius: 10px;
+  width: 100%;
 }
 
 input[type='file']::file-selector-button {

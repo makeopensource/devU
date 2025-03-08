@@ -30,7 +30,7 @@ const CourseListItem = ({course, isOpen}: Props) => {
         setIsOpen(isOpen);
     }, [isOpen]);
 
-    if (!course || !course.isPublic) {
+    if (!course) {
         return null;
     }
 
@@ -47,13 +47,13 @@ const CourseListItem = ({course, isOpen}: Props) => {
                     {infoSection("Semester", prettyPrintSemester(course.semester))}
                     {infoSection("Start/End Date", prettyPrintDate(course.startDate), prettyPrintDate(course.endDate))}
                     <div className={styles.courseVisibility}>
-             {course && (
+             {/* {course && (
                 course.isPublic ? (
                     <span className={styles.public}>Public Course</span>
                 ) : (
                     <span className={styles.private}>Private Course</span>
                 )
-            )}
+            )} */}
         </div>
                 </Link>
                 

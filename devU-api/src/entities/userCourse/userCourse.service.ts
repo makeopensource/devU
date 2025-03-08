@@ -16,6 +16,13 @@ export async function create(userCourse: UserCourseType) {
   return await connect().save(userCourse)
 }
 
+export async function instructor(courseId: number) {
+  return await connect().findOne({
+    select: ['userId'],
+    where: { role: 'instructor', courseId: courseId, deletedAt: IsNull() },
+  })
+}
+
 // Add/drop students based on a list of users,
 // to drop students, set the third param to true
 export async function bulkAddDrop(userEmails: string[], courseId: number, drop: boolean) {
@@ -41,12 +48,12 @@ export async function bulkAddDrop(userEmails: string[], courseId: number, drop: 
         try {
           await create(student)
         } catch (error) {
-            if (error instanceof Error && error.message === 'User already enrolled in course') {
-              // update student drop to false, since they re-enrolled after being dropped
-              await update(student)
-            } else {
-              throw error; // re-throw if it's a different error
-            }
+          if (error instanceof Error && error.message === 'User already enrolled in course') {
+            // update student drop to false, since they re-enrolled after being dropped
+            await update(student)
+          } else {
+            throw error // re-throw if it's a different error
+          }
         }
         success.push(`${email} enrolled successfully`)
       } else {
@@ -121,4 +128,5 @@ export default {
   listByUser,
   checking: checkIfEnrolled,
   bulkCreate: bulkAddDrop,
+  instructor,
 }

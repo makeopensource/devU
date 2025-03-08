@@ -10,7 +10,7 @@ import {applyStylesToErrorFields, removeClassFromField} from "../../../../utils/
 import textStyles from "../../../shared/inputs/textField.scss";
 import {useHistory, useParams} from 'react-router-dom'
 
-import Button from '@mui/material/Button'
+// import Button from '@mui/material/Button'
 
 const ContainerAutoGraderForm = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -76,36 +76,38 @@ const ContainerAutoGraderForm = () => {
             <h1>Container Auto Grader Form</h1>
             <div className = {styles.form}>
                 <p>Required Field *</p>
-
                 <label htmlFor='autogradingImage'>Autograding Image *</label>
-                <TextField id='autogradingImage' onChange={handleChange}
-                           value={formData.autogradingImage}
-                           className={invalidFields.get('autogradingImage')}></TextField>
-
+                <TextField 
+                id='autogradingImage'
+                onChange={handleChange}
+                value={formData.autogradingImage}
+                className={invalidFields.get('autogradingImage')}></TextField>
                 <label htmlFor='timeout'>Timeout *</label>
-                <TextField id='timeout' onChange={handleChange} value={formData.timeout}
-                           className={invalidFields.get('timeout')}></TextField>
+                <TextField id='timeout' onChange={handleChange} 
+                value={formData.timeout}
+                className={invalidFields.get('timeout')}
+                placeholder="3000" ></TextField>
 
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <label htmlFor="graderFile">Graderfile *</label>
-                    <input type="file" id='graderFile'  onChange={handleGraderfileChange} /> <br/>
+                    <input type="file" id='graderFile'  
+                    onChange={handleGraderfileChange} />
                 </div>
 
-                <br/>
 
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <label htmlFor="makefileFile">Makefile *</label>
-                    <input type="file" id='makefileFile' onChange={handleMakefileChange} /> <br/>
+                    <input type="file" id='makefileFile' onChange={handleMakefileChange} />
+
                 </div>
 
                 <br/>
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant='contained' onClick= { handleSubmit } >Add Problem</Button>
+                <div className={styles.buttonContainer}>
+                    <button className={styles.addGraderButton} onClick={handleSubmit}>
+                        Add Grader
+                    </button>
                 </div>
-            </div>
-            <div className = {styles.rightColumn}>
-                <h1>Existing Problems</h1>
             </div>
         </PageWrapper>
     )

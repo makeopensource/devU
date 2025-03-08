@@ -2,65 +2,93 @@
 
 .grid {
     display: grid;
-    grid-template-columns: 0.3fr 1fr 0.5fr;
-    grid-template-rows: 1fr 0.75fr;
+    grid-template-columns: 1fr 1fr;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
     width: 100%;
 }
+.pageHeader{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+.backToCourse{
+    margin-left: auto;
+}
 
-.assignmentsList, .form, .problemsList, .attachments {background-color: $list-item-background;}
-.assignmentsList {grid-area: 1 / 1 / 3 / 2;}
-.form {grid-area: 1 / 2 / 2 / 3;}
-.problemsList {grid-area: 1 / 3 / 2 / 4;}
-.attachments {grid-area: 2 / 2 / 3 / 4;}
+// .assignmentsList {grid-area: 1 / 1 / 3 / 2;}
+// .problemsList {grid-area: 1 / 3 / 2 / 4;}
+// .attachments {grid-area: 2 / 2 / 3 / 4;}
+
+.form {
+    width: 80%;
+    height: fit-content;
+}
 
 
 .textFieldContainer {
     display:flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    font-size: 16px;
+    gap:10px;
+    margin-bottom: 10px;
 }
 
 .textField {
     align-items: center;
+    margin-bottom: 0;
+    background: none;
+    border: 2px solid #ccc;
+}
+
+.textFieldHeader{
+    margin: 5px 0;
+}
+
+.submissionsContainer{
+    display:grid;
+    grid-template-columns: 1fr 1fr;    
+    font-size: 16px;
+    gap:10px;
+    margin-bottom: 10px;
 }
 
 .datepickerContainer {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: 1fr 1fr;
     grid-column-gap: 10px;
-    grid-row-gap: 0px; 
-    width: 100%;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-
+    text-align: left;
+    margin-bottom: 15px;
     .datepicker_start {grid-area: 1 / 1 / 2 / 2;}
     .datepicker_due {grid-area: 1 / 2 / 2 / 3;}
     .datepicker_end {grid-area: 1 / 3 / 2 / 4;}
 }
 
 
-input[type='date'] {
-    height: 20px;
-    background-color: $input-field-background;
+input[type='datetime-local'] {
     color: $input-field-label;
-    padding: 0.625rem 1rem;
-    border: none;
-    border-radius: 100px;
-  }
-
-.problemsList, .assignmentsList {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    align-items: center;
-    width: 100%;
+    border: 2px solid #ccc;
+    padding: 10px;
+    max-width: 1/3;
+    border-radius: 8px;
+    background: none;
 }
 
+.problemsList {
+    display:flex;
+    flex-direction: column;
+    align-items: left;
+    gap:10px;
+    margin-bottom: 10px;
+}
+.filesList{
+    display: flex;
+    margin: 10px 0;
+}
+.problemName{
+    margin: 0 0 10px 0;
+}
 // .assignment {
 //     padding: 10px;
 //     font-weight: bold;
@@ -72,9 +100,6 @@ input[type='date'] {
 //     }
 // }
 
-.pageWrapper {
-    padding:0px;
-  }
 
 .assignmentBtn {
     background-color: transparent;
@@ -90,44 +115,73 @@ input[type='date'] {
     border-radius: 10px;
 }
 
-.problem, .fileList{
+.problem{
+    border-bottom: 1px solid #ddd;
     display: flex;
+    flex-direction: column;
     width: 100%;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content:center;
 }
 
+
 .header {
-    text-align: center;
+    text-align: left;
+    margin: 5px 0;
     color: $text-color;
 }
 
 .editProblem {
-    margin-right: 10px;
-    background-color: $background;
-    border : 2px solid $primary;
+    margin-right: 5px;
+    color: #075D92;
+    padding: 0;
+    background: none;
+    text-decoration: underline;
 }
 
 .deleteButton {
-    background-color: $background;
-    border : 2px solid red;
+    margin-left: 5px;
+    color: $red;
+    padding: 0;
+    background: none;
+    text-decoration: underline;
+
 }
+
+.buttonContainer{
+    display: flex;
+    gap: 20px;
+}
+
+.fileUpload{
+    text-transform: none;
+    border: 3px solid var(--primary);
+    background-color: var(--primary);
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    padding: 5px 15px;
+    max-width: fit-content;
+}
+.fileUpload:hover{
+    background-color: var(--primary);
+}
+
 
 @media (max-width:1000px) {
     .grid {
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, 1fr);
         grid-column-gap: 0px;
         grid-row-gap: 10px;
         width: 100%;
         }
 
-        .assignmentsList, .form, .problemsList, .attachments {background-color: $list-item-background;}
-        .assignmentsList { display: none; }
-        .form { grid-area: 1 / 1 / 2 / 2; }
-        .problemsList { grid-area: 2 / 1 / 3 / 2; }
-        .attachments { grid-area: 3 / 1 / 4 / 2; } 
+    .form {
+        width: 100%;
+    }
+
 }
 
 @media (max-width:450px) {

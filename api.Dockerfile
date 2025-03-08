@@ -1,4 +1,4 @@
-FROM node:20 AS module_builder
+FROM node:22-alpine AS module_builder
 
 WORKDIR /tmp
 
@@ -21,7 +21,7 @@ COPY devU-api/config/ ./config
 
 RUN ./generateConfig.sh default.yml
 
-FROM node:20
+FROM node:22-alpine
 
 WORKDIR /app
 
@@ -43,4 +43,3 @@ RUN chmod +x /wait
 
 # TypeORM Migrations
 CMD /wait && npm run typeorm -- migration:run -d src/database.ts && npm start
-

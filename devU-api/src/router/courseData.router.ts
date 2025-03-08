@@ -9,7 +9,6 @@ import assignmentProblem from '../entities/assignmentProblem/assignmentProblem.r
 import submissionProblemScore from '../entities/submissionProblemScore/submissionProblemScore.router'
 import deadlineExtensions from '../entities/deadlineExtensions/deadlineExtensions.router'
 import fileUpload from '../fileUpload/fileUpload.router'
-import categories from '../entities/category/category.router'
 import categoryScores from '../entities/categoryScore/categoryScore.router'
 import courseScores from '../entities/courseScore/courseScore.router'
 import assignmentScore from '../entities/assignmentScore/assignmentScore.router'
@@ -41,12 +40,15 @@ Router.use('/a/:assignmentId/', asInt('assignmentId'), assignmentRouter)
 
 Router.use('/assignments', assignments)
 Router.use('/assignment-scores', assignmentScore)
-Router.use('/categories', categories)
 Router.use('/category-scores', categoryScores)
 Router.use('/course-scores', courseScores)
 Router.use('/file-upload', fileUpload)
 Router.use('/roles', role)
 Router.use('/user-courses', userCourse)
+
+// redundant endpoint, assignment already encodes the categories
+// here if we need it in the future
+// Router.use('/categories', categories)
 
 Router.use('/webhooks', webhooksRouter)
 
