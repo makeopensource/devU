@@ -23,15 +23,19 @@
     text-align: center;
   }
 
+  a{
+    color: var(--link-blue);
+  }
+  
   // general button template, extends to 3 types of buttons - primary, secondary, delete
   .btn {
     cursor: pointer;
     padding: 5px 15px;
-    border-radius: 100px;
-    height: fit-content;
+    border-radius: 30px;
     border: none;
     font-weight: 700;
-    transition: background-color 0.3s ease;
+    font-size: 16px;
+    transition: all 0.2s ease;
   }
 
   .no_items {
@@ -156,6 +160,7 @@
     --blue-lighter: #74b9ff;
     --blue: #0984e3;
     --blue-darker: #083967;
+    --link-blue: #075D92;
     --btn-secondary-border: var(--primary);
     --btn-secondary-background: #FFF;
     --btn-secondary-text: var(--primary);
@@ -190,7 +195,7 @@
     --red-lighter: #FFA3A3;
     --red: #8A2626;
 
-    --purple-lightest: #efecfd;
+    --purple-lightest: #dcd5fb;
     --purple-lighterer: #9885f0;
     --purple-lighter: #7257EB;
     --purple: #52468A;
