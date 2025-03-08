@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
+import TextField from 'components/shared/inputs/textField'
 import {Assignment, AssignmentProblem, Course, Submission, SubmissionScore /*NonContainerAutoGrader, /*ContainerAutoGrader*/} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from '../errorPage/errorPage'
@@ -38,6 +39,8 @@ const AssignmentDetailPage = () => {
     // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
     const [course, setCourse] = useState<Course>()
+    const [notClickable, setClickable] = useState(true);
+
 
 
     // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
@@ -99,9 +102,9 @@ const AssignmentDetailPage = () => {
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
 
-    const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (value: string, e : React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
-        setFormData(prevState => ({...prevState,[key] : e.target.value}))
+        setFormData(prevState => ({...prevState,[key] : value}))
     }
 
 
@@ -109,6 +112,9 @@ const AssignmentDetailPage = () => {
         setFile(e.target.files?.item(0))
     }
 
+    const handleCheckboxChange = () => {
+        setClickable(!notClickable);
+    };
 
     const handleSubmit = async () => {
         let response;
@@ -154,7 +160,6 @@ const AssignmentDetailPage = () => {
             await fetchData()
         }
     }
-
     const isSubmissionDisabled = () => {
         if (assignment?.dueDate) {
             const dueDate = new Date(assignment.dueDate);
@@ -163,8 +168,6 @@ const AssignmentDetailPage = () => {
         }
         return false;
     };
-
-    handleChange;
     isSubmissionDisabled;
     handleFileChange;
     handleSubmit;
@@ -234,17 +237,75 @@ const AssignmentDetailPage = () => {
                     </span>
                 </div>
             </div>
-            <div className={styles.details}>
+            <div className={styles.details} style={{marginTop: '20px'}}>
                 <div className={styles.assignmentDetails}>
-                <span className={styles.metaText}>
+                    <span className={styles.metaText}>
                         <strong>Assignment Category:&nbsp;</strong>{assignment?.categoryName}
                     </span>
                     <span className={styles.metaText}>
-                        <strong>Attachments:&nbsp;</strong>{assignment?.attachmentsFilenames}
+                        <strong>Attachments:&nbsp;</strong>{assignment?.attachmentsFilenames} {/*Need to add mapping behavior to this when I figure out file storage to add links - Diego */}
                     </span>
                 </div>
+                {role.isInstructor() && <div className={styles.options_section}>
+                        <button className={`btnPrimary ${styles.parallel_button}`} onClick={() => {
+                            history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
+                        }}>Edit Assignment</button>
+                        <button className={`btnPrimary ${styles.parallel_button}`}>Grade Submissions</button>
+                        <button className={`btnPrimary ${styles.parallel_button}`}>Scoreboard</button>
+                </div>}
             </div>
-
+            {role.isInstructor() ? 
+            (<div className={styles.problems_section}>
+                <div className={styles.problems_list}>
+                    <h3 style={{textAlign:'center'}}>Problems</h3>
+                    {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
+                        <div key={problem.id} className={styles.problem}>
+                        <h4 className={styles.problem_header}>{problem.problemName}</h4>
+                        <TextField className={styles.textField}
+                                    placeholder='Answer'
+                                    onChange={handleChange}
+                                    sx={{width: '100%', marginLeft : 1/10}}/>
+                        </div>
+                    ))) : <div style={{fontStyle:'italic', textAlign: 'center', marginTop: '10px'}}> No problems yet...</div>}
+                    {!(isSubmissionDisabled()) &&assignmentProblems && assignmentProblems.length > 0 ? (
+                        <div className = {styles.submit_container}>
+                            <div className={styles.affirmation}>
+                                <input type='checkbox' onClick={handleCheckboxChange}/>
+                                <span className={styles.affirmText}>I affirm that I have complied with this course’s academic integrity policy as defined in the syllabus.</span>
+                            </div>
+                            <button className='btnPrimary'
+                            style={{marginTop:'40px'}} 
+                            onClick={handleSubmit}
+                            disabled={notClickable}
+                                >Submit Assignment</button>
+                        </div>
+                        ) : null}
+                    </div>
+            </div>) : (
+                <div className={styles.problems_section}>
+                <div className={styles.problems_list}>
+                    <h3 style={{textAlign:'center'}}>Problems</h3>
+                    {assignmentProblems &&assignmentProblems.length > 0 ? (assignmentProblems.map((problem) => (
+                        <div key={problem.id} className={styles.problem}>
+                        <h4 className={styles.problem_header}>{problem.problemName}</h4>
+                        <TextField className={styles.textField}
+                                    placeholder='Answer'
+                                    onChange={handleChange}
+                                    sx={{width: '100%', marginLeft : 1/10}}/>
+                        </div>
+                    ))) : <div style={{fontStyle:'italic', textAlign: 'center', marginTop: '10px'}}> No problems yet...</div>}
+                    {!(isSubmissionDisabled()) && assignmentProblems && assignmentProblems.length > 0 && (
+                        <div className = {styles.submit_container}>
+                            <button className='btnPrimary' 
+                            onClick={handleSubmit}
+                            disabled={notClickable}
+                                >Submit Assignment</button>
+                        </div>
+                        )}
+                    </div>
+            </div>
+            )}
+             
             
             {/* <Grid display='flex' justifyContent='center' alignItems='center'>
             <div className={styles.assignment_card}>

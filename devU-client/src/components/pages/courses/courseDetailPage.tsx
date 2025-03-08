@@ -83,7 +83,7 @@ const CourseDetailPage = () => {
                             {role.isInstructor() && (
                                 <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
                                     history.push(`/course/${courseId}/update`)
-                                }}>edit course
+                                }}>Edit Course
                                 </button>
                             )}
                         </div>
@@ -113,7 +113,7 @@ const CourseDetailPage = () => {
                         <div className={styles.subheader}><h3>Assignments</h3>
                             {role.isInstructor() &&(
                                 <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
-                                    setOpenModal(true)}}>add assignment
+                                    setOpenModal(true)}}>Add Assignment
                                 </button>
                                     )}
                         </div>
