@@ -40,7 +40,6 @@ const AssignmentUpdatePage = () => {
   const history = useHistory()
 
   const [theme, setTheme] = useState(getCssVariables())
-setFiles;
   // Needs a custom observer to force an update when the css variables change
   // Custom observer will update the theme variables when the bodies classes change
   useEffect(() => {
@@ -121,13 +120,12 @@ setFiles;
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
-  //useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignmentsList(res) })}, [])
+
   
   /*useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setCategories(res) }).finally(convertToOptions)}, [])
   const convertToOptions = () => {
     setAllCategoryOptions(categories.map((category) => ({label: category.name, value: category}))) 
   }*/
-
 
   const handleAssignmentUpdate = () => {
     const finalFormData = {

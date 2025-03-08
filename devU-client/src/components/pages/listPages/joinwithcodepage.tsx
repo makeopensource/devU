@@ -45,7 +45,7 @@ const JoinWithCodePage = () => {
     
 
     return (
-        <PageWrapper>
+        <PageWrapper className={styles.pageWrapper}>
             <div className={styles.joinCourseContainer}>
                 <h2>Enter course access code</h2>
                 <input

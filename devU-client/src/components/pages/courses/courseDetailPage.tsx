@@ -29,6 +29,7 @@ const CourseDetailPage = () => {
     const [openModal, setOpenModal] = useState(false);
 
     const handleCloseModal = () => {
+        fetchNewAssignments()
         setOpenModal(false);
     };
 
@@ -49,6 +50,10 @@ const CourseDetailPage = () => {
             setCourseInfo(course);
         });
 
+        fetchNewAssignments();
+    };
+
+    const fetchNewAssignments = async () => {
         RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`).then((assignments) => {
             let categoryMap: Record<string, Assignment[]> = {};
             assignments.forEach((assignment: Assignment) => {
@@ -61,6 +66,7 @@ const CourseDetailPage = () => {
             setCategoryMap(categoryMap);
         });
     };
+
 
     useEffect(() => {
         fetchCourseInfo();
@@ -78,7 +84,7 @@ const CourseDetailPage = () => {
                             {role.isInstructor() && (
                                 <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
                                     history.push(`/course/${courseId}/update`)
-                                }}>edit course
+                                }}>Edit Course
                                 </button>
                             )}
                         </div>
@@ -109,7 +115,7 @@ const CourseDetailPage = () => {
                         <div className={styles.subheader}><h3>Assignments</h3>
                             {role.isInstructor() &&(
                                 <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
-                                    setOpenModal(true)}}>add assignment
+                                    setOpenModal(true)}}>Add Assignment
                                 </button>
                                     )}
                         </div>

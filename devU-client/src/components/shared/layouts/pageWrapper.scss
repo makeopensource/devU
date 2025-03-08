@@ -13,11 +13,11 @@
 .content {
   // margin-top: 20px;
   flex-grow: 1;
-  padding: 0px 100px;
+  padding: 0px 100px 70px 100px;
 }
 
 @media (max-width: $extreme){
   .content{
-    padding: 0 $phonePadding;
+    padding: 0 $phonePadding 70px $phonePadding;
   }
 }
