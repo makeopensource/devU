@@ -10,6 +10,7 @@
 .pageHeader{
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
 }
 .backToCourse{
     margin-left: auto;
@@ -162,10 +163,13 @@ input[type='datetime-local'] {
     font-size: 14px;
     color: #fff;
     padding: 5px 15px;
+    font-style: normal;
     max-width: fit-content;
+    transition: all 0.2s ease;
 }
 .fileUpload:hover{
-    background-color: var(--primary);
+    border: 3px solid var(--hover-darker);
+    background-color: var(--hover-darker)
 }
 
 
