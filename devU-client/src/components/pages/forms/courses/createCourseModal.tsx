@@ -52,9 +52,6 @@ const CreateCourseModal = ({ open, onClose }: Props) => {
             privateDate: formatDateForSubmission(endDate)
         };
 
-        console.log("HANDLE SUBMIT TRIGGERED")
-        console.log("FORM DATA:", finalFormData)
-
         RequestService.post('/api/courses/instructor', finalFormData)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Course Added' });

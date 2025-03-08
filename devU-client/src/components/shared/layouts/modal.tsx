@@ -23,6 +23,7 @@ const Modal = ({ title, children, buttonAction, open, onClose }: ModalProps) => 
         <Dialog open={open} onClose={onClose} className='modal'
             sx={{
                 "& .MuiPaper-root": {
+                    minWidth: "350px",
                     padding: "20px",
                     display: "flex",
                     flexDirection: "column",
