@@ -220,8 +220,8 @@ const AssignmentDetailPage = () => {
                         <button className={`btnPrimary ${styles.parallel_button}`}>Scoreboard</button>
                 </div>}
             </div>
-            {role.isInstructor() ? 
-            (<div className={styles.problems_section}>
+            
+            <div className={styles.problems_section}>
                 <div className={styles.problems_list}>
                     <h3 style={{textAlign:'center'}}>Problems</h3>
                     {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
@@ -248,30 +248,7 @@ const AssignmentDetailPage = () => {
                         </div>
                         ) : null}
                     </div>
-            </div>) : (
-                <div className={styles.problems_section}>
-                <div className={styles.problems_list}>
-                    <h3 style={{textAlign:'center'}}>Problems</h3>
-                    {assignmentProblems &&assignmentProblems.length > 0 ? (assignmentProblems.map((problem) => (
-                        <div key={problem.id} className={styles.problem}>
-                        <h4 className={styles.problem_header}>{problem.problemName}</h4>
-                        <TextField className={styles.textField}
-                                    placeholder='Answer'
-                                    onChange={handleChange}
-                                    sx={{width: '100%', marginLeft : 1/10}}/>
-                        </div>
-                    ))) : <div style={{fontStyle:'italic', textAlign: 'center', marginTop: '10px'}}> No problems yet...</div>}
-                    {!(isSubmissionDisabled()) && assignmentProblems && assignmentProblems.length > 0 && (
-                        <div className = {styles.submit_container}>
-                            <button className='btnPrimary' 
-                            onClick={handleSubmit}
-                            disabled={notClickable}
-                                >Submit Assignment</button>
-                        </div>
-                        )}
-                    </div>
             </div>
-            )}
 
 
             <div>
