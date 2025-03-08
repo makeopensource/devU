@@ -14,7 +14,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 import styles from './courseDetailPage.scss';
 //import { SET_ALERT } from '../../../redux/types/active.types';
-import { useAppSelector} from "../../../redux/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 import AddAssignmentModal from '../forms/assignments/assignmentFormPage';
 import { prettyPrintSemester } from 'utils/semester.utils';
 import { wordPrintDate } from 'utils/date.utils';
@@ -33,16 +33,16 @@ const CourseDetailPage = () => {
         setOpenModal(false);
     };
 
-   // const[User, setUser]= useState < User <string>,preferredName>>({})
+    // const[User, setUser]= useState < User <string>,preferredName>>({})
 
-   // const role = useAppSelector((store) => store.roleMode)
-   /* const fetchUserinfo = async () => {
-        RequestService.get< typeof User>('api/users')
-            .then((User) =>{
-                setUser(User)
-
-    })
-*/
+    // const role = useAppSelector((store) => store.roleMode)
+    /* const fetchUserinfo = async () => {
+         RequestService.get< typeof User>('api/users')
+             .then((User) =>{
+                 setUser(User)
+ 
+     })
+ */
 
 
     const fetchCourseInfo = async () => {
