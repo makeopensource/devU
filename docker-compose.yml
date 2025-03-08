@@ -94,7 +94,7 @@ services:
       # Path to volumes within the Tango container. Does not need to be modified.
       #      - DOCKER_VOLUME_PATH
       # Modify the below to be the path to volumes on your host machine
-      - DOCKER_TANGO_HOST_VOLUME_PATH=/absolute/path/to/tango_files
+      - DOCKER_TANGO_HOST_VOLUME_PATH=/home/hartloff/devU/tango_files
     depends_on:
       - redis
     volumes:
