@@ -214,7 +214,6 @@
 .submissionsContainer {
     display: flex;
     flex-direction: column;
-    padding: 30px;
     width: 100%; 
     margin-top: 20px;
 }
@@ -224,15 +223,16 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-    background-color: $list-item-background;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease; 
+    background-color: $background;
+    border: 2px solid $primary;
+    transition: all 0.2s ease; 
     padding: 10px;
+    cursor: pointer;
 }
 
 .submissionCard:hover {
-    transform: scale(1.02); 
+    background-color: var(--purple-lightest);
 }
 
 .submissionHeading {

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import TextField from 'components/shared/inputs/textField'
-import {Assignment, AssignmentProblem, Course, Submission, SubmissionScore /*NonContainerAutoGrader, /*ContainerAutoGrader*/} from 'devu-shared-modules'
+import {Assignment, AssignmentProblem, Course, Submission, /*SubmissionScore NonContainerAutoGrader, /*ContainerAutoGrader*/} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from '../errorPage/errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -35,7 +35,7 @@ const AssignmentDetailPage = () => {
     const [file, setFile] = useState<File | null>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [submissions, setSubmissions] = useState(new Array<Submission>())
-    const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
+    //const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
     // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
     const [course, setCourse] = useState<Course>()
@@ -71,11 +71,11 @@ const AssignmentDetailPage = () => {
             submissionsReq.sort((a, b) => (Date.parse(b.createdAt ?? '') - Date.parse(a.createdAt ?? '')))
             setSubmissions(submissionsReq)
 
-             const submissionScoresPromises = submissionsReq.map(s => {
-                return RequestService.get<SubmissionScore[]>(`/api/submission-scores?submission=${s.id}`)
-             })
-             const submissionScoresReq = (await Promise.all(submissionScoresPromises)).reduce((a, b) => a.concat(b), [])
-             setSubmissionScores(submissionScoresReq)
+            //  const submissionScoresPromises = submissionsReq.map(s => {
+            //     return RequestService.get<SubmissionScore[]>(`/api/submission-scores?submission=${s.id}`)
+            //  })
+            //  const submissionScoresReq = (await Promise.all(submissionScoresPromises)).reduce((a, b) => a.concat(b), [])
+            //  setSubmissionScores(submissionScoresReq)
 
             //  const submissionProblemScoresPromises = submissionsReq.map(s => {
             //     return RequestService.get<SubmissionProblemScore[]>(`/api/submission-problem-scores/${s.id}`)
@@ -103,8 +103,10 @@ const AssignmentDetailPage = () => {
     if (error) return <ErrorPage error={error} />
 
     const handleChange = (value: string, e : React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e)
+        console.log(value)
         const key = e.target.id
-        setFormData(prevState => ({...prevState,[key] : value}))
+        setFormData(prevState => ({...prevState,[key] : e.target.value}))    
     }
 
 
@@ -180,46 +182,6 @@ const AssignmentDetailPage = () => {
                 <button style={{marginLeft:'auto'}} className='btnPrimary' onClick={() => {history.goBack()}}>Back to Course</button>
             </div>
 
-                {/* {role.isInstructor() && (
-                    <>
-                    <div className={styles.card}>
-                        <h2 className={styles.card_heading}>Options</h2>
-                        <hr className = {styles.line} />
-                        <div className={styles.options_buttons}>
-                        {role.isInstructor() && <button className={styles.buttons} onClick={() => {
-                            history.push(`/course/${courseId}/assignment/${assignmentId}/createNCAG`)
-                        }}>Add NCAG</button>}
-                        <hr className = {styles.line} />
-                        {role.isInstructor() && <button  className={styles.buttons} onClick={() => {
-                            history.push(`/course/${courseId}/assignment/${assignmentId}/createCAG`)
-                        }}>Add CAG</button>}
-                        <hr className = {styles.line} />
-                        {role.isInstructor() && <button className={styles.buttons} onClick={() => {
-                            history.push(`/course/${courseId}/assignment/${assignmentId}/createProblem`)
-                        }}>Add Assignment Question</button>}
-                        <hr className = {styles.line} />
-                        {role.isInstructor() && <button  className={styles.buttons} onClick={() => {
-                            history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
-                        }}>Edit Assignment</button>}
-
-                            <hr className = {styles.line} />
-                            {role.isInstructor() && <button className={styles.buttons} onClick={() => {
-                                history.push
-                                (`/course/${courseId}/assignment/${assignmentId}/submissions`)
-                            }}>Grade Submissions</button>}
-
-                            <hr className = {styles.line} />
-                            {role.isInstructor() && <button
-                                className={styles.buttons} onClick={() => {
-                                setShowScoreboard(!showScoreboard)}
-
-                            }>Scoreboard</button>
-                            }
-                        </div> 
-                    </div>
-                   </>
-                    )} */}
-
             <div className={styles.details}>
                 <div className={styles.assignmentDetails}>
                     <h2>{course?.number} - {assignment?.name}</h2>
@@ -233,7 +195,11 @@ const AssignmentDetailPage = () => {
                         <strong>Available Until:&nbsp;</strong>{assignment?.endDate ? fullWordPrintDate(assignment?.dueDate) : "N/A"}
                     </span>
                     <span className={styles.metaText}>
-                        <strong>Submissions Made:&nbsp;</strong>{submissionScores.length +"/"+ assignment?.maxSubmissions}
+                        <strong>Submissions Made:&nbsp;</strong>{submissions.length +"/"+ assignment?.maxSubmissions}
+                    </span>
+                    <span>
+                        <a onClick={() => history.push(`/course/${courseId}/assignment/${assignmentId}/submissions`)}
+                        style={{color:'#075D92', textDecoration: 'underline', cursor: 'pointer'}}>View Handin History</a>
                     </span>
                 </div>
             </div>
@@ -264,6 +230,7 @@ const AssignmentDetailPage = () => {
                         <TextField className={styles.textField}
                                     placeholder='Answer'
                                     onChange={handleChange}
+                                    id={problem.problemName}
                                     sx={{width: '100%', marginLeft : 1/10}}/>
                         </div>
                     ))) : <div style={{fontStyle:'italic', textAlign: 'center', marginTop: '10px'}}> No problems yet...</div>}
@@ -305,48 +272,6 @@ const AssignmentDetailPage = () => {
                     </div>
             </div>
             )}
-             
-            
-            {/* <Grid display='flex' justifyContent='center' alignItems='center'>
-            <div className={styles.assignment_card}>
-            <Typography className={styles.assignment_description}>{assignment?.description}</Typography>
-            <Typography className={styles.filenames}>Attachments : {assignment?.attachmentsFilenames}</Typography>
-            <hr className={styles.line} />
-
-            {assignment?.dueDate && (
-                    <Typography className={styles.due_date}>{`Due Date: ${new Date(assignment.dueDate).toLocaleDateString()}`}</Typography>
-                )}
-            {assignmentProblems && assignmentProblems.length > 0 ? (
-                assignmentProblems.map((assignmentProblem, index) => (
-                    <Accordion className={styles.accordion} key={index}>
-
-                    <AccordionDetails className={styles.accordionDetails}>
-                        <Typography>{assignmentProblem.problemName}</Typography>
-                        <TextField id={assignmentProblem.problemName} fullWidth className={styles.textField} variant='outlined' label='Answer' onChange={handleChange}></TextField>
-                    </AccordionDetails>
-                    </Accordion>
-                ))
-
-                ) : (
-                <div>
-                    <Typography>No Problems Exist</Typography>
-                </div>
-            )}
-
-            {!(assignment?.disableHandins) && (<input type="file"
-                                                      className={styles.fileInput}
-                                                      onChange={handleFileChange} />)}
-
-
-
-            { !(isSubmissionDisabled()) &&assignmentProblems && assignmentProblems.length > 0 ? (
-                 <div className = {styles.submit_container}>
-                <button className={styles.buttons} onClick={handleSubmit}
-                        >Submit</button>
-                </div>
-            ) : null}
-            </div>
-            </Grid> */}
 
 
             <div>
