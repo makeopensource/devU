@@ -31,6 +31,7 @@ $table-row-odd: var(--table-row-odd);
 
 $focus: var(--focus);
 
+
 // These variables WILL NOT update with dark vs light theme
 $grey-lightest: var(--grey-lightest);
 $grey-lighter: var(--grey-lighter);
@@ -41,6 +42,8 @@ $blue: var(--blue);
 
 $red-lighter: var(--red-lighter);
 $red: var(--red);
+
+$brown-lighter: var(--brown-lighter);
 
 $purple-lighter: var(--purple-lighter);
 $purple: var(--purple);
@@ -55,7 +58,24 @@ $yellow: var(--yellow);
 $redText: var(--red-text);
 $yellowText: var(--yellow-text);
 
+$maroon: var(--maroon);
+$cyan: var(--cyan);
+
+
+// Text Input Colors
+$input-border: var(--input-border);
+$input-field-background: var(--input-field-background);
+$text-color-secondary: var(--text-color-secondary);
+
+// Error Colors
+$error-text: var(--error-text);
+$error-background: var(--error-background);
+$error-page-background: var(--error-page-background);
+
+
+
 // Non color CSS variables
+
 $border-radius: 3px;
 
 $box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -67,6 +87,7 @@ $small: 600px;
 $extreme: 780px;
 
 $pagePadding: 100px;
+$phonePadding: 50px;
 
 @mixin ellipsis {
   overflow: hidden;

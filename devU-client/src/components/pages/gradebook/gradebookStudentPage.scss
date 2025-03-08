@@ -1,0 +1,258 @@
+@import 'variables';
+.pageWrapper{
+  // Category Styling
+  .categoryName {
+    color: $text-color;
+    font-size: 1.25rem;
+  }
+
+  // Table Wrapper for layout consistency
+  .tableWrapper {
+    padding: 0 100px;
+  }
+
+  .tableContainer {
+    overflow-x: scroll;
+    scrollbar-color: $primary;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+
+  // Table Header & Cell Styling
+  th {
+    background-color: $primary;
+    color: white;
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+
+  tr{
+    border-bottom: 1px solid #ccc;
+  } 
+
+  tr:last-of-type{
+    border-bottom-right-radius: 10px;
+    border-bottom: none;
+  }
+
+  // Table Borders & Rounded Corners
+  th:first-of-type {
+    border-top-left-radius: 10px;
+  }
+
+  th:last-of-type {
+    border-top-right-radius: 10px;
+  }
+
+  td:first-of-type {
+    border-bottom-left-radius: 10px;
+
+  }
+  td:last-of-type {
+    border-bottom-right-radius: 10px;
+    border-bottom: none;
+  }
+
+  // Table Options Section
+  .tableOptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center; }
+
+  .pageTitle{
+    margin-top: 20px;
+    width: fit-content;
+    align-self: center;
+    grid-column-start: 2;
+  }
+
+  .buttonContainer{
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    padding: 10px 20px;
+  }
+
+  // Text Colors for Status Indicators
+  .tableOptions span:first-child,
+  span.yellow {
+    color: $yellowText;
+  }
+
+  .tableOptions span:last-child,
+  span.red {
+    color: $redText;
+  }
+
+  // Student Gradebook Styling
+  .assignmentName {
+    text-align: left;
+  }
+
+  .gradebookContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  // Section Styling
+  .section {
+    background-color: white;
+    padding: -3px;
+    border-radius: 10px;
+    height:fit-content;
+    border: 2px solid $primary;
+  }
+
+  .categoryRow {
+    font-weight: bold;
+  }
+
+  .categoryValue {
+    text-align: right;
+    padding-right: 10px;  // 🟢 Fix: Align value to the left
+  }
+
+  .categoryText {
+    text-align: left;
+    padding-left: 10px;  // 🟢 Fix: Align "Category Average" text to the right
+  }
+
+  // Assignment Link Styling
+  .assignmentLink {
+    color: blue;
+    text-decoration: underline;
+  }
+
+  // Category Average Styling (Adjusted for spacing)
+  .categoryAverage {
+    font-size: 14px;
+    text-align: right;
+    padding: 10px;
+    font-weight: bold;
+    margin-top: 10px;  // 🟢 FIX: Added spacing so it doesn’t overlap
+  }
+
+
+  .gradebookTitle {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  // 🟢 FIX: "Back to Course" Button Alignment
+  .backToCourseButton {
+    background-color: $primary;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 137px;
+    right: 30px;
+  }
+
+  // Section Headers (Purple Background)
+  .sectionHeader {
+    background-color: $primary;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px 8px 0 0;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;  // 🟢 FIX: Ensures Late Days & Score are in the same row
+    align-items: center;
+  }
+
+  .headerRight {
+    display: flex;
+    gap: 20px;  // 🟢 FIX: Adds spacing between Late Days and Score
+  }
+
+  // Gradebook Layout (Using Grid)
+  .gradebookGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    width: 100%;  // 🟢 FIX: Ensures the grid container spans full width
+  }
+
+  // 🟢 FIX: Project Section Width Adjusted
+  .sectionLeft {
+    grid-column: 1;
+  }
+
+  .sectionRight {
+    grid-column: 2;
+  }
+
+  .sectionFull {
+    grid-column: 1 / span 1;  // 🟢 FIX: Project is same width as Homeworks
+  }
+
+  // Empty Assignments Text
+  .noAssignments {
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+  }
+
+  // Course Average Box Styling
+  .courseAverage {
+    border: 2px solid #5a3d8a;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;  // 🟢 FIX: Pushes the value to the rightmost side
+    font-weight: bold;
+    width: 99.01%;
+    grid-column: span 2;
+    margin-top: 20px;
+    border-radius: 13px;
+  }
+
+  // 🟢 FIX: Mobile Responsive Adjustments
+  @media (max-width: 650px) {
+    .pageWrapper {
+      padding: 0 20px;
+    }
+
+    .category {
+      width: calc(100% / 2 - 14px);
+    }
+
+    .gradebookGrid {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 450px) {
+    .category {
+      width: 100%;
+    }
+
+    .backToCourseButton {
+      position: relative;  // 🟢 FIX: Prevents it from overlapping content on small screens
+      margin-top: 10px;
+    }
+  }
+}

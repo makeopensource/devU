@@ -4,7 +4,8 @@ import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from '../errorPage/errorPage'
 import styles from './homePage.scss'
-import UserCourseListItem from "../../listItems/userCourseListItem";
+import UserCourseListItem from "../../listItems/userCourseListItem"
+import CreateCourseModal from '../forms/courses/createCourseModal'
 
 import { useAppSelector } from 'redux/hooks'
 import RequestService from 'services/request.service'
@@ -20,13 +21,17 @@ const HomePage = () => {
     const [pastCourses, setPastCourses] = useState(new Array<Course>())
     const [assignments, setAssignments] = useState(new Map<Course, Array<Assignment>>())
     const [instructorCourses, setInstructorCourses] = useState(new Array<Course>())
+    const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
         fetchData()
     }, [])
 
-    const fetchData = async () => {
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
 
+    const fetchData = async () => {
         try {
             const assignmentMap = new Map<Course, Array<Assignment>>()
             const allCourses = await RequestService.get<{
@@ -76,26 +81,21 @@ const HomePage = () => {
     }
     return (
         <PageWrapper>
+            <CreateCourseModal open={openModal} onClose={handleCloseModal}/>
             <div className={styles.header}>
-                {/* <div className={styles.smallLine}></div> */}
-                <h1 className={styles.courses_title}>DevU Home</h1>
+                <h1 className={styles.courses_title}>Courses</h1>
                 <div className={styles.buttonContainer}>
-                    <button className='btnSecondary' onClick={() => {
-                        history.push(`/addCoursesForm`)
-                    }}>create course
-                    </button>
-                    <button className='btnPrimary' onClick={() => {
-                        history.push(`/courses`)
-                    }}>join course
-                    </button>
+                    <button className='btnSecondary' id='createCoursBtn' onClick={() => {
+                        // history.push(`/addCoursesForm`);
+                        setOpenModal(true);
+                    }}>Create Course</button>
+                    <button className='btnSecondary' id='joinCoursBtn' onClick={() => {
+                        history.push(`/courses`);
+                    }}>Join Course</button>
                 </div>
-                {/* <div className={styles.largeLine}></div> */}
             </div>
-            {/* <div className={styles.header}> */}
-                {/* <div className={styles.smallLine}></div> */}
-                <h2 className={styles.courses_heading}>Current Courses</h2>
-                {/* <div className={styles.largeLine}></div> */}
-            {/* </div> */}
+
+            <h2 className={styles.courses_heading}>Current Courses</h2>
             <div className={styles.coursesContainer}>
                 {instructorCourses.map((course) => (
                     <div className={styles.courseCard} key={course.id}
@@ -112,13 +112,10 @@ const HomePage = () => {
                         <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id} />
                     </div>
                 ))}
-                {enrollCourses.length === 0 && instructorCourses.length == 0 && <div className={styles.no_courses}>You do not have current enrollment yet</div>}
+                {enrollCourses.length === 0 && instructorCourses.length == 0 && <div className='no_items'>You do not have current enrollment yet</div>}
             </div>
-            {/* <div className={styles.header}> */}
-                {/* <div className={styles.smallLine}></div> */}
-                <h2 className={styles.courses_heading}>Completed Courses</h2>
-                {/* <div className={styles.largeLine}></div> */}
-            {/* </div> */}
+
+            <h2 className={styles.courses_heading}>Completed Courses</h2>
             <div className={styles.coursesContainer}>
                 {pastCourses && pastCourses.map((course) => (
                     <div className={styles.courseCard}
@@ -131,15 +128,10 @@ const HomePage = () => {
                         />
                     </div>
                 ))}
-                {pastCourses.length === 0 && <div className={styles.no_courses}>No completed courses</div>}
+                {pastCourses.length === 0 && <div className='no_items'>No completed courses</div>}
             </div>
 
-            {/* <div className={styles.header}> */}
-                {/* <div className={styles.smallLine}></div> */}
-                <h2 className={styles.courses_heading}>Upcoming Courses</h2>
-                {/* <div className={styles.largeLine}></div> */}
-            {/* </div> */}
-
+            <h2 className={styles.courses_heading}>Upcoming Courses</h2>
             <div className={styles.coursesContainer}>
                 {upcomingCourses && upcomingCourses.map((course) => (
                     <div className={styles.courseCard} key={course.id}
@@ -148,7 +140,7 @@ const HomePage = () => {
                     </div>
                 ))}
 
-                {upcomingCourses.length === 0 && <div className={styles.no_courses}>No upcoming courses</div>}
+                {upcomingCourses.length === 0 && <div className='no_items'>No upcoming courses</div>}
             </div>
 
 

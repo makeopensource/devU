@@ -28,9 +28,9 @@ const GlobalToolbar = () => {
             <RoleDispatcher/>
             <DarkModeToggle />
             {
-            <Link to={`/courses`} className={styles.link} >
-              Join a Course
-            </Link>
+            // <Link to={`/courses`} className={styles.link} >
+            //   Join a Course
+            // </Link>
             }     
             {/*<Link to={`/myCourses`} className={styles.link}>*/}
             {/*  My Courses*/}

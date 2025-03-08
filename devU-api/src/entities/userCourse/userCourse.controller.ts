@@ -2,8 +2,10 @@ import { NextFunction, Request, Response } from 'express'
 
 import UserCourseService from './userCourse.service'
 import { serialize } from './userCourse.serializer'
+import { serialize as userSerialize } from '../user/user.serializer'
 
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
+import UserService from '../user/user.service'
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
@@ -49,6 +51,25 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
     const response = serialize(userCourse)
 
     res.status(200).json(response)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function getInstructor(req: Request, res: Response, next: NextFunction) {
+  try {
+    const cid = parseInt(req.params.courseId)
+
+    const instructorInfo = await UserCourseService.instructor(cid)
+    if (!instructorInfo) return res.status(400).json({ message: `no instructors found for course ${cid}` })
+
+    const userInfo = await UserService.retrieve(instructorInfo.userId)
+    if (!userInfo) return res.status(400).json({ message: `no instructors found for course ${cid}` })
+
+    // strip out unnecessary info
+    const { isAdmin, createdAt, ...responsePayload } = userSerialize(userInfo)
+
+    res.status(200).json(responsePayload)
   } catch (err) {
     next(err)
   }
@@ -122,7 +143,7 @@ export async function checkEnroll(req: Request, res: Response, next: NextFunctio
 export async function _delete(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.courseId)
-    console.log("DELETE PARAMS: ", req.params)
+    console.log('DELETE PARAMS: ', req.params)
     const currentUser = req.currentUser?.userId
     if (!currentUser) return res.status(401).json({ message: 'Unauthorized' })
 
@@ -140,7 +161,7 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
 export async function _deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
     const courseID = parseInt(req.params.courseId)
-    console.log("DELETE PARAMS2: ", req.params)
+    console.log('DELETE PARAMS2: ', req.params)
     // const currentUser = req.currentUser?.userId
     const userID = parseInt(req.params.id)
     if (!userID) return res.status(401).json({ message: 'Unauthorized' })
@@ -194,4 +215,5 @@ export default {
   checkEnroll,
   addStudents,
   dropStudents,
+  getInstructor,
 }

@@ -10,6 +10,15 @@ export function wordPrintDate(date:string){
     minute: '2-digit'})
 }
 
+export function fullWordPrintDate(date:string){
+  return new Date(date).toLocaleString('en-us', {
+    weekday: 'long', 
+    month: 'long', 
+    day: '2-digit', 
+    hour:'2-digit', 
+    minute: '2-digit'})
+}
+
 export function prettyPrintDateTime(date: string) {
   return new Date(date).toLocaleString(undefined, {
     year: 'numeric',

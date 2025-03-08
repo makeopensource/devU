@@ -61,6 +61,7 @@ export function getCssVariables() {
     inputFieldLabel: body.getPropertyValue('--input-field-label'),
 
     focus: body.getPropertyValue('--focus'),
+    modalBackground: body.getPropertyValue('--modal-background'),
 
     // Other CSS colors
     greyLightest: body.getPropertyValue('--grey-lightest'),

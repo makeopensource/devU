@@ -1,5 +1,6 @@
 @import 'variables';
 
+
 .dropdown {
   display: flex;
   flex-direction: column;
@@ -41,6 +42,7 @@
 
 .name {
   cursor: pointer;
+  color:#fff;
 }
 
 .userIcon {
@@ -50,6 +52,7 @@
 
 .caret {
   margin-left: 5px;
+  color:#fff;
 }
 
 .menu {
@@ -81,11 +84,25 @@
   padding: 0 6px;
 
   background-color: $primary;
-  color: $text-color;
+  color: $background;
 
   height: 50px;
   text-align: left;
 
+  text-decoration: none;
+
+  &:hover {
+    background: $purple-darker;
+  }
+}
+.dropCourse {
+  @extend .option;
+  background-color: $primary; /* Same as Account and Logout */
+  color: $background; /* Matching the text color */
+  border: none;
+  font-size: 16px;
+  height: 50px;
+  text-align: left;
   text-decoration: none;
 
   &:hover {
@@ -109,3 +126,4 @@
     display: none;
   }
 }
+
