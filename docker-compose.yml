@@ -15,29 +15,32 @@ services:
       - '' # so it starts with normal docker compose
       - 'dev-client' # start when developing client
 
-  client-nginx:
-    # Builds the front end and serves the frontend static files using nginx
+  client:
+    # Builds the front end and exports static files to ./dist
     build:
-      dockerfile: client.Dockerfile
       context: .
+      dockerfile: client.Dockerfile
     volumes:
       - ./dist:/out
     profiles:
       - '' # so it starts with normal docker compose
       - 'dev-api' # start when developing api
 
-  nginx:
-    # Hosts the front end static files from ./dist/local thorough a web server
-    build:
-      context: .
-      dockerfile: nginx.Dockerfile
-    volumes:
-      - ./dist/production:/usr/share/nginx/html
-    ports:
-      - '9000:80'
-    profiles:
-      - '' # so it starts with normal docker compose
-      - 'dev-api' # start when developing api
+#  nginx:
+#    # Hosts the front end static files from ./dist/local thorough a web server
+#    build:
+#      context: .
+#      dockerfile: nginx.Dockerfile
+#    volumes:
+#      - ./dist/local:/usr/share/nginx/html
+#    depends_on:
+#      client:
+#        condition: service_completed_successfully
+#    ports:
+#      - '9000:80'
+#    profiles:
+#      - '' # so it starts with normal docker compose
+#      - 'dev-api' # start when developing api
 
   # Database stuff
   db:
@@ -67,6 +70,16 @@ services:
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
 
+#  leviathan:
+#    container_name: leviathan
+#    image: ghcr.io/makeopensource/leviathan:dev
+#    ports:
+#      - "9221:9221"
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - ./levi/:/app/appdata
+#    restart: unless-stopped
+
   # tango stuff
   tango:
     container_name: tango
@@ -81,7 +94,7 @@ services:
       # Path to volumes within the Tango container. Does not need to be modified.
       #      - DOCKER_VOLUME_PATH
       # Modify the below to be the path to volumes on your host machine
-      - DOCKER_TANGO_HOST_VOLUME_PATH=/absolute/path/to/tango_files
+      - DOCKER_TANGO_HOST_VOLUME_PATH=/home/hartloff/devU/tango_files
     depends_on:
       - redis
     volumes:
