@@ -23,16 +23,15 @@ const HomePage = () => {
     const [instructorCourses, setInstructorCourses] = useState(new Array<Course>())
     const [openModal, setOpenModal] = useState(false);
 
-    const handleCloseModal = () => {
-        setOpenModal(false);
-    };
-
     useEffect(() => {
         fetchData()
     }, [])
 
-    const fetchData = async () => {
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    };
 
+    const fetchData = async () => {
         try {
             const assignmentMap = new Map<Course, Array<Assignment>>()
             const allCourses = await RequestService.get<{
@@ -97,11 +96,7 @@ const HomePage = () => {
                 </div>
             </div>
 
-            {/* <div className={styles.header}> */}
-            {/* <div className={styles.smallLine}></div> */}
             <h2 className={styles.courses_heading}>Current Courses</h2>
-            {/* <div className={styles.largeLine}></div> */}
-            {/* </div> */}
             <div className={styles.coursesContainer}>
                 {instructorCourses.map((course) => (
                     <div className={styles.courseCard} key={course.id}
@@ -120,11 +115,8 @@ const HomePage = () => {
                 ))}
                 {enrollCourses.length === 0 && instructorCourses.length == 0 && <div className={styles.no_courses}>You do not have current enrollment yet</div>}
             </div>
-            {/* <div className={styles.header}> */}
-            {/* <div className={styles.smallLine}></div> */}
+
             <h2 className={styles.courses_heading}>Completed Courses</h2>
-            {/* <div className={styles.largeLine}></div> */}
-            {/* </div> */}
             <div className={styles.coursesContainer}>
                 {pastCourses && pastCourses.map((course) => (
                     <div className={styles.courseCard}
@@ -140,12 +132,7 @@ const HomePage = () => {
                 {pastCourses.length === 0 && <div className={styles.no_courses}>No completed courses</div>}
             </div>
 
-            {/* <div className={styles.header}> */}
-            {/* <div className={styles.smallLine}></div> */}
             <h2 className={styles.courses_heading}>Upcoming Courses</h2>
-            {/* <div className={styles.largeLine}></div> */}
-            {/* </div> */}
-
             <div className={styles.coursesContainer}>
                 {upcomingCourses && upcomingCourses.map((course) => (
                     <div className={styles.courseCard} key={course.id}

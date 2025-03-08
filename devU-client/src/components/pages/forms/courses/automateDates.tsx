@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import formStyles from './coursesFormPage.scss';
 
 interface AutomateDatesProps {
-  onDatesChange: (dates: { startDate: string; endDate: string }) => void;
+  onDatesChange: (dates: { startDate: string; endDate: string, semester: string, year: string }) => void;
 }
 
 
@@ -154,7 +154,6 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
 
   // Update start and end dates based on selected year, season, and session
   const updateDates = () => {
-    console.log("year, season, session: ", year, season, session);
     if (dateMapping[year]?.[season]?.[session]) {
       const { start, end } = dateMapping[year][season][session];
       setStartDate(start);
@@ -190,7 +189,7 @@ const AutomateDates = ({ onDatesChange }: AutomateDatesProps) => {
   }, [season]);
 
   useEffect(() => {
-    onDatesChange({ startDate, endDate });
+    onDatesChange({ startDate, endDate, semester: season, year });
   }, [startDate, endDate, onDatesChange]);
 
   return (
