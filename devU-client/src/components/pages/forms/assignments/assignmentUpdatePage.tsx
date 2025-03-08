@@ -15,6 +15,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { getCssVariables } from 'utils/theme.utils'
 import { Button as MuiButton, StyledEngineProvider } from '@mui/material'
+import TextProblemModal from './textProblemModal'
 /*import Dropdown, { Option } from 'components/shared/inputs/dropdown';*/
 //import Select from 'react-select/src/Select'
 
@@ -119,6 +120,7 @@ const AssignmentUpdatePage = () => {
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
+
   
   /*useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setCategories(res) }).finally(convertToOptions)}, [])
   const convertToOptions = () => {
@@ -201,32 +203,31 @@ const AssignmentUpdatePage = () => {
     }
   }*/
 
-  const [addProblemModal, setAddProblemModal] = useState(false)
-  const [addProblemForm, setAddProblemForm] = useState({
-    assignmentId: currentAssignmentId,
-    problemName: '',
-    maxScore: 0,
-  })
-  const openAddProblemModal = () => {setAddProblemModal(true)}
-  const handleCloseAddProblemModal = () => {setAddProblemModal(false)}
+  const [textModal, setTextModal] = useState(false)
+  // const [addProblemForm, setAddProblemForm] = useState({
+  //   assignmentId: currentAssignmentId,
+  //   problemName: '',
+  //   maxScore: 0,
+  // })
+  const handleCloseTextModal = () => {setTextModal(false)}
 
-  const handleAddProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
-    const key = e.target.id
-    setAddProblemForm(prevState => ({ ...prevState, [key]: value }))
-  }
-  const handleAddProblem = () => {
-    RequestService.post(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`, addProblemForm)
-      .then(() => {
-        setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' })
-        setAddProblemModal(false)
-        setAddProblemForm({
-          assignmentId: currentAssignmentId,
-          problemName: '',
-          maxScore: 0,
-        })
-        fetchAssignmentProblems()
-    })
-  }
+  // const handleAddProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const key = e.target.id
+  //   setAddProblemForm(prevState => ({ ...prevState, [key]: value }))
+  // }
+  // const handleAddProblem = () => {
+  //   RequestService.post(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`, addProblemForm)
+  //     .then(() => {
+  //       setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' })
+  //       setAddProblemModal(false)
+  //       setAddProblemForm({
+  //         assignmentId: currentAssignmentId,
+  //         problemName: '',
+  //         maxScore: 0,
+  //       })
+  //       fetchAssignmentProblems()
+  //   })
+  // }
 
   const handleDeleteProblem = (problemId: number) => {
     RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
@@ -252,17 +253,8 @@ const AssignmentUpdatePage = () => {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={addProblemModal} onClose={handleCloseAddProblemModal}>
-        <DialogContent sx={{bgcolor:theme.listItemBackground}}>
-          <h3 className={styles.header}>Add Problem</h3>
-          <TextField id="problemName" label={'Problem Name'} onChange={handleAddProblemChange}/>
-          <TextField id="maxScore" label={'Max Score'} onChange={handleAddProblemChange}/>
-          <DialogActions>
-            <Button onClick={handleAddProblem}>Add</Button>
-            <Button onClick={handleCloseAddProblemModal}>Close</Button>
-        </DialogActions>
-        </DialogContent>
-      </Dialog>
+      <TextProblemModal open={textModal} onClose={handleCloseTextModal}/>
+
       <div className={styles.pageHeader}>
         <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
         <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>back to course</Button>
@@ -364,7 +356,7 @@ const AssignmentUpdatePage = () => {
         <h2 className={styles.header}>Add Problems</h2>
           <div className={styles.buttonContainer}>
             <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Code/File Input creation modal' })} className='btnSecondary'>Code/File Input</Button>
-            <Button onClick={openAddProblemModal} className='btnSecondary'>Text Input</Button>
+            <Button onClick={() => {setTextModal(true)}} className='btnSecondary'>Text Input</Button>
             <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Multiple Choice creation modal' })} className='btnSecondary'>Multiple Choice</Button>
           </div>
           <h2 className={styles.header}>Add Graders</h2>

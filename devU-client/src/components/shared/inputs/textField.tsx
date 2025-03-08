@@ -78,14 +78,12 @@ const TextField = ({
                         color: theme.textColor,
                         borderRadius: '10px',
                         marginBottom: '0px',
-                        padding:'10px',
-                        minHeight: '35px'
-
+                        minHeight: '35px',
+                        padding: '10px'
                       },
                       // label text
                       "& .MuiInputLabel-outlined" : {
                         color: theme.inputFieldLabel,
-                        padding: '0', 
                         "&.Mui-focused": {
                           color: theme.focus, // Define this color in your theme
                         },
@@ -93,6 +91,7 @@ const TextField = ({
                       // border
                       "& .MuiOutlinedInput-notchedOutline" : {
                         border: 'none',
+                        padding: '0 10px'
                       },
 
                     }}

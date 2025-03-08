@@ -79,6 +79,7 @@ const CourseDetailPage = () => {
                     <div>
                         {/* Course Title */}
                         <div className={styles.header}>
+
                             <h1 className={styles.class_title}>{courseInfo.number}: {courseInfo.name}</h1>
                             {role.isInstructor() && (
                                 <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
@@ -103,6 +104,7 @@ const CourseDetailPage = () => {
                                 <h3>Course Links</h3>
                                 <div className={styles.buttons_container}>
                                     <button className='btnSecondary' onClick={() => {
+                                        role.isInstructor() ? history.push(`/course/${courseId}/gradebook/instructor`) : 
                                         history.push(`/course/${courseId}/gradebook`)
                                     }}>Gradebook
                                     </button>

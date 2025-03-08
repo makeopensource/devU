@@ -10,7 +10,7 @@ import ErrorPage from '../errorPage/errorPage';
 
 import RequestService from 'services/request.service';
 
-import styles from './gradebookPage.scss';
+import styles from './gradebookStudentPage.scss';
 
 const GradebookStudentPage = () => {
     const [loading, setLoading] = useState(true);
@@ -67,14 +67,17 @@ const GradebookStudentPage = () => {
 
     return (
         <PageWrapper className={styles.pageWrapper}>
-            {/* Top Section with Back to Course Button */}
-            <div className={styles.topSection}>
-                <h1 className={styles.gradebookTitle}>{courseName} Gradebook</h1> 
-                {role.isInstructor() && (
-                    <button className='btnPrimary' onClick={() => history.goBack()}>
-                        Back to Course
-                    </button>
-                )}
+            <div className={styles.header}>
+                <h1 className={styles.pageTitle}>{courseName} Gradebook</h1>
+
+                <div className={styles.buttonContainer}>
+                    {role.isInstructor() && <button className='btnSecondary' id='createCoursBtn' onClick={() => {
+                        history.push(`/course/${courseId}/gradebook/instructor`)
+                    }}>Instructor View</button>}
+                    <button className='btnPrimary' id='backToCourse' onClick={() => {
+                        history.goBack();
+                    }}>Back to Course</button>
+                </div>
             </div>
 
             <div className={styles.gradebookGrid}>
