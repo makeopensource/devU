@@ -1,0 +1,124 @@
+@import 'variables';
+
+.breadcrumb {
+  margin-bottom: 20px;
+  font-size: 14px;
+
+  span {
+    margin: 0 5px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.pageTitle {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form {
+  position: relative; /* Fixed incorrect 'display: absolute' */
+  background-color: $list-item-background;
+  border-radius: 10px;
+  padding: 20px;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.requiredField {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+}
+
+/* Updated file input section */
+.fileUploadContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Adds spacing between file inputs */
+  margin-bottom: 25px;
+}
+
+.fileInputGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Creates proper spacing */
+  padding: 8px 12px;
+  background: #f8f8f8;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.fileInputGroup label {
+  font-weight: 600;
+  flex: 1;
+}
+
+.fileInputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Ensures spacing between elements */
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileInputButton {
+  background-color: $primary;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.fileUploadText {
+  font-size: 14px;
+  color: #666;
+}
+
+.spacer {
+  height: 15px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 35px;
+}
+
+.addGraderButton {
+  background-color: $primary;
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 40px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.existingProblems {
+  margin-top: 40px;
+  text-align: center;
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+}

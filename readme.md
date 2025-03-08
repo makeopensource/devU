@@ -1,5 +1,9 @@
 # DevU
 
+Dev Deployment: https://devu.app
+
+Figma: https://www.figma.com/design/I1p68BKK7w1E0JgfxWE2x0/devu-2.0?node-id=199-2&p=f&t=9Bq5OiHqK8mNlKHt-0
+
 DevU is an automated software-grading platform being developed at the University at Buffalo. DevU aims to be incredibly
 extensible, allowing professors to add any functionality they desire without reaching a dead end. It will eventually
 replace Autolab and other services.
@@ -31,7 +35,6 @@ DevU is open-source and contributors are welcome. To contribute to the project, 
 11. Address any comments and change requests made on your PR during the code review
     12. Push updates to your branch to update the PR
 13. Once the maintainers are satisfied with your PR, it wil be merged into the develop branch
-
 
 ## Getting Started
 
@@ -88,6 +91,11 @@ Enter the project repo.
 cd devU
 ```
 
+Run this command to setup submodules.
+```bash
+git submodule update  --init --recursive
+```
+
 ### 3. Run the Project with Docker Compose
 ```bash
 docker compose up --build
@@ -134,3 +142,16 @@ query: SELECT * FROM "migrations" "migrations" ORDER BY "id" DESC
 query: START TRANSACTION
 query: CREATE TABLE "users" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP, "username" character varying(32) NOT NULL, "name" character varying(128) NOT NULL, "email" character varying(128) NOT NULL, CONSTRAINT "users_primary_key_constraint" PRIMARY KEY ("id"))
 ```
+
+
+## Deploy script
+
+To quickly setup a production version of devU you can call the [setup script](setup.sh)
+
+```
+ bash <(curl -sSL https://raw.githubusercontent.com/makeopensource/devU/refs/heads/develop/setup.sh) makeopensource develop
+```
+
+This will download our [compose file](example-docker-compose.yml) with our pre-built images
+
+Currently, built only for develop, and setup the required config for tango

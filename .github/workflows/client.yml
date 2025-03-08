@@ -1,0 +1,52 @@
+# Builds DevU client
+name: Build DevU client
+
+on:
+  push:
+    paths:
+      - 'devU-client/**'
+    branches:
+      - develop # add more branches as needed
+
+jobs:
+  build-client-docker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      packages: write # to be able to publish packages
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Convert image name to lowercase
+        run: |
+          original_string=${{ github.repository }}
+          echo "repo_url=$(echo $original_string | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Get Branch Name
+        id: get_branch
+        run: echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
+
+      - name: build client docker
+        run: |
+          IMAGE_NAME=ghcr.io/${{ env.repo_url }}/client:${{ steps.get_branch.outputs.branch_name }}
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+      
+          docker build . -f client.Dockerfile -t $IMAGE_NAME
+          docker push $IMAGE_NAME
+
+      - name: build nginx
+        run: |
+          IMAGE_NAME=ghcr.io/${{ env.repo_url }}/nginx:${{ steps.get_branch.outputs.branch_name }}
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+          
+          docker build . -f nginx.Dockerfile -t $IMAGE_NAME          
+          docker push $IMAGE_NAME

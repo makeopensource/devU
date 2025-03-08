@@ -1,0 +1,62 @@
+@import 'variables';
+
+
+
+.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background-color 0.2s linear;
+  // color:$primary;
+  border-bottom: 1px solid #ddd;
+  color: $text-color;
+  padding: 10px;
+}
+
+.meta {
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  font-size:11px;
+  flex-wrap: wrap;
+  color: $text-color-secondary;
+  font-family: monospace;
+  font-weight: 500;
+}
+
+
+.subText {
+  font-size: 18px;
+  font-weight: 500;
+  display: grid;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  margin-bottom: 8px;
+  line-height: 100%
+}
+
+.tag {
+  display: flex;
+  min-width: 8px;
+  background-color: $primary;
+}
+
+.container {
+  text-decoration: none;
+
+  display: flex;
+  flex-direction: column;
+
+
+  border-radius: 0.6rem;
+  transition: background-color 0.2s linear;
+
+  // color: $primary;
+
+  color: $text-color;
+  // &:hover,
+  // &:focus {
+  //   background: $list-simple-item-background-hover;
+  // }
+}
