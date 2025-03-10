@@ -10,7 +10,7 @@ type Props = {
 }
 
 const Button = ({ className = '', children, loading = false, onClick }: Props) => {
-  console.log(loading ? styles.isLoading : '')
+  // console.log(loading ? styles.isLoading : '')
   return (
     <button
       disabled={loading}

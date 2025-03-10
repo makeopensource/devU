@@ -10,16 +10,16 @@ type Props = {
 }
 
 const SimpleAssignmentListItem = ({assignment}: Props) => (
-    <ListItemWrapper to={`/course/${assignment.courseId}/assignment/${assignment.id}`} tag={assignment.name}
-                     className={styles.title} tagStyle={styles.tag} containerStyle={styles.container}>
-        <div className={styles.subText}>{assignment.name}</div>
-        <div className={styles.meta}>
-            <span style={{fontWeight:'700'}}>Due:&nbsp;</span>{wordPrintDate(assignment.dueDate)} | &nbsp;
-            <span style={{fontWeight:'700'}}>End:&nbsp;</span>{wordPrintDate(assignment.endDate)}
-        </div>
-
-
-    </ListItemWrapper>
+    <div onClick={(e) => (e.stopPropagation())}>
+        <ListItemWrapper to={`/course/${assignment.courseId}/assignment/${assignment.id}`} tag={assignment.name}
+                        className={styles.title} tagStyle={styles.tag} containerStyle={styles.container}>
+            <div className={styles.subText}>{assignment.name}</div>
+            <div className={styles.meta}>
+                <span style={{fontWeight:'700'}}>Due:&nbsp;</span>{wordPrintDate(assignment.dueDate)} | &nbsp;
+                <span style={{fontWeight:'700'}}>End:&nbsp;</span>{wordPrintDate(assignment.endDate)}
+            </div>
+        </ListItemWrapper>
+    </div>
 )
 
 

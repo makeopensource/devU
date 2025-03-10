@@ -21,12 +21,11 @@ import { Option } from 'components/shared/inputs/dropdown'
 const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
     menu: (provided) => ({ ...provided, 
         backgroundColor: 'var(--background)', 
-        border: '2px solid #ddd',
         borderRadius: '10px'
     }),
     
     input: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--input-field-background)',
+        backgroundColor: 'var(--background)', 
         borderRadius: '20px',
         color: 'var(--text-color)', 
         }),
@@ -37,9 +36,12 @@ const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
         margin: '0'
     }),
     control: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--input-field-background)', cursor: 'pointer',
-        borderRadius: '20px', padding: '10px',
-        border: 'none'}),
+        backgroundColor: 'var(--background)', 
+        cursor: 'pointer',
+        border: '2px solid #ccc',
+        borderRadius: '20px', 
+        padding: '10px',
+        }),
 
     singleValue: (provided) => ({ ...provided, 
         color: 'var(--text-color)', 

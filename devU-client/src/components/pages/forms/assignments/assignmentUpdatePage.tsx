@@ -109,19 +109,15 @@ const AssignmentUpdatePage = () => {
     }
   }
 
-  const fetchAssignmentProblems = () => {
-    RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
+  const fetchAssignmentProblems = async () => {
+    await RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
       .then((res) => { setAssignmentProblems(res) })
   }
-
-
 
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
-
-  
   /*useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setCategories(res) }).finally(convertToOptions)}, [])
   const convertToOptions = () => {
     setAllCategoryOptions(categories.map((category) => ({label: category.name, value: category}))) 
@@ -209,7 +205,9 @@ const AssignmentUpdatePage = () => {
   //   problemName: '',
   //   maxScore: 0,
   // })
-  const handleCloseTextModal = () => {setTextModal(false)}
+  const handleCloseTextModal = () => {
+    setTextModal(false)
+  }
 
   // const handleAddProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
   //   const key = e.target.id
