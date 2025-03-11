@@ -1,7 +1,8 @@
-import React from 'react'
-import CreatableSelect, { Styles, GroupTypeBase } from 'react-select'
+import React, { useState, useEffect } from 'react'
+import CreatableSelect from 'react-select/creatable'
+import { Styles, GroupTypeBase } from 'react-select'
+import { getCssVariables } from 'utils/theme.utils'
 
-//import { getCssVariables } from 'utils/theme.utils'
 
 import styles from './dropdown.scss'
 
@@ -12,6 +13,7 @@ type Props = {
   onChange: (value: any) => void
   onCreate: (value: string) => void
   defaultOption?: Option<any>
+  value?: Option<any>
   placeholder?: string
   disabled?: boolean
   search?: boolean
@@ -26,28 +28,47 @@ const TextDropdown = ({
   onCreate,
   placeholder,
   disabled,
-  search = false,
+  search = true,
   defaultOption,
   className = '',
   label,
+  value,
   custom,
 }: Props) => {
 
-  const handleChange = (option: Option) => onChange(option)
+  const handleChange = (option: Option<String>) => onChange(option)
   const handleCreate = (input: string) => onCreate(input)
 
+  const [theme, setTheme] = useState(getCssVariables())
+  useEffect(() => {
+    const observer = new MutationObserver(() => setTheme(getCssVariables()))
 
-  // Styling into this component isn't really possible with raw css alone due to its implementation
-  // Because of this we're going to use their style apis
+    observer.observe(document.body, { attributes: true })
+
+    return () => observer.disconnect()
+  })
+
+
+  const { textColor, background } = theme
+
+
   const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
+    ...custom,
     menu: (provided) => ({ ...provided, 
       backgroundColor: 'var(--background)', 
-      borderRadius: '10px'
     }),
+
+    container: (provided) => ({ ...provided, 
+      width: '100%'
+    }),
+
     input: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--background)',
-        borderRadius: '10px',
-        color: 'var(--text-color)', 
+        backgroundColor: background,
+        color: textColor, 
+        fontWeight: '500',
+        "input":{
+          fontFamily: 'inherit'
+        }
         }),
 
     placeholder: (provided) => ({ ...provided,
@@ -55,25 +76,30 @@ const TextDropdown = ({
         color: '#9c9c9c',
         margin: '0'
     }),
+
     control: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--background)', cursor: 'pointer',
-        borderRadius: '10px', padding: '10px',
+        backgroundColor: background, 
+        cursor: 'pointer',
+        borderRadius: '10px', 
+        padding: '8px 2px',
         border: '2px solid #ccc'}),
 
     singleValue: (provided) => ({ ...provided, 
-        color: 'var(--text-color)', 
+        color: textColor, 
     }),
-    
+
     option: (provided, state) => ({
       ...provided,
       cursor: 'pointer',
       color: 'var(--color)', 
       borderBottom: '1px solid #ccc',
-      backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : 'var(--background)',
+      backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : background,
       "&:last-of-type":{
         borderBottom: 'none'
       }
     }),
+  
+    
   }
 
   return (
@@ -81,19 +107,22 @@ const TextDropdown = ({
       {!!label && <label>{label}</label>}
       <CreatableSelect
         aria-label={label}
-        styles={custom ?? customStyles}
+        styles={customStyles}
         options={options}
         onChange={handleChange}
         onCreateOption={handleCreate}
         placeholder={placeholder}
         isDisabled={disabled}
         isSearchable={search}
+        value={value}
         defaultValue={defaultOption}
         components={{
             IndicatorSeparator: () => null
           }}
       />
+      {console.log(value)}
     </div>
+   
   )
 }
 

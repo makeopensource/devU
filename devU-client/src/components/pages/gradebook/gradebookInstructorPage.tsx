@@ -170,7 +170,6 @@ const GradebookInstructorPage = () => {
         
         setAllCategoryOptions(options);
     }
-        
         , [assignments])
 
     const fetchData = async () => {
@@ -216,7 +215,7 @@ const GradebookInstructorPage = () => {
 
     };
 
-    const handleCategoryChange = (value:Option)  => {
+    const handleCategoryChange = (value:Option<String>)  => {
         if(!value){
             setDisplayedAssignments(assignments)
             return;

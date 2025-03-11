@@ -101,7 +101,7 @@ const CourseDetailPage = () => {
                                 </div>
                             </div>
                             <div>
-                                <h3>Course Links</h3>
+                                <h3 className={styles.meta_header}>Course Links</h3>
                                 <div className={styles.buttons_container}>
                                     <button className='btnSecondary' onClick={() => {
                                         role.isInstructor() ? history.push(`/course/${courseId}/gradebook/instructor`) : 
@@ -112,7 +112,7 @@ const CourseDetailPage = () => {
                                 <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
                             </div>
                         </div>
-                        <div className={styles.subheader}><h3>Assignments</h3>
+                        <div className={styles.subheader}><h3 className={styles.meta_header}>Assignments</h3>
                             {role.isInstructor() &&(
                                 <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
                                     setOpenModal(true)}}>Add Assignment

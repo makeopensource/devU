@@ -22,7 +22,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         regex: false
     });
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // early return if form not fully filled out
         if (!formData.title || !formData.maxScore || !formData.correctAnswer) { return }
 
@@ -40,7 +40,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
             isRegex: formData.regex,
         }
 
-        RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
+        await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
             .then(() => {
                 console.log("PROBLEM CREATED")
             })
@@ -49,7 +49,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
 
-        RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
+        await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
             .then(() => {
                 console.log("GRADER CREATED")
             })
