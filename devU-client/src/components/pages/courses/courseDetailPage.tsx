@@ -170,7 +170,7 @@ const CourseDetailPage = () => {
 
 
                 ) : (
-                    <h1>Error fetching Course Information</h1>
+                    <h1></h1>
                 )}
             </div>
         </PageWrapper>
