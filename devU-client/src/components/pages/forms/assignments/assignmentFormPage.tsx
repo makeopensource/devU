@@ -82,6 +82,8 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             disableHandins: formData.disableHandins,
         }
 
+        setCurrentCategory(undefined)
+
         const multipart = new FormData
         multipart.append('courseId', finalFormData.courseId)
         multipart.append('name', finalFormData.name)
@@ -114,7 +116,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
             .finally(() => {
-
+                
             })
     }
 
