@@ -219,7 +219,7 @@ const AssignmentUpdatePage = () => {
     setAssignmentProblemData(prevState => ({ ...prevState, [key]: value }))
   }
 
-  const handleCategoryChange = async(value: Option<String>)  => {
+  const handleCategoryChange = (value: Option<String>)  => {
     setFormData(prevState => ({ ...prevState, categoryName: value.label }))
     setCurrentCategory(value)
   };
@@ -255,7 +255,7 @@ const AssignmentUpdatePage = () => {
 
       <div className={styles.pageHeader}>
         <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
-        <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>back to course</Button>
+        <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>Back to Course</Button>
       </div>
       <div className={styles.grid}>
         <div className={styles.form}>
@@ -343,7 +343,7 @@ const AssignmentUpdatePage = () => {
           <label htmlFor="fileUp">
           <StyledEngineProvider injectFirst>
             <MuiButton disableRipple component="span" className={styles.fileUpload}>
-              choose files
+              Choose Files
             </MuiButton>
           </StyledEngineProvider>
           </label> 
@@ -392,7 +392,7 @@ const AssignmentUpdatePage = () => {
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
-            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>save and exit</Button>
+            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>Save & Exit</Button>
       </div>
     </PageWrapper>
   )

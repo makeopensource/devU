@@ -8,6 +8,8 @@ import styles from './dropdown.scss'
 
 import { Option } from './dropdown'
 
+// This type needed since normal react-select does not allow for creating new options
+
 type Props = {
   options: Option<any>[]
   onChange: (value: any) => void
@@ -16,7 +18,6 @@ type Props = {
   value?: Option<any>
   placeholder?: string
   disabled?: boolean
-  search?: boolean
   className?: string
   label?: string
   custom?: Partial<Styles<any, false, GroupTypeBase<any>>>
@@ -28,7 +29,6 @@ const TextDropdown = ({
   onCreate,
   placeholder,
   disabled,
-  search = true,
   defaultOption,
   className = '',
   label,
@@ -51,11 +51,32 @@ const TextDropdown = ({
 
   const { textColor, background } = theme
 
+  const mergeStyles = (
+    base: Partial<Styles<any, false, GroupTypeBase<any>>>,
+    override: Partial<Styles<any, false, GroupTypeBase<any>>>
+  ) => {
+    const merged: Partial<Styles<any, false, GroupTypeBase<any>>> = {}
 
-  const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
+    Object.keys(base).forEach((key) => {
+      const styleKey = key as keyof Styles<any, false, GroupTypeBase<any>>
+      merged[styleKey] = (provided: any, state: any) => ({
+        ...base[styleKey]?.(provided, state), // Original styles
+        ...override[styleKey]?.(provided, state), // Override styles
+      })
+    })
+
+    return merged
+  }
+
+
+
+  const baseStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
     ...custom,
     menu: (provided) => ({ ...provided, 
-      backgroundColor: 'var(--background)', 
+      backgroundColor: background, 
+      boxShadow: 'none',
+      border: '2px solid #ccc',
+      borderRadius: '10px'
     }),
 
     container: (provided) => ({ ...provided, 
@@ -105,15 +126,14 @@ const TextDropdown = ({
   return (
     <div className={`${styles.dropdown} ${className}`}>
       {!!label && <label>{label}</label>}
-      <CreatableSelect
+      <CreatableSelect 
         aria-label={label}
-        styles={customStyles}
+        styles={custom ? mergeStyles(baseStyles, custom) : baseStyles}
         options={options}
         onChange={handleChange}
         onCreateOption={handleCreate}
         placeholder={placeholder}
         isDisabled={disabled}
-        isSearchable={search}
         value={value}
         defaultValue={defaultOption}
         components={{

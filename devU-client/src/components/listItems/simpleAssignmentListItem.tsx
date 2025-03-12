@@ -10,7 +10,7 @@ type Props = {
 }
 
 const SimpleAssignmentListItem = ({assignment}: Props) => (
-    <div onClick={(e) => (e.stopPropagation())}>
+    <div onClick={(e) => (e.stopPropagation())}> {/*Wrapped in div so that clicking this item does not propogate to course cards onClick and take you to course detail page */}
         <ListItemWrapper to={`/course/${assignment.courseId}/assignment/${assignment.id}`} tag={assignment.name}
                         className={styles.title} tagStyle={styles.tag} containerStyle={styles.container}>
             <div className={styles.subText}>{assignment.name}</div>
