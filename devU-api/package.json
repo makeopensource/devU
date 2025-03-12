@@ -9,6 +9,7 @@
     "create-migrate": "npx typeorm-ts-node-commonjs migration:generate -d src/database.ts",
     "update-shared": "cd ../devU-shared && npm run build-local && cd ../devU-api && npm i",
     "typeorm": "typeorm-ts-node-commonjs",
+    "create-migration": "ts-node scripts/create-migration.ts",
     "test": "jest --passWithNoTests",
     "clean": "rimraf build/*",
     "lint": "tsc",

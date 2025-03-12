@@ -189,7 +189,7 @@ I wouldn't recommend digging that far down as the of tests should be more human-
 If the schema needs to be updated, you can do so by updating the models and running
 
 ```
-npm run typeorm -- migration:generate -- -d src/database src/migration/<generatedMigrationName>
+npm run create-migration someMeaningfulMigrationName
 ```
 
 Doing so will attempt to create an auto migration from any changes within the `src/models` directory and add it to `src/migrations`. If an auto migration is generated for you (always check your auto migrations), you can run it with the above migration command
