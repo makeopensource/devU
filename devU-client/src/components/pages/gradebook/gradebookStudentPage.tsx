@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAppSelector } from 'redux/hooks';
 
-import { Assignment, AssignmentScore, Course } from 'devu-shared-modules';
+import { Assignment, AssignmentScore, AssignmentProblem, Course } from 'devu-shared-modules';
 
 import PageWrapper from 'components/shared/layouts/pageWrapper';
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay';
@@ -23,11 +23,38 @@ const GradebookStudentPage = () => {
     const history = useHistory();
     const [courseName, setCourseName] = useState<string>(""); 
     const [categories, setCategories] = useState<String[]>([])
+    const [assignmentProblems, setAssignmentProblems] = useState<Map<number, AssignmentProblem[]>>(new Map<number, AssignmentProblem[]>())
+    const [maxScores, setMaxScores] = useState<Map<number, number>>(new Map<number, number>())
 
 
     useEffect(() => {
         fetchData();
     }, []);
+    useEffect(() => { // get all assignment problems, map assignment ID to array containing its problems
+        for(let i : number = 0; i < assignments.length; i++) {
+            RequestService.get(`/api/course/${courseId}/assignment/${assignments[i].id}/assignment-problems`)
+               .then((res) => {
+                   setAssignmentProblems(prevState => {
+                       const newMap = new Map(prevState);
+                       newMap.set(Number(assignments[i].id), res);
+                       return newMap
+               });
+           })
+    }}, [assignments]);
+
+    useEffect(() => { // add all maxScores of assignment problems to create a maxScore for the entire assignment
+        for (let [assignmentId, problems] of assignmentProblems.entries()) {             
+            if (problems.length != 0) { // only show possible score for assignments which have problems defined.
+                const maxScore = problems.reduce((sum, problem) => sum + problem.maxScore, 0);
+                    setMaxScores(prevState => {
+                            const newMap = new Map(prevState);
+                            newMap.set(assignmentId, maxScore);
+                            return newMap;
+                    });
+                }
+        }  
+       }
+    , [assignmentProblems]);
 
     const fetchData = async () => {
         try {
@@ -58,12 +85,13 @@ const GradebookStudentPage = () => {
     const calculateAverage = () => {
         if (assignmentScores.length === 0) return 0.0;
         const total = assignmentScores.reduce((sum, a) => sum + (a.score || 0), 0);
-        return (total);
+        const maxScoresPossible = Array.from(maxScores.values()).reduce((sum, a) => sum + (a), 0);
+        return (total / maxScoresPossible * 100).toFixed(1);
     };
 
     const calculateCategoryAverage = (categoryAssignments: Assignment[]) => {
         const totalScore = categoryAssignments.reduce((sum, assignment) => sum + (assignmentScores.find(a => a.assignmentId === assignment.id)?.score || 0), 0);
-        return (totalScore / categories.length).toFixed(1);
+        return (totalScore / categoryAssignments.length).toFixed(1);
     };
 
     return (
@@ -95,13 +123,27 @@ const GradebookStudentPage = () => {
                                     </tr>
                                 </thead>
                                     <tbody>
-                                        {categoryAssignments.map((assignment) => (
+                                        {categoryAssignments.map((assignment) => {
+                                            const assignmentScore = assignmentScores.find(as => as.assignmentId === assignment.id) // if there's a submission, this will be defined
+                                            const late = (assignmentScore && assignmentScore.createdAt) ? (new Date(assignmentScore.createdAt) > new Date(assignment.dueDate)) : false // If there's a submission, late is if your score was after due date.
+                                            const lateDays = late && assignmentScore && assignmentScore.createdAt ? Math.floor((new Date(assignmentScore.createdAt).getTime() - new Date(assignment.dueDate).getTime()) / (1000 * 60 * 60 * 24)) : 0
+                                            const problemsDefined  = (assignment.id && maxScores.has(assignment.id))
+                                            return(
                                                 <tr key={assignment.id}>
                                                     <td><a href={`assignment/${assignment.id}`} className={styles.assignmentLink}>{assignment.name}</a></td>
-                                                     <td className={styles.centered}>0</td> {/*Yell at Diego if this is not updated, should be a simple subtraction */}
-                                                    <td className={styles.centered}>{assignmentScores.find(a => a.assignmentId === assignment.id)?.score ?? 'N/A'}</td>
-                                                </tr>
-                                            ))
+                                                    <td className={styles.centered}>{lateDays}</td> {/*Yell at Diego if this is not updated, should be a simple subtraction */}
+                                                    {assignmentScore 
+                                                        ? (late 
+                                                            ? <td className={`${styles.centered} ${styles.late}`}>{assignmentScore.score} / {assignment.id && maxScores.get(assignment.id)}</td> 
+                                                            : <td className={styles.centered}>{assignmentScore.score} / {assignment.id && maxScores.get(assignment.id)}</td> ) 
+                                                        : (
+                                                            problemsDefined 
+                                                            ? <td className={`${styles.centered} ${styles.no_submission}`}>0 / {assignment.id && maxScores.get(assignment.id)}</td> 
+                                                            : <td className={styles.centered}>N/A</td>
+                                                        )}
+                                                </tr> 
+                                                )
+                                        })
                                         }
                                         <tr className={styles.categoryRow}>
                                             <td  className={styles.categoryText}>Category Average</td>
@@ -117,7 +159,7 @@ const GradebookStudentPage = () => {
             </div>
             <div className={styles.courseAverage}>
                     <span>Course Average</span>
-                    <span>{calculateAverage()}</span>
+                    <span>{calculateAverage()}%</span>
                 </div>
         </PageWrapper>
     );

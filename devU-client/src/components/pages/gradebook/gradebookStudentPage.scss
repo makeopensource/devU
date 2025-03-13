@@ -82,9 +82,17 @@
   }
 
   
+  .late {
+    color: #876212;
+  }
+
+  .no_submission{
+      color: #8A2626;
+  }
+
   .header{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
     justify-items: center;
     align-items: center; }
 
@@ -106,7 +114,7 @@
   // Section Styling
   .section {
     background-color: $primary;
-    width: 100%;
+    width: inherit;
     border-radius: 10px;
     height:fit-content;
     overflow: scroll;
@@ -165,6 +173,7 @@
   // Gradebook Layout (Using Grid)
   .gradebookGrid {
     display: grid;
+    margin-top: 10px;
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
     width: 100%;  // 🟢 FIX: Ensures the grid container spans full width
@@ -187,7 +196,7 @@
     display: flex;
     justify-content: space-between;  // 🟢 FIX: Pushes the value to the rightmost side
     font-weight: bold;
-    width: 99.01%;
+    width: inherit;
     grid-column: span 2;
     margin-top: 20px;
     border-radius: 10px;
@@ -206,10 +215,6 @@
     .gradebookGrid {
       display: flex;
       flex-direction: column;
-    }
-
-    .section {
-      width: 100%;
     }
   }
 
