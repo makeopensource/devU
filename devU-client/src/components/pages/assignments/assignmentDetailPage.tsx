@@ -163,16 +163,14 @@ const AssignmentDetailPage = () => {
         }
     }
     const isSubmissionDisabled = () => {
-        if (assignment?.dueDate) {
-            const dueDate = new Date(assignment.dueDate);
+        if (assignment?.endDate) {
+            const endDate = new Date(assignment.endDate);
             const now = new Date();
-            return now > dueDate;
-        }
+            return now > endDate;
+        }   
         return false;
     };
-    isSubmissionDisabled;
-    handleFileChange;
-    handleSubmit;
+    handleFileChange; // bad js but leaving this in for now since file submission will be needed in the future
 
 
     return(
@@ -184,7 +182,7 @@ const AssignmentDetailPage = () => {
 
             <div className={styles.details}>
                 <div className={styles.assignmentDetails}>
-                    <h2>{course?.number} - {assignment?.name}</h2>
+                    <h2 style={{textAlign:'left'}}>{course?.number} - {assignment?.name}</h2>
                     <div>{assignment?.description}</div>
                 </div>
                 <div className={styles.submissionDetails}>
@@ -192,7 +190,7 @@ const AssignmentDetailPage = () => {
                         <strong>Due Date:&nbsp;</strong>{assignment?.dueDate ? fullWordPrintDate(assignment?.dueDate) : "N/A"}
                     </span>
                     <span className={styles.metaText}>
-                        <strong>Available Until:&nbsp;</strong>{assignment?.endDate ? fullWordPrintDate(assignment?.dueDate) : "N/A"}
+                        <strong>Available Until:&nbsp;</strong>{assignment?.endDate ? fullWordPrintDate(assignment?.endDate) : "N/A"}
                     </span>
                     <span className={styles.metaText}>
                         <strong>Submissions Made:&nbsp;</strong>{submissions.length +"/"+ assignment?.maxSubmissions}
@@ -234,7 +232,7 @@ const AssignmentDetailPage = () => {
                                     sx={{width: '100%', marginLeft : 1/10}}/>
                         </div>
                     ))) : <div style={{fontStyle:'italic', textAlign: 'center', marginTop: '10px'}}> No problems yet...</div>}
-                    {!(isSubmissionDisabled()) &&assignmentProblems && assignmentProblems.length > 0 ? (
+                    {!(isSubmissionDisabled()) && assignmentProblems && assignmentProblems.length > 0 ? (
                         <div className = {styles.submit_container}>
                             <div className={styles.affirmation}>
                                 <input type='checkbox' onClick={handleCheckboxChange}/>

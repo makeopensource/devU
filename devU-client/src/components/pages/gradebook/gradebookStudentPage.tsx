@@ -22,6 +22,8 @@ const GradebookStudentPage = () => {
     const userId = useAppSelector((store) => store.user.id);
     const history = useHistory();
     const [courseName, setCourseName] = useState<string>(""); 
+    const [categories, setCategories] = useState<String[]>([])
+
 
     useEffect(() => {
         fetchData();
@@ -37,7 +39,10 @@ const GradebookStudentPage = () => {
             
             const courseData = await RequestService.get<Course>(`/api/courses/${courseId}`);
             setCourseName(courseData.name);
-        
+            
+            const categories = [...new Set(assignments.map(a => a.categoryName))];
+            setCategories(categories);
+
         } catch (error: any) {
             setError(error);
         } finally {
@@ -49,20 +54,16 @@ const GradebookStudentPage = () => {
     if (error) return <ErrorPage error={error} />;
 
     // Categorize assignments
-    const homeworks = assignments.filter(a => a.categoryName === "Homework");
-    const lectureQuestions = assignments.filter(a => a.categoryName === "Lecture Questions");
-    const projects = assignments.filter(a => a.categoryName === "Project");
 
     const calculateAverage = () => {
         if (assignmentScores.length === 0) return 0.0;
         const total = assignmentScores.reduce((sum, a) => sum + (a.score || 0), 0);
-        return (total / assignmentScores.length).toFixed(1);
+        return (total);
     };
 
-    const calculateHomeworkAverage = () => {
-        if (homeworks.length === 0) return "N/A";
-        const totalScore = homeworks.reduce((sum, assignment) => sum + (assignmentScores.find(a => a.assignmentId === assignment.id)?.score || 0), 0);
-        return (totalScore / homeworks.length).toFixed(1);
+    const calculateCategoryAverage = (categoryAssignments: Assignment[]) => {
+        const totalScore = categoryAssignments.reduce((sum, assignment) => sum + (assignmentScores.find(a => a.assignmentId === assignment.id)?.score || 0), 0);
+        return (totalScore / categories.length).toFixed(1);
     };
 
     return (
@@ -80,97 +81,44 @@ const GradebookStudentPage = () => {
                 </div>
             </div>
 
-            <div className={styles.gradebookGrid}>
-                {/* Homework - Left Column */}
-                <div className={styles.section}>
-                    <div className={styles.sectionHeader}>
-                        <span>Homeworks</span>
-                        <span className={styles.headerRight}>
-                            <span>Late Days</span>
-                            <span>Score</span>
-                        </span>
-                    </div>
-                    <table className={styles.gradeTable}>
-                        <tbody>
-                            {homeworks.length > 0 ? (
-                                homeworks.map((assignment) => (
-                                    <tr key={assignment.id}>
-                                        <td><a href={`/assignment/${assignment.id}`} className={styles.assignmentLink}>{assignment.name}</a></td>
-                                        <td>0</td>
-                                        <td>{assignmentScores.find(a => a.assignmentId === assignment.id)?.score ?? 'N/A'}</td>
+            <div className={styles.gradebookGrid}>                
+                    {categories.map((category) => {
+                        const categoryAssignments = assignments.filter(a => a.categoryName === category);
+                        return (
+                            <div className={styles.section}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style={{minWidth:'80%'}}>{category}</th>
+                                        <th className={styles.centered}>Late Days</th>
+                                        <th className={styles.centered}>Score</th>
                                     </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={3} className={styles.noAssignments}>No assignments yet</td>
-                                </tr>
-                            )}
-                            <tr className={styles.categoryRow}>
-                                <td colSpan={2} className={styles.categoryText}>Category Average</td>
-                                <td className={styles.categoryValue}>{calculateHomeworkAverage()}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                </thead>
+                                    <tbody>
+                                        {categoryAssignments.map((assignment) => (
+                                                <tr key={assignment.id}>
+                                                    <td><a href={`assignment/${assignment.id}`} className={styles.assignmentLink}>{assignment.name}</a></td>
+                                                     <td className={styles.centered}>0</td> {/*Yell at Diego if this is not updated, should be a simple subtraction */}
+                                                    <td className={styles.centered}>{assignmentScores.find(a => a.assignmentId === assignment.id)?.score ?? 'N/A'}</td>
+                                                </tr>
+                                            ))
+                                        }
+                                        <tr className={styles.categoryRow}>
+                                            <td  className={styles.categoryText}>Category Average</td>
+                                            <td className={styles.noBorder}></td>
+                                            <td className={`${styles.categoryValue} ${styles.centered}`}>{calculateCategoryAverage(categoryAssignments)}</td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+                            </div>
 
-                {/* Lecture Questions Section */}
-                <div className={styles.section}>
-                    <div className={styles.sectionHeader}>
-                        <span>Lecture Questions</span>
-                        <span className={styles.headerRight}>
-                            <span>Late Days</span>
-                            <span>Score</span>
-                        </span>
-                    </div>
-                    {lectureQuestions.length > 0 ? (
-                        <table className={styles.gradeTable}>
-                            <tbody>
-                                {lectureQuestions.map((assignment) => (
-                                    <tr key={assignment.id}>
-                                        <td>{assignment.name}</td>
-                                        <td>0</td>
-                                        <td>{assignmentScores.find(a => a.assignmentId === assignment.id)?.score ?? 'N/A'}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <div className={styles.noAssignments}>No assignments yet</div>
-                    )}
-                </div>
-
-                {/* Project Section */}
-                <div className={styles.section}>
-                    <div className={styles.sectionHeader}>
-                        <span>Project</span>
-                        <span className={styles.headerRight}>
-                            <span>Late Days</span>
-                            <span>Score</span>
-                        </span>
-                    </div>
-                    {projects.length > 0 ? (
-                        <table className={styles.gradeTable}>
-                            <tbody>
-                                {projects.map((assignment) => (
-                                    <tr key={assignment.id}>
-                                        <td>{assignment.name}</td>
-                                        <td>0</td>
-                                        <td>{assignmentScores.find(a => a.assignmentId === assignment.id)?.score ?? 'N/A'}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <div className={styles.noAssignments}>No assignments yet</div>
-                    )}
-                </div>
-
-                {/* Course Average Section */}
-                <div className={styles.courseAverage}>
+                        )
+                    })}
+            </div>
+            <div className={styles.courseAverage}>
                     <span>Course Average</span>
                     <span>{calculateAverage()}</span>
                 </div>
-            </div>
         </PageWrapper>
     );
 };

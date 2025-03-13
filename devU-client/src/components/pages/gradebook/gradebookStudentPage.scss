@@ -17,25 +17,50 @@
   }
 
   table {
-    width: 100%;
-    border-collapse: collapse;
+        border-radius: 20px;
+        gap:10px;
+        // margin: 15px auto;
+        border-collapse: collapse;
+        width: 100%;
+        position: relative;
+        text-wrap: nowrap;
   }
 
 
   // Table Header & Cell Styling
   th {
     background-color: $primary;
-    color: white;
+    color: #FFF;
+    font-weight: 600;
   }
 
-  th, td {
+  td,
+  th {
     padding: 10px;
+    max-width: 50%;
     text-align: left;
   }
 
+  td{
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    background-color: $background;
+  }
+  td:first-of-type{
+    border-left: none
+  }
+  td:last-of-type{
+    border-right: none;
+  }
+
+  .noBorder{
+    border-right: none;
+    border-left: none;
+  }
+
   tr{
-    border-bottom: 1px solid #ccc;
-  } 
+    border-bottom: 1px solid #ddd;
+  }
 
   tr:last-of-type{
     border-bottom-right-radius: 10px;
@@ -44,29 +69,19 @@
 
   // Table Borders & Rounded Corners
   th:first-of-type {
-    border-top-left-radius: 10px;
+    border-top-left-radius: 8px;
   }
 
   th:last-of-type {
-    border-top-right-radius: 10px;
+    border-top-right-radius: 8px;
   }
 
-  td:first-of-type {
-    border-bottom-left-radius: 10px;
-
-  }
-  td:last-of-type {
-    border-bottom-right-radius: 10px;
+  tr:last-of-type {
+    border-radius: 0 0 20px 20px;
     border-bottom: none;
   }
 
-  // Table Options Section
-  .tableOptions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
+  
   .header{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -87,34 +102,14 @@
     padding: 10px 20px;
   }
 
-  // Text Colors for Status Indicators
-  .tableOptions span:first-child,
-  span.yellow {
-    color: $yellowText;
-  }
-
-  .tableOptions span:last-child,
-  span.red {
-    color: $redText;
-  }
-
-  // Student Gradebook Styling
-  .assignmentName {
-    text-align: left;
-  }
-
-  .gradebookContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
 
   // Section Styling
   .section {
-    background-color: white;
-    padding: -3px;
+    background-color: $primary;
+    width: 100%;
     border-radius: 10px;
     height:fit-content;
+    overflow: scroll;
     border: 2px solid $primary;
   }
 
@@ -123,18 +118,25 @@
   }
 
   .categoryValue {
-    text-align: right;
-    padding-right: 10px;  // 🟢 Fix: Align value to the left
+    border-bottom-right-radius: 8px;
   }
 
   .categoryText {
-    text-align: left;
-    padding-left: 10px;  // 🟢 Fix: Align "Category Average" text to the right
+    border-bottom-left-radius: 8px;
+    border-right: none;
   }
 
-  // Assignment Link Styling
-  .assignmentLink {
-    color: blue;
+  .centered{
+    text-align: center;
+    max-width: 80px;
+    min-width: 80px;
+  }
+
+  .assignmentLink{
+    text-decoration: none;
+  }
+
+  .assignmentLink:hover {
     text-decoration: underline;
   }
 
@@ -154,30 +156,6 @@
     font-weight: bold;
   }
 
-  // 🟢 FIX: "Back to Course" Button Alignment
-  .backToCourseButton {
-    background-color: $primary;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 30px;
-    border: none;
-    cursor: pointer;
-    position: absolute;
-    top: 137px;
-    right: 30px;
-  }
-
-  // Section Headers (Purple Background)
-  .sectionHeader {
-    background-color: $primary;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px 8px 0 0;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;  // 🟢 FIX: Ensures Late Days & Score are in the same row
-    align-items: center;
-  }
 
   .headerRight {
     display: flex;
@@ -193,17 +171,7 @@
   }
 
   // 🟢 FIX: Project Section Width Adjusted
-  .sectionLeft {
-    grid-column: 1;
-  }
-
-  .sectionRight {
-    grid-column: 2;
-  }
-
-  .sectionFull {
-    grid-column: 1 / span 1;  // 🟢 FIX: Project is same width as Homeworks
-  }
+  
 
   // Empty Assignments Text
   .noAssignments {
@@ -222,11 +190,11 @@
     width: 99.01%;
     grid-column: span 2;
     margin-top: 20px;
-    border-radius: 13px;
+    border-radius: 10px;
   }
 
   // 🟢 FIX: Mobile Responsive Adjustments
-  @media (max-width: 650px) {
+  @media (max-width: $medium) {
     .pageWrapper {
       padding: 0 20px;
     }
