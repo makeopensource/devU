@@ -3,18 +3,18 @@ import {useParams} from 'react-router-dom'
 import { useActionless } from 'redux/hooks'
 import { SET_ALERT } from 'redux/types/active.types'
 
-import {Assignment, AssignmentProblem, SubmissionProblemScore, SubmissionScore} from 'devu-shared-modules'
+import {SubmissionScore} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import Modal from 'components/shared/layouts/modal'
 
 interface Props {
     open: boolean;
     onClose: () => void;
-    submissionScore: SubmissionScore;
+    submissionScore: SubmissionScore | null;
 
 }
 
-const CreateCourseModal = ({ open, onClose, submissionScore }: Props) => {
+const ManualGradeModal = ({ open, onClose, submissionScore }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { submissionId, assignmentId, courseId } = useParams<{submissionId: string, assignmentId: string, courseId: string}>()
 
@@ -45,12 +45,12 @@ const CreateCourseModal = ({ open, onClose, submissionScore }: Props) => {
         }
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const key = e.target.id
-        const value = e.target.value
+    // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //     const key = e.target.id
+    //     const value = e.target.value
 
-        setFormData(prevState => ({ ...prevState, [key]: value }))
-    }
+    //     setFormData(prevState => ({ ...prevState, [key]: value }))
+    // }
 
     return (
         <Modal title="Grade Assignment" buttonAction={handleManualGrade} open={open} onClose={onClose}>
@@ -59,4 +59,4 @@ const CreateCourseModal = ({ open, onClose, submissionScore }: Props) => {
     )
 }
 
-export default CreateCourseModal;
+export default ManualGradeModal;
