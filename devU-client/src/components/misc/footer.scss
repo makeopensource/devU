@@ -5,12 +5,14 @@
   color: #fff;
   text-align: left;
   width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  // position: fixed;
+  // bottom: 0;
+  // left: 0;
+  position: relative;
+  margin-top: auto;
   font-size: 14px;
   font-size: 16px;
-  padding: 10px 0;
+  padding: 10px $pagePadding;
   display: flex;
   flex-direction: row;
   align-items: center;

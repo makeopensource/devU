@@ -13,8 +13,8 @@ import styles from './submissionDetailPage.scss'
 import 'react-datepicker/dist/react-datepicker.css'
 //import Card from '@mui/material/Card'
 //import CardContent from '@mui/material/CardContent'
-import { CardActionArea } from '@mui/material'
-import { prettyPrintDateTime } from "../../../utils/date.utils";
+// import { CardActionArea } from '@mui/material'
+// import { prettyPrintDateTime } from "../../../utils/date.utils";
 //import React, { useState } from 'react';
 //import { Document, Page } from 'react-pdf';
 //import StickyNote from 'react-sticky-notes';
@@ -95,7 +95,6 @@ const SubmissionDetailPage = () => {
             await RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores/${submissionScore.id}`, formData)
                 .then(() => {
                     setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Updated' })
-
                 })
 
         }
@@ -142,7 +141,7 @@ const SubmissionDetailPage = () => {
                 <h1 className={styles.heading}>Submissions For Assignment {assignment?.name}</h1>
 
 
-                <div className={styles.submissionsLayout}>
+                {/* <div className={styles.submissionsLayout}> */}
 
                     {/* <div className={styles.submissionsContainer}>
                         <h2 className={styles.sub_list}>Submission List:</h2>
@@ -216,7 +215,7 @@ const SubmissionDetailPage = () => {
                             <p>Select a submission to view its content.</p>
                         )}
                     </div>
-                </div>
+                {/* </div> */}
             </div>
         </PageWrapper>
     )
