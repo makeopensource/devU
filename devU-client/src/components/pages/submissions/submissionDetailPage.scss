@@ -62,9 +62,18 @@
   padding: 0px 15px 10px; // top l/r bottom
 }
 
+.problem_name {
+  max-width: 90%;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 .feedback {
   padding: 0px 15px 10px;
   margin: 0;
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 .left > p {

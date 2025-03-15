@@ -93,7 +93,7 @@ const SubmissionDetailPage = () => {
 
                             return (
                                 <div key={problemItem.id} className={styles.score_item}>
-                                    <span style={{maxWidth: '90%'}}>{problemItem.problemName}</span>
+                                    <span className={styles.problem_name}>{problemItem.problemName}</span>
                                     <span>{correspondingScore ? correspondingScore.score : '--'}</span>
                                 </div>
                             );

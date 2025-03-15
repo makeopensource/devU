@@ -35,6 +35,7 @@ const ManualGradeModal = ({ open, onClose, submissionScore }: Props) => {
             await RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores/${submissionScore.id}`, formData)
                 .then(() => {
                     setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Updated' })
+                    window.location.reload()
                 })
 
         }
@@ -44,6 +45,7 @@ const ManualGradeModal = ({ open, onClose, submissionScore }: Props) => {
             await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores`, formData)
                 .then(() => {
                     setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Created' })
+                    window.location.reload()
                 })
         }
     }
