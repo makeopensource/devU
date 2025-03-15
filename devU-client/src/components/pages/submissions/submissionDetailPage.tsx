@@ -69,11 +69,14 @@ const SubmissionDetailPage = () => {
                     <div className={styles.feedback_header}>
                         <h2>Feedback for: {assignment?.name}</h2>
                     </div>
+                    
                     <p><strong>Instructor Feedback:</strong></p>
-                    {/* overall assignment feedback part of submissionScore */}
                     <pre className={styles.feedback}>{submissionScore ? submissionScore.feedback : ''}</pre>
+                    
                     <p><strong>Autograder Feedback:</strong></p>
-                    {/* TODO: for each submissionProblemScore */}
+                    {submissionProblemScores.map((problemItem) => (
+                        <pre className={styles.feedback}>{problemItem ? problemItem.feedback : ''}</pre>
+                    ))}
                 </div>
                 <div className={styles.right}>
                     <div className={styles.scores}>
