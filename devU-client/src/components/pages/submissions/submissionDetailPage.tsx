@@ -6,7 +6,6 @@ import RequestService from 'services/request.service'
 import { Assignment, AssignmentProblem, Submission, SubmissionProblemScore, SubmissionScore } from 'devu-shared-modules'
 import { useParams } from 'react-router-dom'
 import styles from './submissionDetailPage.scss'
-import 'react-datepicker/dist/react-datepicker.css'
 import ManualGradeModal from './manualGradeModal'
 
 const SubmissionDetailPage = () => {
@@ -75,12 +74,6 @@ const SubmissionDetailPage = () => {
                         <div className={styles.section_header}>
                             <h2>Scores</h2>
                         </div>
-                        {/* {assignmentProblems.map((problemItem) => (
-                            <div key={problemItem.id}>{problemItem.problemName}</div>
-                        ))}
-                        {submissionProblemScores.map((scoreItem) => (
-                            <div key={scoreItem.id}>{scoreItem.score}</div>
-                        ))} */}
                         {assignmentProblems.map((problemItem) => {
                             // Find the corresponding submissionProblemScore for the current problem
                             const correspondingScore = submissionProblemScores.find(
@@ -88,7 +81,7 @@ const SubmissionDetailPage = () => {
                             );
 
                             return (
-                                <div key={problemItem.id}>
+                                <div key={problemItem.id} className={styles.score_item}>
                                     <span>{problemItem.problemName}</span>
                                     <span>{correspondingScore ? correspondingScore.score : '--'}</span>
                                 </div>

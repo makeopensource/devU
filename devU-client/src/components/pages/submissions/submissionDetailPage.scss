@@ -29,10 +29,15 @@
 .section_header {
   color: #FFF;
   background-color: $primary;
+  
+  // so header corners dont show
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
+
+  // adjust for 2px border
   margin-left: -2px;
   margin-right: -2px;
+  margin-bottom: 15px;
 }
 
 .feedback_header {
@@ -42,3 +47,8 @@
   gap: 20px; // so content does not mush together on smaller screen widths
 }
 
+.score_item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 15px 10px; // top l/r bottom
+}
