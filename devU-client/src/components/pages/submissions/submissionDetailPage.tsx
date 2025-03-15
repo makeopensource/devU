@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useAppSelector } from "../../../redux/hooks";
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from '../errorPage/errorPage'
@@ -15,10 +16,10 @@ const SubmissionDetailPage = () => {
     const { submissionId, assignmentId, courseId } = useParams<{ submissionId: string, assignmentId: string, courseId: string }>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
     const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
-    const [submission, setSubmission] = useState<Submission>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [assignment, setAssignment] = useState<Assignment>()
     const [showManualGrade, setToggleManualGrade] = useState(false)
+    const role = useAppSelector((store) => store.roleMode);
 
     const fetchData = async () => {
         try {
@@ -26,7 +27,8 @@ const SubmissionDetailPage = () => {
             setSubmissionScore(submissionScore)
 
             const submission = await RequestService.get<Submission>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/${submissionId}`);
-            setSubmission({ ...submission });
+            // setSubmission(submission);
+            // ^^doesn't need to be read outside this block
 
             const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores/submission/${submissionId}`)
             setSubmissionProblemScores(submissionProblemScores)
@@ -67,7 +69,11 @@ const SubmissionDetailPage = () => {
                     <div className={styles.feedback_header}>
                         <h2>Feedback for: {assignment?.name}</h2>
                     </div>
-                    feedback rendered here
+                    <p><strong>Instructor Feedback:</strong></p>
+                    {/* overall assignment feedback part of submissionScore */}
+                    <pre className={styles.feedback}>{submissionScore ? submissionScore.feedback : ''}</pre>
+                    <p><strong>Autograder Feedback:</strong></p>
+                    {/* TODO: for each submissionProblemScore */}
                 </div>
                 <div className={styles.right}>
                     <div className={styles.scores}>
@@ -94,7 +100,9 @@ const SubmissionDetailPage = () => {
                     </div>
                     <button className="btnSecondary">View Source</button>
                     <button className="btnSecondary">Download Submission</button>
-                    <button className="btnPrimary" onClick={handleClick}>Manually Grade</button>
+                    {role.isInstructor() && (
+                        <button className="btnPrimary" onClick={handleClick}>Manually Grade</button>
+                    )}
                 </div>
             </div>
         </PageWrapper>

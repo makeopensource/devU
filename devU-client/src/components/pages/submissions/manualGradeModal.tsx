@@ -16,14 +16,14 @@ interface Props {
 
 const ManualGradeModal = ({ open, onClose, submissionScore }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
-    const { submissionId, assignmentId, courseId } = useParams<{submissionId: string, assignmentId: string, courseId: string}>()
+    const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
 
     const [formData, setFormData] = useState({
-        name: '',
-        number: '',
-        session: '',
-        isPublic: false
-    });
+        submissionId: submissionScore?.submissionId,
+        score: 0,
+        feedback: '',
+        // releasedAt: "2024-10-05T14:48:00.00Z"
+    })
 
     const handleManualGrade = async () => {
         if (submissionScore) {
