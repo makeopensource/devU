@@ -65,7 +65,7 @@ const SubmissionDetailPage = () => {
             <div className={styles.container}>
                 <div className={styles.left}>
                     <div className={styles.feedback_header}>
-                        <h2>Feedback for: assignment name here</h2>
+                        <h2>Feedback for: {assignment?.name}</h2>
                     </div>
                     feedback rendered here
                 </div>
@@ -87,6 +87,10 @@ const SubmissionDetailPage = () => {
                                 </div>
                             );
                         })}
+                        <div className={styles.score_item}>
+                            <span><strong>Assignment Score:</strong></span>
+                            <span><strong>{submissionScore ? submissionScore.score : '--'}</strong></span>
+                        </div>
                     </div>
                     <button className="btnSecondary">View Source</button>
                     <button className="btnSecondary">Download Submission</button>
