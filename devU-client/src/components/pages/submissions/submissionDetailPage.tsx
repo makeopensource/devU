@@ -73,11 +73,11 @@ const SubmissionDetailPage = () => {
                     </div>
                     
                     <p><strong>Instructor Feedback:</strong></p>
-                    <pre className={styles.feedback}>{submissionScore ? submissionScore.feedback : ''}</pre>
+                    <pre className={styles.feedback}>{submissionScore ? submissionScore.feedback : 'no feedback provided'}</pre>
                     
                     <p><strong>Autograder Feedback:</strong></p>
                     {submissionProblemScores.map((problemItem) => (
-                        <pre className={styles.feedback}>{problemItem ? problemItem.feedback : ''}</pre>
+                        <pre className={styles.feedback}>{problemItem ? problemItem.feedback : 'no feedback provided'}</pre>
                     ))}
                 </div>
                 <div className={styles.right}>

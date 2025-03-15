@@ -20,12 +20,15 @@ const ManualGradeModal = ({ open, onClose, submissionScore }: Props) => {
 
     const [formData, setFormData] = useState({
         submissionId: submissionScore?.submissionId,
-        score: 0,
-        feedback: '',
-        // releasedAt: "2024-10-05T14:48:00.00Z"
+        score: submissionScore?.score,
+        feedback: submissionScore?.feedback,
+        releasedAt: "2024-10-05T14:48:00.00Z"
     })
 
     const handleManualGrade = async () => {
+        // set releasedAt to now in ISO 8601 format
+        setFormData(prevState => ({ ...prevState, ["releasedAt"]: new Date().toISOString() }))
+
         if (submissionScore) {
             // Update the submission score
             console.log('Submission Exists')
@@ -45,16 +48,24 @@ const ManualGradeModal = ({ open, onClose, submissionScore }: Props) => {
         }
     }
 
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    //     const key = e.target.id
-    //     const value = e.target.value
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const key = e.target.id
+        const value = e.target.value
 
-    //     setFormData(prevState => ({ ...prevState, [key]: value }))
-    // }
+        setFormData(prevState => ({ ...prevState, [key]: value }))
+    }
 
     return (
         <Modal title="Grade Assignment" buttonAction={handleManualGrade} open={open} onClose={onClose}>
-            NOT IMPLEMENTED YET
+            <div className="input-group">
+                <label htmlFor="score" className="input-label">Assignment Score:</label>
+                <input type="number" id="score" value={Number(formData.score)} onChange={handleChange} />
+            </div>
+            <div className="input-group">
+                <label htmlFor="feedback" className="input-label">Overall Feedback:</label>
+                <textarea rows={4} id="feedback" onChange={handleChange} value={String(formData.feedback)} 
+                placeholder='Provide assignment feedback...'/>
+            </div>
         </Modal>
     )
 }
