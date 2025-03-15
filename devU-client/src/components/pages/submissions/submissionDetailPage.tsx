@@ -5,7 +5,7 @@ import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from '../errorPage/errorPage'
 import RequestService from 'services/request.service'
 import { Assignment, AssignmentProblem, Submission, SubmissionProblemScore, SubmissionScore } from 'devu-shared-modules'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, Link } from 'react-router-dom'
 import styles from './submissionDetailPage.scss'
 import ManualGradeModal from './manualGradeModal'
 
@@ -62,7 +62,6 @@ const SubmissionDetailPage = () => {
             <ManualGradeModal open={showManualGrade} onClose={handleClick} submissionScore={submissionScore} />
             <div className="pageHeader">
                 <h1>View Feedback</h1>
-                {/* TODO: link to course page */}
                 <button className="pageHeaderBtn" onClick={() => {
                     history.push(`/course/${courseId}`)
                 }}>Back to Course</button>
@@ -70,7 +69,7 @@ const SubmissionDetailPage = () => {
             <div className={styles.container}>
                 <div className={styles.left}>
                     <div className={styles.feedback_header}>
-                        <h2>Feedback for: {assignment?.name}</h2>
+                        <h2>Feedback for: <Link to={`/course/${courseId}/assignment/${assignmentId}`}>{assignment?.name}</Link></h2>
                     </div>
                     
                     <p><strong>Instructor Feedback:</strong></p>

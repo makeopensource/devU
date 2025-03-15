@@ -52,6 +52,10 @@
   gap: 20px; // so content does not mush together on smaller screen widths
 }
 
+.feedback_header a {
+  color: #FFF;
+}
+
 .score_item {
   display: flex;
   justify-content: space-between;
