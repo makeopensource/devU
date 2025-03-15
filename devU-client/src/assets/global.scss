@@ -139,8 +139,12 @@
     align-items: center;
   }
 
+  .pageHeader > h1 {
+    grid-column-start: 2;
+  }
+
   .pageHeaderBtn {
-    @extend button.btnPrimary;
+    @extend .btnPrimary;
     margin-left: auto;
   }
 
