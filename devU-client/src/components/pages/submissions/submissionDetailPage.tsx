@@ -5,13 +5,14 @@ import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from '../errorPage/errorPage'
 import RequestService from 'services/request.service'
 import { Assignment, AssignmentProblem, Submission, SubmissionProblemScore, SubmissionScore } from 'devu-shared-modules'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import styles from './submissionDetailPage.scss'
 import ManualGradeModal from './manualGradeModal'
 
 const SubmissionDetailPage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const history = useHistory()
 
     const { submissionId, assignmentId, courseId } = useParams<{ submissionId: string, assignmentId: string, courseId: string }>()
     const [submissionScore, setSubmissionScore] = useState<SubmissionScore | null>(null)
@@ -62,7 +63,9 @@ const SubmissionDetailPage = () => {
             <div className="pageHeader">
                 <h1>View Feedback</h1>
                 {/* TODO: link to course page */}
-                <button className="pageHeaderBtn">Back to Course</button>
+                <button className="pageHeaderBtn" onClick={() => {
+                    history.push(`/course/${courseId}`)
+                }}>Back to Course</button>
             </div>
             <div className={styles.container}>
                 <div className={styles.left}>
@@ -91,7 +94,7 @@ const SubmissionDetailPage = () => {
 
                             return (
                                 <div key={problemItem.id} className={styles.score_item}>
-                                    <span>{problemItem.problemName}</span>
+                                    <span style={{maxWidth: '90%'}}>{problemItem.problemName}</span>
                                     <span>{correspondingScore ? correspondingScore.score : '--'}</span>
                                 </div>
                             );
@@ -101,7 +104,9 @@ const SubmissionDetailPage = () => {
                             <span><strong>{submissionScore ? submissionScore.score : '--'}</strong></span>
                         </div>
                     </div>
-                    <button className="btnSecondary">View Source</button>
+                    <button className="btnSecondary" onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submissionId}/fileView`)
+                    }}>View Source</button>
                     <button className="btnSecondary">Download Submission</button>
                     {role.isInstructor() && (
                         <button className="btnPrimary" onClick={handleClick}>Manually Grade</button>

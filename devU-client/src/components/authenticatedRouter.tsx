@@ -24,7 +24,6 @@ import UserCoursesListPage from "./pages/listPages/courses/coursesListPage";
 import JoinCoursePage from "./pages/listPages/joinwithcodepage";
 
 import WebhookURLForm from './pages/webhookURLForm'
-// import AddAssignmentModal from 'components/pages/forms/assignments/assignmentFormPage'
 
 const AuthenticatedRouter = () => (
     <Switch>
@@ -54,7 +53,7 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/assignment/:assignmentId/submissions'
             component={InstructorSubmissionspage} />
 
-        {/* TODO: get rid of separate feedback page, instead have page to view source (/submissions/:submissionID/view on autolab)*/}
+        {/* NOTE: maybe get rid of separate feedback page, instead have page to view source (/submissions/:submissionID/view on autolab)*/}
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId/feedback'
             component={SubmissionFeedbackPage} />
         

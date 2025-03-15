@@ -11,7 +11,7 @@
   border: 2px solid $primary;
   border-radius: 10px;
   height: fit-content;
-  padding-bottom: 5px;
+  padding-bottom: 10px; // for 20px from content
 }
 
 .right {
@@ -60,6 +60,7 @@
 
 .feedback {
   padding: 0px 15px 10px;
+  margin: 0;
 }
 
 .left > p {
