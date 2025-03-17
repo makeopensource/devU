@@ -14,7 +14,7 @@ import NonContainerAutoGraderForm from './pages/forms/containers/nonContainerAut
 import GradebookStudentPage from './pages/gradebook/gradebookStudentPage'
 import GradebookInstructorPage from './pages/gradebook/gradebookInstructorPage'
 import SubmissionFeedbackPage from './pages/submissions/submissionFeedbackPage'
-import ContainerAutoGraderForm from './pages/forms/containers/containerAutoGraderForm'
+import ContainerAutoGraderForm from './pages/forms/containers/ContainerAutoGraderModal'
 import CoursePreviewPage from './pages/courses/coursePreviewPage'
 import CoursesListPage from "./pages/listPages/courses/coursesListPage";
 import AssignmentProblemFormPage from './pages/forms/assignments/assignmentProblemFormPage'

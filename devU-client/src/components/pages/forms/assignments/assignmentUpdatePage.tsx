@@ -19,6 +19,9 @@ import TextProblemModal from './textProblemModal'
 import TextDropdown from 'components/shared/inputs/textDropDown'
 import { Option } from 'components/shared/inputs/dropdown'
 //import Select from 'react-select/src/Select'
+import ContainerAutoGraderModal from '../containers/ContainerAutoGraderModal';
+import AddProblemModal from './AddProblemModal'
+
 
 type UrlParams = { assignmentId: string }
 
@@ -29,7 +32,13 @@ const AssignmentUpdatePage = () => {
   const currentAssignmentId = parseInt(assignmentId)
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
+  const [containerAutoGraderModal, setContainerAutoGraderModal] = useState(false);
+  const handleCloseContainerAutoGraderModal = () => setContainerAutoGraderModal(false);
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
+  const [addProblemModal, setAddProblemModal] = useState(false);
+  const handleCloseAddProblemModal = () => setAddProblemModal(false);
+
+  
 
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
@@ -234,8 +243,11 @@ const AssignmentUpdatePage = () => {
     setFormData(prevState => ({ ...prevState, categoryName: value }))
     setCurrentCategory(newOption)
     };
+
   
   return (
+    <>
+      <ContainerAutoGraderModal open={containerAutoGraderModal} onClose={handleCloseContainerAutoGraderModal} />
 
     <PageWrapper>
 
@@ -252,6 +264,7 @@ const AssignmentUpdatePage = () => {
       </Dialog>
 
       <TextProblemModal open={textModal} onClose={handleCloseTextModal}/>
+      <AddProblemModal open={addProblemModal} onClose={handleCloseAddProblemModal} />
 
       <div className={styles.pageHeader}>
         <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
@@ -347,21 +360,20 @@ const AssignmentUpdatePage = () => {
             </MuiButton>
           </StyledEngineProvider>
           </label> 
-          
 
         </div>
         <div className={styles.problemsList}>
         <h2 className={styles.header}>Add Problems</h2>
           <div className={styles.buttonContainer}>
-            <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Code/File Input creation modal' })} className='btnSecondary'>Code/File Input</Button>
+          <Button onClick={() => setAddProblemModal(true)} className='btnSecondary'>Code/File Input</Button>
             <Button onClick={() => {setTextModal(true)}} className='btnSecondary'>Text Input</Button>
             <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Multiple Choice creation modal' })} className='btnSecondary'>Multiple Choice</Button>
           </div>
           <h2 className={styles.header}>Add Graders</h2>
           <div className={styles.buttonContainer}>
-            <Button onClick={() => {
-                        history.push(`createCAG`)
-                    }} className='btnSecondary'>Code Grader</Button>
+          <Button onClick={() => setContainerAutoGraderModal(true)} className='btnSecondary'>
+            Code Grader
+          </Button>
             <Button onClick={() => {
                         history.push(`createNCAG`)
                     }} className='btnSecondary'>Non-code Grader</Button>
@@ -394,7 +406,8 @@ const AssignmentUpdatePage = () => {
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
             <Button onClick={handleAssignmentUpdate} className='btnPrimary'>Save & Exit</Button>
       </div>
-    </PageWrapper>
+      </PageWrapper>
+    </>
   )
 }
 
