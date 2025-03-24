@@ -23,17 +23,11 @@ import { responseInterceptor } from './entities/webhooks/webhooks.middleware'
 
 const app = express()
 
-initializeMinio()
-  .then(() =>
-    dataSource.initialize()
-      .then(() => {
-        console.log('Data Source has been initialized!')
-      })
-      .catch(err => {
-        console.error('Error during Data Source initialization', err)
-      })
-  )
-  .then(_connection => {
+async function main() {
+  try {
+    await initializeMinio()
+    await dataSource.initialize()
+
     app.use(helmet())
     app.use(express.urlencoded({ extended: true }))
     app.use(express.json())
@@ -42,17 +36,19 @@ initializeMinio()
     app.use(morgan('combined'))
     app.use(passport.initialize())
 
-    console.log(`Api: ${environment.isDocker ? '' : 'not'} running in docker`)
-
-    app.use(responseInterceptor)
-
-    // Middleware;
+    console.log(`API${environment.isDocker ? '' : ' not'} running in docker`)
+    app.use(responseInterceptor) // webhooks
     app.use('/', router)
     app.use(errorHandler)
 
     app.listen(environment.port, () =>
-      console.log(`API listening at port - ${environment.port}\n
-    If you are running the full app, the front end should be accessible at http://localhost:9000`)
+      console.log(`API listening at port - ${environment.port}`),
     )
-  })
-  .catch(err => console.log('TypeORM connection error:', err))
+  } catch (e: any) {
+    console.error(`Error during initialization ${e.toString()}`)
+  }
+}
+
+main().catch((err: any) => {
+  console.error(err)
+})
