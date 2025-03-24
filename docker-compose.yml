@@ -70,15 +70,15 @@ services:
       MINIO_ROOT_PASSWORD: changeMe
     command: server /data --console-address ":9001"
 
-#  leviathan:
-#    container_name: leviathan
-#    image: ghcr.io/makeopensource/leviathan:dev
-#    ports:
-#      - "9221:9221"
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
-#      - ./levi/:/app/appdata
-#    restart: unless-stopped
+  leviathan:
+    container_name: leviathan
+    image: ghcr.io/makeopensource/leviathan:master
+    ports:
+      - "9221:9221"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./levi/:/app/appdata
+    restart: unless-stopped
 
   # tango stuff
   tango:
