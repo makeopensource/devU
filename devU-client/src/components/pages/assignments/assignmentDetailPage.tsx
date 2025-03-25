@@ -238,7 +238,7 @@ const AssignmentDetailPage = () => {
                         <div className = {styles.submit_container}>
                             <div className={styles.affirmation}>
                                 <input type='checkbox' onClick={handleCheckboxChange}/>
-                                <span className={styles.affirmText}>I affirm that I have complied with this course’s academic integrity policy as defined in the syllabus.</span>
+                                <span className={styles.affirmText}>I affirm that I have complied with this course's academic integrity policy as defined in the syllabus.</span>
                             </div>
                             <button className='btnPrimary'
                             style={{marginTop:'40px'}} 

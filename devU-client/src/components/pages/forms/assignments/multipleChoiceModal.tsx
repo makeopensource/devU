@@ -15,6 +15,11 @@ const TextProblemModal = ({ open, onClose }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId } = useParams<{ assignmentId: string }>()
     const { courseId } = useParams<{ courseId: string }>()
+    const [options, setOptions] = useState({
+        a: '',
+        b: '',
+        c: ''
+    })
     const [formData, setFormData] = useState({
         title: '',
         maxScore: '',
@@ -38,26 +43,34 @@ const TextProblemModal = ({ open, onClose }: Props) => {
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
+            metadata: {
+                type: 'MCQ',
+                options: options
+            } // bad js. did as  a quick fix lmk how to do better :D
         }
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
             .then(() => {
                 console.log("PROBLEM CREATED")
+                console.log(problemFormData)
+
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
                 setAlert({ autoDelete: false, type: 'error', message })
+                console.log(problemFormData)
             })
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
             .then(() => {
                 console.log("GRADER CREATED")
+                console.log(graderFormData)
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-
+        
         // close modal
         onClose();
     }
@@ -69,6 +82,19 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         setFormData(prevState => ({ ...prevState, [key]: value }))
     }
 
+    const handleQuestionTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const key = e.target.id
+        const value = e.target.value
+
+        setOptions(prevState => ({ ...prevState, [key]: value }))
+    }
+
+    const handleCorrectAnswerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = e.target.id
+        console.log("AAAAAAAA")
+        setFormData(prevState => ({ ...prevState, correctAnswer: value }))
+    }
+
     return (
         <Modal title="Add Text Problem" buttonAction={handleSubmit} open={open} onClose={onClose}>
             <div className="input-group">
@@ -76,10 +102,24 @@ const TextProblemModal = ({ open, onClose }: Props) => {
                 <input type="text" id="title" onChange={handleChange}
                     placeholder='e.g. What is the time complexity of MergeSort?' />
             </div>
-            <div className="input-group">
-                <label htmlFor="correctAnswer" className="input-label">Correct Answer:</label>
-                <input type="text" id="correctAnswer" onChange={handleChange}
-                    placeholder='e.g. O(nlogn)' />
+            <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
+                <div>a.</div>
+                <input type="text" id="a" onChange={handleQuestionTextChange} 
+                placeholder='Answer A...' />
+                <input type="radio" id="a" onChange={handleCorrectAnswerChange} name="correct"/>
+            </div>
+            <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
+                <div>b.</div>
+                <input type="text" id="b" onChange={handleQuestionTextChange} 
+                placeholder='Answer B...' />
+                <input type="radio" id="b" onChange={handleCorrectAnswerChange} name="correct"/>
+
+            </div>
+            <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
+                <div>c.</div>
+                <input type="text" id="c" onChange={handleQuestionTextChange} 
+                placeholder='Answer C...' />
+                <input type="radio" id="c" onChange={handleCorrectAnswerChange} name="correct"/>
             </div>
             <div className="input-group">
                 <label htmlFor="maxScore" className="input-label">Maximum Score:</label>
