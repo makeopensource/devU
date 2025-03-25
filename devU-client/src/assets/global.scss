@@ -23,10 +23,10 @@
     text-align: center;
   }
 
-  a{
+  a {
     color: var(--link-blue);
   }
-  
+
   // general button template, extends to 3 types of buttons - primary, secondary, delete
   .btn {
     cursor: pointer;
@@ -42,14 +42,15 @@
     font-style: italic;
     margin-right: auto; // Keeps text locked left after hitting 738px
     margin-bottom: 20px;
-}
+  }
 
   button.btnPrimary {
     @extend .btn;
     background-color: var(--primary);
     border: 3px solid var(--primary);
     color: #fff; // primary button always white text
-    &:hover{
+
+    &:hover {
       background-color: var(--hover-darker);
       border: 3px solid var(--hover-darker);
     }
@@ -57,11 +58,12 @@
 
   button.btnSecondary {
     @extend .btn;
-    
+
     background-color: var(--btn-secondary-background);
     color: var(--btn-secondary-text);
     border: 3px solid var(--btn-secondary-border);
-    &:hover{
+
+    &:hover {
       background-color: var(--hover-lighter);
     }
   }
@@ -90,21 +92,25 @@
     width: 100%
   }
 
-  .input-group>input, .input-group>textarea{
+  .input-group>input,
+  .input-group>textarea {
     padding: 10px;
     border-radius: 10px;
     // border: 1px solid var(--input-field-label);
     border: none;
     background-color: var(--input-field-background);
     color: var(--text-color);
-    font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;;
+    font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;
+    ;
   }
 
-  .input-group>input::placeholder, .input-group>textarea::placeholder {
+  .input-group>input::placeholder,
+  .input-group>textarea::placeholder {
     color: var(--input-field-label);
   }
 
-  .modal-header, .input-subgroup-2col {
+  .modal-header,
+  .input-subgroup-2col {
     display: flex;
     justify-content: space-between;
     gap: 20px;
@@ -125,6 +131,21 @@
 
   button.modalAction {
     align-self: center;
+  }
+
+  .pageHeader {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+  }
+
+  .pageHeader > h1 {
+    grid-column-start: 2;
+  }
+
+  .pageHeaderBtn {
+    @extend .btnPrimary;
+    margin-left: auto;
   }
 
   body {
@@ -187,7 +208,7 @@
     --grey-lighter: #c5c5c5;
     --grey: #555555;
     --grey-darker: #444444;
-    --grey-darkest: #333333; 
+    --grey-darkest: #333333;
 
     --blue-lighter: #78B7FF;
     --blue: #1F3D7A;
@@ -239,9 +260,7 @@
     --hover-darker: var(--purple-lighterer);
     --hover-lighter: var(--purple);
 
-    --btn-text-color: var(--purple-lighter)
-
-    --btn-delete-border: var(--red-lighter);
+    --btn-text-color: var(--purple-lighter) --btn-delete-border: var(--red-lighter);
     --btn-delete-background: var(--red);
     --btn-delete-text: #FFF;
 
@@ -258,13 +277,14 @@
     color: var(--text-color);
   }
 
-    // General Error Message
+  // General Error Message
   .error-message {
     color: var(--error-text);
     font-size: 0.875rem;
     font-weight: bold;
     margin-top: 5px;
   }
+
   // Validation Error Container
   .error-container {
     background-color: var(--error-background);
@@ -273,6 +293,7 @@
     margin: 10px 0;
     border-radius: 5px;
   }
+
   // Error Page Styling (From `errorPage.scss`)
   .error-page {
     background-color: var(--error-page-background);
@@ -281,14 +302,17 @@
     justify-content: center;
     height: 100vh;
   }
+
   .error-heading {
     font-size: 2rem;
     color: var(--error-text);
   }
+
   .error-description {
     font-size: 1.2rem;
     color: var(--text-color);
   }
+
   // Global Input Field Styles
   .input-field {
     width: 100%;
@@ -304,6 +328,7 @@
       border-color: var(--focus);
       outline: none;
     }
+
     &:disabled {
       background-color: var(--grey-lightest);
       color: var(--grey-lighter);
@@ -311,8 +336,8 @@
     }
   }
 
-  
-  
+
+
   // Placeholder Styling
   ::placeholder {
     color: var(--text-color-secondary);
