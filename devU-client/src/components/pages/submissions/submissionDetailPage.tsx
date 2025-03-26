@@ -59,7 +59,7 @@ const SubmissionDetailPage = () => {
 
     return (
         <PageWrapper>
-            <ManualGradeModal open={showManualGrade} onClose={handleClick} submissionScore={submissionScore} />
+            <ManualGradeModal open={showManualGrade} onClose={handleClick} submissionScore={submissionScore} assignmentProblems={assignmentProblems} submissionProblemScores={submissionProblemScores} />
             <div className="pageHeader">
                 <h1>View Feedback</h1>
                 <button className="pageHeaderBtn" onClick={() => {
