@@ -18,8 +18,8 @@ interface Props {
 const ManualGradeModal = ({ open, onClose, submissionScore, assignmentProblems, submissionProblemScores }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId, courseId } = useParams<{ assignmentId: string, courseId: string }>()
-    const [problemScores, setProblemScores] = useState({})
-    
+    const [problemScores, setProblemScores] = useState<Record<string, any>>({})
+
     const [formData, setFormData] = useState({
         submissionId: submissionScore?.submissionId,
         score: submissionScore?.score,
@@ -29,24 +29,31 @@ const ManualGradeModal = ({ open, onClose, submissionScore, assignmentProblems, 
 
     const handleManualGrade = async () => {
         const updateProblemScoreURL = `/course/${courseId}/assignment/${assignmentId}/submission-problem-scores`
-        
+
         // set releasedAt to now in ISO 8601 format
         setFormData(prevState => ({ ...prevState, ["releasedAt"]: new Date().toISOString() }))
 
-        // update problem scores
-        for (const problem of assignmentProblems) {
+
+        // update problem scores if changed
+        for (const [id, scoreData] of Object.entries(problemScores)) {
+            const problemID = Number(id.split("_")[1])
+
             // get corresponding score if exists
             const correspondingScore = submissionProblemScores.find(
-                (scoreItem) => scoreItem.assignmentProblemId === problem.id
+                (scoreItem) => scoreItem.assignmentProblemId === problemID
             );
+
+            scoreData["releasedAt"] = new Date().toISOString()
 
             if (correspondingScore) {
                 // put request to update score
-                await RequestService.put(updateProblemScoreURL, problemScores)
+                console.log("SUBMISSION SCOREDATA", scoreData)
+                await RequestService.put(`${updateProblemScoreURL}/${problemID}`, scoreData)
 
             } else {
                 // post request to create new score
-                await RequestService.post(updateProblemScoreURL, problemScores)
+                console.log("NO SUBMISSION SCOREDATA", scoreData)
+                await RequestService.post(updateProblemScoreURL, scoreData)
             }
 
         }
@@ -77,7 +84,27 @@ const ManualGradeModal = ({ open, onClose, submissionScore, assignmentProblems, 
     }
 
     const handleProblemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;  // Get the input's id and value
+        const scoreValue = Number(value); // Convert the score to a number
+        
+        setProblemScores(prevScores => {
+            const updatedScores: any = { ...prevScores };
 
+            // if key exists
+            if (updatedScores[id]) {
+                // update score for existing problem
+                updatedScores[id].score = scoreValue;
+            } else {
+                // add a new problem score entry
+                updatedScores[id] = {
+                    submissionId: submissionScore?.submissionId,
+                    assignmentProblemId: Number(id.split("_")[1]),
+                    score: scoreValue,
+                };
+            }
+    
+            return updatedScores;  // Return the updated scores object
+        });
     }
 
     return (
@@ -90,8 +117,12 @@ const ManualGradeModal = ({ open, onClose, submissionScore, assignmentProblems, 
 
                 return (
                     <div key={problemItem.id} className="input-group">
-                        <label>{problemItem.problemName}</label>
-                        <input type="number" value={Number(correspondingScore ? correspondingScore.score : 0)} onChange={handleProblemChange} />
+                        <label htmlFor={"problem_" + problemItem.id?.toString()}>{problemItem.problemName}</label>
+                        <input type="number"
+                            id={"problem_" + problemItem.id?.toString()}
+                            placeholder={String(correspondingScore ? correspondingScore.score : "unanswered")}
+                            onChange={handleProblemChange}
+                        />
                     </div>
                 );
             })}
