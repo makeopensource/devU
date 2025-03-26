@@ -17,6 +17,7 @@ interface Props {
 const ManualGradeModal = ({ open, onClose, submissionScore }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
+    const updateProblemScoreURL = `/course/${courseId}/assignment/${assignmentId}/submission-problem-scores`
 
     const [formData, setFormData] = useState({
         submissionId: submissionScore?.submissionId,
@@ -31,7 +32,6 @@ const ManualGradeModal = ({ open, onClose, submissionScore }: Props) => {
 
         if (submissionScore) {
             // Update the submission score
-            console.log('Submission Exists')
             await RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores/${submissionScore.id}`, formData)
                 .then(() => {
                     setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Updated' })
@@ -41,7 +41,6 @@ const ManualGradeModal = ({ open, onClose, submissionScore }: Props) => {
         }
         else {
             // Create a new submission score
-            console.log('No Submission')
             await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores`, formData)
                 .then(() => {
                     setAlert({ autoDelete: true, type: 'success', message: 'Submission Score Created' })
