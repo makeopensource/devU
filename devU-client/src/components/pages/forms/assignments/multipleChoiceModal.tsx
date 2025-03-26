@@ -46,7 +46,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
             metadata: {
                 type: 'MCQ',
                 options: options
-            } // bad js. did as  a quick fix lmk how to do better :D
+            } 
         }
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
@@ -91,7 +91,6 @@ const TextProblemModal = ({ open, onClose }: Props) => {
 
     const handleCorrectAnswerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = e.target.id
-        console.log("AAAAAAAA")
         setFormData(prevState => ({ ...prevState, correctAnswer: value }))
     }
 
@@ -102,25 +101,27 @@ const TextProblemModal = ({ open, onClose }: Props) => {
                 <input type="text" id="title" onChange={handleChange}
                     placeholder='e.g. What is the time complexity of MergeSort?' />
             </div>
-            <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
+            <div className="input-group" style={{flexDirection:"row", alignItems:"center", width: '100%'}}>
                 <div>a.</div>
-                <input type="text" id="a" onChange={handleQuestionTextChange} 
+                <input type="text" id="a" onChange={handleQuestionTextChange} style={{width:'100%'}}
                 placeholder='Answer A...' />
                 <input type="radio" id="a" onChange={handleCorrectAnswerChange} name="correct"/>
             </div>
-            <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
-                <div>b.</div>
-                <input type="text" id="b" onChange={handleQuestionTextChange} 
-                placeholder='Answer B...' />
-                <input type="radio" id="b" onChange={handleCorrectAnswerChange} name="correct"/>
 
+            <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
+                    <div>b.</div>
+                    <input type="text" id="b" onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    placeholder='Answer B...' />
+                    <input type="radio" id="b" onChange={handleCorrectAnswerChange} name="correct"/>
             </div>
+
             <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
                 <div>c.</div>
-                <input type="text" id="c" onChange={handleQuestionTextChange} 
+                <input type="text" id="c" onChange={handleQuestionTextChange} style={{width:'100%'}}
                 placeholder='Answer C...' />
                 <input type="radio" id="c" onChange={handleCorrectAnswerChange} name="correct"/>
             </div>
+
             <div className="input-group">
                 <label htmlFor="maxScore" className="input-label">Maximum Score:</label>
                 <input type="number" id="maxScore" onChange={handleChange}
