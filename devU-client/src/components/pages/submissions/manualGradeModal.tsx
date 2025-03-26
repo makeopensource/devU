@@ -18,12 +18,8 @@ interface Props {
 const ManualGradeModal = ({ open, onClose, submissionScore, assignmentProblems, submissionProblemScores }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId, courseId } = useParams<{ assignmentId: string, courseId: string }>()
-
-    const updateProblemScoreURL = `/course/${courseId}/assignment/${assignmentId}/submission-problem-scores`
-    console.log(updateProblemScoreURL)
-    console.log("PROBLEMS:", assignmentProblems)
-    console.log("SCORES:", submissionProblemScores)
-
+    const [problemScores, setProblemScores] = useState({})
+    
     const [formData, setFormData] = useState({
         submissionId: submissionScore?.submissionId,
         score: submissionScore?.score,
@@ -32,10 +28,28 @@ const ManualGradeModal = ({ open, onClose, submissionScore, assignmentProblems, 
     })
 
     const handleManualGrade = async () => {
+        const updateProblemScoreURL = `/course/${courseId}/assignment/${assignmentId}/submission-problem-scores`
+        
         // set releasedAt to now in ISO 8601 format
         setFormData(prevState => ({ ...prevState, ["releasedAt"]: new Date().toISOString() }))
 
+        // update problem scores
+        for (const problem of assignmentProblems) {
+            // get corresponding score if exists
+            const correspondingScore = submissionProblemScores.find(
+                (scoreItem) => scoreItem.assignmentProblemId === problem.id
+            );
 
+            if (correspondingScore) {
+                // put request to update score
+                await RequestService.put(updateProblemScoreURL, problemScores)
+
+            } else {
+                // post request to create new score
+                await RequestService.post(updateProblemScoreURL, problemScores)
+            }
+
+        }
 
         if (submissionScore) {
             // Update the submission score
@@ -62,19 +76,22 @@ const ManualGradeModal = ({ open, onClose, submissionScore, assignmentProblems, 
         setFormData(prevState => ({ ...prevState, [key]: value }))
     }
 
+    const handleProblemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    }
+
     return (
         <Modal title="Grade Assignment" buttonAction={handleManualGrade} open={open} onClose={onClose}>
-            {/* for each problem, show a problem input */}
             {assignmentProblems.map((problemItem) => {
-                // Find the corresponding submissionProblemScore for the current problem
+                // find the corresponding submissionProblemScore for the current problem
                 const correspondingScore = submissionProblemScores.find(
                     (scoreItem) => scoreItem.assignmentProblemId === problemItem.id
                 );
 
                 return (
-                    <div key={problemItem.id}>
-                        <span>{problemItem.problemName}</span>
-                        <span>{correspondingScore ? correspondingScore.score : '--'}</span>
+                    <div key={problemItem.id} className="input-group">
+                        <label>{problemItem.problemName}</label>
+                        <input type="number" value={Number(correspondingScore ? correspondingScore.score : 0)} onChange={handleProblemChange} />
                     </div>
                 );
             })}
