@@ -103,7 +103,6 @@ const AssignmentDetailPage = () => {
     if (error) return <ErrorPage error={error} />
 
     const handleChange = (value: string, e : React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e)
         console.log(value)
         const key = e.target.id
         setFormData(prevState => ({...prevState,[key] : e.target.value}))    

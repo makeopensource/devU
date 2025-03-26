@@ -42,7 +42,9 @@ const TextProblemModal = ({ open, onClose }: Props) => {
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
             .then(() => {
-                console.log("PROBLEM CREATED")
+                console.log("PROBLEM CREATED");
+                setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' });
+
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
