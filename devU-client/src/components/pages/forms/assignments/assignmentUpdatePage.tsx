@@ -244,6 +244,9 @@ const AssignmentUpdatePage = () => {
   // }
 
   const handleDeleteProblem = (problemId: number) => {
+    const problem = RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
+    console.log(problem)
+  //  const idsToDelete = nonContainerAutograders.filter(ncag => ncag.)
     RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
       .then(() => {
         setAlert({ autoDelete: true, type: 'success', message: 'Problem Deleted' })
@@ -276,7 +279,7 @@ const AssignmentUpdatePage = () => {
 
       <div className={styles.pageHeader}>
         <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
-        <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>back to course</Button>
+        <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>Back to Course</Button>
       </div>
       <div className={styles.grid}>
         <div className={styles.form}>
@@ -357,14 +360,13 @@ const AssignmentUpdatePage = () => {
                 <div key={files.length-1}>
                   <span>&nbsp;{`${files[files.length-1].name}`}</span>
               </div>
-                
               </div>) 
            : <div className={styles.filesList} style={{fontStyle:'italic'}}>No files attached</div>}
           <input type='file' id='fileUp' onChange={handleFile} hidden/>
           <label htmlFor="fileUp">
           <StyledEngineProvider injectFirst>
             <MuiButton disableRipple component="span" className={styles.fileUpload}>
-              choose files
+              Choose Files
             </MuiButton>
           </StyledEngineProvider>
           </label> 
@@ -412,7 +414,7 @@ const AssignmentUpdatePage = () => {
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
-            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>save and exit</Button>
+            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>Save and Exit</Button>
       </div>
       </PageWrapper>
     </>

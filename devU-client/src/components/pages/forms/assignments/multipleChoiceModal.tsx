@@ -101,11 +101,14 @@ const TextProblemModal = ({ open, onClose }: Props) => {
                 <input type="text" id="title" onChange={handleChange}
                     placeholder='e.g. What is the time complexity of MergeSort?' />
             </div>
-            <div className="input-group" style={{flexDirection:"row", alignItems:"center", width: '100%'}}>
-                <div>a.</div>
-                <input type="text" id="a" onChange={handleQuestionTextChange} style={{width:'100%'}}
-                placeholder='Answer A...' />
-                <input type="radio" id="a" onChange={handleCorrectAnswerChange} name="correct"/>
+            <div className="input-group" >
+                <div>Answer Choices:</div>
+                <div className="input-group" style={{flexDirection:"row", alignItems:"center", width: '100%'}}>
+                    <div>a.</div>
+                    <input type="text" id="a" onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    placeholder='Answer A...' />
+                    <input type="radio" id="a" onChange={handleCorrectAnswerChange} name="correct"/>
+                </div>
             </div>
 
             <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>

@@ -38,7 +38,7 @@ const Modal = ({ title, children, buttonAction, open, onClose }: ModalProps) => 
                 <button onClick={onClose} aria-label='close' title='close'>✕</button>
             </div>
             {children}
-            <button onClick={buttonAction} className='btnPrimary modalAction'>{title.toLowerCase()}</button>
+            <button onClick={buttonAction} className='btnPrimary modalAction'>{title}</button>
         </Dialog>
     )
 }
