@@ -25,15 +25,26 @@ const AssignmentProblemListItem = ({problem, handleChange}: Props) => {
     useEffect(() => {
         fetchNcags()
     }, [])
-    useEffect(() => {
-        if (ncags && ncags.length > 0){
-            console.log(ncags)
-            const meta = ncags.at(0)?.metadata // need help here
-            console.log(meta)
-        }
-    }, [ncags])
 
-    return (
+    const getMeta = () => {
+        if (ncags && ncags.length > 0){
+            const ncag = ncags.find(ncag => ncag.question == problem.problemName)
+            if (!ncag) {
+                return undefined
+            }
+            return JSON.parse(ncag.metadata)
+        } 
+    }
+
+    const getType = () => {
+        const meta = getMeta()
+        if (meta){
+            return meta.type
+        } 
+    }
+
+    if (getType() == "Text") {
+        return (
         <div key={problem.id} className={styles.problem}>
             <h4 className={styles.problem_header}>{problem.problemName}</h4>
             <TextField className={styles.textField}
@@ -42,7 +53,12 @@ const AssignmentProblemListItem = ({problem, handleChange}: Props) => {
                 id={problem.problemName}
                 sx={{width: '100%', marginLeft : 1/10}}/>
         </div>
-    )
+    )}
+    else {
+        return (<div>
+            Not a text problem!
+        </div>)
+    }
 }
 
 

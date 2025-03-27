@@ -35,6 +35,10 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         // early return if form not fully filled out
         if (!submittable) { return }
 
+        const meta = new Map()
+        meta.set("type", "MCQ")
+        meta.set("options", options)
+
         const problemFormData = {
             assignmentId: parseInt(assignmentId),
             problemName: formData.title,
@@ -47,10 +51,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
-            metadata: {
-                type: 'MCQ',
-                options: options
-            } 
+            metadata: meta
         }
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
@@ -92,7 +93,6 @@ const TextProblemModal = ({ open, onClose }: Props) => {
 
     const handleCorrectAnswerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = e.target.id
-        console.log("CORRECT: " + value)
         setFormData(prevState => ({ ...prevState, correctAnswer: value }))
     }
 
