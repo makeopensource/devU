@@ -353,7 +353,7 @@ const AssignmentUpdatePage = () => {
             {(files.length != 0) ? (
               <div className={styles.filesList}>
                 <span>Files:</span> 
-                {files.slice(0,-1).map((file, index) => (
+                {files.slice(0,-1).map((file, index) => ( // I forget why I did this, yell at me if I forget to clarify this in a comment - Diego
                 <div key={index}>
                   <span>&nbsp;{`${file.name},`}</span>
                 </div>))}

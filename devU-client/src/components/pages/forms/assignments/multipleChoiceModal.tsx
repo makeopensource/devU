@@ -35,10 +35,6 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         // early return if form not fully filled out
         if (!submittable) { return }
 
-        const meta = new Map()
-        meta.set("type", "MCQ")
-        meta.set("options", options)
-
         const problemFormData = {
             assignmentId: parseInt(assignmentId),
             problemName: formData.title,
@@ -51,7 +47,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
-            metadata: meta
+            metadata: {type: "MCQ", options: options}
         }
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
