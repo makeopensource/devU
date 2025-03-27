@@ -405,8 +405,8 @@ const AssignmentUpdatePage = () => {
                         placeholder='Answer'
                         sx={{width: '100%', marginLeft : 1/10, pointerEvents: 'none'}}/>
               <div style={{margin: '5px 0 10px 0'}}>
-                <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>edit</Button>|
-                <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>delete</Button>
+                <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>Edit</Button>|
+                <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
               </div>
             </div>
           ))) : <div style={{fontStyle:'italic'}}>No problems yet</div>}

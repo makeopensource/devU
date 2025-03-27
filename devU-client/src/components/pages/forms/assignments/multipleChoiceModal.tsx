@@ -26,10 +26,14 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         correctAnswer: '',
         regex: false
     });
+    const submittable = () => {
+        if (!formData.title || !formData.maxScore || !formData.correctAnswer) { return false }
+        else { return true }
+    }
 
     const handleSubmit = () => {
         // early return if form not fully filled out
-        if (!formData.title || !formData.maxScore || !formData.correctAnswer) { return }
+        if (!submittable) { return }
 
         const problemFormData = {
             assignmentId: parseInt(assignmentId),
@@ -93,42 +97,42 @@ const TextProblemModal = ({ open, onClose }: Props) => {
     }
 
     return (
-        <Modal title="Add Multiple Choice Problem" buttonAction={handleSubmit} open={open} onClose={onClose}>
+        <Modal title="Add Multiple Choice Problem" isSubmittable={submittable} buttonAction={handleSubmit} open={open} onClose={onClose}>
             <div className="input-group">
                 <label htmlFor="title" className="input-label">Problem Title:</label>
                 <input type="text" id="title" onChange={handleChange}
-                    placeholder='e.g. What is the time complexity of MergeSort?' />
+                    placeholder='e.g. What is the best programming language?' />
             </div>
             <div className="input-group" style={{gap: '5px'}} >
-                <div>Answer Choices:</div>
+                <label>Answer Choices:</label>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center", width: '100%'}}>
-                    <div>a.</div>
+                    <label>a.</label>
                     <input type="text" id="a" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. Java' />
                     <input type="radio" id="a" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
-                    <div>b.</div>
+                    <label>b.</label>
                     <input type="text" id="b" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. Python' />
                     <input type="radio" id="b" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
-                    <div>c.</div>
+                    <label>c.</label>
                     <input type="text" id="c" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. C' />
                     <input type="radio" id="c" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
-                    <div>d.</div>
+                    <label>d.</label>
                     <input type="text" id="d" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. JavaScript' />
                     <input type="radio" id="d" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
-                    <div>e.</div>
+                    <label>e.</label>
                     <input type="text" id="e" onChange={handleQuestionTextChange} style={{width:'100%'}}
-                    placeholder='e.g. ...Matlab?' />
+                    placeholder='e.g. ...MATLAB?' />
                     <input type="radio" id="e" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
             </div>

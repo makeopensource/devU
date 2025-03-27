@@ -5,6 +5,9 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  //padding: 0 10px;
+  min-width: 100px;
+
 
   outline: none;
 
@@ -30,13 +33,15 @@
 .trigger {
   @extend .button;
 
-  color: #D9D9D9;
-  border-radius: 20px;
-  margin:5px;
-  height: 40px;
+  color: #fff;
+  height: 60px;
+  margin: 0;
+  padding: 0 10px;
+
+  transition: background-color 0.2s ease;
 
   &:hover {
-    opacity: 0.7;
+    background-color: var(--hover-darker);
   }
 }
 
@@ -56,17 +61,19 @@
 }
 
 .menu {
-  width: 100%;
-
+  min-width: 97%;
+  width: inherit;
   position: absolute;
-  top: 50px;
+  top: 60px;
 
   display: flex;
   flex-direction: column;
+  border: 3px solid $primary;
+  border-top: none;
 
-  gap: 2px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
 
-  box-shadow: $box-shadow;
 
   visibility: hidden;
   opacity: 0;
@@ -81,34 +88,38 @@
 
   display: flex;
   align-items: center;
-  padding: 0 6px;
+  padding: 0 10px;
 
-  background-color: $primary;
-  color: $background;
+  background-color: $background;
+  color: $text-color;
 
   height: 50px;
   text-align: left;
+  border-bottom: 1px solid #ddd;
 
   text-decoration: none;
+  transition: background-color 0.2s ease;
 
   &:hover {
-    background: $purple-darker;
+      background-color: var(--hover-darker);
   }
+  
 }
-.dropCourse {
-  @extend .option;
-  background-color: $primary; /* Same as Account and Logout */
-  color: $background; /* Matching the text color */
-  border: none;
-  font-size: 16px;
-  height: 50px;
-  text-align: left;
-  text-decoration: none;
 
-  &:hover {
-    background: $purple-darker;
-  }
-}
+// .dropCourse {
+//   @extend .option;
+//   background-color: $primary; /* Same as Account and Logout */
+//   color: $background; /* Matching the text color */
+//   border: none;
+//   font-size: 16px;
+//   height: 50px;
+//   text-align: left;
+//   text-decoration: none;
+
+//   &:hover {
+//     background: $purple-darker;
+//   }
+// }
 
 @media (max-width: $small) {
   .name {

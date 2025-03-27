@@ -66,22 +66,13 @@
 
 .problems_list{
     width: 50%;
+    gap: 10px;
 }
 
-.problem_header{
-    font-size:16px;
-    margin: 0 0 10px 0;
-}
 .no_problems{
     font-style: italic;
     text-align: center;
     margin-top: 10px;
-}
-.textField{
-    align-items: center;
-    margin-bottom: 0;
-    background: none;
-    border: 2px solid #ccc;
 }
 
 .submit_container{
@@ -93,6 +84,7 @@
 .affirmation{
     display: flex;
     align-items: center;
+    margin-top: 10px;
     align-self: flex-start;
     gap: 10px;
 }

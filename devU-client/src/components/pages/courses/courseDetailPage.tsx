@@ -73,7 +73,7 @@ const CourseDetailPage = () => {
     }, []);
 
     return (
-        <PageWrapper>
+        <PageWrapper className={styles.pageWrapper}>
             <div className={styles.courseDetailPage}>
                 {courseInfo ? (
                     <div>

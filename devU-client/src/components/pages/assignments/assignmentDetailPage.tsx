@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import TextField from 'components/shared/inputs/textField'
+import AssignmentProblemListItem from 'components/listItems/assignmentProblemListItem'
 import {Assignment, AssignmentProblem, Course, Submission, /*SubmissionScore NonContainerAutoGrader, /*ContainerAutoGrader*/} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from '../errorPage/errorPage'
@@ -222,16 +222,9 @@ const AssignmentDetailPage = () => {
             
             <div className={styles.problems_section}>
                 <div className={styles.problems_list}>
-                    <h3 style={{textAlign:'center'}}>Problems</h3>
+                    <h2>Problems</h2>
                     {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
-                        <div key={problem.id} className={styles.problem}>
-                        <h4 className={styles.problem_header}>{problem.problemName}</h4>
-                        <TextField className={styles.textField}
-                                    placeholder='Answer'
-                                    onChange={handleChange}
-                                    id={problem.problemName}
-                                    sx={{width: '100%', marginLeft : 1/10}}/>
-                        </div>
+                        <AssignmentProblemListItem problem={problem} handleChange={handleChange}/>
                     ))) : <div style={{fontStyle:'italic', textAlign: 'center', marginTop: '10px'}}> No problems yet...</div>}
                     {!(isSubmissionDisabled()) &&assignmentProblems && assignmentProblems.length > 0 ? (
                         <div className = {styles.submit_container}>
