@@ -27,7 +27,6 @@ const AssignmentDetailPage = () => {
     const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
     const userId = useAppSelector((store) => store.user.id)
     const role = useAppSelector((store) => store.roleMode)
-    role;
 
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -35,8 +34,6 @@ const AssignmentDetailPage = () => {
     const [file, setFile] = useState<File | null>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [submissions, setSubmissions] = useState(new Array<Submission>())
-    //const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
-    // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
     const [course, setCourse] = useState<Course>()
     const [notClickable, setClickable] = useState(true);
@@ -48,7 +45,6 @@ const AssignmentDetailPage = () => {
     // const [ setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
     const [showScoreboard, setShowScoreboard] = useState(false);
     setShowScoreboard;
-    assignmentProblems;
     const location = useLocation();
 
     useEffect(() => {
@@ -101,13 +97,13 @@ const AssignmentDetailPage = () => {
 
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
-
-    const handleChange = (value: string, e : React.ChangeEvent<HTMLInputElement>) => {
-        console.log(value)
+    
+    const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
         const key = e.target.id
-        setFormData(prevState => ({...prevState,[key] : e.target.value}))    
+        setFormData(prevState => ({...prevState,[key] : value}))    
+        console.log(formData)
     }
-
 
     const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.item(0))

@@ -3,17 +3,15 @@ import { useParams } from 'react-router-dom'
 import RequestService from 'services/request.service'
 import {AssignmentProblem, NonContainerAutoGrader} from 'devu-shared-modules'
 
-import TextField from 'components/shared/inputs/textField'
-
-
 import styles from './assignmentProblemListItem.scss'
 
 type Props = {
     problem: AssignmentProblem
-    handleChange: (value: string, e : React.ChangeEvent<HTMLInputElement>) => void
+    handleChange: (e : React.ChangeEvent<HTMLInputElement>) => void
+    disabled?: boolean
 }
 
-const AssignmentProblemListItem = ({problem, handleChange}: Props) => {
+const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => {
     const { courseId } = useParams<{ courseId: string }>()
     const [ncags, setNcags] = useState<NonContainerAutoGrader[]>([])
 
@@ -22,11 +20,6 @@ const AssignmentProblemListItem = ({problem, handleChange}: Props) => {
     const fetchNcags = async() => {
         await RequestService.get(`/api/course/${courseId}/assignment/${problem.assignmentId}/non-container-auto-graders`).then((res) => setNcags(res))
     }
-    
-
-    useEffect(() => {
-        fetchNcags()
-    }, [])
 
     const getMeta = () => {
         if (ncags && ncags.length > 0){
@@ -37,6 +30,12 @@ const AssignmentProblemListItem = ({problem, handleChange}: Props) => {
             return JSON.parse(ncag.metadata)
         } 
     }
+    
+
+    useEffect(() => {
+        fetchNcags()
+    }, [])
+
     const meta = getMeta()
     if (!meta || !meta.type){
         return (<div className={styles.problem}>
@@ -49,11 +48,13 @@ const AssignmentProblemListItem = ({problem, handleChange}: Props) => {
         return (
         <div key={problem.id} className={styles.problem}>
             <h4 className={styles.problem_header}>{problem.problemName}</h4>
-            <TextField className={styles.textField}
+            <input className={styles.textField}
+                type='text'
                 placeholder='Answer'
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
+                disabled={disabled ?? false}
                 id={problem.problemName}
-                sx={{width: '100%', marginLeft : 1/10}}/>
+                />
         </div>
     )} 
     else if(type == "MCQ") {
@@ -64,7 +65,15 @@ const AssignmentProblemListItem = ({problem, handleChange}: Props) => {
         return (
             <div key={problem.id} className={styles.problem}>
                 <h4 className={styles.problem_header}>{problem.problemName}</h4>
-                {Object.keys(options).map((key : string) => (<div key={key}><input type='checkbox'></input> {options[key]}</div>))}
+                {Object.keys(options).map((key : string) => (
+                    <div key={key}>
+                        <input id={problem.problemName} 
+                        type='radio' 
+                        name='answer'
+                        value={key}
+                        onChange={handleChange} 
+                        disabled={disabled ?? false}/> {options[key]}
+                    </div>))}
             </div>)
     }
     else {

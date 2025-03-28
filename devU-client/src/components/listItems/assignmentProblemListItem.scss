@@ -1,3 +1,4 @@
+@import 'variables';
 
 
 .problem_header{
@@ -14,7 +15,13 @@
 
 .textField{
     align-items: center;
-    margin-bottom: 0;
+    font-family: $font-family;
+    font-size: 16px;
     background: none;
     border: 2px solid #ccc;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 50px;
+    padding: 10px
 }
