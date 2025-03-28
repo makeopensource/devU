@@ -219,9 +219,12 @@ const AssignmentDetailPage = () => {
                 <div className={styles.problems_list}>
                     <h2>Problems</h2>
                     {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
-                        <AssignmentProblemListItem problem={problem} handleChange={handleChange}/>
+                        <>
+                            <AssignmentProblemListItem problem={problem} handleChange={handleChange}/>
+                            <hr/>
+                        </>
                     ))) : <div style={{fontStyle:'italic', textAlign: 'center', marginTop: '10px'}}> No problems yet...</div>}
-                    {!(isSubmissionDisabled()) &&assignmentProblems && assignmentProblems.length > 0 ? (
+                    {!(isSubmissionDisabled()) && assignmentProblems && assignmentProblems.length > 0 ? (
                         <div className = {styles.submit_container}>
                             <div className={styles.affirmation}>
                                 <input type='checkbox' onClick={handleCheckboxChange}/>

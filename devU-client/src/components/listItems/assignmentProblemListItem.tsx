@@ -7,7 +7,7 @@ import styles from './assignmentProblemListItem.scss'
 
 type Props = {
     problem: AssignmentProblem
-    handleChange: (e : React.ChangeEvent<HTMLInputElement>) => void
+    handleChange?: (e : React.ChangeEvent<HTMLInputElement>) => void
     disabled?: boolean
 }
 
@@ -51,8 +51,9 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
             <input className={styles.textField}
                 type='text'
                 placeholder='Answer'
-                onChange={(e) => handleChange(e)}
+                onChange={handleChange ?? undefined}
                 disabled={disabled ?? false}
+                
                 id={problem.problemName}
                 />
         </div>
@@ -66,14 +67,15 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
             <div key={problem.id} className={styles.problem}>
                 <h4 className={styles.problem_header}>{problem.problemName}</h4>
                 {Object.keys(options).map((key : string) => (
-                    <label key={key} className={styles.mcqLabel}>
-                        <input id={problem.problemName} 
+                    <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>
+                        <input id={problem.problemName} // actual input
                         type='checkbox' 
                         name={`${key}_answer`}
                         value={key}
                         onChange={handleChange} 
                         disabled={disabled ?? false}/> {options[key]}
-                        <span className={styles.checkbox}></span>
+
+                        <span className={styles.checkbox}></span>{/* custom checkbox */}
                     </label>))}
             </div>)
     }
