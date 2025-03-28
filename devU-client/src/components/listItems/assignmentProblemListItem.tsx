@@ -66,14 +66,15 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
             <div key={problem.id} className={styles.problem}>
                 <h4 className={styles.problem_header}>{problem.problemName}</h4>
                 {Object.keys(options).map((key : string) => (
-                    <div key={key}>
+                    <label key={key} className={styles.mcqLabel}>
                         <input id={problem.problemName} 
-                        type='radio' 
-                        name='answer'
+                        type='checkbox' 
+                        name={`${key}_answer`}
                         value={key}
                         onChange={handleChange} 
                         disabled={disabled ?? false}/> {options[key]}
-                    </div>))}
+                        <span className={styles.checkbox}></span>
+                    </label>))}
             </div>)
     }
     else {

@@ -102,7 +102,6 @@ const AssignmentDetailPage = () => {
         const value = e.target.value
         const key = e.target.id
         setFormData(prevState => ({...prevState,[key] : value}))    
-        console.log(formData)
     }
 
     const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -194,7 +193,7 @@ const AssignmentDetailPage = () => {
                     </span>
                     <span>
                         <a onClick={() => history.push(`/course/${courseId}/assignment/${assignmentId}/submissions`)}
-                        style={{color:'#075D92', textDecoration: 'underline', cursor: 'pointer'}}>View Handin History</a>
+                        className={styles.handinHistory}>View Handin History</a>
                     </span>
                 </div>
             </div>
