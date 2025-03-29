@@ -11,24 +11,33 @@ interface Props {
     onClose: () => void;
 }
 
-const TextProblemModal = ({ open, onClose }: Props) => {
+const MultipleChoiceModal = ({ open, onClose }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId } = useParams<{ assignmentId: string }>()
     const { courseId } = useParams<{ courseId: string }>()
-    const [options, setOptions] = useState({
-        a: '',
-        b: '',
-        c: ''
-    })
+    const [options, setOptions] = useState({})
     const [formData, setFormData] = useState({
         title: '',
         maxScore: '',
-        correctAnswer: '',
+        correctAnswer: new Map(),
+        numCorrect: 0,
         regex: false
     });
+
     const submittable = () => {
-        if (!formData.title || !formData.maxScore || !formData.correctAnswer) { return false }
+        if (!formData.title || !formData.maxScore || formData.numCorrect == 0) { return false }
         else { return true }
+    }
+
+    const createCorrectString = () => {
+        var correctString = ''
+        formData.correctAnswer.forEach((val, key ) => {
+            if (val === true){
+                correctString += key
+            }
+        })
+        correctString = correctString.split('').sort().join('') // makes selecting answers in any order correct
+        return(correctString)
     }
 
     const handleSubmit = () => {
@@ -44,7 +53,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         const graderFormData = {
             assignmentId: parseInt(assignmentId),
             question: formData.title,
-            correctString: formData.correctAnswer,
+            correctString: createCorrectString(),
             score: Number(formData.maxScore),
             isRegex: formData.regex,
             metadata: {type: "MCQ", options: options}
@@ -69,6 +78,8 @@ const TextProblemModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         
+        console.log(graderFormData)
+
         // close modal
         onClose();
     }
@@ -87,9 +98,14 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         setOptions(prevState => ({ ...prevState, [key]: value }))
     }
 
-    const handleCorrectAnswerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleCorrectAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.id
-        setFormData(prevState => ({ ...prevState, correctAnswer: value }))
+        const newState = e.target.checked
+        setFormData(prevState => {
+            const correctAnswers = new Map (prevState.correctAnswer)
+            correctAnswers.set(value, newState)
+            return { ...prevState, correctAnswer: correctAnswers, numCorrect: formData.numCorrect + (newState ? 1 : -1)}
+        })
     }
 
     return (
@@ -105,31 +121,31 @@ const TextProblemModal = ({ open, onClose }: Props) => {
                     <label>a.</label>
                     <input type="text" id="a" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. Java' />
-                    <input type="radio" id="a" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type="checkbox" id="a" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
                     <label>b.</label>
                     <input type="text" id="b" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. Python' />
-                    <input type="radio" id="b" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type="checkbox" id="b" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
                     <label>c.</label>
                     <input type="text" id="c" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. C' />
-                    <input type="radio" id="c" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type="checkbox" id="c" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
                     <label>d.</label>
                     <input type="text" id="d" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. JavaScript' />
-                    <input type="radio" id="d" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type="checkbox" id="d" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
                     <label>e.</label>
                     <input type="text" id="e" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. ...MATLAB?' />
-                    <input type="radio" id="e" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type="checkbox" id="e" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
             </div>
 
@@ -138,9 +154,8 @@ const TextProblemModal = ({ open, onClose }: Props) => {
                 <input type="number" id="maxScore" onChange={handleChange}
                     placeholder='e.g. 10' min="0" />
             </div>
-            <label htmlFor="regex">Correct Answer is Regex <input type="checkbox" id="regex" /></label>
         </Modal>
     )
 }
 
-export default TextProblemModal;
+export default MultipleChoiceModal;

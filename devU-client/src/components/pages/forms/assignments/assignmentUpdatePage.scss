@@ -118,10 +118,6 @@ input[type='datetime-local'] {
     border-radius: 10px;
 }
 
-.problem{
-    border-bottom: 1px solid #ddd;
-}
-
 
 .header {
     text-align: left;
@@ -131,7 +127,7 @@ input[type='datetime-local'] {
 
 .editProblem {
     margin-right: 5px;
-    color: #075D92;
+    color: $link-blue;
     padding: 0;
     background: none;
     text-decoration: underline;

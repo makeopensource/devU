@@ -116,6 +116,8 @@ const AssignmentUpdatePage = () => {
       if(files.length < 5) {
         setFiles([...files, file])
       }
+      console.log(files)
+
     }
   }
 
@@ -245,8 +247,6 @@ const AssignmentUpdatePage = () => {
   // }
 
   const handleDeleteProblem = (problemId: number) => {
-    const problem = RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
-    console.log(problem)
   //  const idsToDelete = nonContainerAutograders.filter(ncag => ncag.)
     RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
       .then(() => {
@@ -354,7 +354,7 @@ const AssignmentUpdatePage = () => {
             {(files.length != 0) ? (
               <div className={styles.filesList}>
                 <span>Files:</span> 
-                {files.slice(0,-1).map((file, index) => ( // I forget why I did this, yell at me if I forget to clarify this in a comment - Diego
+                {files.slice(0,-1).map((file, index) => ( // For some reason the most recent file appears twice, so I did this as a quick fix, should be fixed in future
                 <div key={index}>
                   <span>&nbsp;{`${file.name},`}</span>
                 </div>))}

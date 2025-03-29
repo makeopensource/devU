@@ -38,8 +38,8 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
 
     const meta = getMeta()
     if (!meta || !meta.type){
-        return (<div className={styles.problem}>
-            <h4></h4>
+        return (
+        <div className={styles.problem}>
         </div>)
     }
 
@@ -70,7 +70,6 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                     <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>
                         <input id={problem.problemName} // actual input
                         type='checkbox' 
-                        name={`${key}_answer`}
                         value={key}
                         onChange={handleChange} 
                         disabled={disabled ?? false}/> {options[key]}
