@@ -22,7 +22,7 @@ import { serialize as serializeSubmissionScore } from '../submissionScore/submis
 import { serialize as serializeSubmission } from '../submission/submission.serializer'
 import { serialize as serializeAssignmentProblem } from '../assignmentProblem/assignmentProblem.serializer'
 import { downloadFile, initializeMinio } from '../../fileStorage'
-import { createNewLab, sendSubmission, waitForJob } from '../../autograders/leviathan/leviathan.service'
+import { createNewLab, sendSubmission, waitForJob } from '../../autograders/leviathan.service'
 import { DockerFile, LabData, LabFile, SubmissionFile } from 'leviathan-node-sdk'
 import path from 'path'
 
