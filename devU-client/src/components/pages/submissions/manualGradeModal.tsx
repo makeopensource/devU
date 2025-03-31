@@ -28,7 +28,7 @@ const ManualGradeModal = ({ open, onClose, submissionScore, assignmentProblems, 
     })
 
     const handleManualGrade = async () => {
-        const updateProblemScoreURL = `/course/${courseId}/assignment/${assignmentId}/submission-problem-scores`
+        const updateProblemScoreURL = `/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores`
 
         // set releasedAt to now in ISO 8601 format
         setFormData(prevState => ({ ...prevState, ["releasedAt"]: new Date().toISOString() }))
@@ -47,15 +47,12 @@ const ManualGradeModal = ({ open, onClose, submissionScore, assignmentProblems, 
 
             if (correspondingScore) {
                 // put request to update score
-                console.log("SUBMISSION SCOREDATA", scoreData)
-                await RequestService.put(`${updateProblemScoreURL}/${problemID}`, scoreData)
+                await RequestService.put(`${updateProblemScoreURL}/${correspondingScore.id}`, scoreData)
 
             } else {
                 // post request to create new score
-                console.log("NO SUBMISSION SCOREDATA", scoreData)
                 await RequestService.post(updateProblemScoreURL, scoreData)
             }
-
         }
 
         if (submissionScore) {
