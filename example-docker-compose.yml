@@ -11,7 +11,7 @@ services:
       TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
       WAIT_HOSTS: db:5432
       CLIENT_URL: https://client.devu.app # TODO change the client url here if needed
-      LEVIATHAN_URL: http://levi:9221
+      LEVIATHAN_URL: http://leviathan:9221
     depends_on:
       db:
         condition: service_started
@@ -41,14 +41,14 @@ services:
     restart: unless-stopped
 
   # leviathan stuff
-  levi:
+  leviathan:
     container_name: leviathan
     image: ghcr.io/makeopensource/leviathan:master
     ports:
       - "9221:9221"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./leviathan:/app/appdata
+      - ./levi/:/app/appdata
     restart: unless-stopped
 
   # testing frontend for leviathan

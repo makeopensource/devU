@@ -9,7 +9,7 @@ services:
     environment:
       TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
       WAIT_HOSTS: db:5432
-      LEVIATHAN_URL: http://levi:9221
+      LEVIATHAN_URL: http://leviathan:9221
     ports:
       - '3001:3001'
     profiles:
