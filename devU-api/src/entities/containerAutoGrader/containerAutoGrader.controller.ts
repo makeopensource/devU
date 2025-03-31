@@ -47,7 +47,7 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
 export async function getAllByAssignment(req: Request, res: Response, next: NextFunction) {
   try {
-    const assignmentId = parseInt(req.params.id)
+    const assignmentId = parseInt(req.params.assignmentId)
     if (!assignmentId) return res.status(404).json({ message: 'invalid assignment ID' })
 
     const containerAutoGrader = await ContainerAutoGraderService.getAllGradersByAssignment(assignmentId)
