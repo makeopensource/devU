@@ -1,17 +1,33 @@
-import { Request, Response, NextFunction } from 'express'
-
-import ContainerAutoGraderService from './containerAutoGrader.service'
+import { NextFunction, Request, Response } from 'express'
+import * as ContainerAutoGraderService from './containerAutoGrader.service'
 import { serialize } from './containerAutoGrader.serializer'
-
 import { GenericResponse, NotFound, Updated } from '../../utils/apiResponse.utils'
+import ContainerAutoGraderModel from './containerAutoGrader.model'
+import { FileWithMetadata } from './containerAutoGrader.service'
+import { UpdateResult } from 'typeorm'
+
+export interface FileRequest extends Request {
+  files: {
+    [fieldname: string]: Express.Multer.File[]
+  }
+}
+
+export interface ContainerAutoGraderResponse {
+  model: ContainerAutoGraderModel
+  files: {
+    dockerfile: FileWithMetadata
+    jobFiles: FileWithMetadata[]
+  }
+}
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const containerAutoGrader = await ContainerAutoGraderService.list()
-
-    res.status(200).json(containerAutoGrader.map(serialize))
-  } catch (err) {
-    next(err)
+    const id = parseInt(req.params.id)
+    const result = await ContainerAutoGraderService.retrieve(id)
+    if (!result) return res.status(404).json(NotFound)
+    return res.json(result)
+  } catch (error) {
+    next(error)
   }
 }
 
@@ -22,8 +38,7 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
     if (!containerAutoGrader) return res.status(404).json(NotFound)
 
-    const response = serialize(containerAutoGrader)
-
+    const response = serialize(containerAutoGrader.model)
     res.status(200).json(response)
   } catch (err) {
     next(err)
@@ -36,60 +51,85 @@ export async function getAllByAssignment(req: Request, res: Response, next: Next
     if (!assignmentId) return res.status(404).json({ message: 'invalid assignment ID' })
 
     const containerAutoGrader = await ContainerAutoGraderService.getAllGradersByAssignment(assignmentId)
-
     res.status(200).json(containerAutoGrader.map(serialize))
   } catch (err) {
     next(err)
   }
 }
 
-/*
- * for the post method, I changed how the upload is handled. I am now using fields instead of
- * single(for the purpose of uploading grader file and makefile). But I set the makefile to be
- * optional, since it is not required. I also added the makefile to the create method in the
- * ContainerAutoGraderService.
- */
-export async function post(req: Request, res: Response, next: NextFunction) {
+export async function post(req: FileRequest, res: Response, next: NextFunction) {
   try {
-    if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
-    if (!req.files || !('graderFile' in req.files)) {
-      return res.status(400).json(new GenericResponse('Container Auto Grader requires file upload for grader'))
+    const dockerfile = req.files['dockerfile'][0]
+    const jobFiles = req.files['jobFiles']
+    const requestBody = {
+      assignmentId: parseInt(req.body.assignmentId),
+      timeoutInSeconds: parseInt(req.body.timeoutInSeconds),
+      memoryLimitMB: req.body.memoryLimitMB ? parseInt(req.body.memoryLimitMB) : 512,
+      cpuCores: req.body.cpuCores ? parseInt(req.body.cpuCores) : 1,
+      pidLimit: req.body.pidLimit ? parseInt(req.body.pidLimit) : 100,
+      entryCmd: req.body.entryCmd,
+      autolabCompatible: req.body.autolabCompatible === undefined ? true : req.body.autolabCompatible === 'true',
     }
-    const graderFile = req.files['graderFile'][0]
-    const makefile = req.files['makefileFile']?.[0] ?? null
-    const requestBody = req.body
-    const userId = req.currentUser?.userId
+    const userId = req.currentUser!.userId
 
-    const containerAutoGrader = await ContainerAutoGraderService.create(requestBody, graderFile, makefile, userId)
+    const containerAutoGrader = await ContainerAutoGraderService.create(requestBody, dockerfile, jobFiles, userId)
     const response = serialize(containerAutoGrader)
 
     res.status(201).json(response)
   } catch (err) {
     if (err instanceof Error) {
-        res.status(400).json(new GenericResponse(err.message))
+      res.status(400).json(new GenericResponse(err.message))
+    } else {
+      next(err)
     }
   }
 }
 
-export async function put(req: Request, res: Response, next: NextFunction) {
+export async function put(req: FileRequest, res: Response, next: NextFunction) {
   try {
-    if (!req.currentUser?.userId) return res.status(400).json(new GenericResponse('Request requires auth'))
-    if (req.files && !('graderFile' in req.files) && !('makefileFile' in req.files)) {
-      return res.status(400).json(new GenericResponse('Uploaded files must be grader or makefile'))
+    const hasFiles = req.files && ('dockerfile' in req.files || 'jobFiles' in req.files)
+    if (!hasFiles && Object.keys(req.body).length === 0) {
+      return res.status(400).json(new GenericResponse('No updates provided'))
     }
 
-    const graderFile = req.files?.['graderFile']?.[0] ?? null
-    const makefile = req.files?.['makefileFile']?.[0] ?? null
-    req.body.id = parseInt(req.params.id)
-    const userId = req.currentUser?.userId
+    // If job files are being updated, ensure at least one is provided
+    if (req.files?.['jobFiles']) {
+      const jobFiles = req.files['jobFiles']
+      if (!jobFiles.length) {
+        return res.status(400).json(new GenericResponse('At least one job file is required'))
+      }
+      // Check for empty files
+      for (const file of jobFiles) {
+        if (file.size <= 0) {
+          return res.status(400).json(new GenericResponse('Job file cannot be empty'))
+        }
+      }
+    }
 
-    const results = await ContainerAutoGraderService.update(req.body, graderFile, makefile, userId)
+    const dockerfile = req.files?.dockerfile?.[0] || null
+    const jobFiles = req.files?.jobFiles || null
 
-    if (!results.affected) return res.status(404).json(NotFound)
+    const requestBody = {
+      id: parseInt(req.params.id),
+      assignmentId: req.body.assignmentId ? parseInt(req.body.assignmentId) : undefined,
+      timeoutInSeconds: req.body.timeoutInSeconds ? parseInt(req.body.timeoutInSeconds) : undefined,
+      memoryLimitMB: req.body.memoryLimitMB ? parseInt(req.body.memoryLimitMB) : undefined,
+      cpuCores: req.body.cpuCores ? parseInt(req.body.cpuCores) : undefined,
+      pidLimit: req.body.pidLimit ? parseInt(req.body.pidLimit) : undefined,
+      entryCmd: req.body.entryCmd,
+      autolabCompatible: req.body.autolabCompatible === undefined ? true : req.body.autolabCompatible === 'true',
+    }
+    const userId = req.currentUser!.userId
 
-    res.status(200).json(Updated)
-  } catch (err) {
-    next(err)
+    const result: UpdateResult = await ContainerAutoGraderService.update(requestBody, dockerfile, jobFiles, userId)
+    if (!result.affected) return res.status(404).json(NotFound)
+    return res.json(Updated)
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).json(new GenericResponse(error.message))
+    } else {
+      next(error)
+    }
   }
 }
 
@@ -97,10 +137,8 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
     const results = await ContainerAutoGraderService._delete(id)
-
     if (!results.affected) return res.status(404).json(NotFound)
-
-    res.status(204).send()
+    res.status(200).json(Updated)
   } catch (err) {
     next(err)
   }
@@ -109,8 +147,8 @@ export async function _delete(req: Request, res: Response, next: NextFunction) {
 export default {
   get,
   detail,
+  getAllByAssignment,
   post,
   put,
   _delete,
-  getAllByAssignment,
 }
