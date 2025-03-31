@@ -23,7 +23,7 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
     // const history = useHistory()
     const [graderFile, setGraderFile] = useState<File | null>()
     const [makefile, setMakefile] = useState<File | null>()
-    const [formData,setFormData] = useState({
+    const [formData, setFormData] = useState({
         assignmentId: assignmentId,
         autogradingImage: '',
         timeout: '',
@@ -89,7 +89,7 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
             </div>
             <div className="input-group">
                 <label htmlFor="timeout">Timeout (ms):</label>
-                <input type="number" id="timeout" value={formData.timeout} placeholder="e.g. 3000"  />
+                <input type="number" id="timeout" placeholder="e.g. 3000"  onChange={(e) => setFormData({ ...formData, timeout: e.target.value })}/>
             </div>
             <div className="input-group">
                 <label htmlFor="graderFile">Graderfile*:</label>
