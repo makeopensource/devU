@@ -53,7 +53,8 @@
 .problems_section{
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 20px;
 }
 
 .options_section{
@@ -64,8 +65,12 @@
     justify-content: flex-end;
 }
 
+.file_upload {
+    width: 30%;
+}
+
 .problems_list{
-    width: 50%;
+    width: 70%;
 }
 
 .problem_header{
@@ -98,6 +103,7 @@
 }
 .affirmText{
     color: $text-color;
+    cursor: pointer;
 }
 
 
