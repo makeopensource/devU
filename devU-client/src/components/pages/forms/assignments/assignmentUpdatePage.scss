@@ -7,11 +7,13 @@
     grid-row-gap: 10px;
     width: 100%;
 }
-.pageHeader{
+
+.pageHeader {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     align-items: center;
 }
+
 .backToCourse{
     margin-left: auto;
 }
