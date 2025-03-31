@@ -383,8 +383,8 @@ const AssignmentUpdatePage = () => {
             {nonContainerAutograders.length != 0 && nonContainerAutograders.map((nonContainerAutograder) => (<div>
               <span style={{fontStyle:'italic'}}>{nonContainerAutograder.question}</span> - 
               <span style={{color: 'var(--grey)'}}> Non-Code Grader</span></div>))}
-            {containerAutograders.length != 0 && containerAutograders.map((containerAutograder) => (<div>
-            <span style={{fontStyle:'italic'}}>{containerAutograder.autogradingImage}</span> - 
+            {containerAutograders.length != 0 && containerAutograders.map((_) => (<div>
+            <span style={{fontStyle:'italic'}}>{"todo CAG model has been updated imagetag field does not exist"}</span> -
             <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}
             {nonContainerAutograders.length == 0 && containerAutograders.length == 0 && <div style={{fontStyle:'italic'}}>No graders yet</div>}
           <h2 className={styles.header}>Problems</h2>
