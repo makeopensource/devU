@@ -33,6 +33,8 @@ services:
       dockerfile: nginx.Dockerfile
     volumes:
       - ./dist/local:/usr/share/nginx/html
+    command: >
+      /bin/sh -c "echo 'Frontend is now accessible at http://localhost:9000' && nginx -g 'daemon off;'"
     depends_on:
       client:
         condition: service_completed_successfully
