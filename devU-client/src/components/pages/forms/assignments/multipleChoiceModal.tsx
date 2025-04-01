@@ -19,10 +19,11 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
     const [formData, setFormData] = useState({
         title: '',
         maxScore: '',
-        correctAnswer: new Map(),
+        correctAnswer: new Map(), // did this with just a string in assignmentDetailPage.tsx but if it aint broke... that said if this does break reference that approach
         numCorrect: 0,
         regex: false
     });
+    const [boxType, setBoxType] = useState("checkbox")
 
     const submittable = () => {
         if (!formData.title || !formData.maxScore || formData.numCorrect == 0) { return false }
@@ -108,6 +109,31 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
         })
     }
 
+    const switchBoxType = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newState = e.target.checked
+        if (newState === true) {
+            setBoxType('radio')
+        } else {
+            setBoxType('checkbox')
+        }
+        console.log("peeing")
+        var inputs = document.getElementsByTagName('input') // reset correctAnswer when you do this
+
+        for (var i = 0; i < inputs.length; i++) {
+            console.log(inputs[i])
+            if (inputs[i].name == 'correct') {
+                inputs[i].checked = false;
+            }
+        }
+        setFormData(prevState => {
+            const correctAnswers = new Map (prevState.correctAnswer)
+            for (let key in correctAnswers){
+                correctAnswers.set(key, false)
+            }
+            return { ...prevState, correctAnswer: correctAnswers, numCorrect: 0}
+        })
+    }
+
     return (
         <Modal title="Add Multiple Choice Problem" isSubmittable={submittable} buttonAction={handleSubmit} open={open} onClose={onClose}>
             <div className="input-group">
@@ -119,36 +145,38 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
                 <label>Answer Choices:</label>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center", width: '100%'}}>
                     <label>a.</label>
-                    <input type="text" id="a" onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    <input type='text' id="a" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. Java' />
-                    <input type="checkbox" id="a" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type={`${boxType}`} id="a" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
                     <label>b.</label>
                     <input type="text" id="b" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. Python' />
-                    <input type="checkbox" id="b" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type={`${boxType}`} id="b" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
                     <label>c.</label>
                     <input type="text" id="c" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. C' />
-                    <input type="checkbox" id="c" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type={`${boxType}`} id="c" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
                     <label>d.</label>
                     <input type="text" id="d" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. JavaScript' />
-                    <input type="checkbox" id="d" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type={`${boxType}`} id="d" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
                     <label>e.</label>
                     <input type="text" id="e" onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder='e.g. ...MATLAB?' />
-                    <input type="checkbox" id="e" onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type={`${boxType}`} id="e" onChange={handleCorrectAnswerChange} name="correct"/>
                 </div>
             </div>
-
+            <div style={{display:'flex', alignItems: 'center'}}>
+                <input type='checkbox' onChange={switchBoxType}/><label>Allow only one answer</label>
+            </div>
             <div className="input-group">
                 <label htmlFor="maxScore" className="input-label">Maximum Score:</label>
                 <input type="number" id="maxScore" onChange={handleChange}
