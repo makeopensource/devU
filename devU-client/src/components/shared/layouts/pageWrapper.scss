@@ -14,7 +14,7 @@
 
 .content {
   flex-grow: 1;
-  padding: 0px 100px 50px 100px;
+  padding: 0px $pagePadding 70px $pagePadding;
 }
 
 @media (max-width: $extreme){

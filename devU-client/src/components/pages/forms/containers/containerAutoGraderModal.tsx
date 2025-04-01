@@ -45,6 +45,11 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
     const handleMakefileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
         setMakefile(e.target.files?.item(0))
     }
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const key = e.target.id;
+        const value = e.target.value;
+        setFormData(prevState => ({ ...prevState, [key]: value }));
+    };
 
 
 
@@ -89,7 +94,7 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
             </div>
             <div className="input-group">
                 <label htmlFor="timeout">Timeout (ms):</label>
-                <input type="number" id="timeout" value={formData.timeout} placeholder="e.g. 3000"  />
+                <input type="number" id="timeout" value={formData.timeout} placeholder="e.g. 3000" onChange={handleChange}/>
             </div>
             <div className="input-group">
                 <label htmlFor="graderFile">Graderfile*:</label>

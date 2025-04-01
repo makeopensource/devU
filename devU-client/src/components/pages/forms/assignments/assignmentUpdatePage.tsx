@@ -15,11 +15,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { getCssVariables } from 'utils/theme.utils'
 import { Button as MuiButton, StyledEngineProvider } from '@mui/material'
-import TextProblemModal from './textProblemModal'
 /*import Dropdown, { Option } from 'components/shared/inputs/dropdown';*/
 //import Select from 'react-select/src/Select'
-import ContainerAutoGraderModal from '../containers/ContainerAutoGraderModal';
-import AddProblemModal from './AddProblemModal'
+import ContainerAutoGraderModal from '../containers/containerAutoGraderModal';
+import TextProblemModal from './textProblemModal'
+import CodeProblemModal from './codeProblemModal'
+import MultipleChoiceModal from './multipleChoiceModal'
+
 
 
 type UrlParams = { assignmentId: string }
@@ -34,8 +36,6 @@ const AssignmentUpdatePage = () => {
   const [containerAutoGraderModal, setContainerAutoGraderModal] = useState(false);
   const handleCloseContainerAutoGraderModal = () => setContainerAutoGraderModal(false);
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
-  const [addProblemModal, setAddProblemModal] = useState(false);
-  const handleCloseAddProblemModal = () => setAddProblemModal(false);
 
   
 
@@ -182,8 +182,7 @@ const AssignmentUpdatePage = () => {
         setInvalidFields(newFields)
         setAlert({ autoDelete: false, type: 'error', message })
       })
-      .finally(() => {
-      })
+
   }
 
   const handleProblemUpdate = () => {
@@ -212,13 +211,19 @@ const AssignmentUpdatePage = () => {
     }
   }*/
 
-  const [textModal, setTextModal] = useState(false)
   // const [addProblemForm, setAddProblemForm] = useState({
   //   assignmentId: currentAssignmentId,
   //   problemName: '',
   //   maxScore: 0,
   // })
+
+  const [textModal, setTextModal] = useState(false)
   const handleCloseTextModal = () => {setTextModal(false)}
+  const [codeModal, setCodeModal] = useState(false);
+  const handleCloseCodeModal = () => {setCodeModal(false)};
+  const [mcqModal, setMcqModal] = useState(false);
+  const handleCloseMcqModal = () => {setMcqModal(false)};
+
 
   // const handleAddProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
   //   const key = e.target.id
@@ -239,6 +244,9 @@ const AssignmentUpdatePage = () => {
   // }
 
   const handleDeleteProblem = (problemId: number) => {
+    const problem = RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
+    console.log(problem)
+  //  const idsToDelete = nonContainerAutograders.filter(ncag => ncag.)
     RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
       .then(() => {
         setAlert({ autoDelete: true, type: 'success', message: 'Problem Deleted' })
@@ -265,11 +273,13 @@ const AssignmentUpdatePage = () => {
       </Dialog>
 
       <TextProblemModal open={textModal} onClose={handleCloseTextModal}/>
-      <AddProblemModal open={addProblemModal} onClose={handleCloseAddProblemModal} />
+      <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal}/>
+      <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
+
 
       <div className={styles.pageHeader}>
         <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
-        <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>back to course</Button>
+        <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>Back to Course</Button>
       </div>
       <div className={styles.grid}>
         <div className={styles.form}>
@@ -350,14 +360,13 @@ const AssignmentUpdatePage = () => {
                 <div key={files.length-1}>
                   <span>&nbsp;{`${files[files.length-1].name}`}</span>
               </div>
-                
               </div>) 
            : <div className={styles.filesList} style={{fontStyle:'italic'}}>No files attached</div>}
           <input type='file' id='fileUp' onChange={handleFile} hidden/>
           <label htmlFor="fileUp">
           <StyledEngineProvider injectFirst>
             <MuiButton disableRipple component="span" className={styles.fileUpload}>
-              choose files
+              Choose Files
             </MuiButton>
           </StyledEngineProvider>
           </label> 
@@ -366,9 +375,9 @@ const AssignmentUpdatePage = () => {
         <div className={styles.problemsList}>
         <h2 className={styles.header}>Add Problems</h2>
           <div className={styles.buttonContainer}>
-          <Button onClick={() => setAddProblemModal(true)} className='btnSecondary'>Code/File Input</Button>
+          <Button onClick={() => setCodeModal(true)} className='btnSecondary'>Code/File Input</Button>
             <Button onClick={() => {setTextModal(true)}} className='btnSecondary'>Text Input</Button>
-            <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Multiple Choice creation modal' })} className='btnSecondary'>Multiple Choice</Button>
+            <Button onClick={() => {setMcqModal(true)}} className='btnSecondary'>Multiple Choice</Button>
           </div>
           <h2 className={styles.header}>Add Graders</h2>
           <div className={styles.buttonContainer}>
@@ -405,7 +414,7 @@ const AssignmentUpdatePage = () => {
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
-            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>save and exit</Button>
+            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>Save and Exit</Button>
       </div>
       </PageWrapper>
     </>

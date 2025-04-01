@@ -15,6 +15,11 @@ const TextProblemModal = ({ open, onClose }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId } = useParams<{ assignmentId: string }>()
     const { courseId } = useParams<{ courseId: string }>()
+    const [options, setOptions] = useState({
+        a: '',
+        b: '',
+        c: ''
+    })
     const [formData, setFormData] = useState({
         title: '',
         maxScore: '',
@@ -38,13 +43,16 @@ const TextProblemModal = ({ open, onClose }: Props) => {
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
+            metadata: {
+                type: 'MCQ',
+                options: options
+            } 
         }
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
             .then(() => {
-                console.log("PROBLEM CREATED");
+                console.log("PROBLEM CREATED")
                 setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' });
-
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -59,7 +67,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-
+        
         // close modal
         onClose();
     }
@@ -71,18 +79,60 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         setFormData(prevState => ({ ...prevState, [key]: value }))
     }
 
+    const handleQuestionTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const key = e.target.id
+        const value = e.target.value
+
+        setOptions(prevState => ({ ...prevState, [key]: value }))
+    }
+
+    const handleCorrectAnswerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const value = e.target.id
+        console.log("CORRECT: " + value)
+        setFormData(prevState => ({ ...prevState, correctAnswer: value }))
+    }
+
     return (
-        <Modal title="Add Text Problem" buttonAction={handleSubmit} open={open} onClose={onClose}>
+        <Modal title="Add Multiple Choice Problem" buttonAction={handleSubmit} open={open} onClose={onClose}>
             <div className="input-group">
                 <label htmlFor="title" className="input-label">Problem Title:</label>
                 <input type="text" id="title" onChange={handleChange}
                     placeholder='e.g. What is the time complexity of MergeSort?' />
             </div>
-            <div className="input-group">
-                <label htmlFor="correctAnswer" className="input-label">Correct Answer:</label>
-                <input type="text" id="correctAnswer" onChange={handleChange}
-                    placeholder='e.g. O(nlogn)' />
+            <div className="input-group" style={{gap: '5px'}} >
+                <div>Answer Choices:</div>
+                <div className="input-group" style={{flexDirection:"row", alignItems:"center", width: '100%'}}>
+                    <div>a.</div>
+                    <input type="text" id="a" onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    placeholder='e.g. Java' />
+                    <input type="radio" id="a" onChange={handleCorrectAnswerChange} name="correct"/>
+                </div>
+                <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
+                    <div>b.</div>
+                    <input type="text" id="b" onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    placeholder='e.g. Python' />
+                    <input type="radio" id="b" onChange={handleCorrectAnswerChange} name="correct"/>
+                </div>
+                <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
+                    <div>c.</div>
+                    <input type="text" id="c" onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    placeholder='e.g. C' />
+                    <input type="radio" id="c" onChange={handleCorrectAnswerChange} name="correct"/>
+                </div>
+                <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
+                    <div>d.</div>
+                    <input type="text" id="d" onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    placeholder='e.g. JavaScript' />
+                    <input type="radio" id="d" onChange={handleCorrectAnswerChange} name="correct"/>
+                </div>
+                <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
+                    <div>e.</div>
+                    <input type="text" id="e" onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    placeholder='e.g. ...Matlab?' />
+                    <input type="radio" id="e" onChange={handleCorrectAnswerChange} name="correct"/>
+                </div>
             </div>
+
             <div className="input-group">
                 <label htmlFor="maxScore" className="input-label">Maximum Score:</label>
                 <input type="number" id="maxScore" onChange={handleChange}
