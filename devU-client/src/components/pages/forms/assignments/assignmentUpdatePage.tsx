@@ -97,9 +97,9 @@ const AssignmentUpdatePage = () => {
 
   // taken out of the design for the moment, should get incorporated later
   /*const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}*/ 
-  const handleStartDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, startDate: e.target.value }))}
-  const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, endDate: e.target.value }))}
-  const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, dueDate: e.target.value }))}
+  const handleStartDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, startDate: e.target.value + "Z" }))}
+  const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, endDate: e.target.value + "Z"}))}
+  const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, dueDate: e.target.value + "Z"}))}
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files){
@@ -354,9 +354,9 @@ const AssignmentUpdatePage = () => {
               <label htmlFor="due_date">Due Date *</label>
               <label htmlFor="end_date">End Date *</label>
 
-              <input type='datetime-local' id="start_date" style={{textWrap:'wrap'}} value={formData.startDate.slice(0,-1)} onChange={handleStartDateChange}/>
+              <input type='datetime-local' id="start_date" value={formData.startDate.slice(0,-1)} onChange={handleStartDateChange}/>
               <input type='datetime-local' id="due_date" value={formData.dueDate.slice(0,-1)} onChange={handleDueDateChange}/>
-              <input type='datetime-local' id="end_date" value={formData.startDate.slice(0,-1)} onChange={handleEndDateChange}/>
+              <input type='datetime-local' id="end_date" value={formData.endDate.slice(0,-1)} onChange={handleEndDateChange}/>
           </div>
           <h2 className={styles.header}>Attachments</h2>
             {(files.length != 0) ? (

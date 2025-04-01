@@ -33,6 +33,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
     const [dueDate, setDueDate] = useState('')
     const [startDate, setStartDate] = useState('')
     const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
+    const [currentCategory, setCurrentCategory] = useState<Option<String>>()
     const [assignments, setAssignments] = useState<Assignment[]>([])
 
     const [formData, setFormData] = useState({
@@ -54,16 +55,13 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
 
     const handleCategoryChange = (value: Option<String>)  => {
         setFormData(prevState => ({ ...prevState, categoryName: value.label }))
+        setCurrentCategory(value)
       };
 
     const handleCategoryCreate = (value: string)  => {
         const newOption : Option = {value: value, label: value}
-        setAllCategoryOptions(prevState => {
-          const newArr: Option<String>[] = (prevState);
-          newArr.push(newOption);
-          return newArr;
-        })
         setFormData(prevState => ({ ...prevState, categoryName: value }))
+        setCurrentCategory(newOption)
      };
 
     const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setStartDate(e.target.value) }
@@ -83,6 +81,8 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             maxSubmissions: formData.maxSubmissions,
             disableHandins: formData.disableHandins,
         }
+
+        setCurrentCategory(undefined)
 
         const multipart = new FormData
         multipart.append('courseId', finalFormData.courseId)
@@ -116,7 +116,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
             .finally(() => {
-
+                
             })
     }
 
@@ -145,7 +145,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                         placeholder: () => ({color: '#555555'}),
                         input: () => ({fontSize: '14px'}),
                         singleValue: () => ({fontSize: '14px'})}}
-                value={formData.categoryName ? {value: formData.categoryName, label: formData.categoryName} : undefined}/>
+                value={currentCategory ?? undefined}/>
             </div>
             <div className="input-group">
                 <label htmlFor="name" className="input-label">Assignment Name:</label>
