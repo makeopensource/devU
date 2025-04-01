@@ -15,10 +15,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { getCssVariables } from 'utils/theme.utils'
 import { Button as MuiButton, StyledEngineProvider } from '@mui/material'
-import TextProblemModal from './textProblemModal'
 import TextDropdown from 'components/shared/inputs/textDropDown'
 import { Option } from 'components/shared/inputs/dropdown'
-//import Select from 'react-select/src/Select'
+import ContainerAutoGraderModal from '../containers/containerAutoGraderModal';
+import TextProblemModal from './textProblemModal'
+import CodeProblemModal from './codeProblemModal'
+import MultipleChoiceModal from './multipleChoiceModal'
+import AssignmentProblemListItem from 'components/listItems/assignmentProblemListItem'
+
+
 
 type UrlParams = { assignmentId: string }
 
@@ -29,7 +34,11 @@ const AssignmentUpdatePage = () => {
   const currentAssignmentId = parseInt(assignmentId)
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
+  const [containerAutoGraderModal, setContainerAutoGraderModal] = useState(false);
+  const handleCloseContainerAutoGraderModal = () => setContainerAutoGraderModal(false);
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
+
+  
 
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
@@ -98,12 +107,16 @@ const AssignmentUpdatePage = () => {
       if(files.length < 5) {
         setFiles([...files, file])
       }
+      console.log(files)
+
     }
   }
 
-  const fetchAssignmentProblems = async () => {
-    await RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
-      .then((res) => { setAssignmentProblems(res) })
+  const fetchAssignmentProblems = () => {
+    RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
+    .then((res) => { setNonContainerAutograders(res) })
+     RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
+      .then((res) => { setAssignmentProblems(res)})
   }
   
   
@@ -172,8 +185,7 @@ const AssignmentUpdatePage = () => {
         setInvalidFields(newFields)
         setAlert({ autoDelete: false, type: 'error', message })
       })
-      .finally(() => {
-      })
+
   }
 
   const handleProblemUpdate = () => {
@@ -191,14 +203,29 @@ const AssignmentUpdatePage = () => {
     })
   }
 
-  const [textModal, setTextModal] = useState(false)
 
+  
+
+  const [textModal, setTextModal] = useState(false);
   const handleCloseTextModal = () => {
     setTextModal(false)
     fetchAssignmentProblems()
   }
+  const [codeModal, setCodeModal] = useState(false);
+  const handleCloseCodeModal = () => {
+    setCodeModal(false)
+    fetchAssignmentProblems()
+  }  
+  const [mcqModal, setMcqModal] = useState(false);
+  const handleCloseMcqModal = () => {
+    setMcqModal(false)
+    fetchAssignmentProblems()
+  }  
+
+
 
   const handleDeleteProblem = (problemId: number) => {
+  //  const idsToDelete = nonContainerAutograders.filter(ncag => ncag.)
     RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
       .then(() => {
         setAlert({ autoDelete: true, type: 'success', message: 'Problem Deleted' })
@@ -234,8 +261,11 @@ const AssignmentUpdatePage = () => {
     setFormData(prevState => ({ ...prevState, categoryName: value }))
     setCurrentCategory(newOption)
     };
+
   
   return (
+    <>
+      <ContainerAutoGraderModal open={containerAutoGraderModal} onClose={handleCloseContainerAutoGraderModal} />
 
     <PageWrapper>
 
@@ -252,6 +282,9 @@ const AssignmentUpdatePage = () => {
       </Dialog>
 
       <TextProblemModal open={textModal} onClose={handleCloseTextModal}/>
+      <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal}/>
+      <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
+
 
       <div className={styles.pageHeader}>
         <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
@@ -329,14 +362,13 @@ const AssignmentUpdatePage = () => {
             {(files.length != 0) ? (
               <div className={styles.filesList}>
                 <span>Files:</span> 
-                {files.slice(0,-1).map((file, index) => (
+                {files.slice(0,-1).map((file, index) => ( // For some reason the most recent file appears twice, so I did this as a quick fix, should be fixed in future
                 <div key={index}>
                   <span>&nbsp;{`${file.name},`}</span>
                 </div>))}
                 <div key={files.length-1}>
                   <span>&nbsp;{`${files[files.length-1].name}`}</span>
               </div>
-                
               </div>) 
            : <div className={styles.filesList} style={{fontStyle:'italic'}}>No files attached</div>}
           <input type='file' id='fileUp' onChange={handleFile} hidden/>
@@ -347,21 +379,20 @@ const AssignmentUpdatePage = () => {
             </MuiButton>
           </StyledEngineProvider>
           </label> 
-          
 
         </div>
         <div className={styles.problemsList}>
         <h2 className={styles.header}>Add Problems</h2>
           <div className={styles.buttonContainer}>
-            <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Code/File Input creation modal' })} className='btnSecondary'>Code/File Input</Button>
-            <Button onClick={() => {setTextModal(true)}} className='btnSecondary'>Text Input</Button>
-            <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Multiple Choice creation modal' })} className='btnSecondary'>Multiple Choice</Button>
+          <Button onClick={() => setCodeModal(true)} className='btnSecondary'>Code/File Input</Button>
+            <Button onClick={() => setTextModal(true)} className='btnSecondary'>Text Input</Button>
+            <Button onClick={() => setMcqModal(true)} className='btnSecondary'>Multiple Choice</Button>
           </div>
           <h2 className={styles.header}>Add Graders</h2>
           <div className={styles.buttonContainer}>
-            <Button onClick={() => {
-                        history.push(`createCAG`)
-                    }} className='btnSecondary'>Code Grader</Button>
+          <Button onClick={() => setContainerAutoGraderModal(true)} className='btnSecondary'>
+            Code Grader
+          </Button>
             <Button onClick={() => {
                         history.push(`createNCAG`)
                     }} className='btnSecondary'>Non-code Grader</Button>
@@ -370,31 +401,30 @@ const AssignmentUpdatePage = () => {
             {nonContainerAutograders.length != 0 && nonContainerAutograders.map((nonContainerAutograder) => (<div>
               <span style={{fontStyle:'italic'}}>{nonContainerAutograder.question}</span> - 
               <span style={{color: 'var(--grey)'}}> Non-Code Grader</span></div>))}
-            {containerAutograders.length != 0 && containerAutograders.map((containerAutograder) => (<div>
-            <span style={{fontStyle:'italic'}}>{containerAutograder.autogradingImage}</span> - 
+            {containerAutograders.length != 0 && containerAutograders.map((_) => (<div>
+            <span style={{fontStyle:'italic'}}>{"todo CAG model has been updated imagetag field does not exist"}</span> -
             <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}
             {nonContainerAutograders.length == 0 && containerAutograders.length == 0 && <div style={{fontStyle:'italic'}}>No graders yet</div>}
           <h2 className={styles.header}>Problems</h2>
-
-          {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
-            <div key={problem.id} className={styles.problem}>
-              <h3 style={{margin: '0 0 10px 0'}}>{problem.problemName}</h3>
-              <TextField className={styles.textField}
-                        placeholder='Answer'
-                        sx={{width: '100%', marginLeft : 1/10, pointerEvents: 'none'}}/>
-              <div style={{margin: '5px 0 10px 0'}}>
-                <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>edit</Button>|
-                <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>delete</Button>
+          <div>
+            {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
+              <div>
+              <AssignmentProblemListItem problem={problem} disabled={true}/>
+                <div style={{margin: '5px 0 10px 0'}}>
+                  <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>Edit</Button>|
+                  <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
+                </div>
+                <hr/>
               </div>
-            </div>
-          ))) : <div style={{fontStyle:'italic'}}>No problems yet</div>}
-
+            ))) : <div style={{fontStyle:'italic'}}>No problems yet</div>}
+          </div>
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
-            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>Save & Exit</Button>
+      <Button onClick={handleAssignmentUpdate} className='btnPrimary'>Save & Exit</Button>
       </div>
-    </PageWrapper>
+      </PageWrapper>
+    </>
   )
 }
 

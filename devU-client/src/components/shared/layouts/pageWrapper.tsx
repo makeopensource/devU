@@ -16,7 +16,7 @@ const PageWrapper = ({ children, className = '' }: Props) => (
     <GlobalToolbar />
     <Navbar />
     <div className={`${styles.content} ${className}`}>{children}</div>
-    <Footer /> {/* Footer will now be displayed on all pages */}
+    <Footer />
   </div>
 )
 

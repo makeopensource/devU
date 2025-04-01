@@ -66,11 +66,12 @@ export async function listByCourse(courseId: number) {
 export async function listByCourseReleased(courseId: number) {
   // TODO: filter by start date after current time
   // const now = new Date(Date.now())
-  const allAssignments = await connect().findBy({ courseId: courseId, /*startDate: MoreThanOrEqual(now),*/ deletedAt: IsNull() })
-
   // console.log("ASSIGNMENTS WITH FILTER: ", allAssignments)
 
-  return allAssignments;
+  return await connect().findBy({
+    courseId: courseId, /*startDate: MoreThanOrEqual(now),*/
+    deletedAt: IsNull(),
+  })
 }
 
 export async function isReleased(id: number) {
@@ -87,7 +88,10 @@ export async function isReleased(id: number) {
 }
 
 async function getMaxSubmissionsAndDeadline(id: number) {
-  return await connect().findOne({ where: { id: id, deletedAt: IsNull() }, select: ['maxSubmissions', 'maxFileSize', 'disableHandins', 'endDate'] })
+  return await connect().findOne({
+    where: { id: id, deletedAt: IsNull() },
+    select: ['maxSubmissions', 'maxFileSize', 'disableHandins', 'endDate'],
+  })
 }
 
 async function processFiles(req: Request) {

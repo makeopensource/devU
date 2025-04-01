@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 
 import GraderService from './grader.service'
 
@@ -14,22 +14,9 @@ export async function grade(req: Request, res: Response, next: NextFunction) {
     res.status(200).json(response)
   } catch (err) {
     if (err instanceof Error) {
-        res.status(400).json(new GenericResponse(err.message))
+      res.status(400).json(new GenericResponse(err.message))
     }
   }
 }
 
-export async function tangoCallback(req: Request, res: Response, next: NextFunction) {
-  try {
-    const outputFile = req.params.outputFile
-    const response = await GraderService.tangoCallback(outputFile)
-
-    res.status(200).json(response)
-  } catch (err) {
-    if (err instanceof Error) {
-        res.status(400).json(new GenericResponse(err.message))
-    }
-  }
-}
-
-export default { grade, tangoCallback }
+export default { grade }
