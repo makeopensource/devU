@@ -8,9 +8,8 @@ services:
     container_name: devu-api
     image: ghcr.io/makeopensource/devu/api:develop
     environment:
-      TANGO_KEY: devutangokey # TODO: load in from env file. for now this is defined in tango section below
       WAIT_HOSTS: db:5432
-      CLIENT_URL: https://client.devu.app # TODO change the client url here if needed
+      CLIENT_URL: https://devu.app # TODO change the client url here if needed
       LEVIATHAN_URL: http://leviathan:9221
     depends_on:
       db:
@@ -22,8 +21,8 @@ services:
   client:
     image: ghcr.io/makeopensource/devu/client:develop
     environment:
-      - API_URL=https://devu.app # todo change this to prod api url
-      - ROOT_PATH=/
+      API_URL: https://api.devu.app # todo change this to prod api url
+      ROOT_PATH: /
     volumes:
       - ./dist:/out
 
@@ -102,33 +101,3 @@ services:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_STOPPED=true
     restart: unless-stopped
-
-    #  leviathan can run tango jobs, here in case we need it later
-    #  tango:
-    #    container_name: tango
-    #    ports:
-    #      - '127.0.0.1:3000:3000'
-    #    image: ghcr.io/makeopensource/devu/tango:develop
-    #    environment:
-    #      - DOCKER_REDIS_HOSTNAME=redis
-    #      - RESTFUL_KEY=devutangokey
-    #      # TODO remember to modify the below to be the path to the absolute path of tango_files` on your host machine
-    #      - DOCKER_TANGO_HOST_VOLUME_PATH=/absolute/path/to/tango_files
-    #    depends_on:
-    #      - redis
-    #    volumes:
-    #      - ./tango.config.py:/opt/TangoService/Tango/config.py
-    #      - /var/run/docker.sock:/var/run/docker.sock
-    #      - ./logs/tango/:/var/log/tango/
-    #      - ./logs/tangonginx:/var/log/nginx
-    #      - ./tango_files:/opt/TangoService/Tango/volumes
-    #    restart: unless-stopped
-    #
-    #  redis:
-    #    container_name: redis
-    #    image: redis:latest
-    #    ports:
-    #      - '127.0.0.1:6379:6379'
-    #    deploy:
-    #      replicas: 1
-    #    restart: unless-stopped

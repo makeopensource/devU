@@ -42,9 +42,3 @@ jobs:
 
           docker build . -f api.Dockerfile -t $IMAGE_NAME
           docker push $IMAGE_NAME
-
-      - name: build tango docker
-        run: |
-          IMAGE_NAME=ghcr.io/${{ env.repo_url }}/tango:${{ steps.get_branch.outputs.branch_name }}
-          docker build ./tango -f ./tango/Dockerfile -t $IMAGE_NAME
-          docker push $IMAGE_NAME
