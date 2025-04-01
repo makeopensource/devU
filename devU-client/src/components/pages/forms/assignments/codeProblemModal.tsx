@@ -21,8 +21,13 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
         maxScore: '',
     });
 
+    const submittable = () => {
+        if (!formData.title || !formData.maxScore) {return false}
+        else {return true}
+    }
+
     const handleSubmit = () => {
-        if (!formData.title || !formData.maxScore) return;
+        if (!submittable) return;
 
         const problemFormData = {
             assignmentId: parseInt(assignmentId),
@@ -49,7 +54,7 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
     };
 
     return (
-        <Modal title="Add Code/File Input Problem" buttonAction={handleSubmit} open={open} onClose={onClose}>
+        <Modal title="Add Code/File Input Problem" buttonAction={handleSubmit} open={open} onClose={onClose} isSubmittable={submittable}>
             <div className="input-group">
                 <label htmlFor="title" className="input-label">Problem Title:</label>
                 <input 

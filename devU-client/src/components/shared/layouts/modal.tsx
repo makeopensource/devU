@@ -8,9 +8,10 @@ interface ModalProps {
     buttonAction: () => void;
     open: boolean;
     onClose: () => void;
+    isSubmittable?: () => boolean;
 }
 
-const Modal = ({ title, children, buttonAction, open, onClose }: ModalProps) => {
+const Modal = ({ title, children, buttonAction, open, onClose, isSubmittable }: ModalProps) => {
     const [theme, setTheme] = useState(getCssVariables)
 
     useEffect(() => {
@@ -18,7 +19,6 @@ const Modal = ({ title, children, buttonAction, open, onClose }: ModalProps) => 
         observer.observe(document.body, { attributes: true })
         return () => observer.disconnect()
     })
-
     return (
         <Dialog open={open} onClose={onClose} className='modal'
             sx={{
@@ -38,7 +38,7 @@ const Modal = ({ title, children, buttonAction, open, onClose }: ModalProps) => 
                 <button onClick={onClose} aria-label='close' title='close'>✕</button>
             </div>
             {children}
-            <button onClick={buttonAction} className='btnPrimary modalAction'>{title}</button>
+            <button onClick={buttonAction} disabled={isSubmittable ? !isSubmittable() : false} className='btnPrimary modalAction'>{title}</button>
         </Dialog>
     )
 }

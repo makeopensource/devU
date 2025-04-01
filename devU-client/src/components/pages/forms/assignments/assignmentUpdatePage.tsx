@@ -21,6 +21,7 @@ import ContainerAutoGraderModal from '../containers/containerAutoGraderModal';
 import TextProblemModal from './textProblemModal'
 import CodeProblemModal from './codeProblemModal'
 import MultipleChoiceModal from './multipleChoiceModal'
+import AssignmentProblemListItem from 'components/listItems/assignmentProblemListItem'
 
 
 
@@ -115,6 +116,8 @@ const AssignmentUpdatePage = () => {
       if(files.length < 5) {
         setFiles([...files, file])
       }
+      console.log(files)
+
     }
   }
 
@@ -244,8 +247,6 @@ const AssignmentUpdatePage = () => {
   // }
 
   const handleDeleteProblem = (problemId: number) => {
-    const problem = RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
-    console.log(problem)
   //  const idsToDelete = nonContainerAutograders.filter(ncag => ncag.)
     RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
       .then(() => {
@@ -353,7 +354,7 @@ const AssignmentUpdatePage = () => {
             {(files.length != 0) ? (
               <div className={styles.filesList}>
                 <span>Files:</span> 
-                {files.slice(0,-1).map((file, index) => (
+                {files.slice(0,-1).map((file, index) => ( // For some reason the most recent file appears twice, so I did this as a quick fix, should be fixed in future
                 <div key={index}>
                   <span>&nbsp;{`${file.name},`}</span>
                 </div>))}
@@ -397,20 +398,18 @@ const AssignmentUpdatePage = () => {
             <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}
             {nonContainerAutograders.length == 0 && containerAutograders.length == 0 && <div style={{fontStyle:'italic'}}>No graders yet</div>}
           <h2 className={styles.header}>Problems</h2>
-
-          {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
-            <div key={problem.id} className={styles.problem}>
-              <h3 style={{margin: '0 0 10px 0'}}>{problem.problemName}</h3>
-              <TextField className={styles.textField}
-                        placeholder='Answer'
-                        sx={{width: '100%', marginLeft : 1/10, pointerEvents: 'none'}}/>
-              <div style={{margin: '5px 0 10px 0'}}>
-                <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>edit</Button>|
-                <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>delete</Button>
+          <div>
+            {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
+              <div>
+              <AssignmentProblemListItem problem={problem} disabled={true}/>
+                <div style={{margin: '5px 0 10px 0'}}>
+                  <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>Edit</Button>|
+                  <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
+                </div>
+                <hr/>
               </div>
-            </div>
-          ))) : <div style={{fontStyle:'italic'}}>No problems yet</div>}
-
+            ))) : <div style={{fontStyle:'italic'}}>No problems yet</div>}
+          </div>
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
