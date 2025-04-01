@@ -7,11 +7,13 @@
     grid-row-gap: 10px;
     width: 100%;
 }
-.pageHeader{
+
+.pageHeader {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     align-items: center;
 }
+
 .backToCourse{
     margin-left: auto;
 }
@@ -116,15 +118,6 @@ input[type='datetime-local'] {
     border-radius: 10px;
 }
 
-.problem{
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: flex-start;
-    justify-content:center;
-}
-
 
 .header {
     text-align: left;
@@ -134,7 +127,7 @@ input[type='datetime-local'] {
 
 .editProblem {
     margin-right: 5px;
-    color: #075D92;
+    color: $link-blue;
     padding: 0;
     background: none;
     text-decoration: underline;

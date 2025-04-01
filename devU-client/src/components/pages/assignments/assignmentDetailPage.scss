@@ -12,7 +12,6 @@
 .details{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 100%;
     gap: 10px;
     margin-top: 10px;
 }
@@ -21,6 +20,7 @@
     width: 100%;
     text-align: left;
     flex-direction: column;
+    overflow-wrap: anywhere;
     display: flex;
     align-items: flex-start;
 }
@@ -29,10 +29,12 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 95%;
+    margin-left: auto;
     padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
     font-size: 16px;
-    background-color: $secondary-lighter;
+    background-color: $list-item-background-hover;
     border-radius: 20px
 }
 
@@ -61,27 +63,19 @@
     flex-direction: row;
     align-items: center;
     gap:10px;
+    flex-wrap: wrap;
     justify-content: flex-end;
 }
 
 .problems_list{
     width: 50%;
+    gap: 10px;
 }
 
-.problem_header{
-    font-size:16px;
-    margin: 0 0 10px 0;
-}
 .no_problems{
     font-style: italic;
     text-align: center;
     margin-top: 10px;
-}
-.textField{
-    align-items: center;
-    margin-bottom: 0;
-    background: none;
-    border: 2px solid #ccc;
 }
 
 .submit_container{
@@ -93,11 +87,18 @@
 .affirmation{
     display: flex;
     align-items: center;
+    margin-top: 10px;
     align-self: flex-start;
     gap: 10px;
 }
+
 .affirmText{
     color: $text-color;
+}
+
+.handinHistory{
+    text-decoration: underline;
+    cursor: pointer
 }
 
 
@@ -249,7 +250,7 @@
     padding: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: $extreme) {
     .wrap {
         flex-direction: column;
         align-items: center;
@@ -283,6 +284,9 @@
         width: 200px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	    margin: 20px;
+    }
+    .problems_list{
+        width: 100%;
     }
 }
 

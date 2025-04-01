@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
-import TextField from 'components/shared/inputs/textField'
-import {Assignment, AssignmentProblem, Course, Submission, /*SubmissionScore NonContainerAutoGrader, /*ContainerAutoGrader*/} from 'devu-shared-modules'
+import AssignmentProblemListItem from 'components/listItems/assignmentProblemListItem'
+import {Assignment, AssignmentProblem, Course, Submission,  NonContainerAutoGrader /*SubmissionScore, /*ContainerAutoGrader*/} from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from '../errorPage/errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -27,16 +27,13 @@ const AssignmentDetailPage = () => {
     const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
     const userId = useAppSelector((store) => store.user.id)
     const role = useAppSelector((store) => store.roleMode)
-    role;
 
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [formData, setFormData] = useState({})
+    const [formData, setFormData] = useState<{ [key: string]: string }>({})
     const [file, setFile] = useState<File | null>()
     const [assignmentProblems, setAssignmentProblems] = useState(new Array<AssignmentProblem>())
     const [submissions, setSubmissions] = useState(new Array<Submission>())
-    //const [submissionScores, setSubmissionScores] = useState(new Array<SubmissionScore>())
-    // const [submissionProblemScores, setSubmissionProblemScores] = useState(new Array<SubmissionProblemScore>())
     const [assignment, setAssignment] = useState<Assignment>()
     const [course, setCourse] = useState<Course>()
     const [notClickable, setClickable] = useState(true);
@@ -45,10 +42,9 @@ const AssignmentDetailPage = () => {
 
     // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
     // const contaierAutograder = false; //TODO: Use the above commented out code to get the container autograder
-    // const [ setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
+    const [nonContainerAutograders, setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
     const [showScoreboard, setShowScoreboard] = useState(false);
     setShowScoreboard;
-    assignmentProblems;
     const location = useLocation();
 
     useEffect(() => {
@@ -86,9 +82,9 @@ const AssignmentDetailPage = () => {
             // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
             // setContainerAutograder(containerAutograder)
 
-            // const nonContainers = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
-            // setNonContainerAutograders(nonContainers)
-
+            const nonContainers = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
+            setNonContainerAutograders(nonContainers)
+            nonContainerAutograders
 
         } catch (err:any) {
             setError(err)
@@ -101,13 +97,37 @@ const AssignmentDetailPage = () => {
 
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const type = e.target.type;
+        const value = e.target.value;
+        const key = e.target.id;
+    
+        if (type === 'checkbox') { // behavior for multiple choic questions
+            const newState = e.target.checked;
+    
+            setFormData(prevState => {
+                const currentValue = prevState[key] || ""; 
+                let res = '';
+                if (newState) {
+                    res = currentValue + value
+                } else {
+                    res = currentValue.replace(value, "")
+                }
+                res = res.split('').sort().join('') // makes selecting answers in any order correct
+                return {
+                    ...prevState,
+                    [key]: res
+                };
+            });
 
-    const handleChange = (value: string, e : React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e)
-        console.log(value)
-        const key = e.target.id
-        setFormData(prevState => ({...prevState,[key] : e.target.value}))    
-    }
+        } else {
+            setFormData(prevState => ({
+                ...prevState,
+                [key]: value
+            }));
+        }
+    };
 
 
     const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -122,7 +142,7 @@ const AssignmentDetailPage = () => {
         let response;
         const contentField = {
             filepaths : [],
-            form : formData,
+            form : formData
         }
         const submission = {
             userId : userId,
@@ -130,6 +150,8 @@ const AssignmentDetailPage = () => {
             courseId : courseId,
             content : JSON.stringify(contentField),
         }
+
+        console.log(contentField)
 
         setLoading(true)
 
@@ -172,7 +194,6 @@ const AssignmentDetailPage = () => {
     };
     isSubmissionDisabled;
     handleFileChange;
-    handleSubmit;
 
 
     return(
@@ -199,7 +220,7 @@ const AssignmentDetailPage = () => {
                     </span>
                     <span>
                         <a onClick={() => history.push(`/course/${courseId}/assignment/${assignmentId}/submissions`)}
-                        style={{color:'#075D92', textDecoration: 'underline', cursor: 'pointer'}}>View Handin History</a>
+                        className={styles.handinHistory}>View Handin History</a>
                     </span>
                 </div>
             </div>
@@ -223,22 +244,18 @@ const AssignmentDetailPage = () => {
             
             <div className={styles.problems_section}>
                 <div className={styles.problems_list}>
-                    <h3 style={{textAlign:'center'}}>Problems</h3>
+                    <h2>Problems</h2>
                     {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
-                        <div key={problem.id} className={styles.problem}>
-                        <h4 className={styles.problem_header}>{problem.problemName}</h4>
-                        <TextField className={styles.textField}
-                                    placeholder='Answer'
-                                    onChange={handleChange}
-                                    id={problem.problemName}
-                                    sx={{width: '100%', marginLeft : 1/10}}/>
-                        </div>
+                        <>
+                            <AssignmentProblemListItem problem={problem} handleChange={handleChange}/>
+                            <hr/>
+                        </>
                     ))) : <div style={{fontStyle:'italic', textAlign: 'center', marginTop: '10px'}}> No problems yet...</div>}
-                    {!(isSubmissionDisabled()) &&assignmentProblems && assignmentProblems.length > 0 ? (
+                    {!(isSubmissionDisabled()) && assignmentProblems && assignmentProblems.length > 0 ? (
                         <div className = {styles.submit_container}>
                             <div className={styles.affirmation}>
                                 <input type='checkbox' onClick={handleCheckboxChange}/>
-                                <span className={styles.affirmText}>I affirm that I have complied with this course’s academic integrity policy as defined in the syllabus.</span>
+                                <span className={styles.affirmText}>I affirm that I have complied with this course's academic integrity policy as defined in the syllabus.</span>
                             </div>
                             <button className='btnPrimary'
                             style={{marginTop:'40px'}} 

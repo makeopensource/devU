@@ -140,7 +140,6 @@ const TextDropdown = ({
             IndicatorSeparator: () => null
           }}
       />
-      {console.log(value)}
     </div>
    
   )

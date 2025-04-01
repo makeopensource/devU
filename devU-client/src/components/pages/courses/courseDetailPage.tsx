@@ -73,7 +73,7 @@ const CourseDetailPage = () => {
     }, []);
 
     return (
-        <PageWrapper>
+        <PageWrapper className={styles.pageWrapper}>
             <div className={styles.courseDetailPage}>
                 {courseInfo ? (
                     <div>
@@ -149,7 +149,8 @@ const CourseDetailPage = () => {
                                                                   secondary={
                                                                       <React.Fragment>
                                                                           <div className={styles.due_end}>
-                                                                            <span style={{fontWeight:'700'}}>Due:&nbsp;</span>{wordPrintDate(assignment.dueDate)} | &nbsp;
+                                                                            <span style={{fontWeight:'700'}}>Due:&nbsp;</span>{wordPrintDate(assignment.dueDate)}
+                                                                            <span>&nbsp;|&nbsp;</span>
                                                                             <span style={{fontWeight:'700'}}>End:&nbsp;</span>{wordPrintDate(assignment.endDate)}
                                                                         </div>
                                                                       </React.Fragment>

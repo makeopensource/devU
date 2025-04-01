@@ -21,4 +21,4 @@ COPY ./devU-client/ .
 COPY --from=module_builder /tmp/devu-shared-modules ./devu-shared-modules
 
 # build frontend during run so that we can modify baseurl via docker envoirment
-CMD npm run --silent build-docker && rm -rf /out/* && cp -r /app/dist/* /out
+CMD npm run build-docker && rm -rf /out/* && cp -r /app/dist/* /out

@@ -5,14 +5,13 @@ import { SET_ALERT } from 'redux/types/active.types';
 import { useActionless } from 'redux/hooks';
 import RequestService from 'services/request.service';
 import Modal from 'components/shared/layouts/modal';
-import styles from './modal.module.scss';
 
 interface Props {
     open: boolean;
     onClose: () => void;
 }
 
-const AddProblemModal = ({ open, onClose }: Props) => {
+const CodeProblemModal = ({ open, onClose }: Props) => {
     const [setAlert] = useActionless(SET_ALERT);
     const { assignmentId } = useParams<{ assignmentId: string }>();
     const { courseId } = useParams<{ courseId: string }>();
@@ -22,8 +21,13 @@ const AddProblemModal = ({ open, onClose }: Props) => {
         maxScore: '',
     });
 
+    const submittable = () => {
+        if (!formData.title || !formData.maxScore) {return false}
+        else {return true}
+    }
+
     const handleSubmit = () => {
-        if (!formData.title || !formData.maxScore) return;
+        if (!submittable) return;
 
         const problemFormData = {
             assignmentId: parseInt(assignmentId),
@@ -50,31 +54,29 @@ const AddProblemModal = ({ open, onClose }: Props) => {
     };
 
     return (
-        <Modal title="Add Problem" buttonAction={handleSubmit} open={open} onClose={onClose}>
-            <div className={styles.modalContainer}>
-                <label htmlFor="title" className={styles.inputLabel}>Problem Title:</label>
+        <Modal title="Add Code/File Input Problem" buttonAction={handleSubmit} open={open} onClose={onClose} isSubmittable={submittable}>
+            <div className="input-group">
+                <label htmlFor="title" className="input-label">Problem Title:</label>
                 <input 
                     type="text" 
                     id="title" 
-                    className={styles.inputField} 
                     placeholder="e.g. Application Objective 3" 
                     onChange={handleChange} 
                 />
-
-                <label htmlFor="maxScore" className={styles.inputLabel}>Maximum Score:</label>
+            </div>
+            
+            <div className="input-group">
+                <label htmlFor="maxScore" className="input-label">Maximum Score:</label>
                 <input 
                     type="number" 
                     id="maxScore" 
-                    className={styles.inputField} 
-                    placeholder="10" 
+                    placeholder="e.g. 10" 
                     min="0" 
                     onChange={handleChange} 
                 />
-
-                <button className={styles.submitButton} onClick={handleSubmit}>Add Problem</button>
             </div>
         </Modal>
     );
 };
 
-export default AddProblemModal;
+export default CodeProblemModal;
