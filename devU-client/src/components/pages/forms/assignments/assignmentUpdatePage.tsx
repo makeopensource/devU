@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ExpressValidationError, Assignment, AssignmentProblem, NonContainerAutoGrader, ContainerAutoGrader } from 'devu-shared-modules'
+import { ExpressValidationError, Assignment, AssignmentProblem, NonContainerAutoGrader } from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useHistory, useParams } from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
@@ -36,7 +36,7 @@ const AssignmentUpdatePage = () => {
   const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
   const [containerAutoGraderModal, setContainerAutoGraderModal] = useState(false);
   const handleCloseContainerAutoGraderModal = () => setContainerAutoGraderModal(false);
-  const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
+  //const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
 
   
 
@@ -131,7 +131,7 @@ const AssignmentUpdatePage = () => {
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
+  //useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
 
   
   /*useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setCategories(res) }).finally(convertToOptions)}, [])
@@ -393,10 +393,10 @@ const AssignmentUpdatePage = () => {
             {nonContainerAutograders.length != 0 && nonContainerAutograders.map((nonContainerAutograder) => (<div>
               <span style={{fontStyle:'italic'}}>{nonContainerAutograder.question}</span> - 
               <span style={{color: 'var(--grey)'}}> Non-Code Grader</span></div>))}
-            {containerAutograders.length != 0 && containerAutograders.map((containerAutograder) => (<div>
+            {/* {containerAutograders.length != 0 && containerAutograders.map((containerAutograder) => (<div>
             <span style={{fontStyle:'italic'}}>{containerAutograder.autogradingImage}</span> - 
-            <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}
-            {nonContainerAutograders.length == 0 && containerAutograders.length == 0 && <div style={{fontStyle:'italic'}}>No graders yet</div>}
+            <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}*/}
+            {nonContainerAutograders.length == 0 && <div style={{fontStyle:'italic'}}>No graders yet</div>} {/*ADD BACK CAG.length===0 check here when CAG endpoint fixed */}
           <h2 className={styles.header}>Problems</h2>
           <div>
             {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (

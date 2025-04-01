@@ -17,28 +17,17 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
     const { courseId } = useParams<{ courseId: string }>()
     const [options, setOptions] = useState({})
     const [formData, setFormData] = useState({
+        type: 'MCQ-mult',
         title: '',
         maxScore: '',
-        correctAnswer: new Map(), // did this with just a string in assignmentDetailPage.tsx but if it aint broke... that said if this does break reference that approach
-        numCorrect: 0,
+        correctAnswer: '', 
         regex: false
     });
     const [boxType, setBoxType] = useState("checkbox")
 
     const submittable = () => {
-        if (!formData.title || !formData.maxScore || formData.numCorrect == 0) { return false }
+        if (!formData.title || !formData.maxScore || formData.correctAnswer.length <= 0) { return false }
         else { return true }
-    }
-
-    const createCorrectString = () => {
-        var correctString = ''
-        formData.correctAnswer.forEach((val, key ) => {
-            if (val === true){
-                correctString += key
-            }
-        })
-        correctString = correctString.split('').sort().join('') // makes selecting answers in any order correct
-        return(correctString)
     }
 
     const handleSubmit = () => {
@@ -54,10 +43,10 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
         const graderFormData = {
             assignmentId: parseInt(assignmentId),
             question: formData.title,
-            correctString: createCorrectString(),
+            correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
-            metadata: {type: "MCQ", options: options}
+            metadata: {type: formData.type, options: options}
         }
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
@@ -79,10 +68,23 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         
-        console.log(graderFormData)
-
         // close modal
-        onClose();
+        closeModal()
+    }
+
+    const resetData = () => { // reset data whenever question submitted/hits error, so data is not carried over, shows erroneous messages
+        setFormData({
+            type: 'MCQ-mult',
+            title: '',
+            maxScore: '',
+            correctAnswer: '', 
+            regex: false})
+        setBoxType('checkbox') 
+    }
+
+    const closeModal = () => {
+        resetData()
+        onClose()
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -101,44 +103,55 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
 
     const handleCorrectAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.id
-        const newState = e.target.checked
-        setFormData(prevState => {
-            const correctAnswers = new Map (prevState.correctAnswer)
-            correctAnswers.set(value, newState)
-            return { ...prevState, correctAnswer: correctAnswers, numCorrect: formData.numCorrect + (newState ? 1 : -1)}
-        })
+        if (formData.type === "MCQ-mult"){
+            const checkState = e.target.checked
+            setFormData(prevState => {
+                const currentValue = prevState.correctAnswer || ""; 
+                let res = '';
+                if (checkState === true) { // if the box is checked, we want that as a new answer
+                    res = currentValue + value
+                } else { // otherwise remove it from the string to make it incorrect
+                    res = currentValue.replace(value, "")
+                }
+                res = res.split('').sort().join('') // makes selecting answers in any order correct
+                return {
+                    ...prevState,
+                    correctAnswer: res
+                };
+            });
+        } else if (formData.type === "MCQ-single") {
+            setFormData(prevState => ({...prevState, correctAnswer: value})) // only one answer is accepted
+        } else {
+            setAlert({ autoDelete: false, type: 'error', message: "Unknown Type" })
+        }
+        
     }
 
     const switchBoxType = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newState = e.target.checked
-        if (newState === true) {
+        if (newState === true) { // if box checked, then we're only accepting one answer, switch inputs to radio.
             setBoxType('radio')
+            setFormData(prevState => ({...prevState, type: "MCQ-single"})) 
         } else {
             setBoxType('checkbox')
+            setFormData(prevState => ({...prevState, type: "MCQ-mult"})) 
         }
-        console.log("peeing")
+
         var inputs = document.getElementsByTagName('input') // reset correctAnswer when you do this
 
         for (var i = 0; i < inputs.length; i++) {
-            console.log(inputs[i])
             if (inputs[i].name == 'correct') {
                 inputs[i].checked = false;
             }
         }
-        setFormData(prevState => {
-            const correctAnswers = new Map (prevState.correctAnswer)
-            for (let key in correctAnswers){
-                correctAnswers.set(key, false)
-            }
-            return { ...prevState, correctAnswer: correctAnswers, numCorrect: 0}
-        })
+        setFormData(prevState => ({...prevState, correctAnswer: ''})) 
     }
 
     return (
-        <Modal title="Add Multiple Choice Problem" isSubmittable={submittable} buttonAction={handleSubmit} open={open} onClose={onClose}>
+        <Modal title="Add Multiple Choice Problem" isSubmittable={submittable} buttonAction={handleSubmit} open={open} onClose={closeModal}>
             <div className="input-group">
                 <label htmlFor="title" className="input-label">Problem Title:</label>
-                <input type="text" id="title" onChange={handleChange}
+                <input type="text" id="title" onChange={handleChange} 
                     placeholder='e.g. What is the best programming language?' />
             </div>
             <div className="input-group" style={{gap: '5px'}} >
