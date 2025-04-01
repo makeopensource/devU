@@ -44,7 +44,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
             <div>File Input Problems are not done yet pending backend changes! :D</div>
         </div>)
     }
-    
+
     const type = meta.type
     if (type == "Text") {
         return (
@@ -87,7 +87,6 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
         }
         return (
             <div key={problem.id} className={styles.problem}>
-                            <div>{type}</div>
                 <h4 className={styles.problem_header}>{problem.problemName}</h4>
                 {Object.keys(options).map((key : string) => (
                     <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>
