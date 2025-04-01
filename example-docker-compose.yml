@@ -35,6 +35,8 @@ services:
     depends_on:
       client:
         condition: service_completed_successfully
+    command: >
+      /bin/sh -c "echo 'Frontend is now accessible at http://localhost:9000' && nginx -g 'daemon off;'"
     ports:
       - '9000:80'
     restart: unless-stopped
