@@ -1,42 +1,45 @@
 import React, { useState, useEffect } from 'react'
-import Select, { Styles, GroupTypeBase } from 'react-select'
-
+import CreatableSelect from 'react-select/creatable'
+import { Styles, GroupTypeBase } from 'react-select'
 import { getCssVariables } from 'utils/theme.utils'
+
 
 import styles from './dropdown.scss'
 
-export type Option<T = any> = {
-  value: T
-  label: string
-}
+import { Option } from './dropdown'
+
+// This type needed since normal react-select does not allow for creating new options
 
 type Props = {
   options: Option<any>[]
   onChange: (value: any) => void
+  onCreate: (value: string) => void
   defaultOption?: Option<any>
+  value?: Option<any>
   placeholder?: string
   disabled?: boolean
-  search?: boolean
   className?: string
   label?: string
   custom?: Partial<Styles<any, false, GroupTypeBase<any>>>
 }
 
-const Dropdown = ({
+const TextDropdown = ({
   options,
   onChange,
+  onCreate,
   placeholder,
   disabled,
-  search = false,
   defaultOption,
   className = '',
   label,
-  custom
+  value,
+  custom,
 }: Props) => {
-  const [theme, setTheme] = useState(getCssVariables())
 
-  // Needs a custom observer to force an update when the css variables change
-  // Custom observer will update the theme variables when the bodies classes change
+  const handleChange = (option: Option<String>) => onChange(option)
+  const handleCreate = (input: string) => onCreate(input)
+
+  const [theme, setTheme] = useState(getCssVariables())
   useEffect(() => {
     const observer = new MutationObserver(() => setTheme(getCssVariables()))
 
@@ -45,7 +48,6 @@ const Dropdown = ({
     return () => observer.disconnect()
   })
 
-  const handleChange = (option: Option) => onChange(option)
 
   const { textColor, background } = theme
 
@@ -66,20 +68,28 @@ const Dropdown = ({
     return merged
   }
 
-  // Styling into this component isn't really possible with raw css alone due to its implementation
-  // Because of this we're going to use their style apis
+
+
   const baseStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
+    ...custom,
     menu: (provided) => ({ ...provided, 
-        backgroundColor: background, 
-        boxShadow: 'none',
-        border: '2px solid #ccc',
-        borderRadius: '10px',
+      backgroundColor: background, 
+      boxShadow: 'none',
+      border: '2px solid #ccc',
+      borderRadius: '10px'
     }),
-    
+
+    container: (provided) => ({ ...provided, 
+      width: '100%'
+    }),
+
     input: (provided) => ({ ...provided, 
-        backgroundColor: background, 
-        borderRadius: '20px',
+        backgroundColor: background,
         color: textColor, 
+        fontWeight: '500',
+        "input":{
+          fontFamily: 'inherit'
+        }
         }),
 
     placeholder: (provided) => ({ ...provided,
@@ -87,49 +97,52 @@ const Dropdown = ({
         color: '#9c9c9c',
         margin: '0'
     }),
+
     control: (provided) => ({ ...provided, 
         backgroundColor: background, 
         cursor: 'pointer',
-        border: '2px solid #ccc',
-        borderRadius: '20px', 
+        borderRadius: '10px', 
         padding: '8px 2px',
-        }),
+        border: '2px solid #ccc'}),
 
     singleValue: (provided) => ({ ...provided, 
-        color: textColor,  
+        color: textColor, 
     }),
-    
+
     option: (provided, state) => ({
       ...provided,
       cursor: 'pointer',
-      color: textColor, 
-      borderBottom: '1px solid #ddd',
+      color: 'var(--color)', 
+      borderBottom: '1px solid #ccc',
       backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : background,
       "&:last-of-type":{
         borderBottom: 'none'
       }
     }),
+  
+    
   }
 
   return (
     <div className={`${styles.dropdown} ${className}`}>
       {!!label && <label>{label}</label>}
-      <Select
+      <CreatableSelect 
         aria-label={label}
         styles={custom ? mergeStyles(baseStyles, custom) : baseStyles}
         options={options}
         onChange={handleChange}
+        onCreateOption={handleCreate}
         placeholder={placeholder}
         isDisabled={disabled}
-        isSearchable={search}
-        components={
-          {IndicatorSeparator: () => null}
-        }
+        value={value}
         defaultValue={defaultOption}
-        isClearable={true}
+        components={{
+            IndicatorSeparator: () => null
+          }}
       />
     </div>
+   
   )
 }
 
-export default Dropdown
+export default TextDropdown

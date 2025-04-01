@@ -78,8 +78,6 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
         
-        console.log(graderFormData)
-
         // close modal
         onClose();
     }

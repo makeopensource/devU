@@ -15,8 +15,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { getCssVariables } from 'utils/theme.utils'
 import { Button as MuiButton, StyledEngineProvider } from '@mui/material'
-/*import Dropdown, { Option } from 'components/shared/inputs/dropdown';*/
-//import Select from 'react-select/src/Select'
+import TextDropdown from 'components/shared/inputs/textDropDown'
+import { Option } from 'components/shared/inputs/dropdown'
 import ContainerAutoGraderModal from '../containers/containerAutoGraderModal';
 import TextProblemModal from './textProblemModal'
 import CodeProblemModal from './codeProblemModal'
@@ -40,8 +40,9 @@ const AssignmentUpdatePage = () => {
 
   
 
-  /*const [categories, setCategories] = useState<Category[]>([])
-  const [categoryOptions, setAllCategoryOptions] = useState<Option<Category>[]>([])*/
+  const [assignments, setAssignments] = useState<Assignment[]>([])
+  const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
+  const [currentCategory, setCurrentCategory] = useState<Option<String>>()
 
 
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
@@ -87,22 +88,12 @@ const AssignmentUpdatePage = () => {
       setAssignmentProblemData(problem)
     }
   }
-  const handleCloseModal = () => {setOpenEditModal(false)}
+  const handleCloseEditModal = () => {
+    setOpenEditModal(false)
+  }
   useEffect(() => {
     if (assignmentProblemData.maxScore !== -1) { setOpenEditModal(true) }
   }, [assignmentProblemData])
-
-  const handleChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
-    const key = e.target.id
-    const newInvalidFields = removeClassFromField(invalidFields, key)
-    setInvalidFields(newInvalidFields)
-
-    setFormData(prevState => ({ ...prevState, [key]: value }))
-  }
-  const handleProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
-    const key = e.target.id
-    setAssignmentProblemData(prevState => ({ ...prevState, [key]: value }))
-  }
 
   // taken out of the design for the moment, should get incorporated later
   /*const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}*/ 
@@ -122,23 +113,32 @@ const AssignmentUpdatePage = () => {
   }
 
   const fetchAssignmentProblems = () => {
-    RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
-      .then((res) => { setAssignmentProblems(res) })
+    RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
+    .then((res) => { setNonContainerAutograders(res) })
+     RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
+      .then((res) => { setAssignmentProblems(res)})
   }
-
-
+  
+  
 
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
+
+  useEffect(() => {
+    const categories = [...new Set(assignments.map(a => a.categoryName))];
+    const options = categories.map((category) => ({
+        value: category,
+        label: category
+      }));
+    
+    setAllCategoryOptions(options);
+    setCurrentCategory(categoryOptions.find((category) => (category.value === formData.categoryName)))
+}, [assignments])
 
   
-  /*useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setCategories(res) }).finally(convertToOptions)}, [])
-  const convertToOptions = () => {
-    setAllCategoryOptions(categories.map((category) => ({label: category.name, value: category}))) 
-  }*/
-
   const handleAssignmentUpdate = () => {
     const finalFormData = {
       courseId: formData.courseId,
@@ -203,48 +203,26 @@ const AssignmentUpdatePage = () => {
     })
   }
 
-  /*const handleAssignmentChange = (e: React.MouseEvent<HTMLHeadingElement>) => {
-    const assignmentDetails = assignmentsList.find((assignment) => assignment.id === parseInt(e.currentTarget.id))
-    if (assignmentDetails !== undefined && assignmentDetails.id !== undefined) {
-      setAssignmentProblems(allAssignmentProblems.get(assignmentDetails.id) || [])
-      setCurrentAssignmentId(assignmentDetails.id)
-    } 
-    if (assignmentDetails !== undefined) {
-      setFormData(assignmentDetails)
-    }
-  }*/
 
-  // const [addProblemForm, setAddProblemForm] = useState({
-  //   assignmentId: currentAssignmentId,
-  //   problemName: '',
-  //   maxScore: 0,
-  // })
+  
 
-  const [textModal, setTextModal] = useState(false)
-  const handleCloseTextModal = () => {setTextModal(false)}
+  const [textModal, setTextModal] = useState(false);
+  const handleCloseTextModal = () => {
+    setTextModal(false)
+    fetchAssignmentProblems()
+  }
   const [codeModal, setCodeModal] = useState(false);
-  const handleCloseCodeModal = () => {setCodeModal(false)};
+  const handleCloseCodeModal = () => {
+    setCodeModal(false)
+    fetchAssignmentProblems()
+  }  
   const [mcqModal, setMcqModal] = useState(false);
-  const handleCloseMcqModal = () => {setMcqModal(false)};
+  const handleCloseMcqModal = () => {
+    setMcqModal(false)
+    fetchAssignmentProblems()
+  }  
 
 
-  // const handleAddProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const key = e.target.id
-  //   setAddProblemForm(prevState => ({ ...prevState, [key]: value }))
-  // }
-  // const handleAddProblem = () => {
-  //   RequestService.post(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`, addProblemForm)
-  //     .then(() => {
-  //       setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' })
-  //       setAddProblemModal(false)
-  //       setAddProblemForm({
-  //         assignmentId: currentAssignmentId,
-  //         problemName: '',
-  //         maxScore: 0,
-  //       })
-  //       fetchAssignmentProblems()
-  //   })
-  // }
 
   const handleDeleteProblem = (problemId: number) => {
   //  const idsToDelete = nonContainerAutograders.filter(ncag => ncag.)
@@ -255,20 +233,50 @@ const AssignmentUpdatePage = () => {
     })
   }
 
+  const handleChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
+    const key = e.target.id
+    const newInvalidFields = removeClassFromField(invalidFields, key)
+    setInvalidFields(newInvalidFields)
+
+    setFormData(prevState => ({ ...prevState, [key]: value }))
+  }
+
+  const handleProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
+    const key = e.target.id
+    setAssignmentProblemData(prevState => ({ ...prevState, [key]: value }))
+  }
+
+  const handleCategoryChange = (value: Option<String>)  => {
+    setFormData(prevState => ({ ...prevState, categoryName: value.label }))
+    setCurrentCategory(value)
+  };
+
+  const handleCategoryCreate = (value: string)  => {
+    const newOption : Option = {value: value, label: value}
+    setAllCategoryOptions(prevState => {
+      const newArr: Option<String>[] = (prevState);
+      newArr.push(newOption);
+      return newArr;
+    })
+    setFormData(prevState => ({ ...prevState, categoryName: value }))
+    setCurrentCategory(newOption)
+    };
+
   
   return (
     <>
       <ContainerAutoGraderModal open={containerAutoGraderModal} onClose={handleCloseContainerAutoGraderModal} />
 
-      <PageWrapper>
-      <Dialog open={openEditModal} onClose={handleCloseModal}>
+    <PageWrapper>
+
+      <Dialog open={openEditModal} onClose={handleCloseEditModal}>
         <DialogContent sx={{bgcolor:theme.listItemBackground}}>
         <h3 className={styles.header}>Edit Problem</h3>
           <TextField id="problemName" label={'Problem Name'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.problemName : ''}/>
           <TextField id="maxScore" label={'Max Score'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.maxScore.toString() : ''}/>
           <DialogActions>
             <Button onClick={handleProblemUpdate}>Save</Button>
-            <Button onClick={handleCloseModal}>Close</Button>
+            <Button onClick={handleCloseEditModal}>Close</Button>
           </DialogActions>
         </DialogContent>
       </Dialog>
@@ -288,12 +296,12 @@ const AssignmentUpdatePage = () => {
           <div className={styles.textFieldContainer}>
             <div>
               <div className={styles.textFieldHeader}>Assignment Category: </div>
-              <TextField id="categoryName" onChange={handleChange}
-                      invalidated={!!invalidFields.get('categoryName')}
-                      className={styles.textField}
-                      helpText={invalidFields.get('categoryName')}
-                      value={formData.categoryName} 
-                      sx={{width: '100%'}}/>
+              <TextDropdown onChange={handleCategoryChange}
+                      onCreate={handleCategoryCreate}
+                      options={categoryOptions}
+                      value={currentCategory}
+                      defaultOption={currentCategory}
+                      />
             </div>
             <div>
               <div className={styles.textFieldHeader}>Assignment Name: </div>
@@ -332,7 +340,7 @@ const AssignmentUpdatePage = () => {
                         sx={{width: '100%', marginLeft : 1/10}}/>
             </div>
             <div>
-              <div className={styles.textFieldHeader}>Max File Size: </div>
+              <div className={styles.textFieldHeader}>Max File Size (kb): </div>
               <TextField id="maxFileSize" onChange={handleChange}
                         invalidated={!!invalidFields.get('maxFileSize')}
                         className={styles.textField}
@@ -377,8 +385,8 @@ const AssignmentUpdatePage = () => {
         <h2 className={styles.header}>Add Problems</h2>
           <div className={styles.buttonContainer}>
           <Button onClick={() => setCodeModal(true)} className='btnSecondary'>Code/File Input</Button>
-            <Button onClick={() => {setTextModal(true)}} className='btnSecondary'>Text Input</Button>
-            <Button onClick={() => {setMcqModal(true)}} className='btnSecondary'>Multiple Choice</Button>
+            <Button onClick={() => setTextModal(true)} className='btnSecondary'>Text Input</Button>
+            <Button onClick={() => setMcqModal(true)} className='btnSecondary'>Multiple Choice</Button>
           </div>
           <h2 className={styles.header}>Add Graders</h2>
           <div className={styles.buttonContainer}>
@@ -413,7 +421,7 @@ const AssignmentUpdatePage = () => {
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
-            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>Save and Exit</Button>
+      <Button onClick={handleAssignmentUpdate} className='btnPrimary'>Save & Exit</Button>
       </div>
       </PageWrapper>
     </>

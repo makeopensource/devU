@@ -6,7 +6,6 @@
   font-weight: 600;
   margin: 0;
   padding: 15px;
-  /* Add padding to the text inside the name block */
   background: $primary;
   width: 100%;
   text-align: center;
@@ -33,12 +32,12 @@
   text-overflow: ellipsis;
   overflow-wrap: break-word;
   border-bottom: 1px solid #ddd;
-
 }
 
 .Buttons {
   display: flex;
   justify-content: center;
+  cursor: default;
   margin-top: auto;
   padding: 15px;
   gap: 20px;

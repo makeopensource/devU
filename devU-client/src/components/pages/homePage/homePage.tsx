@@ -29,6 +29,7 @@ const HomePage = () => {
 
     const handleCloseModal = () => {
         setOpenModal(false);
+        fetchData()
     };
 
     const fetchData = async () => {

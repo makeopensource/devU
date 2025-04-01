@@ -35,7 +35,7 @@ const Modal = ({ title, children, buttonAction, open, onClose, isSubmittable }: 
             }}>
             <div className='modal-header'>
                 <h3> {title} </h3>
-                <button onClick={onClose} aria-label='close' title='close'>✕</button>
+                <button onClick={onClose} aria-label='close' title='close' style={{fontWeight:'700px', background: 'none'}}>✕</button>
             </div>
             {children}
             <button onClick={buttonAction} disabled={isSubmittable ? !isSubmittable() : false} className='btnPrimary modalAction'>{title}</button>

@@ -40,6 +40,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
     if (!meta || !meta.type){
         return (
         <div className={styles.problem}>
+            <span>Metadata missing, error!</span>
         </div>)
     }
 
