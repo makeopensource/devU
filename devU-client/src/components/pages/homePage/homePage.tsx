@@ -89,7 +89,7 @@ const HomePage = () => {
                         // history.push(`/addCoursesForm`);
                         setOpenModal(true);
                     }}>Create Course</button>
-                    <button className='btnSecondary' id='joinCoursBtn' onClick={() => {
+                    <button className='btnPrimary' id='joinCoursBtn' onClick={() => {
                         history.push(`/courses`);
                     }}>Join Course</button>
                 </div>
