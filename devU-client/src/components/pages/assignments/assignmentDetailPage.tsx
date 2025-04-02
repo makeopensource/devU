@@ -68,8 +68,6 @@ const AssignmentDetailPage = () => {
             const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
             setAssignmentProblems(assignmentProblemsReq)
 
-            console.log("ASSIGNMENT PROBLEMS:", assignmentProblemsReq)
-
             const submissionsReq = await RequestService.get<Submission[]>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/`)
             submissionsReq.sort((a, b) => (Date.parse(b.createdAt ?? '') - Date.parse(a.createdAt ?? '')))
             setSubmissions(submissionsReq)
@@ -106,7 +104,6 @@ const AssignmentDetailPage = () => {
     if (error) return <ErrorPage error={error} />
 
     const handleChange = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e)
         console.log(value)
         const key = e.target.id
         setFormData(prevState => ({ ...prevState, [key]: e.target.value }))

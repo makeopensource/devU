@@ -26,6 +26,7 @@ const SubmissionDetailPage = () => {
         try {
             const submissionScore = (await RequestService.get<SubmissionScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores?submission=${submissionId}`)).pop() ?? null
             setSubmissionScore(submissionScore)
+            console.log("SUBMISSION SCORE:", submissionScore)
 
             const submission = await RequestService.get<Submission>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/${submissionId}`);
             // setSubmission(submission);
@@ -33,12 +34,25 @@ const SubmissionDetailPage = () => {
 
             const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores/submission/${submissionId}`)
             setSubmissionProblemScores(submissionProblemScores)
+            console.log("SUBMISSION PROBLEM SCORE:", submissionProblemScores)
 
             const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${submission.assignmentId}`)
             setAssignment(assignment)
 
             const assignmentProblems = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignment.id}/assignment-problems`)
             setAssignmentProblems(assignmentProblems)
+
+            // GET INSTRUCTOR FEEDBACK if different from autograder
+            // const submissionFeedback = submissionScore?.feedback
+
+            // for each item in submissionProblemScores, append item.feedback to problemFeedback array
+            let problemFeedbackArr = [];
+            submissionProblemScores.forEach(item => {
+                problemFeedbackArr.push(item.feedback)
+            })
+
+            
+
         } catch (error: any) {
             setError(error)
         } finally {
