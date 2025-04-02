@@ -49,7 +49,6 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
     if (type == "Text") {
         return (
         <div key={problem.id} className={styles.problem}>
-            <div>{type}</div>
             <h4 className={styles.problem_header}>{problem.problemName}</h4>
             <input className={styles.textField}
                 type='text'
@@ -67,7 +66,6 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
         }
         return (
             <div key={problem.id} className={styles.problem}>
-                            <div>{type}</div>
                 <h4 className={styles.problem_header}>{problem.problemName}</h4>
                 {Object.keys(options).map((key : string) => (
                     <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>

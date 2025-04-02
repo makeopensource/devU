@@ -7,7 +7,6 @@ import RequestService from 'services/request.service';
 import styles from './coursesListPage.scss';
 import { useAppSelector, useActionless } from "../../../../redux/hooks";
 import { SET_ALERT } from "../../../../redux/types/active.types";
-import Button from '@mui/material/Button';
 import { useHistory } from "react-router-dom";
 
 const UserCoursesListPage = () => {
@@ -85,7 +84,7 @@ const UserCoursesListPage = () => {
     return (
         <PageWrapper>
             <div className={styles.coursesListPage}>
-                <h1 className={styles.pageTitle}>Join Course</h1>
+                <h2 className={styles.pageTitle}>Join Course</h2>
                 <div className={styles.searchSection}>
                     <input
                         type="text"
@@ -93,10 +92,10 @@ const UserCoursesListPage = () => {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
-                    <button className={styles.searchButton}>Search</button>
-                    <button className={styles.joinWithCodeButton} onClick={() => history.push("/join-course")}>
+                    <button className='btnPrimary'>Search</button>
+                    <button className={`btnSecondary ${styles.far_button}`} onClick={() => history.push("/join-course")}>
                         Join with Code
-                        </button>
+                    </button>
 
                 </div>
 
@@ -121,14 +120,14 @@ const UserCoursesListPage = () => {
                                         {/* <td>{course.instructor}</td> */}
                                         <td>{course.semester}</td> 
                                         <td>
-                                            <Button 
-                                                variant="contained"
-                                                className={styles.joinButton}
+                                            <button 
+                                                className='btnPrimary'
+                                                style={{width: "100%"}} 
                                                 onClick={() => course.id !== undefined && handleJoinCourse(course.id)}
                                                 disabled={joinedCourses.has(course.id ?? -1)} // ✅ Fix: Prevents undefined issues
                                             >
                                                 {joinedCourses.has(course.id ?? -1) ? "Joined" : "Join Course"}
-                                            </Button>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))
