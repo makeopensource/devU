@@ -229,7 +229,7 @@ const AssignmentDetailPage = () => {
                 
                 <div className={styles.file_upload}>
                     <h4 className={styles.problem_header}>File Upload:</h4>
-                    <DragDropFile handleFile={}} />
+                    <DragDropFile handleFile={(e) => {console.log(e)}} />
                 </div>
 
                 <div className={styles.problems_list}>
