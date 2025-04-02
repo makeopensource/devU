@@ -49,7 +49,14 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
 
     const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setStartDate(e.target.value) }
     const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setEndDate(e.target.value) }
-    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setDueDate(e.target.value) }
+    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+        setDueDate(e.target.value) 
+        
+        // automatically set end date
+        if (!endDate) {
+            setEndDate(e.target.value)
+        }
+    }
 
     const handleSubmit = () => {
         const finalFormData = {
@@ -140,7 +147,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 <div>
                     <label htmlFor="end_date">End Date:<span>(optional)</span></label>
                     <br />
-                    <input type='date' id="end_date" onChange={handleEndDateChange} />
+                    <input type='date' id="end_date" value={endDate} onChange={handleEndDateChange} />
                 </div>
             </div>
             <label htmlFor="disableHandins">Disable Submissions?<input type="checkbox" id="disableHandins" /></label>
