@@ -5,9 +5,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import RequestService from 'services/request.service'
 import { useActionless } from 'redux/hooks'
-// import TextField from 'components/shared/inputs/textField'
-// import Button from '../../../shared/inputs/button'
-// import DragDropFile from 'components/utils/dragDropFile'
 
 import { SET_ALERT } from 'redux/types/active.types'
 
