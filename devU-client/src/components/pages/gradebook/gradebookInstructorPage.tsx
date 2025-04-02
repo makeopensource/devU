@@ -6,7 +6,6 @@ import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from '../errorPage/errorPage'
 import FaIcon from 'components/shared/icons/faIcon'
-import Select, {Styles, GroupTypeBase} from 'react-select'
 
 
 import RequestService from 'services/request.service'
@@ -15,44 +14,7 @@ import styles from './gradebookInstructorPage.scss'
 import { useParams, useHistory } from 'react-router-dom'
 
 import TextField from 'components/shared/inputs/textField'
-import { Option } from 'components/shared/inputs/dropdown'
-
-
-const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
-    menu: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--background)', 
-        border: '2px solid #ddd',
-        borderRadius: '10px'
-    }),
-    
-    input: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--input-field-background)',
-        borderRadius: '20px',
-        color: 'var(--text-color)', 
-        }),
-
-    placeholder: (provided) => ({ ...provided,
-        fontStyle:'italic',
-        color: '#9c9c9c',
-        margin: '0'
-    }),
-    control: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--input-field-background)', cursor: 'pointer',
-        borderRadius: '20px', padding: '10px',
-        border: 'none'}),
-
-    singleValue: (provided) => ({ ...provided, 
-        color: 'var(--text-color)', 
-    }),
-    
-    option: (provided) => ({
-      ...provided,
-      cursor: 'pointer',
-      color: 'var(--color)', 
-      background: 'none',
-      borderBottom: '1px solid #ddd'
-    }),
-  }
+import Dropdown, { Option } from 'components/shared/inputs/dropdown'
 
 type TableProps = {
     users: User[]
@@ -168,7 +130,6 @@ const GradebookInstructorPage = () => {
         
         setAllCategoryOptions(options);
     }
-        
         , [assignments])
 
     const fetchData = async () => {
@@ -214,7 +175,7 @@ const GradebookInstructorPage = () => {
 
     };
 
-    const handleCategoryChange = (value:Option)  => {
+    const handleCategoryChange = (value:Option<String>)  => {
         if(!value){
             setDisplayedAssignments(assignments)
             return;
@@ -262,17 +223,11 @@ const GradebookInstructorPage = () => {
                         id='name'
                         placeholder='Search students'
                     />
-                    <Select
+                    <Dropdown
                     className={styles.dropdown}
                     options={categoryOptions}
-                    styles={customStyles}
-                    components={{
-                        IndicatorSeparator: () => null
-                      }}
-                    placeholder="Assignment Category"
-                    isClearable={true}
-                    onChange={handleCategoryChange}
-                /> 
+                    onChange={handleCategoryChange}/>
+                    
             </div>
             <div className={styles.tableContainer}>
                 <GradebookTable

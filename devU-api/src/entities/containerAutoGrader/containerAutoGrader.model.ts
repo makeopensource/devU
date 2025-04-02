@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  Check,
 } from 'typeorm'
 
 import AssignmentModel from '../assignment/assignment.model'
@@ -22,21 +23,30 @@ export default class ContainerAutoGraderModel {
    *  schemas:
    *    ContainerAutoGrader:
    *      type: object
-   *      required: [assignmentId, autogradingImage, timeout, graderFile]
+   *      required: [assignmentId, dockerfileId, timeoutInSeconds, jobFileIds]
    *      properties:
    *        assignmentId:
    *          type: integer
-   *        autogradingImage:
+   *        dockerfileId:
    *          type: string
-   *        timeout:
+   *          description: MinIO object ID for the uploaded Dockerfile
+   *        jobFileIds:
+   *          type: array
+   *          items:
+   *            type: string
+   *          description: List of MinIO object IDs for uploaded job files
+   *        timeoutInSeconds:
    *          type: integer
-   *          description: Must be a positive integer
-   *        graderFile:
+   *          description: Must be a positive integer greater than 0
+   *        pidLimit:
+   *          type: integer
+   *          description: Maximum number of processes allowed in the container
+   *        entryCmd:
    *          type: string
-   *          format: binary
-   *        makefileFile:
-   *          type: string
-   *          format: binary
+   *          description: Custom entry command for the container
+   *        autolabCompatible:
+   *          type: boolean
+   *          description: Whether the container is compatible with autolab mode
    */
 
   @PrimaryGeneratedColumn()
@@ -56,16 +66,28 @@ export default class ContainerAutoGraderModel {
   @ManyToOne(() => AssignmentModel)
   assignmentId: number
 
-  @Column({ name: 'grader_filename', length: 128 })
-  graderFile: string
+  @Column({ name: 'dockerfile_id', length: 512 })
+  dockerfileId: string
 
-  @Column({ name: 'makefile_filename', type: 'text', nullable: true })
-  makefileFile: string | null
+  @Column({ name: 'job_file_ids', type: 'jsonb', nullable: false, default: [] })
+  jobFileIds: string[]
 
-  @Column({ name: 'autograding_image' })
-  autogradingImage: string
+  @Column({ name: 'timeout_in_seconds' })
+  @Check('timeout_in_seconds > 0')
+  timeoutInSeconds: number
 
-  // timeout should be positive integer
-  @Column({ name: 'timeout' })
-  timeout: number
+  @Column({ name: 'memory_limit_mb', default: 512 })
+  memoryLimitMB: number
+
+  @Column({ name: 'cpu_cores', default: 1 })
+  cpuCores: number
+
+  @Column({ name: 'pid_limit', default: 100 })
+  pidLimit: number
+
+  @Column({ name: 'entry_cmd', nullable: true })
+  entryCmd?: string
+
+  @Column({ name: 'autolab_compatible', default: true })
+  autolabCompatible: boolean
 }

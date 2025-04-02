@@ -1,129 +1,264 @@
-import { IsNull } from 'typeorm'
-import { dataSource } from '../../database'
-
-import { ContainerAutoGrader, FileUpload } from 'devu-shared-modules'
-
+import { IsNull, UpdateResult } from 'typeorm'
 import ContainerAutoGraderModel from './containerAutoGrader.model'
-import FileModel from '../../fileUpload/fileUpload.model'
-
-import { downloadFile, uploadFile } from '../../fileStorage'
+import { dataSource } from '../../database'
+import { downloadFile, initializeMinio, uploadFile } from '../../fileStorage'
 import { generateFilename } from '../../utils/fileUpload.utils'
+import fs from 'fs'
+import path from 'path'
+import FileModel from '../../fileUpload/fileUpload.model'
+import { Blob } from 'node:buffer'
 
 const connect = () => dataSource.getRepository(ContainerAutoGraderModel)
 const fileConn = () => dataSource.getRepository(FileModel)
 
-async function filesUpload(
+// Load default Dockerfile
+const defaultDockerfile = fs.readFileSync(
+  path.join(__dirname, 'defaultDockerfile.txt'),
+  'utf8',
+)
+
+export interface FileWithMetadata {
+  originalName: string
+  blob: Buffer
+  contentType: string
+}
+
+export interface ContainerAutoGraderWithFiles {
+  model: ContainerAutoGraderModel
+  files: {
+    dockerfile: FileWithMetadata
+    jobFiles: FileWithMetadata[]
+  }
+}
+
+async function uploadToMinIO(
   bucket: string,
   file: Express.Multer.File,
-  containerAutoGrader: ContainerAutoGrader,
-  filename: string,
-  userId: number
-) {
-  const Etag: string = await uploadFile(bucket, file, filename)
-  const assignmentId = containerAutoGrader.assignmentId
+  assignmentId: number,
+  userId: number,
+): Promise<string> {
+  await initializeMinio(bucket)
 
-  const fileModel: FileUpload = {
-    etags: Etag,
+  const filename = generateFilename(file.originalname, userId)
+  const etag = await uploadFile(bucket, file, filename)
+  const fileModel = <FileModel>{
+    etag: etag,
     fieldName: bucket,
-    originalName: file.originalname,
+    name: file.originalname,
+    type: file.mimetype,
     filename: filename,
     assignmentId: assignmentId,
+    courseId: 1, // TODO: Update this when course management is implemented
+    userId: userId,
   }
-  //TODO: This is a temporary fix to get the function to pass. CourseId should be modified in the future
-  fileModel.courseId = 1
-  fileModel.userId = userId
 
   await fileConn().save(fileModel)
+  return filename
+}
 
-  return Etag
+async function uploadDefaultDockerfile(assignmentId: number, userId: number): Promise<string> {
+  // Create a buffer from the default Dockerfile content
+  const buffer = Buffer.from(defaultDockerfile)
+
+  // Create a mock file object that matches Express.Multer.File interface
+  const mockFile: Express.Multer.File = {
+    fieldname: 'dockerfile',
+    originalname: 'Dockerfile',
+    mimetype: 'text/plain',
+    filename: 'Dockerfile',
+    buffer,
+    size: buffer.length,
+    stream: null as any,
+    encoding: '',
+    destination: '',
+    path: '',
+  }
+
+  // Upload the default Dockerfile to MinIO
+  return await uploadToMinIO('dockerfiles', mockFile, assignmentId, userId)
+}
+
+async function getFileWithMetadata(bucket: string, fileId: string): Promise<FileWithMetadata> {
+  // Get file metadata from database
+  const fileMetadata = await fileConn().findOneByOrFail({ filename: fileId })
+
+  // Download file content
+  const blob = await downloadFile(bucket, fileId)
+
+  return {
+    originalName: fileMetadata.name,
+    blob,
+    contentType: fileMetadata.type || 'application/octet-stream',
+  }
 }
 
 export async function create(
-  containerAutoGrader: ContainerAutoGrader,
-  graderInputFile: Express.Multer.File,
-  makefileInputFile: Express.Multer.File | null = null,
-  userId: number
-) {
-  const existingContainerAutoGrader = await connect().findOneBy({
-    assignmentId: containerAutoGrader.assignmentId,
-    deletedAt: IsNull(),
-  })
-  if (existingContainerAutoGrader)
-    throw new Error(
-      'Container Auto Grader already exists for this assignment, please update instead of creating a new one'
-    )
-  const bucket: string = 'graders'
-  const filename: string = generateFilename(graderInputFile.originalname, userId)
-  await filesUpload(bucket, graderInputFile, containerAutoGrader, filename, userId)
-  containerAutoGrader.graderFile = filename
+  requestBody: Pick<ContainerAutoGraderModel, 'assignmentId' | 'timeoutInSeconds' | 'memoryLimitMB' | 'cpuCores' | 'pidLimit' | 'entryCmd' | 'autolabCompatible'>,
+  dockerfileInput: Express.Multer.File | null,
+  jobFileInputs: Express.Multer.File[],
+  userId: number,
+): Promise<ContainerAutoGraderModel> {
+  // Upload Dockerfile to MinIO (use default if none provided)
+  const dockerfileId = dockerfileInput
+    ? await uploadToMinIO('dockerfiles', dockerfileInput, requestBody.assignmentId, userId)
+    : await uploadDefaultDockerfile(requestBody.assignmentId, userId)
 
-  if (makefileInputFile) {
-    const bucket: string = 'makefiles'
-    const makefileFilename: string = generateFilename(makefileInputFile.originalname, userId)
-    await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename, userId)
-    containerAutoGrader.makefileFile = makefileFilename
+  // Upload all job files to MinIO
+  const jobFileIds = await Promise.all(
+    jobFileInputs.map(jobFile => uploadToMinIO('jobfiles', jobFile, requestBody.assignmentId, userId)),
+  )
+
+  // Create container auto grader
+  const newContainerAutoGrader = {
+    assignmentId: requestBody.assignmentId,
+    dockerfileId: dockerfileId,
+    jobFileIds: jobFileIds,
+    timeoutInSeconds: requestBody.timeoutInSeconds,
+    memoryLimitMB: requestBody.memoryLimitMB,
+    cpuCores: requestBody.cpuCores,
+    pidLimit: requestBody.pidLimit,
+    entryCmd: requestBody.entryCmd,
+    autolabCompatible: requestBody.autolabCompatible ?? true,
   }
 
-  const { id, assignmentId, graderFile, makefileFile, autogradingImage, timeout } = containerAutoGrader
-  return await connect().save({ id, assignmentId, graderFile, makefileFile, autogradingImage, timeout })
+  return await connect().save(newContainerAutoGrader)
 }
 
 export async function update(
-  containerAutoGrader: ContainerAutoGrader,
-  graderInputFile: Express.Multer.File | null = null,
-  makefileInputFile: Express.Multer.File | null = null,
-  userId: number
-) {
-  if (!containerAutoGrader.id) throw new Error('Missing Id')
-  if (graderInputFile) {
-    const bucket: string = 'graders'
-    const filename: string = generateFilename(graderInputFile.originalname, userId)
-    await filesUpload(bucket, graderInputFile, containerAutoGrader, filename, userId)
-    containerAutoGrader.graderFile = filename
+  requestBody: Partial<ContainerAutoGraderModel>,
+  dockerfileInput: Express.Multer.File | null,
+  jobFileInputs: Express.Multer.File[] | null,
+  userId: number,
+): Promise<UpdateResult> {
+  const containerAutoGrader = await connect().findOneBy({
+    id: requestBody.id,
+    deletedAt: IsNull(),
+  })
+
+  if (!containerAutoGrader) {
+    throw new Error('Container Auto Grader not found')
   }
 
-  if (makefileInputFile) {
-    const bucket: string = 'makefiles'
-    const makefileFilename: string = generateFilename(makefileInputFile.originalname, userId)
-    await filesUpload(bucket, makefileInputFile, containerAutoGrader, makefileFilename, userId)
-    containerAutoGrader.makefileFile = makefileFilename
+  // Update Dockerfile if provided
+  if (dockerfileInput) {
+    containerAutoGrader.dockerfileId = await uploadToMinIO('dockerfiles', dockerfileInput, containerAutoGrader.assignmentId!, userId)
   }
 
-  const { id, assignmentId, graderFile, makefileFile, autogradingImage, timeout } = containerAutoGrader
-  return await connect().update(id, { assignmentId, graderFile, makefileFile, autogradingImage, timeout })
+  // Update job files if provided
+  if (jobFileInputs) {
+    containerAutoGrader.jobFileIds = await Promise.all(
+      jobFileInputs.map(jobFile => uploadToMinIO('jobfiles', jobFile, containerAutoGrader.assignmentId!, userId)),
+    )
+  }
+
+  // Update other fields if provided
+  if (requestBody.assignmentId) {
+    containerAutoGrader.assignmentId = requestBody.assignmentId
+  }
+  if (requestBody.timeoutInSeconds) {
+    containerAutoGrader.timeoutInSeconds = requestBody.timeoutInSeconds
+  }
+  if (requestBody.memoryLimitMB) {
+    containerAutoGrader.memoryLimitMB = requestBody.memoryLimitMB
+  }
+  if (requestBody.cpuCores) {
+    containerAutoGrader.cpuCores = requestBody.cpuCores
+  }
+  if (requestBody.pidLimit) {
+    containerAutoGrader.pidLimit = requestBody.pidLimit
+  }
+  if (requestBody.entryCmd !== undefined) {
+    containerAutoGrader.entryCmd = requestBody.entryCmd
+  }
+  if (requestBody.autolabCompatible !== undefined) {
+    containerAutoGrader.autolabCompatible = requestBody.autolabCompatible
+  }
+
+  // Ensure there is at least one job file
+  if (containerAutoGrader.jobFileIds.length === 0) {
+    throw new Error('Container Auto Grader must have at least one job file')
+  }
+
+  return await connect().update(
+    { id: requestBody.id },
+    {
+      assignmentId: containerAutoGrader.assignmentId,
+      timeoutInSeconds: containerAutoGrader.timeoutInSeconds,
+      dockerfileId: containerAutoGrader.dockerfileId,
+      jobFileIds: containerAutoGrader.jobFileIds,
+      memoryLimitMB: containerAutoGrader.memoryLimitMB,
+      cpuCores: containerAutoGrader.cpuCores,
+      pidLimit: containerAutoGrader.pidLimit,
+      entryCmd: containerAutoGrader.entryCmd,
+      autolabCompatible: containerAutoGrader.autolabCompatible,
+      updatedAt: new Date(),
+    },
+  )
 }
 
-export async function _delete(id: number) {
+export async function _delete(id: number): Promise<UpdateResult> {
   return await connect().softDelete({ id, deletedAt: IsNull() })
 }
 
-export async function retrieve(id: number) {
-  return await connect().findOneBy({ id, deletedAt: IsNull() })
+export async function retrieve(id: number): Promise<ContainerAutoGraderWithFiles> {
+  const containerAutoGrader = await connect().findOneBy({
+    id,
+    deletedAt: IsNull(),
+  })
+
+  if (!containerAutoGrader) {
+    throw new Error('Container Auto Grader not found')
+  }
+
+  // Download Dockerfile and job files from MinIO with metadata
+  const dockerfile = await getFileWithMetadata('dockerfiles', containerAutoGrader.dockerfileId)
+  const jobFiles = await Promise.all(
+    containerAutoGrader.jobFileIds.map(jobFileId => getFileWithMetadata('jobfiles', jobFileId)),
+  )
+
+  return {
+    model: containerAutoGrader,
+    files: {
+      dockerfile,
+      jobFiles,
+    },
+  }
 }
 
-export async function list() {
-  return await connect().findBy({ deletedAt: IsNull() })
+export async function list(): Promise<ContainerAutoGraderModel[]> {
+  return await connect().find({ where: { deletedAt: IsNull() } })
 }
 
-export async function getAllGradersByAssignment(assignmentId: number) {
-  return await connect().findBy({ assignmentId: assignmentId, deletedAt: IsNull() })
+export async function getAllGradersByAssignment(assignmentId: number): Promise<ContainerAutoGraderModel[]> {
+  return await connect().find({ where: { assignmentId, deletedAt: IsNull() } })
 }
 
 export async function loadGrader(assignmentId: number) {
-  const containerAutoGraders = await connect().findOneBy({ assignmentId: assignmentId, deletedAt: IsNull() })
-  if (!containerAutoGraders) return { graderData: null, makefileData: null, autogradingImage: null, timeout: null }
-
-  const { graderFile, makefileFile, autogradingImage, timeout } = containerAutoGraders
-  const graderData = await downloadFile('graders', graderFile)
-  let makefileData
-
-  if (makefileFile) {
-    makefileData = await downloadFile('makefiles', makefileFile)
-  } else {
-    makefileData = await downloadFile('makefiles', 'defaultMakefile') // Put actual default makefile name here
+  const containerAutoGrader = await connect().findOneBy({
+    assignmentId,
+    deletedAt: IsNull(),
+  })
+  if (!containerAutoGrader) {
+    throw new Error('Container Auto Grader not found')
   }
 
-  return { graderData, makefileData, autogradingImage, timeout }
+  // Get Dockerfile and job files metadata and content from MinIO
+  const dockerfileData = await getFileWithMetadata('dockerfiles', containerAutoGrader.dockerfileId)
+  const jobFilesData = await Promise.all(
+    containerAutoGrader.jobFileIds.map(jobFileId => getFileWithMetadata('jobfiles', jobFileId)),
+  )
+
+  return {
+    dockerfile: {
+      blob: new Blob([dockerfileData.blob], { type: dockerfileData.contentType }),
+      filename: dockerfileData.originalName,
+    },
+    jobFiles: jobFilesData.map(file => ({
+      blob: new Blob([file.blob], { type: file.contentType }),
+      filename: file.originalName,
+    })),
+    containerAutoGrader,
+  }
 }
 
 export default {
@@ -132,6 +267,6 @@ export default {
   update,
   _delete,
   list,
-  loadGrader,
   getAllGradersByAssignment,
+  loadGrader,
 }

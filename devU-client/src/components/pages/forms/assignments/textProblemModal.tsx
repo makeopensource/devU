@@ -27,7 +27,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         else {return true}
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // early return if form not fully filled out
         if (!submittable) { return }
 
@@ -54,7 +54,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
             
         }
 
-        RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
+        await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
             .then(() => {
                 console.log("PROBLEM CREATED");
                 setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' });
@@ -65,7 +65,7 @@ const TextProblemModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message })
             })
 
-        RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
+        await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
             .then(() => {
                 console.log("GRADER CREATED")
             })
