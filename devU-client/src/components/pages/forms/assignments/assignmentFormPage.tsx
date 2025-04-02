@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-// import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { ExpressValidationError } from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
-// import PageWrapper from 'components/shared/layouts/pageWrapper'
 
 import RequestService from 'services/request.service'
 import { useActionless } from 'redux/hooks'
@@ -29,6 +28,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
     const [endDate, setEndDate] = useState('')
     const [dueDate, setDueDate] = useState('')
     const [startDate, setStartDate] = useState('')
+    const history = useHistory()
 
     const [formData, setFormData] = useState({
         courseId: courseId,
@@ -82,12 +82,10 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
 
 
         RequestService.postMultipart(`/api/course/${courseId}/assignments/`, multipart)
-            .then(() => {
+            .then((response) => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
-                // Navigate to the update page for the new assignment
-                // navigate(`/course/${courseId}/assignment/${response.id}/update`);
-                // history.goBack()
                 onClose();
+                history.push(`/course/${courseId}/assignment/${response.id}/update`);
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -96,10 +94,6 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
 
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-            .finally(() => {
-
-            })
-
     }
 
 
