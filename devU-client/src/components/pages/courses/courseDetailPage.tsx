@@ -108,6 +108,12 @@ const CourseDetailPage = () => {
                                         history.push(`/course/${courseId}/gradebook`)
                                     }}>Gradebook
                                     </button>
+                                
+                                    <button className='btnSecondary' onClick={() => {
+                                        role.isInstructor() ? history.push(`/course/${courseId}/attendance/instructor`) : 
+                                        history.push(`/course/${courseId}/attendance`)
+                                    }}> Attendance
+                                    </button>
                                 </div>
                                 <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
                             </div>

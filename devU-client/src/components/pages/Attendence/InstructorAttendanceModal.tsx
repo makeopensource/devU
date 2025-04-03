@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'components/shared/layouts/modal';
-import './attendancePage.scss'; // using same styles as assignment modal
+import './attendancePage.scss';
 
 interface Props {
   open: boolean;
@@ -22,7 +22,7 @@ const InstructorAttendanceModal: React.FC<Props> = ({ open, onClose }) => {
   const handleSubmit = () => {
     const attendanceData = { course, date, code, duration, description };
     console.log('Submitting attendance:', attendanceData);
-    onClose(); // close modal after submit
+    onClose();
   };
 
   return (
