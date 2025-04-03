@@ -152,6 +152,15 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
         setOptions(prevState => ({...prevState, [index]: ''}))
     }
 
+    const decreaseOptions = () => { //fix this
+        const newState = {}
+        const oldKeys = Object.keys(options)
+        for (let i = 0; i < Object.keys(options).length - 1; i++){
+            newState[oldKeys.at(i)] = 
+        }
+
+    }
+
 
     const switchBoxType = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newState = e.target.checked
@@ -186,10 +195,9 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
                     <div>
                         <button 
                         className={`${styles.btn} ${styles.addButton}`} 
-                        id='add'
                         onClick={increaseOptions}
                         disabled={Object.keys(options).length >= 5}>+</button>
-                        <button className={`${styles.btn} ${styles.subtractButton}`} id='subtract'>-</button>
+                        <button className={`${styles.btn} ${styles.subtractButton}`}>-</button>
                     </div>
                 </div>
                 

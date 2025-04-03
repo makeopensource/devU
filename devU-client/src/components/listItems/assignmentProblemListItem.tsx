@@ -74,8 +74,10 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                         value={key}
                         onChange={handleChange} 
                         disabled={disabled ?? false}/> {options[key]}
-
-                        <span className={styles.checkbox}><FaIcon icon='check' className={styles.checkboxCheck}/></span>{/* custom checkbox */}
+                        
+                        <span className={styles.checkbox}>
+                                <FaIcon icon='check' className={styles.checkboxCheck}/>
+                        </span>{/* custom checkbox */}
                     </label>))}
             </div>)
     } else if(type == "MCQ-single") {
