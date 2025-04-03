@@ -76,7 +76,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                         disabled={disabled ?? false}/> {options[key]}
                         
                         <span className={styles.checkbox}>
-                                <FaIcon icon='check' className={styles.checkboxCheck}/>
+                             <FaIcon icon='check' className={styles.checkboxCheck}/>
                         </span>{/* custom checkbox */}
                     </label>))}
             </div>)
@@ -92,7 +92,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                     <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>
                         <input id={problem.problemName} 
                         type='radio' 
-                        name='correct'
+                        name={`${problem.id}_answer`}
                         value={key}
                         onChange={handleChange} 
                         disabled={disabled ?? false}/> {options[key]}
