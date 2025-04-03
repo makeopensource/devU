@@ -5,7 +5,7 @@ import { SET_ALERT } from 'redux/types/active.types';
 import { useActionless } from 'redux/hooks';
 import RequestService from 'services/request.service';
 import Modal from 'components/shared/layouts/modal';
-import styles from './modal.module.scss';
+
 
 interface Props {
     open: boolean;
@@ -50,30 +50,37 @@ const AddProblemModal = ({ open, onClose }: Props) => {
     };
 
     return (
-        <Modal title="Add Problem" buttonAction={handleSubmit} open={open} onClose={onClose}>
-            <div className={styles.modalContainer}>
-                <label htmlFor="title" className={styles.inputLabel}>Problem Title:</label>
-                <input 
-                    type="text" 
-                    id="title" 
-                    className={styles.inputField} 
-                    placeholder="e.g. Application Objective 3" 
-                    onChange={handleChange} 
+    <Modal title="Add Problem" buttonAction={handleSubmit} open={open} onClose={onClose}>
+        <div className="text-problem-modal"> {/* Optional wrapper if needed */}
+            <div className="input-group">
+                <label htmlFor="title">Problem Title:</label>
+                <input
+                type="text"
+                id="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="e.g. Application Objective"
                 />
-
-                <label htmlFor="maxScore" className={styles.inputLabel}>Maximum Score:</label>
-                <input 
-                    type="number" 
-                    id="maxScore" 
-                    className={styles.inputField} 
-                    placeholder="10" 
-                    min="0" 
-                    onChange={handleChange} 
-                />
-
-                <button className={styles.submitButton} onClick={handleSubmit}>Add Problem</button>
             </div>
-        </Modal>
+            
+            <div className="input-group">
+                <label htmlFor="maxScore">Maximum Score:</label>
+                <input
+                type="number"
+                id="maxScore"
+                value={formData.maxScore}
+                onChange={handleChange}
+                placeholder="e.g. 10"
+                min="0"
+                />
+            </div>
+            
+            <button type="button" className="btn btnPrimary" onClick={handleSubmit}>
+                Add Problem
+            </button>
+        </div>
+    </Modal>
+
     );
 };
 

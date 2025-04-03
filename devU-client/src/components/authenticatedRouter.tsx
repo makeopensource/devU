@@ -22,6 +22,8 @@ import InstructorSubmissionspage from "./pages/submissions/InstructorSubmissions
 import SubmissionFileView from './pages/submissions/submissionFileView'
 import UserCoursesListPage from "./pages/listPages/courses/coursesListPage";
 import JoinCoursePage from "./pages/listPages/joinwithcodepage";
+import attendancePage from './pages/Attendence/attendancePage'
+import matchingTable from './pages/Multiplechoice/matchingTable'
 
 import WebhookURLForm from './pages/webhookURLForm'
 
@@ -47,6 +49,9 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/assignment/:assignmentId/createCAG' component={ContainerAutoGraderForm} />
         <Route exact path='/course/:courseId/assignment/:assignmentId/createProblem' component={AssignmentProblemFormPage} />
         <Route exact path='/course/:courseId/webhooks' component={WebhookURLForm} />
+        <Route path="/attendence" component={attendancePage} />
+        <Route path="/matchingTable" component={matchingTable} />
+
 
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId'
             component={SubmissionDetailPage} />
