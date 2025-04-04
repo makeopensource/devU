@@ -142,7 +142,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                     <input type='date' id="due_date" onChange={handleDueDateChange} />
                 </div>
                 <div>
-                    <label htmlFor="end_date">End Date:<span>(optional)</span></label>
+                    <label htmlFor="end_date">End Date:{/*<span>(optional)</span>*/}</label>
                     <br />
                     <input type='date' id="end_date" value={endDate} onChange={handleEndDateChange} />
                 </div>
