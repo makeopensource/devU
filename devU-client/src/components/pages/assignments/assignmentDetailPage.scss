@@ -55,7 +55,9 @@
 .problems_section{
     width: 100%;
     display: flex;
+    // justify-content: space-between;
     justify-content: center;
+    gap: 20px;
 }
 
 .options_section{
@@ -65,6 +67,10 @@
     gap:10px;
     flex-wrap: wrap;
     justify-content: flex-end;
+}
+
+.file_upload {
+    width: 30%;
 }
 
 .problems_list{
@@ -90,10 +96,17 @@
     margin-top: 10px;
     align-self: flex-start;
     gap: 10px;
+    margin: auto;
 }
 
 .affirmText{
     color: $text-color;
+    cursor: pointer;
+}
+
+.handinHistory{
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .handinHistory{

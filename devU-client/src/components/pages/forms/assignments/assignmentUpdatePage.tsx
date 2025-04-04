@@ -38,7 +38,7 @@ const AssignmentUpdatePage = () => {
   const handleCloseContainerAutoGraderModal = () => setContainerAutoGraderModal(false);
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
 
-  
+
 
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
@@ -81,10 +81,10 @@ const AssignmentUpdatePage = () => {
   })
 
 
-  const handleOpenEditModal = (problem : AssignmentProblem) => {
-    if(problem === assignmentProblemData) {
+  const handleOpenEditModal = (problem: AssignmentProblem) => {
+    if (problem === assignmentProblemData) {
       setOpenEditModal(true)
-    } else {    
+    } else {
       setAssignmentProblemData(problem)
     }
   }
@@ -102,9 +102,9 @@ const AssignmentUpdatePage = () => {
   const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, dueDate: e.target.value + "Z"}))}
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files){
+    if (e.target.files) {
       const file = e.target.files[0]
-      if(files.length < 5) {
+      if (files.length < 5) {
         setFiles([...files, file])
       }
       console.log(files)
@@ -160,16 +160,16 @@ const AssignmentUpdatePage = () => {
     multipart.append('dueDate', finalFormData.dueDate)
     multipart.append('endDate', finalFormData.endDate)
     multipart.append('categoryName', finalFormData.categoryName)
-    if(finalFormData.description !== null) {
+    if (finalFormData.description !== null) {
       multipart.append('description', finalFormData.description)
     }
     multipart.append('maxFileSize', finalFormData.maxFileSize.toString())
-    if(finalFormData.maxSubmissions !== null) {
+    if (finalFormData.maxSubmissions !== null) {
       multipart.append('maxSubmissions', finalFormData.maxSubmissions.toString())
     }
     multipart.append('disableHandins', finalFormData.disableHandins.toString())
-    
-    for(let i = 0; i < files.length; i++) {
+
+    for (let i = 0; i < files.length; i++) {
       multipart.append('files', files[i])
     }
 
@@ -200,7 +200,7 @@ const AssignmentUpdatePage = () => {
         setAlert({ autoDelete: true, type: 'success', message: 'Problem Updated' })
         setOpenEditModal(false)
         fetchAssignmentProblems()
-    })
+      })
   }
 
 
@@ -230,7 +230,7 @@ const AssignmentUpdatePage = () => {
       .then(() => {
         setAlert({ autoDelete: true, type: 'success', message: 'Problem Deleted' })
         fetchAssignmentProblems()
-    })
+      })
   }
 
   const handleChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -281,8 +281,8 @@ const AssignmentUpdatePage = () => {
         </DialogContent>
       </Dialog>
 
-      <TextProblemModal open={textModal} onClose={handleCloseTextModal}/>
-      <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal}/>
+        <TextProblemModal open={textModal} onClose={handleCloseTextModal} />
+        <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal}/>
       <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
 
 
@@ -307,27 +307,29 @@ const AssignmentUpdatePage = () => {
               <div className={styles.textFieldHeader}>Assignment Name: </div>
 
                 <TextField id="name" onChange={handleChange}
-                          invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
-                          className={styles.textField}
-                          value={formData.name} 
-                          sx={{ width: '100%',
-                            "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"}
-                              }}/>
-            </div>
-            <div>
-              <div className={styles.textFieldHeader}>Description: <span style={{fontStyle:'italic', color: 'var(--grey)'}}>(optional)</span> </div>
-                <TextField id="description" onChange={handleChange} multiline={true} rows={3}
-                        invalidated={!!invalidFields.get('description')}
-                        className={styles.textField}
-                        placeholder='Provide an optional description...'
-                        helpText={invalidFields.get('description')}
-                        value={formData.description ? formData.description : ''} 
-                        sx={{width: '100%',
-                          "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"},
-                          "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root" : {padding : "0px"},
-                        }}/>
+                  invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
+                  className={styles.textField}
+                  value={formData.name}
+                  sx={{
+                    width: '100%',
+                    "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": { padding: "15px" }
+                  }} />
               </div>
-          </div>
+              <div>
+                <div className={styles.textFieldHeader}>Description: <span style={{ fontStyle: 'italic', color: 'var(--grey)' }}>(optional)</span> </div>
+                <TextField id="description" onChange={handleChange} multiline={true} rows={3}
+                  invalidated={!!invalidFields.get('description')}
+                  className={styles.textField}
+                  placeholder='Provide an optional description...'
+                  helpText={invalidFields.get('description')}
+                  value={formData.description ? formData.description : ''}
+                  sx={{
+                    width: '100%',
+                    "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": { padding: "15px" },
+                    "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root": { padding: "0px" },
+                  }} />
+              </div>
+            </div>
 
           <div className={styles.submissionsContainer}>
             <div>
