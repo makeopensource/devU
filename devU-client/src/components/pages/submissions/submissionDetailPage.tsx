@@ -42,17 +42,6 @@ const SubmissionDetailPage = () => {
             const assignmentProblems = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignment.id}/assignment-problems`)
             setAssignmentProblems(assignmentProblems)
 
-            // GET INSTRUCTOR FEEDBACK if different from autograder
-            // const submissionFeedback = submissionScore?.feedback
-
-            // for each item in submissionProblemScores, append item.feedback to problemFeedback array
-            let problemFeedbackArr = [];
-            submissionProblemScores.forEach(item => {
-                problemFeedbackArr.push(item.feedback)
-            })
-
-            
-
         } catch (error: any) {
             setError(error)
         } finally {
@@ -87,6 +76,7 @@ const SubmissionDetailPage = () => {
                     </div>
                     
                     <p><strong>Instructor Feedback:</strong></p>
+                    {/* Backend currently adds default feedback to submission --> should be removed on backend */}
                     <pre className={styles.feedback}>{submissionScore ? submissionScore.feedback : 'no feedback provided'}</pre>
                     
                     <p><strong>Autograder Feedback:</strong></p>
