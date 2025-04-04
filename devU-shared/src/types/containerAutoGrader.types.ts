@@ -1,10 +1,14 @@
 export type ContainerAutoGrader = {
   id?: number
   assignmentId: number
-  graderFile?: string 
-  makefileFile: string | null 
-  autogradingImage?: string 
   timeout: number
+  cpuCores: number
+  pidLimit: number
+  memoryLimitMB: number
+  entryCommand: string
+  dockerfileId: string
+  graderFileIds: string[]
   createdAt?: string
   updatedAt?: string
-  }
+  autolabCompatible: boolean
+}

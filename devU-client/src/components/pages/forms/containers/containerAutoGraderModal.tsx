@@ -45,6 +45,11 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
     const handleMakefileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMakefile(e.target.files?.item(0))
     }
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const key = e.target.id;
+        const value = e.target.value;
+        setFormData(prevState => ({ ...prevState, [key]: value }));
+    };
 
 
 
@@ -79,13 +84,6 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
         })
 
         onClose();
-    }
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const key = e.target.id
-        const value = e.target.value
-
-        setFormData(prevState => ({ ...prevState, [key]: value }))
     }
 
     return (

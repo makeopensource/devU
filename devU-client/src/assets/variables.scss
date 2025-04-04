@@ -39,6 +39,7 @@ $grey: var(--grey);
 
 $blue-lighter: var(--blue-lighter);
 $blue: var(--blue);
+$link-blue: var(--link-blue);
 
 $red-lighter: var(--red-lighter);
 $red: var(--red);
@@ -87,7 +88,7 @@ $small: 600px;
 $extreme: 780px;
 
 $pagePadding: 100px;
-$phonePadding: 50px;
+$phonePadding: 25px;
 
 @mixin ellipsis {
   overflow: hidden;

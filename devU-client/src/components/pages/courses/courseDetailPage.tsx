@@ -73,7 +73,7 @@ const CourseDetailPage = () => {
     }, []);
 
     return (
-        <PageWrapper>
+        <PageWrapper className={styles.pageWrapper}>
             <div className={styles.courseDetailPage}>
                 {courseInfo ? (
                     <div>
@@ -101,7 +101,7 @@ const CourseDetailPage = () => {
                                 </div>
                             </div>
                             <div>
-                                <h3>Course Links</h3>
+                                <h3 className={styles.meta_header}>Course Links</h3>
                                 <div className={styles.buttons_container}>
                                     <button className='btnSecondary' onClick={() => {
                                         role.isInstructor() ? history.push(`/course/${courseId}/gradebook/instructor`) : 
@@ -112,7 +112,7 @@ const CourseDetailPage = () => {
                                 <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
                             </div>
                         </div>
-                        <div className={styles.subheader}><h3>Assignments</h3>
+                        <div className={styles.subheader}><h3 className={styles.meta_header}>Assignments</h3>
                             {role.isInstructor() &&(
                                 <button className='btnPrimary' id={styles.parallel_button} onClick={() => {
                                     setOpenModal(true)}}>Add Assignment
@@ -149,7 +149,8 @@ const CourseDetailPage = () => {
                                                                   secondary={
                                                                       <React.Fragment>
                                                                           <div className={styles.due_end}>
-                                                                            <span style={{fontWeight:'700'}}>Due:&nbsp;</span>{wordPrintDate(assignment.dueDate)} | &nbsp;
+                                                                            <span style={{fontWeight:'700'}}>Due:&nbsp;</span>{wordPrintDate(assignment.dueDate)}
+                                                                            <span>&nbsp;|&nbsp;</span>
                                                                             <span style={{fontWeight:'700'}}>End:&nbsp;</span>{wordPrintDate(assignment.endDate)}
                                                                         </div>
                                                                       </React.Fragment>
@@ -170,7 +171,7 @@ const CourseDetailPage = () => {
 
 
                 ) : (
-                    <h1>Error fetching Course Information</h1>
+                    <h1></h1>
                 )}
             </div>
         </PageWrapper>
