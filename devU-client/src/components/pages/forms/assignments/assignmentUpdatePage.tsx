@@ -37,7 +37,7 @@ const AssignmentUpdatePage = () => {
   const [addProblemModal, setAddProblemModal] = useState(false);
   const handleCloseAddProblemModal = () => setAddProblemModal(false);
 
-  
+
 
   /*const [categories, setCategories] = useState<Category[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<Category>[]>([])*/
@@ -79,14 +79,14 @@ const AssignmentUpdatePage = () => {
   })
 
 
-  const handleOpenEditModal = (problem : AssignmentProblem) => {
-    if(problem === assignmentProblemData) {
+  const handleOpenEditModal = (problem: AssignmentProblem) => {
+    if (problem === assignmentProblemData) {
       setOpenEditModal(true)
-    } else {    
+    } else {
       setAssignmentProblemData(problem)
     }
   }
-  const handleCloseModal = () => {setOpenEditModal(false)}
+  const handleCloseModal = () => { setOpenEditModal(false) }
   useEffect(() => {
     if (assignmentProblemData.maxScore !== -1) { setOpenEditModal(true) }
   }, [assignmentProblemData])
@@ -104,15 +104,15 @@ const AssignmentUpdatePage = () => {
   }
 
   // taken out of the design for the moment, should get incorporated later
-  /*const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}*/ 
-  const handleStartDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, startDate: e.target.value }))}
-  const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, endDate: e.target.value }))}
-  const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, dueDate: e.target.value }))}
+  /*const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}*/
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setFormData(prevState => ({ ...prevState, startDate: e.target.value })) }
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setFormData(prevState => ({ ...prevState, endDate: e.target.value })) }
+  const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setFormData(prevState => ({ ...prevState, dueDate: e.target.value })) }
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files){
+    if (e.target.files) {
       const file = e.target.files[0]
-      if(files.length < 5) {
+      if (files.length < 5) {
         setFiles([...files, file])
       }
     }
@@ -125,12 +125,12 @@ const AssignmentUpdatePage = () => {
 
 
 
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
+  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) }) }, [])
+  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) }) }, [])
+  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) }) }, [])
+  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) }) }, [])
 
-  
+
   /*useEffect(() => {RequestService.get(`/api/course/${courseId}/categories/`).then((res) => { setCategories(res) }).finally(convertToOptions)}, [])
   const convertToOptions = () => {
     setAllCategoryOptions(categories.map((category) => ({label: category.name, value: category}))) 
@@ -157,16 +157,16 @@ const AssignmentUpdatePage = () => {
     multipart.append('dueDate', finalFormData.dueDate)
     multipart.append('endDate', finalFormData.endDate)
     multipart.append('categoryName', finalFormData.categoryName)
-    if(finalFormData.description !== null) {
+    if (finalFormData.description !== null) {
       multipart.append('description', finalFormData.description)
     }
     multipart.append('maxFileSize', finalFormData.maxFileSize.toString())
-    if(finalFormData.maxSubmissions !== null) {
+    if (finalFormData.maxSubmissions !== null) {
       multipart.append('maxSubmissions', finalFormData.maxSubmissions.toString())
     }
     multipart.append('disableHandins', finalFormData.disableHandins.toString())
-    
-    for(let i = 0; i < files.length; i++) {
+
+    for (let i = 0; i < files.length; i++) {
       multipart.append('files', files[i])
     }
 
@@ -198,7 +198,7 @@ const AssignmentUpdatePage = () => {
         setAlert({ autoDelete: true, type: 'success', message: 'Problem Updated' })
         setOpenEditModal(false)
         fetchAssignmentProblems()
-    })
+      })
   }
 
   /*const handleAssignmentChange = (e: React.MouseEvent<HTMLHeadingElement>) => {
@@ -218,7 +218,7 @@ const AssignmentUpdatePage = () => {
   //   problemName: '',
   //   maxScore: 0,
   // })
-  const handleCloseTextModal = () => {setTextModal(false)}
+  const handleCloseTextModal = () => { setTextModal(false) }
 
   // const handleAddProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
   //   const key = e.target.id
@@ -243,170 +243,172 @@ const AssignmentUpdatePage = () => {
       .then(() => {
         setAlert({ autoDelete: true, type: 'success', message: 'Problem Deleted' })
         fetchAssignmentProblems()
-    })
+      })
   }
 
-  
+
   return (
     <>
       <ContainerAutoGraderModal open={containerAutoGraderModal} onClose={handleCloseContainerAutoGraderModal} />
 
       <PageWrapper>
-      <Dialog open={openEditModal} onClose={handleCloseModal}>
-        <DialogContent sx={{bgcolor:theme.listItemBackground}}>
-        <h3 className={styles.header}>Edit Problem</h3>
-          <TextField id="problemName" label={'Problem Name'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.problemName : ''}/>
-          <TextField id="maxScore" label={'Max Score'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.maxScore.toString() : ''}/>
-          <DialogActions>
-            <Button onClick={handleProblemUpdate}>Save</Button>
-            <Button onClick={handleCloseModal}>Close</Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+        <Dialog open={openEditModal} onClose={handleCloseModal}>
+          <DialogContent sx={{ bgcolor: theme.listItemBackground }}>
+            <h3 className={styles.header}>Edit Problem</h3>
+            <TextField id="problemName" label={'Problem Name'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.problemName : ''} />
+            <TextField id="maxScore" label={'Max Score'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.maxScore.toString() : ''} />
+            <DialogActions>
+              <Button onClick={handleProblemUpdate}>Save</Button>
+              <Button onClick={handleCloseModal}>Close</Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
 
-      <TextProblemModal open={textModal} onClose={handleCloseTextModal}/>
-      <AddProblemModal open={addProblemModal} onClose={handleCloseAddProblemModal} />
+        <TextProblemModal open={textModal} onClose={handleCloseTextModal} />
+        <AddProblemModal open={addProblemModal} onClose={handleCloseAddProblemModal} />
 
-      <div className={styles.pageHeader}>
-        <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
-        <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>back to course</Button>
-      </div>
-      <div className={styles.grid}>
-        <div className={styles.form}>
-          <h2 className={styles.header}>Edit Info</h2>
-          <div className={styles.textFieldContainer}>
-            <div>
-              <div className={styles.textFieldHeader}>Assignment Category: </div>
-              <TextField id="categoryName" onChange={handleChange}
-                      invalidated={!!invalidFields.get('categoryName')}
-                      className={styles.textField}
-                      helpText={invalidFields.get('categoryName')}
-                      value={formData.categoryName} 
-                      sx={{width: '100%'}}/>
-            </div>
-            <div>
-              <div className={styles.textFieldHeader}>Assignment Name: </div>
+        <div className={styles.pageHeader}>
+          <h1 style={{ gridColumnStart: 2 }}>Edit Assignment</h1>
+          <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => { history.goBack() }}>back to course</Button>
+        </div>
+        <div className={styles.grid}>
+          <div className={styles.form}>
+            <h2 className={styles.header}>Edit Info</h2>
+            <div className={styles.textFieldContainer}>
+              <div>
+                <div className={styles.textFieldHeader}>Assignment Category: </div>
+                <TextField id="categoryName" onChange={handleChange}
+                  invalidated={!!invalidFields.get('categoryName')}
+                  className={styles.textField}
+                  helpText={invalidFields.get('categoryName')}
+                  value={formData.categoryName}
+                  sx={{ width: '100%' }} />
+              </div>
+              <div>
+                <div className={styles.textFieldHeader}>Assignment Name: </div>
 
                 <TextField id="name" onChange={handleChange}
-                          invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
-                          className={styles.textField}
-                          value={formData.name} 
-                          sx={{ width: '100%',
-                            "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"}
-                              }}/>
-            </div>
-            <div>
-              <div className={styles.textFieldHeader}>Description: <span style={{fontStyle:'italic', color: 'var(--grey)'}}>(optional)</span> </div>
-                <TextField id="description" onChange={handleChange} multiline={true} rows={3}
-                        invalidated={!!invalidFields.get('description')}
-                        className={styles.textField}
-                        placeholder='Provide an optional description...'
-                        helpText={invalidFields.get('description')}
-                        value={formData.description ? formData.description : ''} 
-                        sx={{width: '100%',
-                          "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": {padding : "15px"},
-                          "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root" : {padding : "0px"},
-                        }}/>
+                  invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
+                  className={styles.textField}
+                  value={formData.name}
+                  sx={{
+                    width: '100%',
+                    "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": { padding: "15px" }
+                  }} />
               </div>
-          </div>
+              <div>
+                <div className={styles.textFieldHeader}>Description: <span style={{ fontStyle: 'italic', color: 'var(--grey)' }}>(optional)</span> </div>
+                <TextField id="description" onChange={handleChange} multiline={true} rows={3}
+                  invalidated={!!invalidFields.get('description')}
+                  className={styles.textField}
+                  placeholder='Provide an optional description...'
+                  helpText={invalidFields.get('description')}
+                  value={formData.description ? formData.description : ''}
+                  sx={{
+                    width: '100%',
+                    "& .MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputMultiline.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input": { padding: "15px" },
+                    "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-multiline.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root": { padding: "0px" },
+                  }} />
+              </div>
+            </div>
 
-          <div className={styles.submissionsContainer}>
-            <div>
-              <div className={styles.textFieldHeader}>Max Submissions: </div>
-              <TextField id="maxSubmissions" onChange={handleChange} 
-                        invalidated={!!invalidFields.get('maxSubmission')}
-                        className={styles.textField}
-                        helpText={invalidFields.get('maxSubmission')}
-                        value={formData.maxSubmissions ? (formData.maxSubmissions).toString() : ''} 
-                        sx={{width: '100%', marginLeft : 1/10}}/>
+            <div className={styles.submissionsContainer}>
+              <div>
+                <div className={styles.textFieldHeader}>Max Submissions: </div>
+                <TextField id="maxSubmissions" onChange={handleChange}
+                  invalidated={!!invalidFields.get('maxSubmission')}
+                  className={styles.textField}
+                  helpText={invalidFields.get('maxSubmission')}
+                  value={formData.maxSubmissions ? (formData.maxSubmissions).toString() : ''}
+                  sx={{ width: '100%', marginLeft: 1 / 10 }} />
+              </div>
+              <div>
+                <div className={styles.textFieldHeader}>Max File Size: </div>
+                <TextField id="maxFileSize" onChange={handleChange}
+                  invalidated={!!invalidFields.get('maxFileSize')}
+                  className={styles.textField}
+                  helpText={invalidFields.get('maxFileSize')}
+                  value={formData.maxFileSize ? formData.maxFileSize.toString() : ''}
+                  sx={{ width: '100%', marginLeft: 1 / 10 }} />
+              </div>
             </div>
-            <div>
-              <div className={styles.textFieldHeader}>Max File Size: </div>
-              <TextField id="maxFileSize" onChange={handleChange}
-                        invalidated={!!invalidFields.get('maxFileSize')}
-                        className={styles.textField}
-                        helpText={invalidFields.get('maxFileSize')}
-                        value={formData.maxFileSize ? formData.maxFileSize.toString() : ''} 
-                        sx={{width: '100%', marginLeft : 1/10}}/>
-            </div>
-          </div>
-          <div className={styles.datepickerContainer}>
+            <div className={styles.datepickerContainer}>
               <label htmlFor="start_date">Start Date *</label>
               <label htmlFor="due_date">Due Date *</label>
               <label htmlFor="end_date">End Date *</label>
 
-              <input type='datetime-local' id="start_date" style={{textWrap:'wrap'}} value={formData.startDate.slice(0,-1)} onChange={handleStartDateChange}/>
-              <input type='datetime-local' id="due_date" value={formData.dueDate.slice(0,-1)} onChange={handleDueDateChange}/>
-              <input type='datetime-local' id="end_date" value={formData.startDate.slice(0,-1)} onChange={handleEndDateChange}/>
-          </div>
-          <h2 className={styles.header}>Attachments</h2>
+              <input type='datetime-local' id="start_date" style={{ textWrap: 'wrap' }} value={formData.startDate.slice(0, -1)} onChange={handleStartDateChange} />
+              <input type='datetime-local' id="due_date" value={formData.dueDate.slice(0, -1)} onChange={handleDueDateChange} />
+              <input type='datetime-local' id="end_date" value={formData.startDate.slice(0, -1)} onChange={handleEndDateChange} />
+            </div>
+            <h2 className={styles.header}>Attachments</h2>
             {(files.length != 0) ? (
               <div className={styles.filesList}>
-                <span>Files:</span> 
-                {files.slice(0,-1).map((file, index) => (
-                <div key={index}>
-                  <span>&nbsp;{`${file.name},`}</span>
-                </div>))}
-                <div key={files.length-1}>
-                  <span>&nbsp;{`${files[files.length-1].name}`}</span>
-              </div>
-                
-              </div>) 
-           : <div className={styles.filesList} style={{fontStyle:'italic'}}>No files attached</div>}
-          <input type='file' id='fileUp' onChange={handleFile} hidden/>
-          <label htmlFor="fileUp">
-          <StyledEngineProvider injectFirst>
-            <MuiButton disableRipple component="span" className={styles.fileUpload}>
-              choose files
-            </MuiButton>
-          </StyledEngineProvider>
-          </label> 
+                <span>Files:</span>
+                {files.slice(0, -1).map((file, index) => (
+                  <div key={index}>
+                    <span>&nbsp;{`${file.name},`}</span>
+                  </div>))}
+                <div key={files.length - 1}>
+                  <span>&nbsp;{`${files[files.length - 1].name}`}</span>
+                </div>
 
-        </div>
-        <div className={styles.problemsList}>
-        <h2 className={styles.header}>Add Problems</h2>
-          <div className={styles.buttonContainer}>
-          <Button onClick={() => setAddProblemModal(true)} className='btnSecondary'>Code/File Input</Button>
-            <Button onClick={() => {setTextModal(true)}} className='btnSecondary'>Text Input</Button>
-            <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Multiple Choice creation modal' })} className='btnSecondary'>Multiple Choice</Button>
+              </div>)
+              : <div className={styles.filesList} style={{ fontStyle: 'italic' }}>No files attached</div>}
+            <input type='file' id='fileUp' onChange={handleFile} hidden />
+            <label htmlFor="fileUp">
+              <StyledEngineProvider injectFirst>
+                <MuiButton disableRipple component="span" className={styles.fileUpload}>
+                  choose files
+                </MuiButton>
+              </StyledEngineProvider>
+            </label>
+
           </div>
-          <h2 className={styles.header}>Add Graders</h2>
-          <div className={styles.buttonContainer}>
-          <Button onClick={() => setContainerAutoGraderModal(true)} className='btnSecondary'>
-            Code Grader
-          </Button>
-            <Button onClick={() => {
-                        history.push(`createNCAG`)
-                    }} className='btnSecondary'>Non-code Grader</Button>
-          </div>  
-          <h2 className={styles.header}>Graders</h2>
-            {nonContainerAutograders.length != 0 && nonContainerAutograders.map((nonContainerAutograder) => (<div>
-              <span style={{fontStyle:'italic'}}>{nonContainerAutograder.question}</span> - 
-              <span style={{color: 'var(--grey)'}}> Non-Code Grader</span></div>))}
-            {containerAutograders.length != 0 && containerAutograders.map((containerAutograder) => (<div>
-            <span style={{fontStyle:'italic'}}>{containerAutograder.autogradingImage}</span> - 
-            <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}
-            {nonContainerAutograders.length == 0 && containerAutograders.length == 0 && <div style={{fontStyle:'italic'}}>No graders yet</div>}
-          <h2 className={styles.header}>Problems</h2>
-
-          {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
-            <div key={problem.id} className={styles.problem}>
-              <h3 style={{margin: '0 0 10px 0'}}>{problem.problemName}</h3>
-              <TextField className={styles.textField}
-                        placeholder='Answer'
-                        sx={{width: '100%', marginLeft : 1/10, pointerEvents: 'none'}}/>
-              <div style={{margin: '5px 0 10px 0'}}>
-                <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>edit</Button>|
-                <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>delete</Button>
-              </div>
+          <div className={styles.problemsList}>
+            <h2 className={styles.header}>Add Problems</h2>
+            <div className={styles.buttonContainer}>
+              <Button onClick={() => setAddProblemModal(true)} className='btnSecondary'>Code/File Input</Button>
+              <Button onClick={() => { setTextModal(true) }} className='btnSecondary'>Text Input</Button>
+              <Button onClick={() => setAlert({ autoDelete: true, type: 'error', message: 'Setup Multiple Choice creation modal' })} className='btnSecondary'>Multiple Choice</Button>
             </div>
-          ))) : <div style={{fontStyle:'italic'}}>No problems yet</div>}
+            <h2 className={styles.header}>Add Graders</h2>
+            <div className={styles.buttonContainer}>
+              <Button onClick={() => setContainerAutoGraderModal(true)} className='btnSecondary'>
+                Code Grader
+              </Button>
+              <Button onClick={() => {
+                history.push(`createNCAG`)
+              }} className='btnSecondary'>Non-code Grader</Button>
+            </div>
+            <h2 className={styles.header}>Graders</h2>
+            {nonContainerAutograders.length != 0 && nonContainerAutograders.map((nonContainerAutograder) => (<div>
+              <span style={{ fontStyle: 'italic' }}>{nonContainerAutograder.question}</span> -
+              <span style={{ color: 'var(--grey)' }}> Non-Code Grader</span></div>))}
+            {containerAutograders.length != 0 && containerAutograders.map((containerAutograder) => (<div>
+              <span style={{ fontStyle: 'italic' }}>{containerAutograder.autogradingImage}</span> -
+              <span style={{ color: 'var(--grey)' }}> Code Grader</span></div>))}
+            {nonContainerAutograders.length == 0 && containerAutograders.length == 0 && <div style={{ fontStyle: 'italic' }}>No graders yet</div>}
+            <h2 className={styles.header}>Problems</h2>
 
+            {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
+              <div key={problem.id} className={styles.problem}>
+                <h3 style={{ margin: '0 0 10px 0' }}>{problem.problemName}</h3>
+                <TextField className={styles.textField}
+                  placeholder='Answer'
+                  sx={{ width: '100%', marginLeft: 1 / 10, pointerEvents: 'none' }} />
+                <div style={{ margin: '5px 0 10px 0' }}>
+                  <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>edit</Button>|
+                  <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>delete</Button>
+                </div>
+              </div>
+            ))) : <div style={{ fontStyle: 'italic' }}>No problems yet</div>}
+
+          </div>
         </div>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
-            <Button onClick={handleAssignmentUpdate} className='btnPrimary'>save and exit</Button>
-      </div>
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
+          <Button onClick={handleAssignmentUpdate} className='btnPrimary'>save and exit</Button>
+        </div>
       </PageWrapper>
     </>
   )
