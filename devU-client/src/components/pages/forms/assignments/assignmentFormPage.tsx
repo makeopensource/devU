@@ -87,7 +87,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
 
         RequestService.postMultipart(`/api/course/${courseId}/assignments/`, multipart)
             .then((response) => {
-                setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
+                // setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
                 onClose();
                 history.push(`/course/${courseId}/assignment/${response.id}/update`);
             })
