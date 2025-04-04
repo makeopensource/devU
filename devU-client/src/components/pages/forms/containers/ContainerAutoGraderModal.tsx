@@ -1,14 +1,14 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 // import PageWrapper from 'components/shared/layouts/pageWrapper'
 // import styles from './containerAutoGraderForm.scss'
 // import TextField from 'components/shared/inputs/textField'
-import {useActionless} from 'redux/hooks'
-import {SET_ALERT} from 'redux/types/active.types'
+import { useActionless } from 'redux/hooks'
+import { SET_ALERT } from 'redux/types/active.types'
 import RequestService from 'services/request.service'
-import {ExpressValidationError} from "devu-shared-modules";
+import { ExpressValidationError } from "devu-shared-modules";
 // import {applyStylesToErrorFields, removeClassFromField} from "../../../../utils/textField.utils";
 // import textStyles from "../../../shared/inputs/textField.scss";
-import {useParams} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Modal from 'components/shared/layouts/modal'
 
 // import Button from '@mui/material/Button'
@@ -39,10 +39,10 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
 
     //This is janky but it works and I'm too tired to come up with a better solution
     //this is done because the files need to be uniquely identified for multer to parse them from the multipart
-    const handleGraderfileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const handleGraderfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setGraderFile(e.target.files?.item(0))
     }
-    const handleMakefileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const handleMakefileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMakefile(e.target.files?.item(0))
     }
 
@@ -67,9 +67,9 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
                 // const newFields = applyStylesToErrorFields(err, formData, textStyles.errorField)
                 // setInvalidFields(newFields)
 
-            setAlert({autoDelete: false, type: 'error', message: message})
-        }).finally(() => {
-        })
+                setAlert({ autoDelete: false, type: 'error', message: message })
+            }).finally(() => {
+            })
 
 
         setFormData({
@@ -81,15 +81,24 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
         onClose();
     }
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const key = e.target.id
+        const value = e.target.value
+
+        setFormData(prevState => ({ ...prevState, [key]: value }))
+    }
+
     return (
         <Modal title="Add Container Auto Grader" buttonAction={handleSubmit} open={open} onClose={onClose}>
             <div className="input-group">
                 <label htmlFor="autogradingImage">Autograding Image*:</label>
-                <input type="text" id="autogradingImage" onChange={(e) => setFormData({ ...formData, autogradingImage: e.target.value })} placeholder="e.g. Assignment 1 Image" />
+                {/* <input type="text" id="autogradingImage" onChange={(e) => setFormData({ ...formData, autogradingImage: e.target.value })} placeholder="e.g. Assignment 1 Image" /> */}
+                <input type="text" id="autogradingImage" onChange={handleChange} placeholder="e.g. Assignment 1 Image" />
             </div>
             <div className="input-group">
                 <label htmlFor="timeout">Timeout (ms):</label>
-                <input type="number" id="timeout" placeholder="e.g. 3000"  onChange={(e) => setFormData({ ...formData, timeout: e.target.value })}/>
+                {/* <input type="number" id="timeout" placeholder="e.g. 3000" onChange={(e) => setFormData({ ...formData, timeout: e.target.value })} /> */}
+                <input type="number" id="timeout" placeholder="e.g. 3000" onChange={handleChange} />
             </div>
             <div className="input-group">
                 <label htmlFor="graderFile">Graderfile*:</label>
