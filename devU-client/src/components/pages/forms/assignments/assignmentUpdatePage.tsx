@@ -125,7 +125,6 @@ const AssignmentUpdatePage = () => {
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
 
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
-  console.log(containerAutograders)
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
 
   useEffect(() => {

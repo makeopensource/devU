@@ -65,7 +65,7 @@
 
       .checkbox {
         position: absolute;
-        transition: all .1s ease;
+        transition: all .2s ease;
         top: 3px;
         left: 0;
         height: 18px;
@@ -74,17 +74,19 @@
         border: 1px solid #999;
         border-radius: 5px;
         margin-left: 0;
+        .checkboxCheck {
+            opacity: 0;
+            width: 15px;
+            left: 2px;
+            top: 2px;
+            height: 15px;
+            border-radius: 5px;
+            color: #fff;
+            position: absolute;
+          }
       }
 
-      .checkboxCheck {
-        width: 15px;
-        height: 15px;
-        top: 2px;
-        left: 2px;
-        border-radius: 5px;
-        color: white;
-        position: absolute;
-      }
+      
 
 
     input:checked {
@@ -96,16 +98,17 @@
         ~ .checkbox{
             background-color: $primary;
             border: 1px solid $primary;
+            .checkboxCheck{
+                opacity: 100%;
+            }
         }
+
+       
 
         ~ .radio::after {
             display: block;
             border: 3px solid #fff;
         }
-        ~ .checkboxCheck{
-            display: block;
-        }
-        
     }
 
     &:last-of-type{

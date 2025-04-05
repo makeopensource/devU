@@ -49,7 +49,6 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
     if (type == "Text") {
         return (
         <div key={problem.id} className={styles.problem}>
-            <div>{type}</div>
             <h4 className={styles.problem_header}>{problem.problemName}</h4>
             <input className={styles.textField}
                 type='text'
@@ -67,7 +66,6 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
         }
         return (
             <div key={problem.id} className={styles.problem}>
-                            <div>{type}</div>
                 <h4 className={styles.problem_header}>{problem.problemName}</h4>
                 {Object.keys(options).map((key : string) => (
                     <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>
@@ -76,8 +74,10 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                         value={key}
                         onChange={handleChange} 
                         disabled={disabled ?? false}/> {options[key]}
-
-                        <span className={styles.checkbox}><FaIcon icon='check' className={styles.checkboxCheck}/></span>{/* custom checkbox */}
+                        
+                        <span className={styles.checkbox}>
+                             <FaIcon icon='check' className={styles.checkboxCheck}/>
+                        </span>{/* custom checkbox */}
                     </label>))}
             </div>)
     } else if(type == "MCQ-single") {
@@ -92,7 +92,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                     <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>
                         <input id={problem.problemName} 
                         type='radio' 
-                        name='correct'
+                        name={`${problem.id}_answer`}
                         value={key}
                         onChange={handleChange} 
                         disabled={disabled ?? false}/> {options[key]}

@@ -66,8 +66,8 @@ const SubmissionDetailPage = () => {
             <div className="pageHeader">
                 <h1>View Feedback</h1>
                 <button className="pageHeaderBtn" onClick={() => {
-                    history.push(`/course/${courseId}`)
-                }}>Back to Course</button>
+                    history.push(`/course/${courseId}/assignment/${assignmentId}`)
+                }}>Back to Assignment</button>
             </div>
             <div className={styles.container}>
                 <div className={styles.left}>

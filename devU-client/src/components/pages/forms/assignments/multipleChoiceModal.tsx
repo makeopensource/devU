@@ -5,6 +5,7 @@ import { SET_ALERT } from 'redux/types/active.types'
 import { useActionless } from 'redux/hooks'
 import RequestService from 'services/request.service'
 import Modal from 'components/shared/layouts/modal'
+import styles from './multipleChoiceModal.scss'
 
 interface Props {
     open: boolean;
@@ -15,7 +16,7 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId } = useParams<{ assignmentId: string }>()
     const { courseId } = useParams<{ courseId: string }>()
-    const [options, setOptions] = useState({})
+    const [options, setOptions] = useState<Map<string,string>>(new Map<string,string>([['a',''],['b',''],['c','']]))
     const [formData, setFormData] = useState({
         type: 'MCQ-mult',
         title: '',
@@ -50,9 +51,10 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
-            metadata: {type: formData.type, options: options},
+            metadata: {type: formData.type, options: Object.fromEntries(options)},
             createdAt: createdAt
         }
+        console.log(graderFormData)
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
             .then(() => {
@@ -77,7 +79,7 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
         closeModal()
     }
 
-    const resetData = () => { // reset data whenever question submitted/hits error, so data is not carried over, shows erroneous messages
+    const resetData = () => { // reset data whenever question submitted/hits error, so data is not carried over next time modal opened and potentially result in text not inputted being assigned
         setFormData({
             type: 'MCQ-mult',
             title: '',
@@ -103,7 +105,10 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
         const key = e.target.id
         const value = e.target.value
 
-        setOptions(prevState => ({ ...prevState, [key]: value }))
+        setOptions(prevState => {
+            const newMap = new Map(prevState)
+            newMap.set(key, value)
+            return newMap})
     }
 
     const handleCorrectAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,6 +136,48 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
         }
         
     }
+
+    const getPlaceholder = (key: string) => {
+        const choices = new Map([['a', 'e.g. Java'], 
+            ['b', 'e.g. Python'],
+            ['c', 'e.g. C'],
+            ['d', 'e.g. JavaScript'],
+            ['e', 'e.g. C++'],
+            ['f', 'e.g. Rust'],
+            ['g', 'e.g. OCaml'],
+            ['h', 'e.g. FORTRAN'],
+            ['i', 'e.g. COBOL'],
+            ['j', 'e.g. ...MATLAB?'],])
+        return choices.get(key)
+    }
+
+    const increaseOptions = () => {
+        const insert = options.size
+        const index = String.fromCharCode("a".charCodeAt(0) + insert)
+        setOptions(prevState => {
+            const newMap = new Map(prevState)
+            newMap.set(index, '')
+            return newMap})
+    }
+
+    const decreaseOptions = () => { 
+        const remove = options.size - 1 // gets index of last element, which we want to remove
+        const index = String.fromCharCode("a".charCodeAt(0) + remove) // translates that into a char to actually remove this element
+        setOptions(prevState => {
+            const newMap = new Map(prevState)
+            newMap.delete(index)
+            return newMap})
+        setFormData(prevState => { // make sure element getting removed is no longer in correctAnswer
+            const currentValue = prevState.correctAnswer || ""; 
+            let res = currentValue.replace(index, "")
+            res = res.split('').sort().join('') // makes selecting answers in any order correct
+            return {
+                ...prevState,
+                correctAnswer: res
+            };
+        });
+    }
+
 
     const switchBoxType = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newState = e.target.checked
@@ -160,37 +207,27 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
                     placeholder='e.g. What is the best programming language?' />
             </div>
             <div className="input-group" style={{gap: '5px'}} >
-                <label>Answer Choices:</label>
+                <div style={{display:'flex', justifyContent:'space-between'}}>
+                    <label>Answer Choices:</label> 
+                    <div>
+                        <button 
+                        className={`${styles.btn} ${styles.addButton}`} 
+                        onClick={increaseOptions}
+                        disabled={options.size >= 10}>+</button>
+
+                        <button className={`${styles.btn} ${styles.subtractButton}`}
+                        onClick={decreaseOptions}
+                        disabled={options.size <= 2}>-</button>
+                    </div>
+                </div>
+                
+                {[...options].map(([key, text]) => 
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center", width: '100%'}}>
-                    <label>a.</label>
-                    <input type='text' id="a" onChange={handleQuestionTextChange} style={{width:'100%'}}
-                    placeholder='e.g. Java' />
-                    <input type={`${boxType}`} id="a" onChange={handleCorrectAnswerChange} name="correct"/>
-                </div>
-                <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
-                    <label>b.</label>
-                    <input type="text" id="b" onChange={handleQuestionTextChange} style={{width:'100%'}}
-                    placeholder='e.g. Python' />
-                    <input type={`${boxType}`} id="b" onChange={handleCorrectAnswerChange} name="correct"/>
-                </div>
-                <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
-                    <label>c.</label>
-                    <input type="text" id="c" onChange={handleQuestionTextChange} style={{width:'100%'}}
-                    placeholder='e.g. C' />
-                    <input type={`${boxType}`} id="c" onChange={handleCorrectAnswerChange} name="correct"/>
-                </div>
-                <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
-                    <label>d.</label>
-                    <input type="text" id="d" onChange={handleQuestionTextChange} style={{width:'100%'}}
-                    placeholder='e.g. JavaScript' />
-                    <input type={`${boxType}`} id="d" onChange={handleCorrectAnswerChange} name="correct"/>
-                </div>
-                <div className="input-group" style={{flexDirection:"row", alignItems:"center"}}>
-                    <label>e.</label>
-                    <input type="text" id="e" onChange={handleQuestionTextChange} style={{width:'100%'}}
-                    placeholder='e.g. ...MATLAB?' />
-                    <input type={`${boxType}`} id="e" onChange={handleCorrectAnswerChange} name="correct"/>
-                </div>
+                    <label style={{width: '15px'}}>{key}.</label>
+                    <input type='text' id={key} value={text} onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    placeholder={getPlaceholder(key)} />
+                    <input type={`${boxType}`} id={key} onChange={handleCorrectAnswerChange} name="correct"/>
+                </div>)}
             </div>
             <div style={{display:'flex', alignItems: 'center'}}>
                 <input type='checkbox' onChange={switchBoxType}/><label>Allow only one answer</label>

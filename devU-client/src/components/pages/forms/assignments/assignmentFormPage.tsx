@@ -140,9 +140,11 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 onChange={handleCategoryChange}
                 onCreate={handleCategoryCreate}
                 options={categoryOptions}
-                custom={{control: () => ({border:'none', padding:'3px 0'}),
-                        placeholder: () => ({color: '#555555'}),
-                        input: () => ({fontSize: '14px'}),
+                custom={{control: () => ({border:'none', padding:'3px 0', backgroundColor: 'var(--input-field-background)'}),
+                        placeholder: () => ({color: 'var(--input-field-label)'}),
+                        input: () => ({fontSize: '14px', backgroundColor: 'var(--input-field-background)'}),
+                        option: (_, state) => ({ backgroundColor: state.isFocused ? 'var(--grey-darker)' : 'var(--input-field-background)',}),
+                        menu: () => ({ backgroundColor: 'var(--input-field-background)', overflow:'hidden'}),
                         singleValue: () => ({fontSize: '14px'})}}
                 value={currentCategory ?? undefined}/>
             </div>

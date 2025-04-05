@@ -133,9 +133,9 @@ const CourseDetailPage = () => {
                                             {category}
                                         </Typography>
                                     </CardContent>
-                                    <List disablePadding style={{backgroundColor:'var(--background)'}}>
+                                    <List disablePadding style={{backgroundColor:'var(--background)', transition: 'ease .2s background-color'}}>
                                         {categoryMap[category].map((assignment, index) => (
-                                            <ListItem key={index}  disablePadding>
+                                            <ListItem key={index}  disablePadding className={styles.border}>
                                                 <ListItemButton sx={{padding: 0}} onClick={() => {
                                                     history.push(`/course/${courseId}/assignment/${assignment.id}`)
                                                 }}>

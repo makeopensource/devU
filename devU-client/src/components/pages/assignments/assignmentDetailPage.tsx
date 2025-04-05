@@ -202,8 +202,8 @@ const AssignmentDetailPage = () => {
     return (
         <PageWrapper>
             <div className={styles.header}>
-                <h1 style={{ gridColumnStart: 2 }}>Submit Assignment</h1>
-                <button style={{ marginLeft: 'auto' }} className='btnPrimary' onClick={() => { history.goBack() }}>Back to Course</button>
+                <h1 style={{gridColumnStart:2}}>Submit Assignment</h1> 
+                <button style={{marginLeft:'auto'}} className='btnPrimary' onClick={() => {history.push(`/course/${courseId}`)}}>Back to Course</button>
             </div>
 
             <div className={styles.details}>
