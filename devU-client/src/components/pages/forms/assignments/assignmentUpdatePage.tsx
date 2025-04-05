@@ -107,14 +107,13 @@ const AssignmentUpdatePage = () => {
         setFiles([...files, file])
       }
       console.log(files)
-
     }
   }
 
-  const fetchAssignmentProblems = () => {
-    RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
+  const fetchAssignmentProblems = async () => {
+    await RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
     .then((res) => { setNonContainerAutograders(res) })
-     RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
+    await RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
       .then((res) => { setAssignmentProblems(res)})
   }
   
