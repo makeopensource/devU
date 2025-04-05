@@ -12,7 +12,7 @@ interface Props {
     onClose: () => void;
 }
 
-const AddProblemModal = ({ open, onClose }: Props) => {
+const CodeProblemModal = ({ open, onClose }: Props) => {
     const [setAlert] = useActionless(SET_ALERT);
     const { assignmentId } = useParams<{ assignmentId: string }>();
     const { courseId } = useParams<{ courseId: string }>();
