@@ -143,7 +143,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 custom={{control: () => ({border:'none', padding:'3px 0', backgroundColor: 'var(--input-field-background)'}),
                         placeholder: () => ({color: 'var(--input-field-label)'}),
                         input: () => ({fontSize: '14px', backgroundColor: 'var(--input-field-background)'}),
-                        option: (_, state) => ({ backgroundColor: state.isFocused ? 'var(--grey-darker)' : 'var(--input-field-background)',}),
+                        option: (_, state) => ({ backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : 'var(--input-field-background)',}),
                         menu: () => ({ backgroundColor: 'var(--input-field-background)', overflow:'hidden'}),
                         singleValue: () => ({fontSize: '14px'})}}
                 value={currentCategory ?? undefined}/>
