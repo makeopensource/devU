@@ -39,7 +39,6 @@ const AssignmentUpdatePage = () => {
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
 
 
-
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
   const [currentCategory, setCurrentCategory] = useState<Option<String>>()
@@ -124,7 +123,9 @@ const AssignmentUpdatePage = () => {
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
+
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
+  console.log(containerAutograders)
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
 
   useEffect(() => {
@@ -137,6 +138,7 @@ const AssignmentUpdatePage = () => {
     setAllCategoryOptions(options);
     setCurrentCategory(categoryOptions.find((category) => (category.value === formData.categoryName)))
 }, [assignments])
+
 
   
   const handleAssignmentUpdate = () => {
@@ -403,8 +405,8 @@ const AssignmentUpdatePage = () => {
             {nonContainerAutograders.length != 0 && nonContainerAutograders.map((nonContainerAutograder) => (<div>
               <span style={{fontStyle:'italic'}}>{nonContainerAutograder.question}</span> - 
               <span style={{color: 'var(--grey)'}}> Non-Code Grader</span></div>))}
-            {containerAutograders.length != 0 && containerAutograders.map((_) => (<div>
-            <span style={{fontStyle:'italic'}}>{"todo CAG model has been updated imagetag field does not exist"}</span> -
+            {containerAutograders.length != 0 && containerAutograders.map((containerAutograder) => (<div>
+            <span style={{fontStyle:'italic'}}>Code Grader {containerAutograder.id}</span> -
             <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}
             {nonContainerAutograders.length == 0 && containerAutograders.length == 0 && <div style={{fontStyle:'italic'}}>No graders yet</div>}
           <h2 className={styles.header}>Problems</h2>

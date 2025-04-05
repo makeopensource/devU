@@ -104,8 +104,8 @@ const AssignmentDetailPage = () => {
         const type = e.target.type;
         const value = e.target.value;
         const key = e.target.id;
+        if (type === 'checkbox') { // behavior for multiple choice - multiple answer questions
 
-        if (type === 'checkbox') { // behavior for multiple choic questions
             const newState = e.target.checked;
 
             setFormData(prevState => {
@@ -122,12 +122,13 @@ const AssignmentDetailPage = () => {
                     [key]: res
                 };
             });
-
-        } else {
+        } 
+        else {
             setFormData(prevState => ({
                 ...prevState,
                 [key]: value
             }));
+            console.log(formData)
         }
     };
 
