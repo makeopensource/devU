@@ -31,3 +31,8 @@
     }
   }
 }
+@media (max-width: $extreme){
+  .footer{
+    padding: 10px $phonePadding;
+  }
+}

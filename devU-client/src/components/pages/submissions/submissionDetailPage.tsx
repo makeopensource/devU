@@ -26,6 +26,7 @@ const SubmissionDetailPage = () => {
         try {
             const submissionScore = (await RequestService.get<SubmissionScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-scores?submission=${submissionId}`)).pop() ?? null
             setSubmissionScore(submissionScore)
+            console.log("SUBMISSION SCORE:", submissionScore)
 
             const submission = await RequestService.get<Submission>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/${submissionId}`);
             // setSubmission(submission);
@@ -33,12 +34,14 @@ const SubmissionDetailPage = () => {
 
             const submissionProblemScores = await RequestService.get<SubmissionProblemScore[]>(`/api/course/${courseId}/assignment/${assignmentId}/submission-problem-scores/submission/${submissionId}`)
             setSubmissionProblemScores(submissionProblemScores)
+            console.log("SUBMISSION PROBLEM SCORE:", submissionProblemScores)
 
             const assignment = await RequestService.get<Assignment>(`/api/course/${courseId}/assignments/${submission.assignmentId}`)
             setAssignment(assignment)
 
             const assignmentProblems = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignment.id}/assignment-problems`)
             setAssignmentProblems(assignmentProblems)
+
         } catch (error: any) {
             setError(error)
         } finally {
@@ -59,12 +62,12 @@ const SubmissionDetailPage = () => {
 
     return (
         <PageWrapper>
-            <ManualGradeModal open={showManualGrade} onClose={handleClick} submissionScore={submissionScore} />
+            <ManualGradeModal open={showManualGrade} onClose={handleClick} submissionScore={submissionScore} assignmentProblems={assignmentProblems} submissionProblemScores={submissionProblemScores} />
             <div className="pageHeader">
                 <h1>View Feedback</h1>
                 <button className="pageHeaderBtn" onClick={() => {
-                    history.push(`/course/${courseId}`)
-                }}>Back to Course</button>
+                    history.push(`/course/${courseId}/assignment/${assignmentId}`)
+                }}>Back to Assignment</button>
             </div>
             <div className={styles.container}>
                 <div className={styles.left}>
@@ -73,6 +76,7 @@ const SubmissionDetailPage = () => {
                     </div>
                     
                     <p><strong>Instructor Feedback:</strong></p>
+                    {/* Backend currently adds default feedback to submission --> should be removed on backend */}
                     <pre className={styles.feedback}>{submissionScore ? submissionScore.feedback : 'no feedback provided'}</pre>
                     
                     <p><strong>Autograder Feedback:</strong></p>

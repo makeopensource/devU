@@ -4,85 +4,132 @@ import multer from 'multer'
 import validator from './containerAutoGrader.validator'
 import { asInt } from '../../middleware/validator/generic.validator'
 import { isAuthorized } from '../../authorization/authorization.middleware'
-
 import ContainerAutoGraderController from './containerAutoGrader.controller'
 
 const Router = express.Router({ mergeParams: true })
 const upload = multer()
 
 /**
- * @swagger
+ * @openapi
+ * /course/:courseId/assignment/:assignmentId/container-auto-graders:
+ *   get:
+ *     summary: Retrieve all container auto graders for an assignment
+ *     tags:
+ *       - Container Auto Graders
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ContainerAutoGrader'
+ */
+Router.get('/', isAuthorized('assignmentViewAll'), ContainerAutoGraderController.getAllByAssignment)
+
+/**
+ * @openapi
  * /course/:courseId/assignment/:assignmentId/container-auto-graders/{id}:
  *   get:
- *     summary: Retrieve a single container auto grader
+ *     summary: Retrieve a specific container auto grader by ID
  *     tags:
- *       - ContainerAutoGraders
- *     responses:
- *       '200':
- *         description: OK
+ *       - Container Auto Graders
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
  *         required: true
  *         schema:
  *           type: integer
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ContainerAutoGrader'
  */
 Router.get('/:id', isAuthorized('assignmentViewAll'), asInt(), ContainerAutoGraderController.detail)
 
 /**
- * @swagger
- * /course/:courseId/assignment/:assignmentId/container-auto-graders:
- *   get:
- *     summary: Retrieve an assignment's container auto grader
- *     tags:
- *       - ContainerAutoGraders
- *     responses:
- *       '200':
- *         description: OK
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         schema:
- *           type: integer
- */
-Router.get('/assignment/:id', asInt(), ContainerAutoGraderController.getAllByAssignment)
-
-/**
- * @swagger
- * /container-auto-graders:
+ * @openapi
  * /course/:courseId/assignment/:assignmentId/container-auto-graders:
  *   post:
  *     summary: Create a new container auto grader
  *     tags:
- *       - ContainerAutoGraders
- *     responses:
- *       '200':
- *         description: OK
+ *       - Container Auto Graders
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
+ *       required: true
  *       content:
  *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/ContainerAutoGrader'
+ *             type: object
+ *             required:
+ *               - jobFiles
+ *               - timeoutInSeconds
+ *             properties:
+ *               dockerfile:
+ *                 type: string
+ *                 format: binary
+ *                 description: The Dockerfile for the auto grader
+ *               jobFiles:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: List of job files for the auto grader
+ *               timeoutInSeconds:
+ *                 type: integer
+ *                 minimum: 1
+ *               memoryLimitMB:
+ *                 type: integer
+ *                 minimum: 1
+ *                 default: 512
+ *                 description: Memory limit in megabytes
+ *               cpuCores:
+ *                 type: integer
+ *                 minimum: 1
+ *                 default: 1
+ *                 description: Number of CPU cores to allocate
+ *               pidLimit:
+ *                 type: integer
+ *                 minimum: 1
+ *                 default: 100
+ *                 description: Maximum number of processes allowed
+ *     responses:
+ *       201:
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ContainerAutoGrader'
  */
 Router.post(
   '/',
   isAuthorized('assignmentEditAll'),
-  upload.fields([{ name: 'graderFile' }, { name: 'makefileFile' }]),
+  upload.fields([
+    { name: 'dockerfile', maxCount: 1 },
+    { name: 'jobFiles', maxCount: 10 }
+  ]),
   validator,
-  ContainerAutoGraderController.post
+  ContainerAutoGraderController.post as express.RequestHandler
 )
 
 /**
- * @swagger
+ * @openapi
  * /course/:courseId/assignment/:assignmentId/container-auto-graders/{id}:
  *   put:
- *     summary: Update a container auto grader's grader file and/or makefile
+ *     summary: Update an existing container auto grader
  *     tags:
- *       - ContainerAutoGraders
- *     responses:
- *       '200':
- *         description: OK
+ *       - Container Auto Graders
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -90,36 +137,78 @@ Router.post(
  *         schema:
  *           type: integer
  *     requestBody:
+ *       required: true
  *       content:
  *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/ContainerAutoGrader'
+ *             type: object
+ *             properties:
+ *               dockerfile:
+ *                 type: string
+ *                 format: binary
+ *                 description: The Dockerfile for the auto grader
+ *               jobFiles:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: List of job files for the auto grader
+ *               timeoutInSeconds:
+ *                 type: integer
+ *                 minimum: 1
+ *               memoryLimitMB:
+ *                 type: integer
+ *                 minimum: 1
+ *                 default: 512
+ *                 description: Memory limit in megabytes
+ *               cpuCores:
+ *                 type: integer
+ *                 minimum: 1
+ *                 default: 1
+ *                 description: Number of CPU cores to allocate
+ *               pidLimit:
+ *                 type: integer
+ *                 minimum: 1
+ *                 default: 100
+ *                 description: Maximum number of processes allowed
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ContainerAutoGrader'
  */
 Router.put(
   '/:id',
   isAuthorized('assignmentEditAll'),
   asInt(),
-  upload.fields([{ name: 'graderFile' }, { name: 'makefileFile' }]),
+  upload.fields([
+    { name: 'dockerfile', maxCount: 1 },
+    { name: 'jobFiles', maxCount: 10 }
+  ]),
   validator,
-  ContainerAutoGraderController.put
+  ContainerAutoGraderController.put as express.RequestHandler
 )
 
 /**
- * @swagger
+ * @openapi
  * /course/:courseId/assignment/:assignmentId/container-auto-graders/{id}:
  *   delete:
  *     summary: Delete a container auto grader
  *     tags:
- *       - ContainerAutoGraders
- *     responses:
- *       '200':
- *         description: OK
+ *       - Container Auto Graders
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
  *         required: true
  *         schema:
  *           type: integer
+ *     responses:
+ *       200:
+ *         description: OK
  */
 Router.delete('/:id', isAuthorized('assignmentEditAll'), asInt(), ContainerAutoGraderController._delete)
 

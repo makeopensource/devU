@@ -6,7 +6,6 @@ import { useActionless } from 'redux/hooks';
 import RequestService from 'services/request.service';
 import Modal from 'components/shared/layouts/modal';
 
-
 interface Props {
     open: boolean;
     onClose: () => void;
@@ -17,13 +16,21 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
     const { assignmentId } = useParams<{ assignmentId: string }>();
     const { courseId } = useParams<{ courseId: string }>();
 
+
     const [formData, setFormData] = useState({
         title: '',
         maxScore: '',
     });
 
+
+    const submittable = () => {
+        if (!formData.title || !formData.maxScore) {return false}
+        else {return true}
+    }
+
     const handleSubmit = () => {
-        if (!formData.title || !formData.maxScore) return;
+        if (!submittable) return;
+
 
         const problemFormData = {
             assignmentId: parseInt(assignmentId),
@@ -40,8 +47,18 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message });
             });
 
-        onClose();
+
+        closeModal();
     };
+
+    const closeModal = () => {
+        setFormData({
+            title: '',
+            maxScore: ''
+        })   
+        onClose()
+    }
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id;
@@ -50,38 +67,29 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
     };
 
     return (
-    <Modal title="Add Problem" buttonAction={handleSubmit} open={open} onClose={onClose}>
-        <div className="text-problem-modal"> {/* Optional wrapper if needed */}
+        <Modal title="Add Code/File Input Problem" buttonAction={handleSubmit} open={open} onClose={closeModal} isSubmittable={submittable}>
             <div className="input-group">
-                <label htmlFor="title">Problem Title:</label>
-                <input
-                type="text"
-                id="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="e.g. Application Objective"
+                <label htmlFor="title" className="input-label">Problem Title:</label>
+                <input 
+                    type="text" 
+                    id="title" 
+                    placeholder="e.g. Application Objective 3" 
+                    onChange={handleChange} 
                 />
             </div>
             
             <div className="input-group">
-                <label htmlFor="maxScore">Maximum Score:</label>
-                <input
-                type="number"
-                id="maxScore"
-                value={formData.maxScore}
-                onChange={handleChange}
-                placeholder="e.g. 10"
-                min="0"
+                <label htmlFor="maxScore" className="input-label">Maximum Score:</label>
+                <input 
+                    type="number" 
+                    id="maxScore" 
+                    placeholder="e.g. 10" 
+                    min="0" 
+                    onChange={handleChange} 
                 />
             </div>
-            
-            <button type="button" className="btn btnPrimary" onClick={handleSubmit}>
-                Add Problem
-            </button>
-        </div>
-    </Modal>
-
+        </Modal>
     );
 };
 
-export default AddProblemModal;
+export default CodeProblemModal;

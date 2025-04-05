@@ -29,6 +29,7 @@ const HomePage = () => {
 
     const handleCloseModal = () => {
         setOpenModal(false);
+        fetchData()
     };
 
     const fetchData = async () => {
@@ -89,7 +90,7 @@ const HomePage = () => {
                         // history.push(`/addCoursesForm`);
                         setOpenModal(true);
                     }}>Create Course</button>
-                    <button className='btnSecondary' id='joinCoursBtn' onClick={() => {
+                    <button className='btnPrimary' id='joinCoursBtn' onClick={() => {
                         history.push(`/courses`);
                     }}>Join Course</button>
                 </div>
@@ -112,7 +113,7 @@ const HomePage = () => {
                         <UserCourseListItem course={course} assignments={assignments.get(course)} key={course.id} />
                     </div>
                 ))}
-                {enrollCourses.length === 0 && instructorCourses.length == 0 && <div className='no_items'>You do not have current enrollment yet</div>}
+                {enrollCourses.length === 0 && instructorCourses.length == 0 && <div className='no_items'>No current courses</div>}
             </div>
 
             <h2 className={styles.courses_heading}>Completed Courses</h2>

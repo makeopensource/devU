@@ -23,6 +23,11 @@
     text-align: center;
   }
 
+  hr{
+    border: 1px solid #ddd;
+    margin: 0;
+  }
+
   a {
     color: var(--link-blue);
   }
@@ -36,6 +41,10 @@
     font-weight: 700;
     font-size: 16px;
     transition: all 0.2s ease;
+    &:disabled{
+      opacity: 60%;
+      cursor: not-allowed;
+    }
   }
 
   .no_items {
@@ -156,7 +165,7 @@
 
     background-color: var(--background);
     color: var(--text-color);
-
+    
     --background: white;
     --text-color: black;
     --text-color-secondary: #363636;
@@ -197,7 +206,7 @@
     --input-field-background: #fff;
     --input-field-label: var(--grey);
 
-    --table-row-even: var(--grey-lighter);
+    --table-row-even: var(--background);
     --table-row-odd: var(--grey-lightest);
 
     --red-text: var(--red);
@@ -242,6 +251,8 @@
     --secondary-lighter: #636666;
     --secondary: #3d3f3f;
     --secondary-darker: #1f2020;
+
+    --link-blue: #0b8cdb;
 
     --list-item-background: #333333;
     --list-item-background-hover: #303030;

@@ -5,7 +5,7 @@ import SubmissionModel from '../submission/submission.model'
 import FileModel from '../../fileUpload/fileUpload.model'
 import CourseModel from '../course/course.model'
 
-import { FileUpload, Submission } from 'devu-shared-modules'
+import { Submission } from 'devu-shared-modules'
 import { uploadFile } from '../../fileStorage'
 
 const submissionConn = () => dataSource.getRepository(SubmissionModel)
@@ -25,14 +25,15 @@ export async function create(submission: Submission, file?: Express.Multer.File 
 
     const filename: string = file.originalname
     const Etag: string = await uploadFile(bucket, file, filename)
-    const fileModel: FileUpload = {
+    const fileModel = {
       userId: submission.userId,
       assignmentId: submission.assignmentId,
       courseId: submission.courseId,
-      etags: Etag,
+      etag: Etag,
       fieldName: bucket,
-      originalName: file.originalname,
-      filename: filename,
+      name: filename,
+      type: 'application/octet-stream',
+      filename: file.originalname,
     }
     const content = JSON.parse(submission.content)
     if (!content.filepaths) {
