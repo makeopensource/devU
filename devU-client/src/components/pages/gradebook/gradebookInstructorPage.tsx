@@ -6,7 +6,6 @@ import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from '../errorPage/errorPage'
 import FaIcon from 'components/shared/icons/faIcon'
-import Select, {Styles, GroupTypeBase} from 'react-select'
 
 
 import RequestService from 'services/request.service'
@@ -15,44 +14,7 @@ import styles from './gradebookInstructorPage.scss'
 import { useParams, useHistory } from 'react-router-dom'
 
 import TextField from 'components/shared/inputs/textField'
-import { Option } from 'components/shared/inputs/dropdown'
-
-
-const customStyles: Partial<Styles<any, false, GroupTypeBase<any>>> = {
-    menu: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--background)', 
-        border: '2px solid #ddd',
-        borderRadius: '10px'
-    }),
-    
-    input: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--input-field-background)',
-        borderRadius: '20px',
-        color: 'var(--text-color)', 
-        }),
-
-    placeholder: (provided) => ({ ...provided,
-        fontStyle:'italic',
-        color: '#9c9c9c',
-        margin: '0'
-    }),
-    control: (provided) => ({ ...provided, 
-        backgroundColor: 'var(--input-field-background)', cursor: 'pointer',
-        borderRadius: '20px', padding: '10px',
-        border: 'none'}),
-
-    singleValue: (provided) => ({ ...provided, 
-        color: 'var(--text-color)', 
-    }),
-    
-    option: (provided) => ({
-      ...provided,
-      cursor: 'pointer',
-      color: 'var(--color)', 
-      background: 'none',
-      borderBottom: '1px solid #ddd'
-    }),
-  }
+import Dropdown, { Option } from 'components/shared/inputs/dropdown'
 
 type TableProps = {
     users: User[]
@@ -73,14 +35,33 @@ const TableRow = ({ user, assignments, assignmentScores, maxScores }: RowProps) 
 
     return (
         <tr className={styles.row}>
-                {user.preferredName ? <td className={styles.name} key={user.preferredName}>{user.preferredName}</td> : <td className={styles.noName}>No Name Set</td>}
-                <td className={styles.email} key={user.email} style={{borderRight: '#ddd 2px solid'}}><a href={`mailto:${user.email}`}>{user.email}</a></td>
-            
-            {assignments.map(a => (
-                assignmentScores.find(as => as.assignmentId === a.id)?.score ? <td >{assignmentScores.find(as => as.assignmentId === a.id)?.score}</td> :// If there's a submission, display that grade
-                    ((a.id && maxScores.has(a.id)) ?  <td className={styles.no_submission} >0/{maxScores.get(a.id)} <strong>-</strong></td> // Otherwise, check if the assignment has problems and show score as 0/Max(NoSubmissions), if it has no problems, show N/A.
-                        : <td>N/A</td>) 
-            ))}
+                {user.preferredName 
+                    ? <td className={styles.name} key={user.preferredName}>{user.preferredName}</td> 
+                    : <td className={styles.noName}>No Name Set</td>}
+                <td className={styles.email} key={user.email} style={{borderRight: '#ddd 2px solid'}}>
+                    <a href={`mailto:${user.email}`}>{user.email}</a>
+                </td>
+            {
+            assignments.map(a => {
+                const assignmentScore = assignmentScores.find(as => as.assignmentId === a.id)
+                if (a.id && assignmentScore){ // Submission defined, so...
+                    if (assignmentScore.createdAt){
+                        const late: boolean = new Date(assignmentScore.createdAt) > new Date(a.dueDate)
+                        if (late){ // render in red if assignment submission was late.
+                            return (<td className={styles.late} >{assignmentScore.score}/{maxScores.get(a.id)} <strong>!</strong></td>)
+                        }
+                        else { // render in black if assignment submission was on time
+                            return (<td>{assignmentScore.score}/{maxScores.get(a.id)}</td>)
+                        }
+                    }
+                }
+                else if (a.id && maxScores.has(a.id)){  // No submission, but there are assignmentproblems defined
+                    return (<td className={styles.no_submission} >0/{maxScores.get(a.id)} <strong>-</strong></td>)
+                }
+                else{ // No submission
+                    return (<td>N/A</td>)
+                }
+            })}
         </tr>
     )
 }
@@ -168,7 +149,6 @@ const GradebookInstructorPage = () => {
         
         setAllCategoryOptions(options);
     }
-        
         , [assignments])
 
     const fetchData = async () => {
@@ -214,7 +194,7 @@ const GradebookInstructorPage = () => {
 
     };
 
-    const handleCategoryChange = (value:Option)  => {
+    const handleCategoryChange = (value:Option<String>)  => {
         if(!value){
             setDisplayedAssignments(assignments)
             return;
@@ -262,17 +242,11 @@ const GradebookInstructorPage = () => {
                         id='name'
                         placeholder='Search students'
                     />
-                    <Select
+                    <Dropdown
                     className={styles.dropdown}
                     options={categoryOptions}
-                    styles={customStyles}
-                    components={{
-                        IndicatorSeparator: () => null
-                      }}
-                    placeholder="Assignment Category"
-                    isClearable={true}
-                    onChange={handleCategoryChange}
-                /> 
+                    onChange={handleCategoryChange}/>
+                    
             </div>
             <div className={styles.tableContainer}>
                 <GradebookTable

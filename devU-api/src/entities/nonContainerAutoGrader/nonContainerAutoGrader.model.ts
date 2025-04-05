@@ -27,6 +27,9 @@ export default class NonContainerAutoGraderModel {
    *          type: integer
    *        question:
    *          type: string
+   *        metadata:
+   *          type: any
+   *          description: this contains a valid json string tha contains info about any arbitrary question type (MCQ, Fill in the blanks etc.)
    *        score:
    *          type: number
    *        correctString:
@@ -52,6 +55,9 @@ export default class NonContainerAutoGraderModel {
 
   @Column({ name: 'question', length: 128 })
   question: string
+
+  @Column({ name: 'metadata', type: 'jsonb', nullable: true, default: {} })
+  metadata: any // use any since this can be any arbitrary structure
 
   @Column({ name: 'score' })
   score: number

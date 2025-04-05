@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
-// import { useHistory } from 'react-router-dom'
-import { ExpressValidationError } from 'devu-shared-modules'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
+import { ExpressValidationError, Assignment } from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
-// import PageWrapper from 'components/shared/layouts/pageWrapper'
 
 import RequestService from 'services/request.service'
 import { useActionless } from 'redux/hooks'
-// import TextField from 'components/shared/inputs/textField'
-// import Button from '../../../shared/inputs/button'
-// import DragDropFile from 'components/utils/dragDropFile'
+import { Option } from 'components/shared/inputs/dropdown'
+
 
 import { SET_ALERT } from 'redux/types/active.types'
 
@@ -17,6 +15,7 @@ import { useParams } from 'react-router-dom'
 
 import formStyles from './assignmentFormPage.scss'
 import Modal from 'components/shared/layouts/modal'
+import TextDropdown from 'components/shared/inputs/textDropDown'
 
 interface Props {
     open: boolean;
@@ -29,6 +28,10 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
     const [endDate, setEndDate] = useState('')
     const [dueDate, setDueDate] = useState('')
     const [startDate, setStartDate] = useState('')
+    const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
+    const [currentCategory, setCurrentCategory] = useState<Option<String>>()
+    const [assignments, setAssignments] = useState<Assignment[]>([])
+    const history = useHistory()
 
     const [formData, setFormData] = useState({
         courseId: courseId,
@@ -47,9 +50,27 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
         setFormData(prevState => ({ ...prevState, [key]: value }))
     }
 
+    const handleCategoryChange = (value: Option<String>)  => {
+        setFormData(prevState => ({ ...prevState, categoryName: value.label }))
+        setCurrentCategory(value)
+      };
+
+    const handleCategoryCreate = (value: string)  => {
+        const newOption : Option = {value: value, label: value}
+        setFormData(prevState => ({ ...prevState, categoryName: value }))
+        setCurrentCategory(newOption)
+     };
+
     const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setStartDate(e.target.value) }
     const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setEndDate(e.target.value) }
-    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setDueDate(e.target.value) }
+    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+        setDueDate(e.target.value) 
+        
+        // automatically set end date
+        if (!endDate) {
+            setEndDate(e.target.value)
+        }
+    }
 
     const handleSubmit = () => {
         const finalFormData = {
@@ -64,6 +85,8 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             maxSubmissions: formData.maxSubmissions,
             disableHandins: formData.disableHandins,
         }
+
+        setCurrentCategory(undefined)
 
         const multipart = new FormData
         multipart.append('courseId', finalFormData.courseId)
@@ -82,12 +105,10 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
 
 
         RequestService.postMultipart(`/api/course/${courseId}/assignments/`, multipart)
-            .then(() => {
-                setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
-                // Navigate to the update page for the new assignment
-                // navigate(`/course/${courseId}/assignment/${response.id}/update`);
-                // history.goBack()
+            .then((response) => {
+                // setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
                 onClose();
+                history.push(`/course/${courseId}/assignment/${response.id}/update`);
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -96,39 +117,56 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
 
                 setAlert({ autoDelete: false, type: 'error', message })
             })
-            .finally(() => {
-
-            })
-
     }
 
+    useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
+
+
+    useEffect(() => {
+        const categories = [...new Set(assignments.map(a => a.categoryName))];
+        const options = categories.map((category) => ({
+            value: category,
+            label: category
+          }));
+        
+        setAllCategoryOptions(options);
+    }, [assignments])
 
     return (
         <Modal title="Add Assignment" buttonAction={handleSubmit} open={open} onClose={onClose}>
             <div className="input-group">
                 <label htmlFor="categoryName" className="input-label">Assignment Category:</label>
-                <input type="text" id="categoryName" onChange={handleChange}
-                placeholder='Type assignment category' />
+                <TextDropdown
+                onChange={handleCategoryChange}
+                onCreate={handleCategoryCreate}
+                options={categoryOptions}
+                custom={{control: () => ({border:'none', padding:'3px 0', backgroundColor: 'var(--input-field-background)'}),
+                        placeholder: () => ({color: 'var(--input-field-label)'}),
+                        input: () => ({fontSize: '14px', backgroundColor: 'var(--input-field-background)'}),
+                        option: (_, state) => ({ backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : 'var(--input-field-background)',}),
+                        menu: () => ({ backgroundColor: 'var(--input-field-background)', overflow:'hidden'}),
+                        singleValue: () => ({fontSize: '14px'})}}
+                value={currentCategory ?? undefined}/>
             </div>
             <div className="input-group">
                 <label htmlFor="name" className="input-label">Assignment Name:</label>
-                <input type="text" id="name" onChange={handleChange} 
+                <input type="text" id="name" onChange={handleChange} className={formStyles.input}
                 placeholder='e.g. PA3'/>
             </div>
             <div className="input-group">
                 <label htmlFor="description" className="input-label">Description: <span>(optional)</span></label>
-                <textarea rows={4} id="description" onChange={handleChange} 
+                <textarea rows={4} id="description" onChange={handleChange} className={formStyles.input}
                 placeholder='Provide an optional assignment description'/>
             </div>
             <div className='input-subgroup-2col'>
                 <div className="input-group">
                     <label htmlFor="maxSubmissions" className="input-label">Maximum Submissions:</label>
-                    <input type="number"  id="maxSubmissions" onChange={handleChange} 
+                    <input type="number"  id="maxSubmissions" onChange={handleChange} className={formStyles.input}
                     placeholder='e.g. 1' value={formData.maxSubmissions} min="0"/>
                 </div>
                 <div className="input-group">
                     <label htmlFor="maxFileSize" className="input-label">Maximum File Size (KB):</label>
-                    <input type="number" id="maxFileSize" onChange={handleChange} 
+                    <input type="number" id="maxFileSize" onChange={handleChange} className={formStyles.input}
                     placeholder='e.g. 100' value={formData.maxFileSize} min="0"/>
                 </div>
             </div>
@@ -144,9 +182,9 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                     <input type='date' id="due_date" onChange={handleDueDateChange} />
                 </div>
                 <div>
-                    <label htmlFor="end_date">End Date:<span>(optional)</span></label>
+                    <label htmlFor="end_date">End Date:</label>
                     <br />
-                    <input type='date' id="end_date" onChange={handleEndDateChange} />
+                    <input type='date' id="end_date" value={endDate} onChange={handleEndDateChange} />
                 </div>
             </div>
             <label htmlFor="disableHandins">Disable Submissions?<input type="checkbox" id="disableHandins" /></label>

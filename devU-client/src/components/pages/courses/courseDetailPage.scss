@@ -1,5 +1,18 @@
 @import 'variables';
 
+.pageWrapper{
+    h3 {
+        font-size: 24px;
+        margin: 10px 0 0 0;
+    }
+    
+    h4 {
+        font-size: 1.0rem;
+        margin: 0;
+        display: inline;
+    }
+}
+
 .courseFormWrapper {
     display: flex;
     margin: 16px 50px;
@@ -78,16 +91,8 @@
     margin-bottom: 20px;
 }
 
-h3 {
-    font-size: 24px;
-    margin: 10px 0 0 0;
-}
 
-h4 {
-    font-size: 1.0rem;
-    margin: 0;
-    display: inline;
-}
+
 .class_title{
     grid-column-start: 2;
     padding: 0 20px;
@@ -116,8 +121,13 @@ h4 {
     display: block;
     width: 100%;
     margin: 5px auto;
-    border-bottom: 1px solid #ddd;
+}
 
+.border{
+    border-bottom: 1px solid #ddd;
+    &:last-of-type{
+        border-bottom: none;
+    }
 }
 
 .due_end{

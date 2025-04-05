@@ -27,6 +27,21 @@ export default class FileModel {
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date
 
+  @Column({ name: 'etag' })
+  etag: string
+
+  @Column({ name: 'name' })
+  name: string
+
+  @Column({ name: 'type' })
+  type: string
+
+  @Column({ name: 'filename', length: 128 })
+  filename: string
+
+  @Column({ name: 'bucket', length: 64 })
+  fieldName: string
+
   @Column({ name: 'course_id' })
   @JoinColumn({ name: 'course_id' })
   @ManyToOne(() => CourseModel)
@@ -41,10 +56,4 @@ export default class FileModel {
   @JoinColumn({ name: 'user_id' })
   @ManyToOne(() => UserModel)
   userId: number
-
-  @Column({ name: 'filename', length: 128 })
-  filename: string
-
-  @Column({ name: 'bucket', length: 64 })
-  fieldName: string
 }

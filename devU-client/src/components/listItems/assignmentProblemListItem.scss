@@ -1,0 +1,117 @@
+@import 'variables';
+
+
+.problem_header{
+    font-size:16px;
+    margin: 0 0 10px 0;
+}
+
+.problem{
+    gap: 10px;
+    padding: 10px 0;
+}
+
+
+.textField{
+    font-family: $font-family;
+    font-size: 16px;
+    background: none;
+    border: 2px solid #ccc;
+    color: $text-color;
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.mcqLabel{
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    width: fit-content;
+
+    input {
+        position: absolute;
+        opacity: 0;
+        height: 0;
+        width: 0;
+    }
+
+    .radio {
+        position: absolute;
+        transition: all .1s ease;
+        top: 3px;
+        left: 0;
+        height: 18px;
+        width: 18px;
+        background-color: $background;
+        border: 1px solid #999;
+        border-radius: 100px;
+        margin-left: 0;
+      }
+
+
+    
+    .radio::after {
+        width: 12px;
+        height: 12px;
+        border-radius: 100%;
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+      .checkbox {
+        position: absolute;
+        transition: all .2s ease;
+        top: 3px;
+        left: 0;
+        height: 18px;
+        width: 18px;
+        background-color: $background;
+        border: 1px solid #999;
+        border-radius: 5px;
+        margin-left: 0;
+        .checkboxCheck {
+            opacity: 0;
+            width: 15px;
+            left: 2px;
+            top: 2px;
+            height: 15px;
+            border-radius: 5px;
+            color: #fff;
+            position: absolute;
+          }
+      }
+
+      
+
+
+    input:checked {
+        ~ .radio  {
+            background-color: $primary;
+            border: 1px solid $primary;
+        }
+
+        ~ .checkbox{
+            background-color: $primary;
+            border: 1px solid $primary;
+            .checkboxCheck{
+                opacity: 100%;
+            }
+        }
+
+       
+
+        ~ .radio::after {
+            display: block;
+            border: 3px solid #fff;
+        }
+    }
+
+    &:last-of-type{
+        margin-bottom: 0;
+    }
+}

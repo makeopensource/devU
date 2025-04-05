@@ -1,7 +1,9 @@
 @import 'variables';
 
 .page {
-  //height: 100%;
+  // push footer to bottom of viewport when content doesn't fill viewport
+  height: 100vh;
+
   display: flex;
   flex-direction: column;
 
@@ -11,9 +13,8 @@
 }
 
 .content {
-  // margin-top: 20px;
   flex-grow: 1;
-  padding: 0px 100px 70px 100px;
+  padding: 0px $pagePadding 70px $pagePadding;
 }
 
 @media (max-width: $extreme){
