@@ -16,12 +16,12 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
     const { assignmentId } = useParams<{ assignmentId: string }>();
     const { courseId } = useParams<{ courseId: string }>();
 
-    
 
     const [formData, setFormData] = useState({
         title: '',
         maxScore: '',
     });
+
 
     const submittable = () => {
         if (!formData.title || !formData.maxScore) {return false}
@@ -47,6 +47,7 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message });
             });
 
+
         closeModal();
     };
 
@@ -57,6 +58,7 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
         })   
         onClose()
     }
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id;
