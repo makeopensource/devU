@@ -11,104 +11,37 @@ For now the only reason we're including docker is to more easily control the dev
 
 ## Running the Project Locally
 
-### Getting Everything Started
+### Quick Start
 
-Once you've got these installed, we can build our container and run it
+The instructions below assume you are in the api dir `/devU-api/`
 
-#### Note to run the postgres container locally using the command below
+You must have the following tools installed
 
-You have to modify `devU-api/src/environment.ts`
+* Docker
+* Node >= v20
 
-change
+Once you've got these installed,
 
-`dbHost: (load('database.host') || 'localhost') as string`
+1. We use [docker compose profiles](https://docs.docker.com/compose/profiles/) 
+    to selectively start services in the main docker-compose when developing.
+    This starts all required services for the api depends (database, frontend etc.)
+    ```
+    npm run api-services
+    ```
+    
+    To remove all related containers 
+    ```
+    npm run api-services-stop
+    ```
 
-to
-
-`dbHost: 'localhost'`
-
-This will probably be fixed in the future but for now the above steps are necessary
-
-#### Using docker compose
-
-We use [docker compose profiles](https://docs.docker.com/compose/profiles/) to selectively start services in the main docker-compose when developing.
-
-Assuming you are in api dir `devU-api`, To start all api services except the api run
-
-```
-npm run api-services
-```
-
-To stop the services
-
-```
-npm run api-services-stop
-```
-
-Then install dependencies using
-
-```
-npm install
-```
-
-Once you've got all the dependencies installed you can run the project via
-
-```
-npm start
-```
-
-#### Manually:
-
-```
-docker run \
-  --name typeorm-postgres \
-  -p 5432:5432 \
-  -e POSTGRES_PASSWORD=password \
-  -e POSTGRES_DB=typescript_api \
-  -e POSTGRES_USER=typescript_user \
-  -d postgres
-```
-
-Install all node dependencies. All of the database environment variables can change, and can be set as environment variables on your machine if you want to overwrite the defaults
-
-```
-docker run \
-  --name minio \
-  -p 9002:9000 \
-  -p 9001:9001 \
-  -v /tmp/data:/data \
-  -e "MINIO_ROOT_USER=typescript_user" \
-  -e "MINIO_ROOT_PASSWORD=changeMe" \
-  -d minio/minio server /data --console-address ":9001"
-```
-
-Install all node dependencies. All of the database environment variables can change, and can be set as environment variables on your machine if you want to overwrite the defaults
-
-```
-npm install
-```
-
-Run the setup script to create local development auth keys. These are used in local development for signing and authenticating JWTs.
-
-```
-npm run generate-config
-```
-
-Run the initial migrations to setup our DB schema
-
-```
-npm run typeorm -- migration:run -d src/database.ts
-```
-
-Once you've got all the dependencies installed you can run the project via
-
-```
-npm start
-```
-
-By default the project runs at `localhost:3001`, but you can change the port by setting an alternate port by setting the `PORT` environment variable.
-
-If you're working in vscode, a configuration has been included to allow for debugging. Open up the VS Code Run and Debug section and click `Debug API`.
+2. Install dependencies using
+    ```
+    npm install
+    ```
+3. Once you've got all the dependencies installed you can run the project via
+    ```
+    npm run start
+    ```
 
 ### Convenient Devtools
 
@@ -173,7 +106,7 @@ Here's what you need to know:
 
 Here's the basic layout of the application
 
-![control flow of the api](/docs/controlFlow.png 'Control Flow')
+![control flow of the api](./docs/controlFlow.png 'Control Flow')
 
 Let's take this from the top
 
@@ -218,9 +151,8 @@ When developing if you need to create a new type,
 
 This will update the types in `devU-api` and `devU-client` folders.
 
-**Note if the types are not being detected by your IDE**
-
-**Go to the `devU-api/` and `devU-client/` and run `npm install` in each folder to update the shared modules.**
+if the types are not being detected, Go to the `devU-api/` and `devU-client/` 
+and run `npm install` in each folder to update the shared modules.
 
 ### Testing
 
@@ -257,7 +189,7 @@ I wouldn't recommend digging that far down as the of tests should be more human-
 If the schema needs to be updated, you can do so by updating the models and running
 
 ```
-npm run typeorm migration:generate -- -d src/database src/migration/<generatedMigrationName>
+npm run create-migration someMeaningfulMigrationName
 ```
 
 Doing so will attempt to create an auto migration from any changes within the `src/models` directory and add it to `src/migrations`. If an auto migration is generated for you (always check your auto migrations), you can run it with the above migration command

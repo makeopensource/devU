@@ -1,0 +1,35 @@
+
+@import 'variables';
+
+.btn{
+    background-color: var(--btn-secondary-background);
+    color: var(--btn-secondary-text);
+    border: 2px solid var(--btn-secondary-border);
+    font-weight: 700;
+    min-width: 20px;
+    &:hover {
+      background-color: var(--hover-lighter);
+    }
+    &:active{
+        background-color: #c9bef9;
+    }
+    &:disabled{
+        opacity: 50%;
+        cursor: not-allowed;
+    }
+}
+.addButton{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 1px solid var(--btn-secondary-border);;
+}
+
+.subtractButton{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left: 1px solid var(--btn-secondary-border);;
+}
