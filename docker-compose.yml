@@ -39,8 +39,6 @@ services:
     depends_on:
       client:
         condition: service_completed_successfully
-    command: >
-      /bin/sh -c "echo 'Frontend is now accessible at http://localhost:9000' && nginx -g 'daemon off;'"
     ports:
       - '9000:80'
     profiles:
@@ -86,48 +84,3 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./levi/:/app/appdata
     restart: unless-stopped
-
-  # optional frontend service for leviathan to interact directly with it
-  #  kraken:
-  #    container_name: kraken
-  #    image: ghcr.io/makeopensource/leviathan/kraken:master
-  #    ports:
-  #      - "3022:3000"
-  #    environment:
-  #      - LEVIATHAN_URL=http://levi:9221
-  #    restart: unless-stopped
-
-  #  leviathan can run tango jobs, here in case we need it later
-  #  tango stuff
-  #  tango:
-  #    container_name: tango
-  #    ports:
-  #      - '127.0.0.1:3000:3000'
-  #    build:
-  #      context: ./tango
-  #    environment:
-  #      - DOCKER_REDIS_HOSTNAME=redis
-  #      - RESTFUL_KEY=devutangokey
-  #      #      - DOCKER_DEPLOYMENT
-  #      # Path to volumes within the Tango container. Does not need to be modified.
-  #      #      - DOCKER_VOLUME_PATH
-  #      # Modify the below to be the path to volumes on your host machine
-  #      - DOCKER_TANGO_HOST_VOLUME_PATH=/absolute/path/to/tango_files
-  #    depends_on:
-  #      - redis
-  #    volumes:
-  #      - ./tango.config.py:/opt/TangoService/Tango/config.py
-  #      - /var/run/docker.sock:/var/run/docker.sock
-  #      - ./logs/tango/:/var/log/tango/
-  #      - ./logs/tangonginx:/var/log/nginx
-  #      - ./tango_files:/opt/TangoService/Tango/volumes
-  #    restart: unless-stopped
-  #
-  #  redis:
-  #    container_name: redis
-  #    image: redis:latest
-  #    ports:
-  #      - '127.0.0.1:6379:6379'
-  #    deploy:
-  #      replicas: 1
-  #    restart: unless-stopped
