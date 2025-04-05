@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useActionless } from 'redux/hooks'
 import { SET_ALERT } from 'redux/types/active.types'
+import { useHistory } from "react-router-dom"
 
 import RequestService from 'services/request.service'
 import Modal from 'components/shared/layouts/modal'
@@ -20,12 +21,10 @@ interface Dates {
 
 const CreateCourseModal = ({ open, onClose }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
-    // const [startDate, setStartDate] = useState(new Date().toISOString())
     const [startDate, setStartDate] = useState("")
-    // const [endDate, setEndDate] = useState(new Date().toISOString())
     const [endDate, setEndDate] = useState("")
     const [semester, setSemester] = useState("")
-    // const privateDate = new Date().toISOString()
+    const history = useHistory()
 
     const [formData, setFormData] = useState({
         name: '',
@@ -53,9 +52,10 @@ const CreateCourseModal = ({ open, onClose }: Props) => {
         };
 
         RequestService.post('/api/courses/instructor', finalFormData)
-            .then(() => {
+            .then((response) => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Course Added' });
                 onClose();
+                history.push(`/course/${response.id}`)
             })
             .catch((err) => {
                 setAlert({ autoDelete: false, type: 'error', message: err.message });

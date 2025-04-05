@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react'
-import {useHistory, useParams} from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import AssignmentProblemListItem from 'components/listItems/assignmentProblemListItem'
-import {Assignment, AssignmentProblem, Course, Submission,  NonContainerAutoGrader /*SubmissionScore, /*ContainerAutoGrader*/} from 'devu-shared-modules'
+import { Assignment, AssignmentProblem, Course, Submission, NonContainerAutoGrader /*SubmissionScore, /*ContainerAutoGrader*/ } from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from '../errorPage/errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
-import {useActionless, useAppSelector} from 'redux/hooks'
-import {SET_ALERT} from 'redux/types/active.types'
+import { useActionless, useAppSelector } from 'redux/hooks'
+import { SET_ALERT } from 'redux/types/active.types'
 //import Card from '@mui/material/Card'
 //import CardContent from '@mui/material/CardContent'
 //import {Accordion, AccordionDetails, TextField, Typography} from '@mui/material'
@@ -16,15 +16,16 @@ import {SET_ALERT} from 'redux/types/active.types'
 //import Grid from '@mui/material/Unstable_Grid2'
 
 import styles from './assignmentDetailPage.scss'
-import {prettyPrintDateTime, fullWordPrintDate} from "../../../utils/date.utils";
+import { prettyPrintDateTime, fullWordPrintDate } from "../../../utils/date.utils";
 
 import { useLocation } from 'react-router-dom';
 import Scoreboard from '../assignments/scoreboard';
+// import DragDropFile from 'components/utils/dragDropFile'
 
 const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
     const history = useHistory()
-    const { assignmentId, courseId } = useParams<{assignmentId: string, courseId: string}>()
+    const { assignmentId, courseId } = useParams<{ assignmentId: string, courseId: string }>()
     const userId = useAppSelector((store) => store.user.id)
     const role = useAppSelector((store) => store.roleMode)
 
@@ -42,7 +43,7 @@ const AssignmentDetailPage = () => {
 
     // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
     // const contaierAutograder = false; //TODO: Use the above commented out code to get the container autograder
-    const [nonContainerAutograders, setNonContainerAutograders] = useState(new Array <NonContainerAutoGrader>())
+    const [nonContainerAutograders, setNonContainerAutograders] = useState(new Array<NonContainerAutoGrader>())
     const [showScoreboard, setShowScoreboard] = useState(false);
     setShowScoreboard;
     const location = useLocation();
@@ -86,10 +87,11 @@ const AssignmentDetailPage = () => {
             setNonContainerAutograders(nonContainers)
             nonContainerAutograders
 
-        } catch (err:any) {
+
+        } catch (err: any) {
             setError(err)
-            const message =  "Submission past due date"//Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
-            setAlert({autoDelete: false, type: 'error', message})
+            const message = "Submission past due date"//Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+            setAlert({ autoDelete: false, type: 'error', message })
         } finally {
             setLoading(false)
         }
@@ -97,17 +99,17 @@ const AssignmentDetailPage = () => {
 
     if (loading) return <LoadingOverlay delay={250} />
     if (error) return <ErrorPage error={error} />
-    
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const type = e.target.type;
         const value = e.target.value;
         const key = e.target.id;
-    
         if (type === 'checkbox') { // behavior for multiple choice - multiple answer questions
+
             const newState = e.target.checked;
-    
+
             setFormData(prevState => {
-                const currentValue = prevState[key] || ""; 
+                const currentValue = prevState[key] || "";
                 let res = '';
                 if (newState) {
                     res = currentValue + value
@@ -131,7 +133,7 @@ const AssignmentDetailPage = () => {
     };
 
 
-    const handleFileChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.item(0))
     }
 
@@ -142,14 +144,14 @@ const AssignmentDetailPage = () => {
     const handleSubmit = async () => {
         let response;
         const contentField = {
-            filepaths : [],
-            form : formData
+            filepaths: [],
+            form: formData
         }
         const submission = {
-            userId : userId,
-            assignmentId : assignmentId,
-            courseId : courseId,
-            content : JSON.stringify(contentField),
+            userId: userId,
+            assignmentId: assignmentId,
+            courseId: courseId,
+            content: JSON.stringify(contentField),
         }
 
         console.log(contentField)
@@ -173,7 +175,7 @@ const AssignmentDetailPage = () => {
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Sent' })
 
             // Now you can use submissionResponse.id here
-            await RequestService.post(`/api/course/${courseId}/grade/${response.id}`, {} )
+            await RequestService.post(`/api/course/${courseId}/grade/${response.id}`, {})
             setAlert({ autoDelete: true, type: 'success', message: 'Submission Graded' })
 
             await fetchData()
@@ -186,18 +188,18 @@ const AssignmentDetailPage = () => {
         }
     }
     const isSubmissionDisabled = () => {
-        if (assignment?.dueDate) {
-            const dueDate = new Date(assignment.dueDate);
+        if (assignment?.endDate) {
+            const endDate = new Date(assignment.endDate);
             const now = new Date();
-            return now > dueDate;
+            return now > endDate;
         }
         return false;
     };
-    isSubmissionDisabled;
+
     handleFileChange;
 
 
-    return(
+    return (
         <PageWrapper>
             <div className={styles.header}>
                 <h1 style={{gridColumnStart:2}}>Submit Assignment</h1> 
@@ -206,7 +208,7 @@ const AssignmentDetailPage = () => {
 
             <div className={styles.details}>
                 <div className={styles.assignmentDetails}>
-                    <h2>{course?.number} - {assignment?.name}</h2>
+                    <h2 style={{ textAlign: 'left' }}>{course?.number} - {assignment?.name}</h2>
                     <div>{assignment?.description}</div>
                 </div>
                 <div className={styles.submissionDetails}>
@@ -214,18 +216,18 @@ const AssignmentDetailPage = () => {
                         <strong>Due Date:&nbsp;</strong>{assignment?.dueDate ? fullWordPrintDate(assignment?.dueDate) : "N/A"}
                     </span>
                     <span className={styles.metaText}>
-                        <strong>Available Until:&nbsp;</strong>{assignment?.endDate ? fullWordPrintDate(assignment?.dueDate) : "N/A"}
+                        <strong>Available Until:&nbsp;</strong>{assignment?.endDate ? fullWordPrintDate(assignment?.endDate) : "N/A"}
                     </span>
                     <span className={styles.metaText}>
-                        <strong>Submissions Made:&nbsp;</strong>{submissions.length +"/"+ assignment?.maxSubmissions}
+                        <strong>Submissions Made:&nbsp;</strong>{submissions.length + "/" + assignment?.maxSubmissions}
                     </span>
                     <span>
                         <a onClick={() => history.push(`/course/${courseId}/assignment/${assignmentId}/submissions`)}
-                        className={styles.handinHistory}>View Handin History</a>
+                            className={styles.handinHistory}>View Handin History</a>
                     </span>
                 </div>
             </div>
-            <div className={styles.details} style={{marginTop: '20px'}}>
+            <div className={styles.details} style={{ marginTop: '20px' }}>
                 <div className={styles.assignmentDetails}>
                     <span className={styles.metaText}>
                         <strong>Assignment Category:&nbsp;</strong>{assignment?.categoryName}
@@ -235,62 +237,69 @@ const AssignmentDetailPage = () => {
                     </span>
                 </div>
                 {role.isInstructor() && <div className={styles.options_section}>
-                        <button className={`btnPrimary ${styles.parallel_button}`} onClick={() => {
-                            history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
-                        }}>Edit Assignment</button>
-                        <button className={`btnPrimary ${styles.parallel_button}`}>Grade Submissions</button>
-                        <button className={`btnPrimary ${styles.parallel_button}`}>Scoreboard</button>
+                    <button className={`btnPrimary ${styles.parallel_button}`} onClick={() => {
+                        history.push(`/course/${courseId}/assignment/${assignmentId}/update`)
+                    }}>Edit Assignment</button>
+                    <button className={`btnPrimary ${styles.parallel_button}`}>Grade Submissions</button>
+                    <button className={`btnPrimary ${styles.parallel_button}`}>Scoreboard</button>
                 </div>}
             </div>
-            
+
+            <h3 style={{ textAlign: 'center' }}>Problems</h3>
             <div className={styles.problems_section}>
+
+                {/* <div className={styles.file_upload}>
+                    <h4 className={styles.problem_header}>File Upload:</h4>
+                    <DragDropFile handleFile={(e) => {console.log(e)}} />
+                </div> */}
+
                 <div className={styles.problems_list}>
                     <h2>Problems</h2>
                     {assignmentProblems.length != 0 ? (assignmentProblems.map((problem) => (
                         <>
-                            <AssignmentProblemListItem problem={problem} handleChange={handleChange}/>
-                            <hr/>
+                            <AssignmentProblemListItem problem={problem} handleChange={handleChange} />
+                            <hr />
                         </>
-                    ))) : <div style={{fontStyle:'italic', textAlign: 'center', marginTop: '10px'}}> No problems yet...</div>}
+                    ))) : <div style={{ fontStyle: 'italic', textAlign: 'center', marginTop: '10px' }}> No problems yet...</div>}
                     {!(isSubmissionDisabled()) && assignmentProblems && assignmentProblems.length > 0 ? (
-                        <div className = {styles.submit_container}>
+                        <div className={styles.submit_container}>
                             <div className={styles.affirmation}>
-                                <input type='checkbox' onClick={handleCheckboxChange}/>
-                                <span className={styles.affirmText}>I affirm that I have complied with this course's academic integrity policy as defined in the syllabus.</span>
+                                <input type='checkbox' id='ai-check' onClick={handleCheckboxChange} />
+                                <label htmlFor='ai-check' className={styles.affirmText}>I affirm that I have complied with this course’s academic integrity policy as defined in the syllabus.</label>
                             </div>
                             <button className='btnPrimary'
-                            style={{marginTop:'40px'}} 
-                            onClick={handleSubmit}
-                            disabled={notClickable}
-                                >Submit Assignment</button>
+                                style={{ marginTop: '40px' }}
+                                onClick={handleSubmit}
+                                disabled={notClickable}
+                            >Submit Assignment</button>
                         </div>
-                        ) : null}
-                    </div>
+                    ) : null}
+                </div>
             </div>
 
 
             <div>
-            <div className={styles.submissionsContainer}>
-            {submissions.map((submission, index) => (
-                <div className={styles.submissionCard} key={index}>
-                    <div onClick={() => {
-                        history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
-                    }}>
-                    <div>
-                    <div className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</div>
-                    <div className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</div>
-                     </div>
-                    </div>
+                <div className={styles.submissionsContainer}>
+                    {submissions.map((submission, index) => (
+                        <div className={styles.submissionCard} key={index}>
+                            <div onClick={() => {
+                                history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
+                            }}>
+                                <div>
+                                    <div className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</div>
+                                    <div className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    {showScoreboard && (
+                        <div className={styles.scoreboardContainer}>
+                            <Scoreboard courseId={courseId} assignmentId={assignmentId} />
+
+                        </div>
+                    )}
                 </div>
-            ))}
-
-                {showScoreboard && (
-                    <div className={styles.scoreboardContainer}>
-                        <Scoreboard courseId={courseId} assignmentId={assignmentId} />
-
-                    </div>
-                )}
-            </div>
             </div>
 
         </PageWrapper>

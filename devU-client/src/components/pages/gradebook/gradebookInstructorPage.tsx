@@ -35,14 +35,33 @@ const TableRow = ({ user, assignments, assignmentScores, maxScores }: RowProps) 
 
     return (
         <tr className={styles.row}>
-                {user.preferredName ? <td className={styles.name} key={user.preferredName}>{user.preferredName}</td> : <td className={styles.noName}>No Name Set</td>}
-                <td className={styles.email} key={user.email} style={{borderRight: '#ddd 2px solid'}}><a href={`mailto:${user.email}`}>{user.email}</a></td>
-            
-            {assignments.map(a => (
-                assignmentScores.find(as => as.assignmentId === a.id)?.score ? <td >{assignmentScores.find(as => as.assignmentId === a.id)?.score}</td> :// If there's a submission, display that grade
-                    ((a.id && maxScores.has(a.id)) ?  <td className={styles.no_submission} >0/{maxScores.get(a.id)} <strong>-</strong></td> // Otherwise, check if the assignment has problems and show score as 0/Max(NoSubmissions), if it has no problems, show N/A.
-                        : <td>N/A</td>) 
-            ))}
+                {user.preferredName 
+                    ? <td className={styles.name} key={user.preferredName}>{user.preferredName}</td> 
+                    : <td className={styles.noName}>No Name Set</td>}
+                <td className={styles.email} key={user.email} style={{borderRight: '#ddd 2px solid'}}>
+                    <a href={`mailto:${user.email}`}>{user.email}</a>
+                </td>
+            {
+            assignments.map(a => {
+                const assignmentScore = assignmentScores.find(as => as.assignmentId === a.id)
+                if (a.id && assignmentScore){ // Submission defined, so...
+                    if (assignmentScore.createdAt){
+                        const late: boolean = new Date(assignmentScore.createdAt) > new Date(a.dueDate)
+                        if (late){ // render in red if assignment submission was late.
+                            return (<td className={styles.late} >{assignmentScore.score}/{maxScores.get(a.id)} <strong>!</strong></td>)
+                        }
+                        else { // render in black if assignment submission was on time
+                            return (<td>{assignmentScore.score}/{maxScores.get(a.id)}</td>)
+                        }
+                    }
+                }
+                else if (a.id && maxScores.has(a.id)){  // No submission, but there are assignmentproblems defined
+                    return (<td className={styles.no_submission} >0/{maxScores.get(a.id)} <strong>-</strong></td>)
+                }
+                else{ // No submission
+                    return (<td>N/A</td>)
+                }
+            })}
         </tr>
     )
 }
