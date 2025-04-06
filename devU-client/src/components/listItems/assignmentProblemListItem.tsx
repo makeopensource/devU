@@ -1,7 +1,7 @@
-import React, { useState, useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import RequestService from 'services/request.service'
-import {AssignmentProblem, NonContainerAutoGrader} from 'devu-shared-modules'
+import { AssignmentProblem, NonContainerAutoGrader } from 'devu-shared-modules'
 
 import styles from './assignmentProblemListItem.scss'
 
@@ -23,11 +23,8 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
 
     const getMeta = () => {
         if (ncags && ncags.length > 0){
-            const ncag = ncags.find(ncag => ncag.question == problem.problemName)
-            if (!ncag || !ncag.metadata) {
-                return undefined
-            }
-            return JSON.parse(ncag.metadata)
+            ncags.find(ncag => ncag.question == problem.problemName)
+            return undefined // todo metadata moved to assignment problem
         } 
     }
     
@@ -37,14 +34,14 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
     }, [])
 
     const meta = getMeta()
-    if (!meta || !meta.type){
+    if (!meta){
         return (
         <div className={styles.problem}>
             <span>Metadata missing, error!</span>
         </div>)
     }
 
-    const type = meta.type
+    const type = null // todo metadata moved
     if (type == "Text") {
         return (
         <div key={problem.id} className={styles.problem}>
@@ -60,7 +57,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
         </div>
     )} 
     else if(type == "MCQ") {
-        const options = meta.options
+        const options = null // todo metadata moved
         if (!options){
             return <div></div>
         }
