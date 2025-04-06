@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 
 import AssignmentProblemService from './assignmentProblem.service'
 
@@ -33,15 +33,21 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function post(req: Request, res: Response, next: NextFunction) {
+export async function post(req: Request, res: Response, _: NextFunction) {
   try {
-    const assignmentProblem = await AssignmentProblemService.create(req.body)
+    req.body.assignmentId = parseInt(req.params.assignmentId)
+    const assignmentProblem = await AssignmentProblemService.create(
+      req.body.assignmentId,
+      req.body.problemName,
+      req.body.maxScore,
+      req.body.metadata,
+    )
     const response = serialize(assignmentProblem)
 
     res.status(201).json(response)
   } catch (err) {
     if (err instanceof Error) {
-        res.status(400).json(new GenericResponse(err.message))
+      res.status(400).json(new GenericResponse(err.message))
     }
   }
 }
