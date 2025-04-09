@@ -324,6 +324,11 @@
     color: var(--text-color);
   }
 
+  .textField{
+    border: 2px solid #ccc;
+    margin-bottom: 5px;
+  }
+
   // Global Input Field Styles
   .input-field {
     width: 100%;

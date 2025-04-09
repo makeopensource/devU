@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Assignment, AssignmentProblem, AssignmentScore, User } from 'devu-shared-modules'
+import { Assignment, AssignmentProblem, AssignmentScore, User, Course } from 'devu-shared-modules'
 
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -30,9 +30,7 @@ type RowProps = {
     maxScores: Map<number, number>
 }
 
-//table for style
 const TableRow = ({ user, assignments, assignmentScores, maxScores }: RowProps) => {
-
     return (
         <tr className={styles.row}>
                 {user.preferredName 
@@ -43,7 +41,7 @@ const TableRow = ({ user, assignments, assignmentScores, maxScores }: RowProps) 
                 </td>
             {
             assignments.map(a => {
-                const assignmentScore = assignmentScores.find(as => as.assignmentId === a.id)
+                const assignmentScore = assignmentScores.find(as => as.assignmentId === a.id && as.userId === user.id)
                 if (a.id && assignmentScore){ // Submission defined, so...
                     if (assignmentScore.createdAt){
                         const late: boolean = new Date(assignmentScore.createdAt) > new Date(a.dueDate)
@@ -58,7 +56,7 @@ const TableRow = ({ user, assignments, assignmentScores, maxScores }: RowProps) 
                 else if (a.id && maxScores.has(a.id)){  // No submission, but there are assignmentproblems defined
                     return (<td className={styles.no_submission} >0/{maxScores.get(a.id)} <strong>-</strong></td>)
                 }
-                else{ // No submission
+                else{ // No problems mapped to this assignment, so there is no max score.
                     return (<td>N/A</td>)
                 }
             })}
@@ -108,6 +106,8 @@ const GradebookInstructorPage = () => {
     const [assignments, setAssignments] = useState(new Array<Assignment>()) //All assignments in the course
     const [displayedAssignments, setDisplayedAssignments] = useState(new Array<Assignment>()) //All assignments in the course
     const [assignmentScores, setAssignmentScores] = useState(new Array<AssignmentScore>()) //All assignment scores for assignments in the course
+    const [course, setCourse] = useState<Course>()
+
     const { courseId } = useParams<{ courseId: string }>()
 
     useEffect(() => {
@@ -153,8 +153,8 @@ const GradebookInstructorPage = () => {
 
     const fetchData = async () => {
         try {
-            //const userCourses = await RequestService.get<UserCourse[]>(`/api/course/${courseId}/user-courses/`)
-            //setUserCourses(userCourses)
+            const course = await RequestService.get<Course>(`/api/courses/${courseId}`)
+            setCourse(course)
 
             const users = await RequestService.get<User[]>(`/api/users/course/${courseId}`)
             setAllUsers(users)
@@ -176,13 +176,49 @@ const GradebookInstructorPage = () => {
         }
     }
 
+    const saveToCsv = () => {
+        const toCSV = []
+        let header = "externalId,email,preferredName"
+        assignments.forEach((assignment) => {header+=`,${assignment.name}`})
+        toCSV.push(header + '\n')
+        //console.log(header)
+
+
+        allUsers.forEach((user) => {
+            let csvString = `${user.externalId},${user.email},${user.preferredName ?? "N/A"}`
+            //console.log(csvString)
+            assignments.forEach((assignment) => {
+                const assignmentScore = assignmentScores.find(as => as.assignmentId === assignment?.id && as.userId == user.id) 
+                if (assignment?.id && assignmentScore){ // Submission defined, so...
+                    csvString += `,${assignmentScore.score}`
+                }
+                else if (assignment?.id && maxScores.has(assignment?.id)){  // No submission, but there are assignmentproblems defined
+                    csvString += ',0';
+                }
+                else{ // No problems mapped to this assignment, so there is no max score.
+                    csvString += ',N/A';
+                }
+            })
+            toCSV.push(csvString + '\n')
+        })
+        let final = 'data:text/csv;charset=utf-8,'
+        toCSV.forEach((row)=>{final += row})
+        var encodedUri = encodeURI(final);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `${course?.number.replace(" ", '').toLowerCase() ?? 'class'}_gradebook`);
+        document.body.appendChild(link); 
+        link.click();
+        document.body.removeChild(link);
+        
+    //console.log(final)
+    }  
+
     const handleStudentSearch = (value:string)  => {
         if(value.length === 0){
             setDisplayedUsers(allUsers)
             return;
         }
-
-        //const search = value.toLowerCase();
 
         const filterusers = allUsers.filter((user) =>{
             const matchuser =
@@ -191,7 +227,6 @@ const GradebookInstructorPage = () => {
             return matchuser;
         });
         setDisplayedUsers(filterusers);
-
     };
 
     const handleCategoryChange = (value:Option<String>)  => {
@@ -255,6 +290,9 @@ const GradebookInstructorPage = () => {
                     assignmentScores={assignmentScores}
                     maxScores={maxScores}
                 />
+            </div>
+            <div style={{width:'100%', marginTop: '10px'}}>
+                    <button style={{float: 'right'}}className='btnSecondary' id='createCoursBtn' onClick={saveToCsv}>Download as CSV</button>
             </div>
         </PageWrapper>
     )
