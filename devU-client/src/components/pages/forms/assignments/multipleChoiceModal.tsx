@@ -10,9 +10,10 @@ import styles from './multipleChoiceModal.scss'
 interface Props {
     open: boolean;
     onClose: () => void;
+    edit?: boolean;
 }
 
-const MultipleChoiceModal = ({ open, onClose }: Props) => {
+const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId } = useParams<{ assignmentId: string }>()
     const { courseId } = useParams<{ courseId: string }>()
@@ -33,7 +34,7 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
 
     const handleSubmit = () => {
         // early return if form not fully filled out
-        if (!submittable) { return }
+        if (!submittable()) { return }
 
         const time = new Date() // stopgap since the NCAG method right now means questions with the same name can get confused, can be removed once meta added to assignmentProblem
         const createdAt = time;
@@ -54,26 +55,45 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
             metadata: {type: formData.type, options: Object.fromEntries(options)},
             createdAt: createdAt
         }
-        console.log(graderFormData)
 
-        RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
-            .then(() => {
-                console.log("PROBLEM CREATED")
-                setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' });
-            })
-            .catch((err: ExpressValidationError[] | Error) => {
-                const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
-                setAlert({ autoDelete: false, type: 'error', message })
-            })
+        if (edit){
+            RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
+                .then(() => {
+                    console.log("PROBLEM UPDATED")
+                    setAlert({ autoDelete: true, type: 'success', message: 'Problem Updated' });
+                })
+                .catch((err: ExpressValidationError[] | Error) => {
+                    const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+                    setAlert({ autoDelete: false, type: 'error', message })
+                })
+            RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
+                .then(() => {
+                    console.log("GRADER UPDATED")
+                })
+                .catch((err: ExpressValidationError[] | Error) => {
+                    const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+                    setAlert({ autoDelete: false, type: 'error', message })
+                })
+        } else {
+            RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
+                .then(() => {
+                    console.log("PROBLEM CREATED")
+                    setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' });
+                })
+                .catch((err: ExpressValidationError[] | Error) => {
+                    const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+                    setAlert({ autoDelete: false, type: 'error', message })
+                })
 
-        RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
-            .then(() => {
-                console.log("GRADER CREATED")
-            })
-            .catch((err: ExpressValidationError[] | Error) => {
-                const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
-                setAlert({ autoDelete: false, type: 'error', message })
-            })
+            RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
+                .then(() => {
+                    console.log("GRADER CREATED")
+                })
+                .catch((err: ExpressValidationError[] | Error) => {
+                    const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
+                    setAlert({ autoDelete: false, type: 'error', message })
+                })
+        }
         
         // close modal
         closeModal()
@@ -200,7 +220,7 @@ const MultipleChoiceModal = ({ open, onClose }: Props) => {
     }
 
     return (
-        <Modal title="Add Multiple Choice Problem" isSubmittable={submittable} buttonAction={handleSubmit} open={open} onClose={closeModal}>
+        <Modal title="Edit Multiple Choice Problem" isSubmittable={submittable} buttonAction={handleSubmit} open={open} onClose={closeModal}>
             <div className="input-group">
                 <label htmlFor="title" className="input-label">Problem Title:</label>
                 <input type="text" id="title" onChange={handleChange} 

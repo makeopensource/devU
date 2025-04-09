@@ -10,10 +10,6 @@ import Button from '../../../shared/inputs/button'
 import styles from './assignmentUpdatePage.scss'
 import { SET_ALERT } from 'redux/types/active.types'
 import { applyMessageToErrorFields, removeClassFromField } from 'utils/textField.utils'
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import { getCssVariables } from 'utils/theme.utils'
 import { Button as MuiButton, StyledEngineProvider } from '@mui/material'
 import TextDropdown from 'components/shared/inputs/textDropDown'
 import { Option } from 'components/shared/inputs/dropdown'
@@ -45,20 +41,12 @@ const AssignmentUpdatePage = () => {
 
 
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
-  const [openEditModal, setOpenEditModal] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const history = useHistory()
 
-  const [theme, setTheme] = useState(getCssVariables())
   // Needs a custom observer to force an update when the css variables change
   // Custom observer will update the theme variables when the bodies classes change
-  useEffect(() => {
-    const observer = new MutationObserver(() => setTheme(getCssVariables()))
-
-    observer.observe(document.body, { attributes: true })
-
-    return () => observer.disconnect()
-  })
+  
 
   const [formData, setFormData] = useState<Assignment>({
     courseId: parseInt(courseId),
@@ -73,26 +61,9 @@ const AssignmentUpdatePage = () => {
     startDate: '',
   })
 
-  const [assignmentProblemData, setAssignmentProblemData] = useState<AssignmentProblem>({
-    assignmentId: currentAssignmentId,
-    problemName: '',
-    maxScore: -1,
-  })
+  
 
-
-  const handleOpenEditModal = (problem: AssignmentProblem) => {
-    if (problem === assignmentProblemData) {
-      setOpenEditModal(true)
-    } else {
-      setAssignmentProblemData(problem)
-    }
-  }
-  const handleCloseEditModal = () => {
-    setOpenEditModal(false)
-  }
-  useEffect(() => {
-    if (assignmentProblemData.maxScore !== -1) { setOpenEditModal(true) }
-  }, [assignmentProblemData])
+  
 
   // taken out of the design for the moment, should get incorporated later
   /*const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}*/ 
@@ -188,21 +159,6 @@ const AssignmentUpdatePage = () => {
 
   }
 
-  const handleProblemUpdate = () => {
-    const finalFormData = {
-      assignmentId: assignmentProblemData.assignmentId,
-      problemName: assignmentProblemData.problemName,
-      maxScore: assignmentProblemData.maxScore,
-    }
-
-    RequestService.put(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${assignmentProblemData.id}`, finalFormData)
-      .then(() => {
-        setAlert({ autoDelete: true, type: 'success', message: 'Problem Updated' })
-        setOpenEditModal(false)
-        fetchAssignmentProblems()
-      })
-  }
-
 
   
 
@@ -218,6 +174,11 @@ const AssignmentUpdatePage = () => {
   }  
   const [mcqModal, setMcqModal] = useState(false);
   const handleCloseMcqModal = () => {
+    setMcqModal(false)
+    fetchAssignmentProblems()
+  }  
+  const [mcqEditModal, setMcqEditModal] = useState(false);
+  const handleCloseEditMcqModal = () => {
     setMcqModal(false)
     fetchAssignmentProblems()
   }  
@@ -241,10 +202,6 @@ const AssignmentUpdatePage = () => {
     setFormData(prevState => ({ ...prevState, [key]: value }))
   }
 
-  const handleProblemChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
-    const key = e.target.id
-    setAssignmentProblemData(prevState => ({ ...prevState, [key]: value }))
-  }
 
   const handleCategoryChange = (value: Option<String>)  => {
     setFormData(prevState => ({ ...prevState, categoryName: value.label }))
@@ -269,21 +226,10 @@ const AssignmentUpdatePage = () => {
 
     <PageWrapper>
 
-      <Dialog open={openEditModal} onClose={handleCloseEditModal}>
-        <DialogContent sx={{bgcolor:theme.listItemBackground}}>
-        <h3 className={styles.header}>Edit Problem</h3>
-          <TextField id="problemName" label={'Problem Name'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.problemName : ''}/>
-          <TextField id="maxScore" label={'Max Score'} onChange={handleProblemChange} value={assignmentProblemData ? assignmentProblemData.maxScore.toString() : ''}/>
-          <DialogActions>
-            <Button onClick={handleProblemUpdate}>Save</Button>
-            <Button onClick={handleCloseEditModal}>Close</Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
-
         <TextProblemModal open={textModal} onClose={handleCloseTextModal} />
         <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal}/>
-      <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
+        <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
+        <MultipleChoiceModal open={mcqEditModal} onClose={handleCloseEditMcqModal} edit/>
 
 
       <div className={styles.pageHeader}>
@@ -413,7 +359,7 @@ const AssignmentUpdatePage = () => {
               <div>
               <AssignmentProblemListItem problem={problem} disabled={true}/>
                 <div style={{margin: '5px 0 10px 0'}}>
-                  <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { handleOpenEditModal(problem) } }}>Edit</Button>|
+                  <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { setMcqEditModal(true) } }}>Edit</Button>|
                   <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
                 </div>
                 <hr/>
