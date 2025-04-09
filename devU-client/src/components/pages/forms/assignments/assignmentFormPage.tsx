@@ -50,22 +50,22 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
         setFormData(prevState => ({ ...prevState, [key]: value }))
     }
 
-    const handleCategoryChange = (value: Option<String>)  => {
+    const handleCategoryChange = (value: Option<String>) => {
         setFormData(prevState => ({ ...prevState, categoryName: value.label }))
         setCurrentCategory(value)
-      };
+    };
 
-    const handleCategoryCreate = (value: string)  => {
-        const newOption : Option = {value: value, label: value}
+    const handleCategoryCreate = (value: string) => {
+        const newOption: Option = { value: value, label: value }
         setFormData(prevState => ({ ...prevState, categoryName: value }))
         setCurrentCategory(newOption)
-     };
+    };
 
     const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setStartDate(e.target.value) }
     const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setEndDate(e.target.value) }
-    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
-        setDueDate(e.target.value) 
-        
+    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDueDate(e.target.value)
+
         // automatically set end date
         if (!endDate) {
             setEndDate(e.target.value)
@@ -119,7 +119,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             })
     }
 
-    useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
+    useEffect(() => { RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) }) }, [formData])
 
 
     useEffect(() => {
@@ -127,8 +127,8 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
         const options = categories.map((category) => ({
             value: category,
             label: category
-          }));
-        
+        }));
+
         setAllCategoryOptions(options);
     }, [assignments])
 
@@ -137,37 +137,39 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             <div className="input-group">
                 <label htmlFor="categoryName" className="input-label">Assignment Category:</label>
                 <TextDropdown
-                onChange={handleCategoryChange}
-                onCreate={handleCategoryCreate}
-                options={categoryOptions}
-                custom={{control: () => ({border:'none', padding:'3px 0', backgroundColor: 'var(--input-field-background)'}),
-                        placeholder: () => ({color: 'var(--input-field-label)'}),
-                        input: () => ({fontSize: '14px', backgroundColor: 'var(--input-field-background)'}),
-                        option: (_, state) => ({ backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : 'var(--input-field-background)',}),
-                        menu: () => ({ backgroundColor: 'var(--input-field-background)', overflow:'hidden'}),
-                        singleValue: () => ({fontSize: '14px'})}}
-                value={currentCategory ?? undefined}/>
+                    onChange={handleCategoryChange}
+                    onCreate={handleCategoryCreate}
+                    options={categoryOptions}
+                    custom={{
+                        control: () => ({ border: 'none', padding: '3px 0', backgroundColor: 'var(--input-field-background)' }),
+                        placeholder: () => ({ color: 'var(--input-field-label)' }),
+                        input: () => ({ fontSize: '14px', backgroundColor: 'var(--input-field-background)' }),
+                        option: (_, state) => ({ backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : 'var(--input-field-background)', }),
+                        menu: () => ({ backgroundColor: 'var(--input-field-background)', overflow: 'hidden' }),
+                        singleValue: () => ({ fontSize: '14px' })
+                    }}
+                    value={currentCategory ?? undefined} />
             </div>
             <div className="input-group">
                 <label htmlFor="name" className="input-label">Assignment Name:</label>
                 <input type="text" id="name" onChange={handleChange} className={formStyles.input}
-                placeholder='e.g. PA3'/>
+                    placeholder='e.g. PA3' />
             </div>
             <div className="input-group">
                 <label htmlFor="description" className="input-label">Description: <span>(optional)</span></label>
                 <textarea rows={4} id="description" onChange={handleChange} className={formStyles.input}
-                placeholder='Provide an optional assignment description'/>
+                    placeholder='Provide an optional assignment description' />
             </div>
             <div className='input-subgroup-2col'>
                 <div className="input-group">
                     <label htmlFor="maxSubmissions" className="input-label">Maximum Submissions:</label>
-                    <input type="number"  id="maxSubmissions" onChange={handleChange} className={formStyles.input}
-                    placeholder='e.g. 1' value={formData.maxSubmissions} min="0"/>
+                    <input type="number" id="maxSubmissions" onChange={handleChange} className={formStyles.input}
+                        placeholder='e.g. 1' value={formData.maxSubmissions} min="0" />
                 </div>
                 <div className="input-group">
                     <label htmlFor="maxFileSize" className="input-label">Maximum File Size (KB):</label>
                     <input type="number" id="maxFileSize" onChange={handleChange} className={formStyles.input}
-                    placeholder='e.g. 100' value={formData.maxFileSize} min="0"/>
+                        placeholder='e.g. 100' value={formData.maxFileSize} min="0" />
                 </div>
             </div>
             <div className={formStyles.datepickerContainer}>
@@ -188,6 +190,11 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 </div>
             </div>
             <label htmlFor="disableHandins">Disable Submissions?<input type="checkbox" id="disableHandins" /></label>
+            <div className="input-subgroup-2col" style={{justifyContent: 'flex-start'}}>
+                <span>Select submission for final score:</span>
+                <label htmlFor="subRecent"><input type="radio" id="subRecent" name="submissionChoice"/>Most Recent</label>
+                <label htmlFor="subHighest"><input type="radio" id="subHighest" name="submissionChoice"/>Highest Score</label>
+            </div>
         </Modal>
     )
 }
