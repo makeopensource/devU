@@ -245,7 +245,6 @@ const AssignmentDetailPage = () => {
                 </div>}
             </div>
 
-            <h3 style={{ textAlign: 'center' }}>Problems</h3>
             <div className={styles.problems_section}>
 
                 {/* <div className={styles.file_upload}>
@@ -268,7 +267,7 @@ const AssignmentDetailPage = () => {
                                 <label htmlFor='ai-check' className={styles.affirmText}>I affirm that I have complied with this course’s academic integrity policy as defined in the syllabus.</label>
                             </div>
                             <button className='btnPrimary'
-                                style={{ marginTop: '40px' }}
+                                style={{ margin: '10px 0' }}
                                 onClick={handleSubmit}
                                 disabled={notClickable}
                             >Submit Assignment</button>
@@ -277,19 +276,18 @@ const AssignmentDetailPage = () => {
                 </div>
             </div>
 
-
+            
+            {submissions.length != 0 && 
             <div>
                 <div className={styles.submissionsContainer}>
                     {submissions.map((submission, index) => (
-                        <div className={styles.submissionCard} key={index}>
-                            <div onClick={() => {
-                                history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
-                            }}>
+                        <div className={styles.submissionCard} key={index} onClick={() => {
+                            history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
+                        }}>
                                 <div>
                                     <div className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</div>
                                     <div className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</div>
                                 </div>
-                            </div>
                         </div>
                     ))}
 
@@ -300,7 +298,7 @@ const AssignmentDetailPage = () => {
                         </div>
                     )}
                 </div>
-            </div>
+            </div>}
 
         </PageWrapper>
     )

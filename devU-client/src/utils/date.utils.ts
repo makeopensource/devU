@@ -11,7 +11,9 @@ export function wordPrintDate(date:string){
 }
 
 export function fullWordPrintDate(date:string){
-  return new Date(date).toLocaleString('en-us', {
+  let updatedTime = new Date(date)
+  updatedTime.setHours(updatedTime.getHours() + 4) // jank fix, but makes due dates appear correctly :D
+  return updatedTime.toLocaleString('en-us', {
     weekday: 'long', 
     month: 'long', 
     day: '2-digit', 

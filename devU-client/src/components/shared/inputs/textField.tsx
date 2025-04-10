@@ -79,7 +79,13 @@ const TextField = ({
                         borderRadius: '10px',
                         marginBottom: '0px',
                         minHeight: '35px',
-                        padding: '10px'
+                        padding: '10px',
+                        
+                      },
+                      "& .MuiOutlinedInput-input.Mui-disabled" : {
+                          WebkitTextFillColor: '#7c7c7c',
+                          opacity: '50%',
+                          cursor: 'not-allowed'
                       },
                       // label text
                       "& .MuiInputLabel-outlined" : {

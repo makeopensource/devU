@@ -41,7 +41,6 @@ const AssignmentUpdatePage = () => {
 
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
-  const [currentCategory, setCurrentCategory] = useState<Option<String>>()
 
 
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
@@ -117,12 +116,9 @@ const AssignmentUpdatePage = () => {
       .then((res) => { setAssignmentProblems(res)})
   }
   
-  
-
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
-
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
 
@@ -134,7 +130,6 @@ const AssignmentUpdatePage = () => {
       }));
     
     setAllCategoryOptions(options);
-    setCurrentCategory(categoryOptions.find((category) => (category.value === formData.categoryName)))
 }, [assignments])
 
 
@@ -248,7 +243,6 @@ const AssignmentUpdatePage = () => {
 
   const handleCategoryChange = (value: Option<String>)  => {
     setFormData(prevState => ({ ...prevState, categoryName: value.label }))
-    setCurrentCategory(value)
   };
 
   const handleCategoryCreate = (value: string)  => {
@@ -259,7 +253,6 @@ const AssignmentUpdatePage = () => {
       return newArr;
     })
     setFormData(prevState => ({ ...prevState, categoryName: value }))
-    setCurrentCategory(newOption)
     };
 
   
@@ -299,8 +292,7 @@ const AssignmentUpdatePage = () => {
               <TextDropdown onChange={handleCategoryChange}
                       onCreate={handleCategoryCreate}
                       options={categoryOptions}
-                      value={currentCategory}
-                      defaultOption={currentCategory}
+                      value={{value: formData.categoryName, label: formData.categoryName}}
                       />
             </div>
             <div>
@@ -336,7 +328,7 @@ const AssignmentUpdatePage = () => {
               <div className={styles.textFieldHeader}>Max Submissions: </div>
               <TextField id="maxSubmissions" onChange={handleChange} 
                         invalidated={!!invalidFields.get('maxSubmission')}
-                        className={styles.textField}
+                        className='textField'
                         helpText={invalidFields.get('maxSubmission')}
                         value={formData.maxSubmissions ? (formData.maxSubmissions).toString() : ''} 
                         sx={{width: '100%', marginLeft : 1/10}}/>
@@ -345,7 +337,7 @@ const AssignmentUpdatePage = () => {
               <div className={styles.textFieldHeader}>Max File Size (kb): </div>
               <TextField id="maxFileSize" onChange={handleChange}
                         invalidated={!!invalidFields.get('maxFileSize')}
-                        className={styles.textField}
+                        className='textField'
                         helpText={invalidFields.get('maxFileSize')}
                         value={formData.maxFileSize ? formData.maxFileSize.toString() : ''} 
                         sx={{width: '100%', marginLeft : 1/10}}/>
