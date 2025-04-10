@@ -210,8 +210,6 @@ const GradebookInstructorPage = () => {
         document.body.appendChild(link); 
         link.click();
         document.body.removeChild(link);
-        
-    //console.log(final)
     }  
 
     const handleStudentSearch = (value:string)  => {
@@ -292,7 +290,7 @@ const GradebookInstructorPage = () => {
                 />
             </div>
             <div style={{width:'100%', marginTop: '10px'}}>
-                    <button style={{float: 'right'}}className='btnSecondary' id='createCoursBtn' onClick={saveToCsv}>Download as CSV</button>
+                    <button style={{float: 'right'}}className='btnSecondary' onClick={saveToCsv}>Download as CSV</button>
             </div>
         </PageWrapper>
     )

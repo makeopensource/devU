@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAppSelector } from 'redux/hooks';
 
-import { Assignment, AssignmentScore, AssignmentProblem, Course } from 'devu-shared-modules';
+import { Assignment, AssignmentScore, AssignmentProblem, Course, User } from 'devu-shared-modules';
 
 import PageWrapper from 'components/shared/layouts/pageWrapper';
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay';
@@ -25,6 +25,9 @@ const GradebookStudentPage = () => {
     const [categories, setCategories] = useState<String[]>([])
     const [assignmentProblems, setAssignmentProblems] = useState<Map<number, AssignmentProblem[]>>(new Map<number, AssignmentProblem[]>())
     const [maxScores, setMaxScores] = useState<Map<number, number>>(new Map<number, number>())
+    
+    const [user, setUser] = useState({} as User)
+
 
 
     useEffect(() => {
@@ -61,14 +64,19 @@ const GradebookStudentPage = () => {
             const assignments = await RequestService.get<Assignment[]>(`/api/course/${courseId}/assignments/released`);
             setAssignments(assignments);
 
-            const assignmentScores = await RequestService.get<AssignmentScore[]>(`/api/course/${courseId}/assignment-scores/user/${userId}`);
-            setAssignmentScores(assignmentScores);
-            
+            const assignmentIds = assignments.map((a) => (a.id)) 
+
+            const assignmentScoreData = await RequestService.get<AssignmentScore[]>(`/api/course/${courseId}/assignment-scores/user/${userId}`);
+            setAssignmentScores(assignmentScoreData.filter((as) => (as.userId === userId && assignmentIds.includes(as.assignmentId))));
+
             const courseData = await RequestService.get<Course>(`/api/courses/${courseId}`);
             setCourseName(courseData.name);
             
             const categories = [...new Set(assignments.map(a => a.categoryName))];
             setCategories(categories);
+
+            const userData = await RequestService.get<User>(`/api/users/${userId}`);
+            setUser(userData)
 
         } catch (error: any) {
             setError(error);
@@ -80,18 +88,62 @@ const GradebookStudentPage = () => {
     if (loading) return <LoadingOverlay delay={250} />;
     if (error) return <ErrorPage error={error} />;
 
-    // Categorize assignments
+    const saveToCsv = () => {
+        const toCSV = []
+        let header = "externalId,email,preferredName"
+        assignments.forEach((assignment) => {header+=`,${assignment.name}`})
+        toCSV.push(header + '\n')
+
+        let csvString = `${user.externalId},${user.email},${user.preferredName ?? "N/A"}`
+        assignments.forEach((assignment) => {
+            const assignmentScore = assignmentScores.find(as => as.assignmentId === assignment?.id && as.userId === userId) 
+            if (assignment?.id && assignmentScore){ // Submission defined, so...
+                csvString += `,${assignmentScore.score}`
+            }
+            else if (assignment?.id && maxScores.has(assignment?.id)){  // No submission, but there are assignmentproblems defined
+                csvString += ',0';
+            }
+            else{ // No problems mapped to this assignment, so there is no max score.
+                csvString += ',N/A';
+            }
+        })
+        toCSV.push(csvString + '\n')
+        
+        let final = 'data:text/csv;charset=utf-8,'
+        toCSV.forEach((row)=>{final += row})
+        var encodedUri = encodeURI(final);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `${courseName.replace(" ", '').toLowerCase() ?? 'class'}_gradebook`);
+        document.body.appendChild(link); 
+        link.click();
+        document.body.removeChild(link);
+    }
+
+
 
     const calculateAverage = () => {
         if (assignmentScores.length === 0) return 0.0;
+        const assignmentIds = assignments.map((a) => (a.id)) 
+        assignmentScores.filter((as) => (assignmentIds.includes(as.assignmentId)))
         const total = assignmentScores.reduce((sum, a) => sum + (a.score || 0), 0);
         const maxScoresPossible = Array.from(maxScores.values()).reduce((sum, a) => sum + (a), 0);
+        console.log(total)
         return (total / maxScoresPossible * 100).toFixed(1);
     };
 
     const calculateCategoryAverage = (categoryAssignments: Assignment[]) => {
-        const totalScore = categoryAssignments.reduce((sum, assignment) => sum + (assignmentScores.find(a => a.assignmentId === assignment.id)?.score || 0), 0);
-        return (totalScore / categoryAssignments.length).toFixed(1);
+        let totalScore = 0;
+        let maxPossible = 0;
+        for (let i = 0; i < categoryAssignments.length; i++) {
+            let assignment = categoryAssignments.at(i)
+            totalScore += (assignmentScores.find(a => a.assignmentId === assignment?.id)?.score || 0)
+            maxPossible += (assignment?.id ? (maxScores.get(assignment.id) ?? 0) : 0)
+        }
+        if (maxPossible === 0){
+            return "N/A"
+        }
+        return (totalScore / maxPossible * 100).toFixed(1) + "%";
     };
 
     return (
@@ -131,7 +183,7 @@ const GradebookStudentPage = () => {
                                             return(
                                                 <tr key={assignment.id}>
                                                     <td><a href={`assignment/${assignment.id}`} className={styles.assignmentLink}>{assignment.name}</a></td>
-                                                    <td className={styles.centered}>{lateDays}</td> {/*Yell at Diego if this is not updated, should be a simple subtraction */}
+                                                    <td className={styles.centered}>{lateDays}</td>
                                                     {assignmentScore 
                                                         ? (late 
                                                             ? <td className={`${styles.centered} ${styles.late}`}>{assignmentScore.score} / {assignment.id && maxScores.get(assignment.id)}</td> 
@@ -160,7 +212,10 @@ const GradebookStudentPage = () => {
             <div className={styles.courseAverage}>
                     <span>Course Average</span>
                     <span>{calculateAverage()}%</span>
-                </div>
+            </div>
+            <div style={{width:'100%', marginTop: '10px'}}>
+                    <button style={{float: 'right'}} className='btnSecondary' onClick={saveToCsv}>Download as CSV</button>
+            </div>
         </PageWrapper>
     );
 };
