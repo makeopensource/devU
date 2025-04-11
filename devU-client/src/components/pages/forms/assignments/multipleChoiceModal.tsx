@@ -221,7 +221,6 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
             const newMap = new Map(prevState)
             newMap.set(index, '')
             return newMap})
-        console.log(options)
     }
 
     const decreaseOptions = () => { 
