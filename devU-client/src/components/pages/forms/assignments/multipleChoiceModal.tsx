@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { ExpressValidationError } from 'devu-shared-modules'
+import { AssignmentProblem, ExpressValidationError, NonContainerAutoGrader } from 'devu-shared-modules'
 import { SET_ALERT } from 'redux/types/active.types'
 import { useActionless } from 'redux/hooks'
 import RequestService from 'services/request.service'
@@ -11,9 +11,10 @@ interface Props {
     open: boolean;
     onClose: () => void;
     edit?: boolean;
+    problemId?: number
 }
 
-const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
+const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId } = useParams<{ assignmentId: string }>()
     const { courseId } = useParams<{ courseId: string }>()
@@ -26,6 +27,39 @@ const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
         regex: false
     });
     const [boxType, setBoxType] = useState("checkbox")
+
+
+    const setInitalFormData = async () => {
+        if (!problemId){
+            return
+        }
+        const assignmentProblemData = await RequestService.get<AssignmentProblem>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/${problemId}`);
+        const ncagData = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`);
+        const ncag = ncagData.find((as) => (as.id === problemId))
+        if (ncag?.metadata){ // UPDATE for AssignmentProblem metadata
+            const meta = JSON.parse(ncag.metadata)
+            const type = meta.type
+            if (type === "MCQ-mult"){
+                setBoxType("checkbox")
+            } else {
+                setBoxType("radio")
+            }
+            setFormData(({type: type, 
+                title: assignmentProblemData.problemName,
+                maxScore: '' + assignmentProblemData.maxScore,
+                correctAnswer: ncag.correctString,
+                regex: ncag.isRegex
+                }))
+            const options = meta.options
+            setOptions(new Map(Object.entries(options)))
+        } else {
+            setAlert({ autoDelete: false, type: 'error', message: "No metadata" })
+        }
+        
+    }
+
+    useEffect(() => {setInitalFormData()}, [problemId])
+
 
     const submittable = () => {
         if (!formData.title || !formData.maxScore || formData.correctAnswer.length <= 0) { return false }
@@ -47,17 +81,22 @@ const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
         };
 
         const graderFormData = {
+            id: problemId,
             assignmentId: parseInt(assignmentId),
             question: formData.title,
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
-            metadata: {type: formData.type, options: Object.fromEntries(options)},
+            metadata: {
+                type: "A", 
+                options: Object.fromEntries(options)},
             createdAt: createdAt
         }
 
+        console.log(graderFormData)
+
         if (edit){
-            RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
+            RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/${problemId}`, problemFormData)
                 .then(() => {
                     console.log("PROBLEM UPDATED")
                     setAlert({ autoDelete: true, type: 'success', message: 'Problem Updated' });
@@ -66,7 +105,7 @@ const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
                     const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
                     setAlert({ autoDelete: false, type: 'error', message })
                 })
-            RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
+            RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/${problemId}`, graderFormData)
                 .then(() => {
                     console.log("GRADER UPDATED")
                 })
@@ -74,7 +113,9 @@ const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
                     const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
                     setAlert({ autoDelete: false, type: 'error', message })
                 })
-        } else {
+        } 
+        
+        else {
             RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
                 .then(() => {
                     console.log("PROBLEM CREATED")
@@ -110,7 +151,9 @@ const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
     }
 
     const closeModal = () => {
-        resetData()
+        if (!edit){
+            resetData()
+        }
         onClose()
     }
 
@@ -178,6 +221,7 @@ const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
             const newMap = new Map(prevState)
             newMap.set(index, '')
             return newMap})
+        console.log(options)
     }
 
     const decreaseOptions = () => { 
@@ -218,12 +262,11 @@ const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
         }
         setFormData(prevState => ({...prevState, correctAnswer: ''})) 
     }
-
     return (
-        <Modal title="Edit Multiple Choice Problem" isSubmittable={submittable} buttonAction={handleSubmit} open={open} onClose={closeModal}>
+        <Modal title={edit ? "Edit Multiple Choice Problem" : "Add Multiple Choice Problem"} isSubmittable={submittable} buttonAction={handleSubmit} open={open} onClose={closeModal}>
             <div className="input-group">
                 <label htmlFor="title" className="input-label">Problem Title:</label>
-                <input type="text" id="title" onChange={handleChange} 
+                <input type="text" id="title" onChange={handleChange} value={formData.title}
                     placeholder='e.g. What is the best programming language?' />
             </div>
             <div className="input-group" style={{gap: '5px'}} >
@@ -246,15 +289,21 @@ const MultipleChoiceModal = ({ open, onClose, edit }: Props) => {
                     <label style={{width: '15px'}}>{key}.</label>
                     <input type='text' id={key} value={text} onChange={handleQuestionTextChange} style={{width:'100%'}}
                     placeholder={getPlaceholder(key)} />
-                    <input type={`${boxType}`} id={key} onChange={handleCorrectAnswerChange} name="correct"/>
+                    <input type={`${boxType}`} 
+                    id={key} 
+                    onChange={handleCorrectAnswerChange} 
+                    checked={formData.correctAnswer.includes(key)} 
+                    name="correct"/>
                 </div>)}
             </div>
             <div style={{display:'flex', alignItems: 'center'}}>
-                <input type='checkbox' onChange={switchBoxType}/><label>Allow only one answer</label>
+                <input type='checkbox' 
+                checked={formData.type === "MCQ-single"}
+                onChange={switchBoxType}/><label>Allow only one answer</label>
             </div>
             <div className="input-group">
-                <label htmlFor="maxScore" className="input-label">Maximum Score:</label>
-                <input type="number" id="maxScore" onChange={handleChange}
+                <label htmlFor="maxScore" className="input-label" >Maximum Score:</label>
+                <input type="number" id="maxScore" onChange={handleChange} value={formData.maxScore}
                     placeholder='e.g. 10' min="0" />
             </div>
         </Modal>

@@ -34,7 +34,7 @@ const AssignmentUpdatePage = () => {
   const handleCloseContainerAutoGraderModal = () => setContainerAutoGraderModal(false);
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
 
-
+  const [problemId, setProblemId] = useState<number>()
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
   const [currentCategory, setCurrentCategory] = useState<Option<String>>()
@@ -179,7 +179,7 @@ const AssignmentUpdatePage = () => {
   }  
   const [mcqEditModal, setMcqEditModal] = useState(false);
   const handleCloseEditMcqModal = () => {
-    setMcqModal(false)
+    setMcqEditModal(false)
     fetchAssignmentProblems()
   }  
 
@@ -219,6 +219,18 @@ const AssignmentUpdatePage = () => {
     setCurrentCategory(newOption)
     };
 
+  const openEditModal = (problem: AssignmentProblem) => {
+    setProblemId(problem.id)
+    const ncag = nonContainerAutograders.find((n) => (n.question === problem.problemName && n.createdAt === problem.createdAt))
+    const type = JSON.parse(ncag?.metadata ?? "").type
+    if (type === "MCQ-mult" || "MCQ-single"){
+      setMcqEditModal(true)
+    }
+    else {
+      console.log("Pee")
+    }
+  }
+
   
   return (
     <>
@@ -229,7 +241,7 @@ const AssignmentUpdatePage = () => {
         <TextProblemModal open={textModal} onClose={handleCloseTextModal} />
         <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal}/>
         <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
-        <MultipleChoiceModal open={mcqEditModal} onClose={handleCloseEditMcqModal} edit/>
+        <MultipleChoiceModal open={mcqEditModal} onClose={handleCloseEditMcqModal} edit problemId={problemId}/>
 
 
       <div className={styles.pageHeader}>
@@ -359,7 +371,7 @@ const AssignmentUpdatePage = () => {
               <div>
               <AssignmentProblemListItem problem={problem} disabled={true}/>
                 <div style={{margin: '5px 0 10px 0'}}>
-                  <Button className={styles.editProblem} onClick={() => { if (problem !== undefined) { setMcqEditModal(true) } }}>Edit</Button>|
+                  <Button className={styles.editProblem} onClick={() => {openEditModal(problem)}}>Edit</Button>|
                   <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
                 </div>
                 <hr/>
