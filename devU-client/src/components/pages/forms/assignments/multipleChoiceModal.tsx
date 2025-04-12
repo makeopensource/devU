@@ -66,7 +66,7 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
         else { return true }
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // early return if form not fully filled out
         if (!submittable()) { return }
 
@@ -88,15 +88,14 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
             score: Number(formData.maxScore),
             isRegex: formData.regex,
             metadata: {
-                type: "A", 
+                type: formData.type,
                 options: Object.fromEntries(options)},
             createdAt: createdAt
         }
 
-        console.log(graderFormData)
 
         if (edit){
-            RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/${problemId}`, problemFormData)
+            await RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/${problemId}`, problemFormData)
                 .then(() => {
                     console.log("PROBLEM UPDATED")
                     setAlert({ autoDelete: true, type: 'success', message: 'Problem Updated' });
@@ -105,7 +104,7 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
                     const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
                     setAlert({ autoDelete: false, type: 'error', message })
                 })
-            RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/${problemId}`, graderFormData)
+            await RequestService.put(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/${problemId}`, graderFormData)
                 .then(() => {
                     console.log("GRADER UPDATED")
                 })
@@ -116,7 +115,7 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
         } 
         
         else {
-            RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
+            await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
                 .then(() => {
                     console.log("PROBLEM CREATED")
                     setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' });
@@ -126,7 +125,7 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
                     setAlert({ autoDelete: false, type: 'error', message })
                 })
 
-            RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
+            await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
                 .then(() => {
                     console.log("GRADER CREATED")
                 })
@@ -275,21 +274,26 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
                         <button 
                         className={`${styles.btn} ${styles.addButton}`} 
                         onClick={increaseOptions}
-                        disabled={options.size >= 10}>+</button>
+                        disabled={options.size >= 10 || edit}>+</button>
 
                         <button className={`${styles.btn} ${styles.subtractButton}`}
                         onClick={decreaseOptions}
-                        disabled={options.size <= 2}>-</button>
+                        disabled={options.size <= 2 || edit}>-</button>
                     </div>
                 </div>
                 
                 {[...options].map(([key, text]) => 
                 <div className="input-group" style={{flexDirection:"row", alignItems:"center", width: '100%'}}>
                     <label style={{width: '15px'}}>{key}.</label>
-                    <input type='text' id={key} value={text} onChange={handleQuestionTextChange} style={{width:'100%'}}
+                    <input type='text' id={key} 
+                    value={text} 
+                    onChange={handleQuestionTextChange} 
+                    style={{width:'100%'}}
+                    disabled={edit} // disabled={edit} enabled right now since NCAGS can't update meta string
                     placeholder={getPlaceholder(key)} />
                     <input type={`${boxType}`} 
                     id={key} 
+                    disabled={edit} // Here
                     onChange={handleCorrectAnswerChange} 
                     checked={formData.correctAnswer.includes(key)} 
                     name="correct"/>
@@ -297,6 +301,7 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
             </div>
             <div style={{display:'flex', alignItems: 'center'}}>
                 <input type='checkbox' 
+                disabled={edit} // Here
                 checked={formData.type === "MCQ-single"}
                 onChange={switchBoxType}/><label>Allow only one answer</label>
             </div>

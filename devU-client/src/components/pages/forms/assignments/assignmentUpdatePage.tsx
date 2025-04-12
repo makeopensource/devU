@@ -34,7 +34,9 @@ const AssignmentUpdatePage = () => {
   const handleCloseContainerAutoGraderModal = () => setContainerAutoGraderModal(false);
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
 
-  const [problemId, setProblemId] = useState<number>()
+  const [mcqProblemId, setMcqProblemId] = useState<number>()
+  const [textProblemId, setTextProblemId] = useState<number>()
+
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
   const [currentCategory, setCurrentCategory] = useState<Option<String>>()
@@ -88,12 +90,9 @@ const AssignmentUpdatePage = () => {
       .then((res) => { setAssignmentProblems(res)})
   }
   
-  
-
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
-
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
 
@@ -168,30 +167,40 @@ const AssignmentUpdatePage = () => {
     fetchAssignmentProblems()
   }
   const [codeModal, setCodeModal] = useState(false);
-  const handleCloseCodeModal = () => {
+  const handleCloseCodeModal = async () => {
     setCodeModal(false)
-    fetchAssignmentProblems()
+     fetchAssignmentProblems()
   }  
   const [mcqModal, setMcqModal] = useState(false);
-  const handleCloseMcqModal = () => {
+  const handleCloseMcqModal = async () => {
     setMcqModal(false)
-    fetchAssignmentProblems()
+     fetchAssignmentProblems()
   }  
   const [mcqEditModal, setMcqEditModal] = useState(false);
-  const handleCloseEditMcqModal = () => {
+  const handleCloseEditMcqModal = async () => {
     setMcqEditModal(false)
-    fetchAssignmentProblems()
+     fetchAssignmentProblems()
+  }  
+  const [textEditModal, setTextEditModal] = useState(false);
+  const handleCloseTextEditModal = async () => {
+    setTextEditModal(false)
+   fetchAssignmentProblems()
   }  
 
 
 
-  const handleDeleteProblem = (problemId: number) => {
+  const handleDeleteProblem = async (problem: AssignmentProblem) => {
   //  const idsToDelete = nonContainerAutograders.filter(ncag => ncag.)
-    RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problemId}`)
-      .then(() => {
-        setAlert({ autoDelete: true, type: 'success', message: 'Problem Deleted' })
-        fetchAssignmentProblems()
-      })
+  const ncag = nonContainerAutograders.find((n) => (n.question === problem.problemName && n.createdAt === problem.createdAt))
+  ncag && RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/non-container-auto-graders/${problem.id}`)
+  .then(() => {
+    setAlert({ autoDelete: true, type: 'success', message: 'Problem Deleted' })
+  })
+  RequestService.delete(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems/${problem.id}`)
+    .then(() => {
+      setAlert({ autoDelete: true, type: 'success', message: 'Problem Deleted' })
+      window.location.reload()
+    })
   }
 
   const handleChange = (value: String, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -220,28 +229,34 @@ const AssignmentUpdatePage = () => {
     };
 
   const openEditModal = (problem: AssignmentProblem) => {
-    setProblemId(problem.id)
     const ncag = nonContainerAutograders.find((n) => (n.question === problem.problemName && n.createdAt === problem.createdAt))
+    if (!ncag) {
+      fetchAssignmentProblems()
+      return
+    }
     const type = JSON.parse(ncag?.metadata ?? "").type
-    if (type === "MCQ-mult" || "MCQ-single"){
+    if (type === "MCQ-mult" || type === "MCQ-single"){
+      setMcqProblemId(problem.id)
       setMcqEditModal(true)
+    } else if (type === "Match"){
+      console.log("Implement Match MCQ")
     }
     else {
-      console.log("Pee")
+      setTextProblemId(problem.id)
+      setTextEditModal(true)
     }
+    console.log(type)
   }
 
   
   return (
-    <>
-      <ContainerAutoGraderModal open={containerAutoGraderModal} onClose={handleCloseContainerAutoGraderModal} />
-
     <PageWrapper>
-
+        <ContainerAutoGraderModal open={containerAutoGraderModal} onClose={handleCloseContainerAutoGraderModal} />
         <TextProblemModal open={textModal} onClose={handleCloseTextModal} />
+        <TextProblemModal open={textEditModal} onClose={handleCloseTextEditModal} edit problemId={textProblemId}/>
         <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal}/>
         <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
-        <MultipleChoiceModal open={mcqEditModal} onClose={handleCloseEditMcqModal} edit problemId={problemId}/>
+        <MultipleChoiceModal open={mcqEditModal} onClose={handleCloseEditMcqModal} edit problemId={mcqProblemId}/>
 
 
       <div className={styles.pageHeader}>
@@ -361,6 +376,7 @@ const AssignmentUpdatePage = () => {
             {nonContainerAutograders.length != 0 && nonContainerAutograders.map((nonContainerAutograder) => (<div>
               <span style={{fontStyle:'italic'}}>{nonContainerAutograder.question}</span> - 
               <span style={{color: 'var(--grey)'}}> Non-Code Grader</span></div>))}
+
             {containerAutograders.length != 0 && containerAutograders.map((containerAutograder) => (<div>
             <span style={{fontStyle:'italic'}}>Code Grader {containerAutograder.id}</span> -
             <span style={{color: 'var(--grey)'}}> Code Grader</span></div>))}
@@ -372,7 +388,7 @@ const AssignmentUpdatePage = () => {
               <AssignmentProblemListItem problem={problem} disabled={true}/>
                 <div style={{margin: '5px 0 10px 0'}}>
                   <Button className={styles.editProblem} onClick={() => {openEditModal(problem)}}>Edit</Button>|
-                  <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem.id) } }}>Delete</Button>
+                  <Button className={styles.deleteButton} onClick={() => { if (problem !== undefined && problem.id !== undefined) { handleDeleteProblem(problem) } }}>Delete</Button>
                 </div>
                 <hr/>
               </div>
@@ -383,8 +399,7 @@ const AssignmentUpdatePage = () => {
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px'}}>
       <Button onClick={handleAssignmentUpdate} className='btnPrimary'>Save & Exit</Button>
       </div>
-      </PageWrapper>
-    </>
+    </PageWrapper>
   )
 }
 
