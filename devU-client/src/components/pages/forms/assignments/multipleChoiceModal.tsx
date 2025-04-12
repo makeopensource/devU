@@ -293,7 +293,6 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
                     placeholder={getPlaceholder(key)} />
                     <input type={`${boxType}`} 
                     id={key} 
-                    disabled={edit} // Here
                     onChange={handleCorrectAnswerChange} 
                     checked={formData.correctAnswer.includes(key)} 
                     name="correct"/>
