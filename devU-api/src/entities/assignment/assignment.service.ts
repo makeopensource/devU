@@ -28,6 +28,7 @@ export async function update(assignment: Assignment) {
     disableHandins,
     attachmentsHashes,
     attachmentsFilenames,
+    scoringType,
   } = assignment
 
   if (!id) throw new Error('Missing Id')
@@ -44,6 +45,7 @@ export async function update(assignment: Assignment) {
     disableHandins,
     attachmentsHashes,
     attachmentsFilenames,
+    scoringType,
   })
 }
 
