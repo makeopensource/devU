@@ -1,14 +1,15 @@
 @import 'variables';
 
-// matchingTable.scss - Styles for HTML5 DnD and click-to-select
+// matchingTable.scss - Updated styles with clean box layout and structure
 .matching-instructor-wrapper {
-  max-width: 800px;
+  max-width: 900px;
   margin: 3rem auto;
-  padding: 2rem;
+  padding: 2.5rem;
   background-color: var(--background);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: var(--box-shadow);
-  
+  border: 1px solid var(--grey-lightest);
+
   h2 {
     text-align: center;
     color: var(--text-color);
@@ -22,7 +23,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  
+
   @media (min-width: 768px) {
     flex-direction: row;
   }
@@ -30,11 +31,12 @@
 
 .matching-input-form {
   flex: 1;
-  padding: 1.5rem;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  
+  padding: 2rem;
+  background-color: var(--modal-background);
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--grey-lightest);
+
   h3 {
     margin-top: 0;
     margin-bottom: 1.5rem;
@@ -45,36 +47,38 @@
 
 .matching-input-row {
   display: flex;
+  align-items: center;
   margin-bottom: 1rem;
   gap: 10px;
-  
+
   .input {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    
+    border: 1px solid var(--grey);
+    border-radius: 6px;
+    font-size: 1rem;
+
     &:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 2px rgba(86, 69, 169, 0.2);
     }
   }
-  
+
   .btnDelete {
     background-color: var(--red);
     color: white;
     border: none;
-    border-radius: 4px;
-    width: 30px;
-    height: 30px;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s;
-    
+    transition: background-color 0.2s ease;
+
     &:hover {
       background-color: #b71c1c;
     }
@@ -91,11 +95,11 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  
+
   &:hover {
     background-color: var(--hover-darker);
   }
-  
+
   &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
@@ -112,20 +116,21 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
-  
+
   &:hover {
     background-color: var(--hover-lighter);
   }
 }
 
-// Student page styles
+// Student wrapper
 .matching-table-student-wrapper {
-  max-width: 800px;
+  max-width: 900px;
   margin: 3rem auto;
-  padding: 2rem;
+  padding: 2.5rem;
   background-color: var(--background);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: var(--box-shadow);
+  border: 1px solid var(--grey-lightest);
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -206,7 +211,7 @@ table.matching-table {
   font-size: 1rem;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--box-shadow);
 
   thead th {
     background-color: var(--purple);
@@ -262,15 +267,15 @@ table.matching-table {
     padding: 0.5rem;
     border: 1px solid var(--grey-lightest);
     border-radius: 4px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     background-color: white;
-    
+
     &:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 2px rgba(86, 69, 169, 0.2);
     }
-    
+
     &:disabled {
       background-color: #f5f5f5;
       cursor: not-allowed;
