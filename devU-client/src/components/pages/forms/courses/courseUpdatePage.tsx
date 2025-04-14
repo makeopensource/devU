@@ -300,7 +300,7 @@ const CourseUpdatePage = ({ }) => {
         <PageWrapper>
             <h1>Update Course Form</h1>
             <div className={styles.grid}>
-                <div className={styles.form}>
+                <div className={styles.form} style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
                     <h2>Course Details</h2>
                     <div className="input-group">
                         <label htmlFor="name" className="input-label">Course Title:</label>
@@ -317,20 +317,20 @@ const CourseUpdatePage = ({ }) => {
                         <button className='btnPrimary' onClick={handleCourseUpdate}>Update Course</button>
                     </div>
                 </div>
-                <div>
+                <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
                     <h2>Manage Roster</h2>
                     {/* <TextField id='studentEmail' label={"Email"} onChange={handleChange}
                         placeholder='e.g. hartloff@buffalo.edu' invalidated={!!invalidFields.get("studentEmail")} helpText={invalidFields.get("studentEmail")} /> */}
                     <div className="input-group">
-                        <label htmlFor="studentEmail" className="input-label">Course Code:</label>
+                        <label htmlFor="studentEmail" className="input-label">Student Email:</label>
                         <input type="text" id="studentEmail" onChange={handleChange}
                             placeholder='e.g. hartloff@buffalo.edu' />
                     </div>
                     <label htmlFor="addDropFile">Add multiple students by uploading a CSV file below</label>
                     <input type="file" accept='.csv' id="addDropFile" onChange={handleFileChange} />
-                    <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 'auto', gap: '1rem' }}>
-                        <button className='btnPrimary' onClick={handleAddStudent}>Add Student</button>
-                        <button className='btnDelete' onClick={handleDropStudent}>Drop Student</button>
+                    <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '30px', gap: '1rem' }}>
+                        <button className='btnPrimary' onClick={handleAddStudent}>Add</button>
+                        <button className='btnDelete' onClick={handleDropStudent}>Drop</button>
                     </div>
                 </div>
             </div>
