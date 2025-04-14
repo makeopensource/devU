@@ -77,6 +77,7 @@ const AssignmentUpdatePage = () => {
     assignmentId: currentAssignmentId,
     problemName: '',
     maxScore: -1,
+    metadata: "", // todo new metadata field
   })
 
 
