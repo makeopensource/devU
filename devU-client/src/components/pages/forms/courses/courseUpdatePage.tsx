@@ -9,7 +9,7 @@ import RequestService from 'services/request.service'
 import { ExpressValidationError } from 'devu-shared-modules'
 
 import { useActionless } from 'redux/hooks'
-import TextField from 'components/shared/inputs/textField'
+// import TextField from 'components/shared/inputs/textField'
 import AutomateDates from './automateDates'
 import { SET_ALERT } from 'redux/types/active.types'
 import {
@@ -17,8 +17,7 @@ import {
     removeClassFromField
 } from "../../../../utils/textField.utils";
 
-import formStyles from './coursesFormPage.scss'
-
+import styles from '../assignments/assignmentUpdatePage.scss'
 
 type UrlParams = {
     courseId: string
@@ -45,7 +44,7 @@ const CourseUpdatePage = ({ }) => {
         name: '',
         number: '',
         semester: 'f0000',
-        isPublic: false 
+        isPublic: false
     })
     const [startDate, setStartDate] = useState(new Date().toISOString())
     const [endDate, setEndDate] = useState(new Date().toISOString())
@@ -63,11 +62,11 @@ const CourseUpdatePage = ({ }) => {
                     name: res.name,
                     number: res.number,
                     semester: res.semester,
-                    isPublic: res.isPublic 
+                    isPublic: res.isPublic
                 });
                 setStartDate(new Date(res.startDate).toISOString().split("T")[0]);
                 setEndDate(new Date(res.endDate).toISOString().split("T")[0]);
-                setPrivateDate(new Date(res.privateDate).toISOString().split("T")[0]); 
+                setPrivateDate(new Date(res.privateDate).toISOString().split("T")[0]);
                 isMounted = true;
             });
         }
@@ -83,10 +82,11 @@ const CourseUpdatePage = ({ }) => {
         setEndDate(endDate);
     };
 
-    const handleChange = (value: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id
         const newInvalidFields = removeClassFromField(invalidFields, key)
         setInvalidFields(newInvalidFields)
+        const value = e.target.value
 
         // Update form data based on input field
         if (key === 'studentEmail') {
@@ -95,15 +95,15 @@ const CourseUpdatePage = ({ }) => {
             setFormData(prevState => ({ ...prevState, [key]: value }))
         }
     }
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData(prevState => ({ ...prevState, isPublic: e.target.checked })); 
-    };
-    const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
-    const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
+    // const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setFormData(prevState => ({ ...prevState, isPublic: e.target.checked }));
+    // };
+    // const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setStartDate(event.target.value) }
+    // const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => { setEndDate(event.target.value) }
 
-    const handlePrivateDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPrivateDate(event.target.value);
-    };
+    // const handlePrivateDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setPrivateDate(event.target.value);
+    // };
     const handleCourseUpdate = () => {
         const finalFormData = {
             name: formData.name,
@@ -224,7 +224,7 @@ const CourseUpdatePage = ({ }) => {
 
     const dropSingleStudent = async (email: string) => {
         const userID = await getUserId(email)
-        
+
         if (userID == 0) {
             setAlert({ autoDelete: false, type: 'error', message: "userID not found" })
             return
@@ -267,7 +267,7 @@ const CourseUpdatePage = ({ }) => {
 
     const handleAddStudent = () => {
         console.log("emails: ", emails);
-        if (emails.length<1) {
+        if (emails.length < 1) {
             // if no file inputted then addSingleStudent with email
             console.log("adding single user")
             addSingleStudent(studentEmail)
@@ -282,7 +282,7 @@ const CourseUpdatePage = ({ }) => {
     }
 
     const handleDropStudent = () => {
-        if (emails.length<1) {
+        if (emails.length < 1) {
             // if no file inputted then dropSingleStudent with email
             console.log("dropping single user")
             dropSingleStudent(studentEmail)
@@ -299,54 +299,34 @@ const CourseUpdatePage = ({ }) => {
     return (
         <PageWrapper>
             <h1>Update Course Form</h1>
-            <div className={formStyles.courseFormWrapper}>
-                <div className={formStyles.updateDetailsForm}>
+            <div className={styles.grid}>
+                <div className={styles.form}>
                     <h2>Course Details</h2>
-                    <div className={formStyles.inputContainer}>
-                        <TextField id='name' label={"Course Name*"} onChange={handleChange} value={formData.name}
-                            invalidated={!!invalidFields.get("name")} helpText={invalidFields.get("name")}
-                            defaultValue={formData.name} />
-                        <TextField id='number' label={"Course Number*"} onChange={handleChange} value={formData.number}
-                            invalidated={!!invalidFields.get("number")} helpText={invalidFields.get("number")} />
-                        {/* <TextField id='semester' label={"Semester*"} onChange={handleChange} value={formData.semester}
-                            placeholder='e.g. f2022, w2023, s2024' invalidated={!!invalidFields.get("semester")}
-                            helpText={invalidFields.get("semester")} /> */}
+                    <div className="input-group">
+                        <label htmlFor="name" className="input-label">Course Title:</label>
+                        <input type="text" id="name" onChange={handleChange}
+                            placeholder='e.g. Web Applications' />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="number" className="input-label">Course Code:</label>
+                        <input type="text" id="number" onChange={handleChange}
+                            placeholder='e.g. CSE 312' />
                     </div>
                     <AutomateDates onDatesChange={handleDatesChange} />
-                    <div className={formStyles.datepickerContainer}>
-                        <div className={formStyles.fieldContainer}>
-                            <label htmlFor='start-date'>Start Date *</label>
-                            <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} />
-                        </div>
-                        <div className={formStyles.fieldContainer}>
-                            <label htmlFor='end-date'>End Date *</label>
-                            <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} />
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '5px' }}>
-                            <label htmlFor='private-date'>Private Date *</label>
-                            <input type="date" id="private-date" value={privateDate} onChange={handlePrivateDateChange} />
-                        </div>
-                        <div>
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked={formData.isPublic} 
-                                onChange={handleCheckboxChange}
-                            />
-                            Make this course public
-                        </label>
-                        </div>
-                    </div>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <button className='btnPrimary' onClick={handleCourseUpdate}>Update Course</button>
                     </div>
                 </div>
-                <div className={formStyles.addDropForm}>
-                    <h2>Add/Drop Students</h2>
-                    <TextField id='studentEmail' label={"Email"} onChange={handleChange}
-                        placeholder='e.g. hartloff@buffalo.edu' invalidated={!!invalidFields.get("studentEmail")} helpText={invalidFields.get("studentEmail")} />
+                <div>
+                    <h2>Manage Roster</h2>
+                    {/* <TextField id='studentEmail' label={"Email"} onChange={handleChange}
+                        placeholder='e.g. hartloff@buffalo.edu' invalidated={!!invalidFields.get("studentEmail")} helpText={invalidFields.get("studentEmail")} /> */}
+                    <div className="input-group">
+                        <label htmlFor="studentEmail" className="input-label">Course Code:</label>
+                        <input type="text" id="studentEmail" onChange={handleChange}
+                            placeholder='e.g. hartloff@buffalo.edu' />
+                    </div>
                     <label htmlFor="addDropFile">Add multiple students by uploading a CSV file below</label>
-                    {/* csv should be a good standard filetype */}
                     <input type="file" accept='.csv' id="addDropFile" onChange={handleFileChange} />
                     <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: 'auto', gap: '1rem' }}>
                         <button className='btnPrimary' onClick={handleAddStudent}>Add Student</button>
@@ -354,6 +334,8 @@ const CourseUpdatePage = ({ }) => {
                     </div>
                 </div>
             </div>
+            {/* </div> */}
+            {/* </div> */}
         </PageWrapper>
     )
 }
