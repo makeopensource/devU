@@ -16,10 +16,12 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
     const { assignmentId } = useParams<{ assignmentId: string }>();
     const { courseId } = useParams<{ courseId: string }>();
 
+
     const [formData, setFormData] = useState({
         title: '',
         maxScore: '',
     });
+
 
     const submittable = () => {
         if (!formData.title || !formData.maxScore) {return false}
@@ -28,6 +30,7 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
 
     const handleSubmit = () => {
         if (!submittable) return;
+
 
         const problemFormData = {
             assignmentId: parseInt(assignmentId),
@@ -44,8 +47,18 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
                 setAlert({ autoDelete: false, type: 'error', message });
             });
 
-        onClose();
+
+        closeModal();
     };
+
+    const closeModal = () => {
+        setFormData({
+            title: '',
+            maxScore: ''
+        })   
+        onClose()
+    }
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id;
@@ -54,7 +67,7 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
     };
 
     return (
-        <Modal title="Add Code/File Input Problem" buttonAction={handleSubmit} open={open} onClose={onClose} isSubmittable={submittable}>
+        <Modal title="Add Code/File Input Problem" buttonAction={handleSubmit} open={open} onClose={closeModal} isSubmittable={submittable}>
             <div className="input-group">
                 <label htmlFor="title" className="input-label">Problem Title:</label>
                 <input 

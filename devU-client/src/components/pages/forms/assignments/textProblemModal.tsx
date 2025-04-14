@@ -31,15 +31,20 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         // early return if form not fully filled out
         if (!submittable) { return }
 
+        const time = new Date() // stopgap since the NCAG method right now means questions with the same name can get confused, can be removed once meta added to assignmentProblem
+        const createdAt = time;
+
         const problemFormData = {
             assignmentId: parseInt(assignmentId),
             problemName: formData.title,
+            createdAt: createdAt,
             maxScore: parseInt(formData.maxScore),
         };
 
         const graderFormData = {
             assignmentId: parseInt(assignmentId),
             question: formData.title,
+            createdAt: createdAt,
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
@@ -63,13 +68,22 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
             .then(() => {
                 console.log("GRADER CREATED")
+                window.location.reload()
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
                 setAlert({ autoDelete: false, type: 'error', message })
             })
 
-        // close modal
+        closeModal();
+    }
+    const closeModal = () => {
+        setFormData({
+            title: '',
+            maxScore: '',
+            correctAnswer: '',
+            regex: false
+        })
         onClose();
     }
 

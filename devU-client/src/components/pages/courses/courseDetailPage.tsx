@@ -108,6 +108,12 @@ const CourseDetailPage = () => {
                                         history.push(`/course/${courseId}/gradebook`)
                                     }}>Gradebook
                                     </button>
+                                
+                                    <button className='btnSecondary' onClick={() => {
+                                        role.isInstructor() ? history.push(`/course/${courseId}/attendance/instructor`) : 
+                                        history.push(`/course/${courseId}/attendance`)
+                                    }}> Attendance
+                                    </button>
                                 </div>
                                 <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
                             </div>
@@ -133,9 +139,9 @@ const CourseDetailPage = () => {
                                             {category}
                                         </Typography>
                                     </CardContent>
-                                    <List disablePadding style={{backgroundColor:'var(--background)'}}>
+                                    <List disablePadding style={{backgroundColor:'var(--background)', transition: 'ease .2s background-color'}}>
                                         {categoryMap[category].map((assignment, index) => (
-                                            <ListItem key={index}  disablePadding>
+                                            <ListItem key={index}  disablePadding className={styles.border}>
                                                 <ListItemButton sx={{padding: 0}} onClick={() => {
                                                     history.push(`/course/${courseId}/assignment/${assignment.id}`)
                                                 }}>

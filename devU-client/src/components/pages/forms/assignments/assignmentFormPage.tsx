@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react'
-// import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { ExpressValidationError, Assignment } from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
-// import PageWrapper from 'components/shared/layouts/pageWrapper'
 
 import RequestService from 'services/request.service'
 import { useActionless } from 'redux/hooks'
-// import TextField from 'components/shared/inputs/textField'
-// import Button from '../../../shared/inputs/button'
-// import DragDropFile from 'components/utils/dragDropFile'
 import { Option } from 'components/shared/inputs/dropdown'
 
 
@@ -35,6 +31,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
     const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
     const [currentCategory, setCurrentCategory] = useState<Option<String>>()
     const [assignments, setAssignments] = useState<Assignment[]>([])
+    const history = useHistory()
 
     const [formData, setFormData] = useState({
         courseId: courseId,
@@ -66,7 +63,14 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
 
     const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setStartDate(e.target.value) }
     const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setEndDate(e.target.value) }
-    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setDueDate(e.target.value) }
+    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+        setDueDate(e.target.value) 
+        
+        // automatically set end date
+        if (!endDate) {
+            setEndDate(e.target.value)
+        }
+    }
 
     const handleSubmit = () => {
         const finalFormData = {
@@ -101,12 +105,10 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
 
 
         RequestService.postMultipart(`/api/course/${courseId}/assignments/`, multipart)
-            .then(() => {
-                setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
-                // Navigate to the update page for the new assignment
-                // navigate(`/course/${courseId}/assignment/${response.id}/update`);
-                // history.goBack()
+            .then((response) => {
+                // setAlert({ autoDelete: true, type: 'success', message: 'Assignment Added' })
                 onClose();
+                history.push(`/course/${courseId}/assignment/${response.id}/update`);
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -114,9 +116,6 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 Array.isArray(err) ? err.map((e) => applyMessageToErrorFields(newFields, e.param, e.msg)) : newFields
 
                 setAlert({ autoDelete: false, type: 'error', message })
-            })
-            .finally(() => {
-                
             })
     }
 
@@ -141,9 +140,11 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 onChange={handleCategoryChange}
                 onCreate={handleCategoryCreate}
                 options={categoryOptions}
-                custom={{control: () => ({border:'none', padding:'3px 0'}),
-                        placeholder: () => ({color: '#555555'}),
-                        input: () => ({fontSize: '14px'}),
+                custom={{control: () => ({border:'none', padding:'3px 0', backgroundColor: 'var(--input-field-background)'}),
+                        placeholder: () => ({color: 'var(--input-field-label)'}),
+                        input: () => ({fontSize: '14px', backgroundColor: 'var(--input-field-background)'}),
+                        option: (_, state) => ({ backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : 'var(--input-field-background)',}),
+                        menu: () => ({ backgroundColor: 'var(--input-field-background)', overflow:'hidden'}),
                         singleValue: () => ({fontSize: '14px'})}}
                 value={currentCategory ?? undefined}/>
             </div>
@@ -183,7 +184,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 <div>
                     <label htmlFor="end_date">End Date:</label>
                     <br />
-                    <input type='date' id="end_date" onChange={handleEndDateChange} />
+                    <input type='date' id="end_date" value={endDate} onChange={handleEndDateChange} />
                 </div>
             </div>
             <label htmlFor="disableHandins">Disable Submissions?<input type="checkbox" id="disableHandins" /></label>

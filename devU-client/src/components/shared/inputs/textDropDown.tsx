@@ -76,7 +76,7 @@ const TextDropdown = ({
       backgroundColor: background, 
       boxShadow: 'none',
       border: '2px solid #ccc',
-      borderRadius: '10px'
+      borderRadius: '10px',
     }),
 
     container: (provided) => ({ ...provided, 
@@ -92,10 +92,10 @@ const TextDropdown = ({
         }
         }),
 
-    placeholder: (provided) => ({ ...provided,
-        fontStyle:'italic',
-        color: '#9c9c9c',
-        margin: '0'
+    placeholder: (provided) => ({
+        ...provided,
+        color: '#ffffff',
+        
     }),
 
     control: (provided) => ({ ...provided, 
@@ -112,11 +112,13 @@ const TextDropdown = ({
     option: (provided, state) => ({
       ...provided,
       cursor: 'pointer',
-      color: 'var(--color)', 
+      color: textColor, 
       borderBottom: '1px solid #ccc',
+      width: 'inherit',
       backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : background,
       "&:last-of-type":{
-        borderBottom: 'none'
+        borderBottom: 'none',
+        
       }
     }),
   
