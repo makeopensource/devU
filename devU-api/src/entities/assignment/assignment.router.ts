@@ -123,8 +123,10 @@ Router.get('/:assignmentId', asInt('assignmentId'), isAuthorizedByAssignmentStat
  *     tags:
  *       - Assignments
  *     responses:
- *       '200':
- *         description: OK
+ *       '201':
+ *         description: Created
+ *       '400':
+ *         description: Bad Request
  *     parameters:
  *       - name: courseId
  *         in: path
@@ -136,7 +138,41 @@ Router.get('/:assignmentId', asInt('assignmentId'), isAuthorizedByAssignmentStat
  *       content:
  *         application/x-www-form-urlencoded:
  *           schema:
- *             $ref: '#/components/schemas/Assignment'
+ *             type: object
+ *             required: [courseId, name, categoryName, maxFileSize, disableHandins, startDate, dueDate, endDate]
+ *             properties:
+ *               courseId:
+ *                 type: integer
+ *               name:
+ *                 type: string
+ *                 maxLength: 128
+ *               categoryName:
+ *                 type: string
+ *                 maxLength: 128
+ *               description:
+ *                 type: string
+ *                 nullable: true
+ *               maxFileSize:
+ *                 type: integer
+ *               maxSubmissions:
+ *                 type: integer
+ *                 nullable: true
+ *               disableHandins:
+ *                 type: boolean
+ *               startDate:
+ *                 type: string
+ *                 format: date-time
+ *               dueDate:
+ *                 type: string
+ *                 format: date-time
+ *               endDate:
+ *                 type: string
+ *                 format: date-time
+ *               scoringType:
+ *                 type: string
+ *                 enum: [highest-score, latest-submission, no-score]
+ *                 default: highest-score
+ *                 description: Determines how the final score is chosen for the assignment
  */
 
 
@@ -151,7 +187,9 @@ Router.post('/', isAuthorized('assignmentEditAll'), upload.array('files', 5), va
  *       - Assignments
  *     responses:
  *       '200':
- *         description: OK
+ *         description: Updated
+ *       '404':
+ *         description: Not Found
  *     parameters:
  *       - name: courseId
  *         in: path
@@ -168,7 +206,37 @@ Router.post('/', isAuthorized('assignmentEditAll'), upload.array('files', 5), va
  *       content:
  *         application/x-www-form-urlencoded:
  *           schema:
- *             $ref: '#/components/schemas/Assignment'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 maxLength: 128
+ *               categoryName:
+ *                 type: string
+ *                 maxLength: 128
+ *               description:
+ *                 type: string
+ *                 nullable: true
+ *               maxFileSize:
+ *                 type: integer
+ *               maxSubmissions:
+ *                 type: integer
+ *                 nullable: true
+ *               disableHandins:
+ *                 type: boolean
+ *               startDate:
+ *                 type: string
+ *                 format: date-time
+ *               dueDate:
+ *                 type: string
+ *                 format: date-time
+ *               endDate:
+ *                 type: string
+ *                 format: date-time
+ *               scoringType:
+ *                 type: string
+ *                 enum: [highest-score, latest-submission, no-score]
+ *                 description: Determines how the final score is chosen for the assignment
  */
 Router.put(
   '/:assignmentId',
