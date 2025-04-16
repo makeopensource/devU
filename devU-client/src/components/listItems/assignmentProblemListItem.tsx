@@ -11,20 +11,15 @@ type Props = {
 }
 
 const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => {
-    const [meta, setMeta] = useState<{options: {}, type: string}>()
-
-    //const type = ncags.at(0)?.metadata
+    const [meta, setMeta] = useState<{options: {[key:string]: string}, type: string}>()
 
     const getMeta = () => {
-        //console.log(JSON.parse(problem.metadata))
         setMeta(problem.metadata)
     }
     
     useEffect(() => {
         getMeta()
     }, [problem])
-    
-
     
     if (!meta){
         return (
@@ -48,13 +43,14 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                 />
         </div>
     )} else if(type == "MCQ-mult") {
-        const options = null
+        const options = meta.options
         if (!options){
             return <div></div>
         }
         return (
             <div key={problem.id} className={styles.problem}>
                 <h4 className={styles.problem_header}>{problem.problemName}</h4>
+                {console.log(options)}
                 {Object.keys(options).map((key : string) => (
                     <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>
                         <input id={problem.problemName} 
@@ -69,7 +65,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                     </label>))}
             </div>)
     } else if(type == "MCQ-single") {
-        const options = null
+        const options = meta.options
         if (!options){
             return <div></div>
         }

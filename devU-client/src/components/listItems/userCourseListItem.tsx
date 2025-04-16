@@ -4,12 +4,9 @@ import { useHistory } from "react-router-dom";
 import ListItemWrapper from 'components/shared/layouts/listItemWrapper'
 import FaIcon from 'components/shared/icons/faIcon'
 
-//import {prettyPrintDate} from 'utils/date.utils'
 
 import styles from './userCourseListItem.scss'
-
 import SimpleAssignmentListItem from "./simpleAssignmentListItem";
-//import {prettyPrintSemester} from "../../utils/semester.utils";
 
 type Props = {
     course: Course
@@ -33,7 +30,7 @@ const UserCourseListItem = ({ course, assignments, past = false, instructor = fa
                 {assignments && assignments.length > 0 ? (assignments.map((assignment) => (
                     (new Date(assignment.dueDate) > currentTime) && <SimpleAssignmentListItem assignment={assignment} key={assignment.id} />
                 ))) : past && <div></div> }
-                <div className={styles.Buttons}>
+                <div className={styles.buttons}>
                     <button className={styles.sub_button} onClick={(e) => {
                         e.stopPropagation();
                         history.push(`/course/${course.id}`);
