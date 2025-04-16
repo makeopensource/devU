@@ -191,9 +191,9 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             </div>
             <span>Select submission for final score:</span>
             <div className="input-subgroup-2col" style={{justifyContent: 'flex-start'}}>
-                <label htmlFor="subRecent"><input type="radio" id="subRecent" name="submissionChoice" defaultChecked/>Most Recent</label>
-                <label htmlFor="subHighest"><input type="radio" id="subHighest" name="submissionChoice"/>Highest Score</label>
-                <label htmlFor="subNone"><input type="radio" id="subNone" name="submissionChoice" />No Default</label>
+                <label htmlFor="subRecent" style={{cursor: 'pointer'}}><input type="radio" id="subRecent" name="submissionChoice" defaultChecked/>Most Recent</label>
+                <label htmlFor="subHighest" style={{cursor: 'pointer'}}><input type="radio" id="subHighest" name="submissionChoice"/>Highest Score</label>
+                <label htmlFor="subNone" style={{cursor: 'pointer'}}><input type="radio" id="subNone" name="submissionChoice" />No Default</label>
             </div>
             <label htmlFor="disableHandins">Disable Submissions?<input type="checkbox" id="disableHandins" /></label>
         </Modal>
