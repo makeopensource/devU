@@ -5,22 +5,8 @@ import { NonContainerAutoGrader } from 'devu-shared-modules'
 
 const connect = () => dataSource.getRepository(NonContainerAutoGraderModel)
 
-export async function create(
-  assignmentId: number,
-  question: string,
-  score: number,
-  isRegex: boolean,
-  correctString: string,
-) {
-  const nonContainerAutoGrader = <NonContainerAutoGraderModel>{
-    assignmentId: assignmentId,
-    question: question,
-    score: score,
-    isRegex: isRegex,
-    correctString: correctString,
-  }
-
-  return await connect().save(nonContainerAutoGrader)
+export async function create(nonContainerQuestion: NonContainerAutoGrader) {
+  return await connect().save(nonContainerQuestion)
 }
 
 export async function update(nonContainerQuestion: NonContainerAutoGrader) {

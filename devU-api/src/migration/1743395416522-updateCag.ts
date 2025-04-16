@@ -8,9 +8,9 @@ export class UpdateCag1743395416522 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "container_auto_grader" DROP COLUMN "makefile_filename"`);
         await queryRunner.query(`ALTER TABLE "container_auto_grader" DROP COLUMN "autograding_image"`);
         await queryRunner.query(`ALTER TABLE "container_auto_grader" DROP COLUMN "grader_filename"`);
-        await queryRunner.query(`ALTER TABLE "FilesAuth" ADD "etag" character varying NOT NULL DEFAULT ''`);
-        await queryRunner.query(`ALTER TABLE "FilesAuth" ADD "name" character varying NOT NULL DEFAULT ''`);
-        await queryRunner.query(`ALTER TABLE "FilesAuth" ADD "type" character varying NOT NULL DEFAULT ''`);
+        await queryRunner.query(`ALTER TABLE "FilesAuth" ADD "etag" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "FilesAuth" ADD "name" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "FilesAuth" ADD "type" character varying NOT NULL`);
         await queryRunner.query(`ALTER TABLE "container_auto_grader" ADD "dockerfile_id" character varying(512) NOT NULL`);
         await queryRunner.query(`ALTER TABLE "container_auto_grader" ADD "job_file_ids" jsonb NOT NULL DEFAULT '[]'`);
         await queryRunner.query(`ALTER TABLE "container_auto_grader" ADD "timeout_in_seconds" integer NOT NULL`);

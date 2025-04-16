@@ -28,9 +28,6 @@ export default class AssignmentProblemModel {
    *          type: integer
    *        problemName:
    *          type: string
-   *        metadata:
-   *          type: string
-   *          description: A json string containing additional problem metadata
    *        maxScore:
    *          type: integer
    */
@@ -45,9 +42,6 @@ export default class AssignmentProblemModel {
 
   @Column({ name: 'problem_name', length: 128 })
   problemName: string
-
-  @Column({ name: 'metadata', type: 'jsonb', nullable: true, default: {} })
-  metadata: any // use any since this can be any arbitrary structure
 
   @Column({ name: 'max_score' })
   maxScore: number
