@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import RequestService from 'services/request.service'
-import { AssignmentProblem, NonContainerAutoGrader } from 'devu-shared-modules'
+import {AssignmentProblem, NonContainerAutoGrader} from 'devu-shared-modules'
 
 import styles from './assignmentProblemListItem.scss'
 import FaIcon from 'components/shared/icons/faIcon'
@@ -24,8 +24,11 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
 
     const getMeta = () => {
         if (ncags && ncags.length > 0){
-            ncags.find(ncag => ncag.question == problem.problemName)
-            return undefined // todo metadata moved to assignment problem
+            const ncag = ncags.find(ncag => ((ncag.question == problem.problemName) && (ncag.createdAt === problem.createdAt))) // currently checking against createdAt since if two non-code questions have the same name they can be confused otherwise, can be removed once meta string added to assignemntproblem
+            if (!ncag || !ncag.metadata) {
+                return undefined
+            }
+            return JSON.parse(ncag.metadata)
         } 
     }
     
@@ -35,14 +38,14 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
     }, [])
 
     const meta = getMeta()
-    if (!meta){
+    if (!meta || !meta.type){
         return (
         <div className={styles.problem}>
             <div>File Input Problems are not done yet pending backend changes! :D</div>
         </div>)
     }
 
-    const type = null // todo metadata moved
+    const type = meta.type
     if (type == "Text") {
         return (
         <div key={problem.id} className={styles.problem}>

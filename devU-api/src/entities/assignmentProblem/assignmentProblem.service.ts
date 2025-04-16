@@ -7,6 +7,10 @@ import { AssignmentProblem } from 'devu-shared-modules'
 
 const connect = () => dataSource.getRepository(AssignmentProblemModel)
 
+export async function create(assignmentProblem: AssignmentProblem) {
+  return await connect().save(assignmentProblem)
+}
+
 export async function update(assignmentProblem: AssignmentProblem) {
   const { id, assignmentId, problemName, maxScore } = assignmentProblem
   if (!id) throw new Error('Missing Id')
@@ -26,26 +30,10 @@ export async function list(assignmentId: number) {
   return await connect().findBy({ assignmentId: assignmentId, deletedAt: IsNull() })
 }
 
-export async function create(
-  assignmentId: number,
-  problemName: string,
-  maxScore: number,
-  metadata?: any,
-) {
-  const assignmentProblem = <AssignmentProblemModel>{
-    assignmentId: assignmentId,
-    problemName: problemName,
-    maxScore: maxScore,
-    metadata: metadata,
-  }
-
-  return await connect().save(assignmentProblem)
-}
-
 export default {
+  create,
   retrieve,
   update,
   _delete,
   list,
-  create,
 }

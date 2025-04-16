@@ -114,6 +114,8 @@ async function processFiles(req: Request) {
     } else {
       console.warn(`Files where not in array format ${req.files}`)
     }
+  } else {
+    console.warn(`No files where processed`)
   }
 
   return { fileHashes, fileNames }
