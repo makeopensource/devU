@@ -189,10 +189,11 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                     <input type='date' id="end_date" value={endDate} onChange={handleEndDateChange} />
                 </div>
             </div>
+            <span>Select submission for final score:</span>
             <div className="input-subgroup-2col" style={{justifyContent: 'flex-start'}}>
-                <span>Select submission for final score:</span>
                 <label htmlFor="subRecent"><input type="radio" id="subRecent" name="submissionChoice" defaultChecked/>Most Recent</label>
                 <label htmlFor="subHighest"><input type="radio" id="subHighest" name="submissionChoice"/>Highest Score</label>
+                <label htmlFor="subNone"><input type="radio" id="subNone" name="submissionChoice" />No Default</label>
             </div>
             <label htmlFor="disableHandins">Disable Submissions?<input type="checkbox" id="disableHandins" /></label>
         </Modal>
