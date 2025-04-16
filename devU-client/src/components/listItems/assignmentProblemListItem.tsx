@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import RequestService from 'services/request.service'
-import { AssignmentProblem, NonContainerAutoGrader } from 'devu-shared-modules'
+import { AssignmentProblem } from 'devu-shared-modules'
 
 import styles from './assignmentProblemListItem.scss'
 import FaIcon from 'components/shared/icons/faIcon'
@@ -13,28 +11,21 @@ type Props = {
 }
 
 const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => {
-    const { courseId } = useParams<{ courseId: string }>()
-    const [ncags, setNcags] = useState<NonContainerAutoGrader[]>([])
+    const [meta, setMeta] = useState<{options: {}, type: string}>()
 
     //const type = ncags.at(0)?.metadata
 
-    const fetchNcags = async() => {
-        await RequestService.get(`/api/course/${courseId}/assignment/${problem.assignmentId}/non-container-auto-graders`).then((res) => setNcags(res))
-    }
-
     const getMeta = () => {
-        if (ncags && ncags.length > 0){
-            ncags.find(ncag => ncag.question == problem.problemName)
-            return undefined // todo metadata moved to assignment problem
-        } 
+        //console.log(JSON.parse(problem.metadata))
+        setMeta(problem.metadata)
     }
     
-
     useEffect(() => {
-        fetchNcags()
-    }, [])
+        getMeta()
+    }, [problem])
+    
 
-    const meta = getMeta()
+    
     if (!meta){
         return (
         <div className={styles.problem}>
@@ -42,7 +33,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
         </div>)
     }
 
-    const type = null // todo metadata moved
+    const type = meta.type // todo metadata moved
     if (type == "Text") {
         return (
         <div key={problem.id} className={styles.problem}>
@@ -57,7 +48,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                 />
         </div>
     )} else if(type == "MCQ-mult") {
-        const options = meta.options
+        const options = null
         if (!options){
             return <div></div>
         }
@@ -78,7 +69,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                     </label>))}
             </div>)
     } else if(type == "MCQ-single") {
-        const options = meta.options
+        const options = null
         if (!options){
             return <div></div>
         }
@@ -98,7 +89,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
             </div>)
     } else {
         return(
-            <div>Unknown type, something is wrong on the backend!</div>)
+            <div>{console.log(meta)}Unknown type, something is wrong on the backend!</div>)
         }
 }
 
