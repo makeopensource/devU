@@ -294,8 +294,10 @@ const AssignmentUpdatePage = () => {
           <div className={styles.form}>
             <h2 className={styles.header}>Edit Info</h2>
             <span>Select submission for final score:</span>
-            <label htmlFor="subRecent" style={{display: 'block', paddingTop: '5px'}}><input type="radio" id="subRecent" name="submissionChoice" defaultChecked />Most Recent</label>
-            <label htmlFor="subHighest"><input type="radio" id="subHighest" name="submissionChoice" />Highest Score</label>
+            <label htmlFor="subRecent" style={{display: 'block', paddingTop: '5px', cursor: 'pointer'}}><input type="radio" id="subRecent" name="submissionChoice" defaultChecked />Most Recent</label>
+            <label htmlFor="subHighest" style={{display: 'block', paddingTop: '5px', cursor: 'pointer'}}><input type="radio" id="subHighest" name="submissionChoice" />Highest Score</label>
+            <label htmlFor="subNone" style={{display: 'block', paddingTop: '5px', cursor: 'pointer'}}><input type="radio" id="subNone" name="submissionChoice" />No Default</label>
+
             <div className={styles.textFieldContainer}>
               <div>
                 <div className={styles.textFieldHeader}>Assignment Category: </div>
