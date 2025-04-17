@@ -6,6 +6,8 @@ import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import ErrorPage from '../errorPage/errorPage'
 import FaIcon from 'components/shared/icons/faIcon'
+import {createGradebookCsv} from 'utils/download.utils'
+
 
 
 import RequestService from 'services/request.service'
@@ -107,6 +109,7 @@ const GradebookInstructorPage = () => {
     const [displayedAssignments, setDisplayedAssignments] = useState(new Array<Assignment>()) //All assignments in the course
     const [assignmentScores, setAssignmentScores] = useState(new Array<AssignmentScore>()) //All assignment scores for assignments in the course
     const [course, setCourse] = useState<Course>()
+    course
 
     const { courseId } = useParams<{ courseId: string }>()
 
@@ -176,41 +179,7 @@ const GradebookInstructorPage = () => {
         }
     }
 
-    const saveToCsv = () => {
-        const toCSV = []
-        let header = "externalId,email,preferredName"
-        assignments.forEach((assignment) => {header+=`,${assignment.name}`})
-        toCSV.push(header + '\n')
-        //console.log(header)
-
-
-        allUsers.forEach((user) => {
-            let csvString = `${user.externalId},${user.email},${user.preferredName ?? "N/A"}`
-            //console.log(csvString)
-            assignments.forEach((assignment) => {
-                const assignmentScore = assignmentScores.find(as => as.assignmentId === assignment?.id && as.userId == user.id) 
-                if (assignment?.id && assignmentScore){ // Submission defined, so...
-                    csvString += `,${assignmentScore.score}`
-                }
-                else if (assignment?.id && maxScores.has(assignment?.id)){  // No submission, but there are assignmentproblems defined
-                    csvString += ',0';
-                }
-                else{ // No problems mapped to this assignment, so there is no max score.
-                    csvString += ',N/A';
-                }
-            })
-            toCSV.push(csvString + '\n')
-        })
-        let final = 'data:text/csv;charset=utf-8,'
-        toCSV.forEach((row)=>{final += row})
-        var encodedUri = encodeURI(final);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `${course?.number.replace(" ", '').toLowerCase() ?? 'class'}_gradebook`);
-        document.body.appendChild(link); 
-        link.click();
-        document.body.removeChild(link);
-    }  
+    
 
     const handleStudentSearch = (value:string)  => {
         if(value.length === 0){
@@ -260,7 +229,7 @@ const GradebookInstructorPage = () => {
                         history.push(`/course/${courseId}/gradebook`)
                     }}>Student View</button>
                     <button className='btnPrimary' id='backToCourse' onClick={() => {
-                        history.goBack();
+                        history.push(`/course/${courseId}`)
                     }}>Back to Course</button>
                 </div>
             </div>
@@ -290,7 +259,10 @@ const GradebookInstructorPage = () => {
                 />
             </div>
             <div style={{width:'100%', marginTop: '10px'}}>
-                    <button style={{float: 'right'}}className='btnSecondary' onClick={saveToCsv}>Download as CSV</button>
+                    <a 
+                    className={`btnSecondary ${styles.download}`}
+                    download={`${course?.number.toLowerCase().replace(" ","")}_gradebook.csv`}
+                    href={createGradebookCsv(assignments,allUsers,assignmentScores,maxScores)}>Download as CSV</a>
             </div>
         </PageWrapper>
     )

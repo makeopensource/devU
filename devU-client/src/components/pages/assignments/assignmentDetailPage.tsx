@@ -277,7 +277,7 @@ const AssignmentDetailPage = () => {
             </div>
 
             
-            {submissions.length != 0 && 
+            {submissions.length !== 0 && 
             <div>
                 <div className={styles.submissionsContainer}>
                     {submissions.map((submission, index) => (

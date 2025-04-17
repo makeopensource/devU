@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAppSelector } from 'redux/hooks';
+import {createGradebookCsv} from 'utils/download.utils'
+
 
 import { Assignment, AssignmentScore, AssignmentProblem, Course, User } from 'devu-shared-modules';
 
@@ -88,40 +90,6 @@ const GradebookStudentPage = () => {
     if (loading) return <LoadingOverlay delay={250} />;
     if (error) return <ErrorPage error={error} />;
 
-    const saveToCsv = () => {
-        const toCSV = []
-        let header = "externalId,email,preferredName"
-        assignments.forEach((assignment) => {header+=`,${assignment.name}`})
-        toCSV.push(header + '\n')
-
-        let csvString = `${user.externalId},${user.email},${user.preferredName ?? "N/A"}`
-        assignments.forEach((assignment) => {
-            const assignmentScore = assignmentScores.find(as => as.assignmentId === assignment?.id && as.userId === userId) 
-            if (assignment?.id && assignmentScore){ // Submission defined, so...
-                csvString += `,${assignmentScore.score}`
-            }
-            else if (assignment?.id && maxScores.has(assignment?.id)){  // No submission, but there are assignmentproblems defined
-                csvString += ',0';
-            }
-            else{ // No problems mapped to this assignment, so there is no max score.
-                csvString += ',N/A';
-            }
-        })
-        toCSV.push(csvString + '\n')
-        
-        let final = 'data:text/csv;charset=utf-8,'
-        toCSV.forEach((row)=>{final += row})
-        var encodedUri = encodeURI(final);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `${courseName.replace(" ", '').toLowerCase() ?? 'class'}_gradebook`);
-        document.body.appendChild(link); 
-        link.click();
-        document.body.removeChild(link);
-    }
-
-
-
     const calculateAverage = () => {
         if (assignmentScores.length === 0) return 0.0;
         const assignmentIds = assignments.map((a) => (a.id)) 
@@ -156,7 +124,7 @@ const GradebookStudentPage = () => {
                         history.push(`/course/${courseId}/gradebook/instructor`)
                     }}>Instructor View</button>}
                     <button className='btnPrimary' id='backToCourse' onClick={() => {
-                        history.goBack();
+                        history.push(`/course/${courseId}`)
                     }}>Back to Course</button>
                 </div>
             </div>
@@ -214,7 +182,10 @@ const GradebookStudentPage = () => {
                     <span>{calculateAverage()}%</span>
             </div>
             <div style={{width:'100%', marginTop: '10px'}}>
-                    <button style={{float: 'right'}} className='btnSecondary' onClick={saveToCsv}>Download as CSV</button>
+                 <a 
+                    className={`btnSecondary ${styles.download}`}
+                    download={`${courseName.toLowerCase().replace(" ","")}_gradebook.csv`}
+                    href={createGradebookCsv(assignments,[user],assignmentScores,maxScores)}>Download as CSV</a>
             </div>
         </PageWrapper>
     );
