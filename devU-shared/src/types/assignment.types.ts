@@ -1,3 +1,9 @@
+export enum ScoringType {
+  HIGHEST_SCORE = 'highest-score',
+  LATEST_SUBMISSION = 'latest-submission',
+  NO_SCORE = 'no-score'
+}
+
 export type Assignment = {
   id?: number
   courseId: number
@@ -14,5 +20,6 @@ export type Assignment = {
   updatedAt?: string
   attachmentsHashes ?: string[]
   attachmentsFilenames ?: string[]
+  scoringType?: ScoringType
 }
 

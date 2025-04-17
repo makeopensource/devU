@@ -23,7 +23,11 @@
     text-align: center;
   }
 
-  hr{
+  span {
+    color: var(--text-color)
+  }
+
+  hr {
     border: 1px solid #ddd;
     margin: 0;
   }
@@ -41,7 +45,8 @@
     font-weight: 700;
     font-size: 16px;
     transition: all 0.2s ease;
-    &:disabled{
+
+    &:disabled {
       opacity: 60%;
       cursor: not-allowed;
     }
@@ -148,7 +153,7 @@
     align-items: center;
   }
 
-  .pageHeader > h1 {
+  .pageHeader>h1 {
     grid-column-start: 2;
   }
 
@@ -165,7 +170,7 @@
 
     background-color: var(--background);
     color: var(--text-color);
-    
+
     --background: white;
     --text-color: black;
     --text-color-secondary: #363636;
