@@ -15,12 +15,15 @@ type Props = {
 const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => {
     const { courseId } = useParams<{ courseId: string }>()
     const [ncags, setNcags] = useState<NonContainerAutoGrader[]>([])
+    const [meta, setMeta] = useState<any>()
+
 
     //const type = ncags.at(0)?.metadata
 
     const fetchNcags = async() => {
         await RequestService.get(`/api/course/${courseId}/assignment/${problem.assignmentId}/non-container-auto-graders`).then((res) => setNcags(res))
     }
+
 
     const getMeta = () => {
         if (ncags && ncags.length > 0){
@@ -32,12 +35,14 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
         } 
     }
     
-
     useEffect(() => {
         fetchNcags()
     }, [])
 
-    const meta = getMeta()
+    useEffect(() => {
+        setMeta(getMeta)
+    }, [ncags])
+
     if (!meta || !meta.type){
         return (
         <div className={styles.problem}>
@@ -59,7 +64,9 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                 id={problem.problemName}
                 />
         </div>
-    )} else if(type == "MCQ-mult") {
+    )} 
+    
+    else if(type == "MCQ-mult") {
         const options = meta.options
         if (!options){
             return <div></div>
@@ -80,7 +87,9 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                         </span>{/* custom checkbox */}
                     </label>))}
             </div>)
-    } else if(type == "MCQ-single") {
+    } 
+    
+    else if(type == "MCQ-single") {
         const options = meta.options
         if (!options){
             return <div></div>
@@ -99,7 +108,9 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                         <span className={styles.radio}></span>{/* custom radio button */}
                     </label>))}
             </div>)
-    } else {
+    } 
+    
+    else {
         return(
             <div>Unknown type, something is wrong on the backend!</div>)
         }
