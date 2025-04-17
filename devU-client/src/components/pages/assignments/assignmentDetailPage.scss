@@ -94,10 +94,10 @@
 .affirmation{
     display: flex;
     align-items: center;
-    margin-top: 10px;
+    margin: 15px auto;
+
     align-self: flex-start;
     gap: 10px;
-    margin: auto;
 }
 
 .affirmText{
@@ -210,11 +210,6 @@
     margin-bottom: 20px; 
 }
 
-.submissionCard {
-	margin-bottom : 15px;
-    background-color: $list-item-background;
-}
-
 .fileInput {
 	margin-top: 20px;
 }
@@ -230,7 +225,8 @@
 .submissionsContainer {
     display: flex;
     flex-direction: column;
-    width: 100%; 
+    margin: auto;
+    width: 80%; 
     margin-top: 20px;
 }
 
@@ -248,7 +244,7 @@
 }
 
 .submissionCard:hover {
-    background-color: var(--purple-lightest);
+    background-color: var(--hover-lighter);
 }
 
 .submissionHeading {

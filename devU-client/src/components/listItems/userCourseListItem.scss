@@ -16,25 +16,9 @@
   overflow-wrap: break-word;
 }
 
-.No_assignments {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  flex-grow: 1;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 15px;
-  font-style: italic;
-  flex-wrap: wrap;
-  // color: $primary;
-  color: $text-color;
-  text-overflow: ellipsis;
-  overflow-wrap: break-word;
-  border-bottom: 1px solid #ddd;
-}
 
-.Buttons {
+
+.buttons {
   display: flex;
   justify-content: center;
   cursor: default;
@@ -51,6 +35,10 @@
   margin: 0 10px;
   cursor: pointer;
   font-size: 16px;
+  transition: .2s ease color;
+    &:hover{
+      color: var(--hover-darker);
+    }
 }
 
 .tag {

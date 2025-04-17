@@ -39,6 +39,9 @@ const TextProblemModal = ({ open, onClose }: Props) => {
             problemName: formData.title,
             createdAt: createdAt,
             maxScore: parseInt(formData.maxScore),
+            metadata: {
+                type: 'Text'
+            } 
         };
 
         const graderFormData = {
@@ -48,11 +51,11 @@ const TextProblemModal = ({ open, onClose }: Props) => {
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
-            metadata: {
-                type: 'Text'
-            } 
+            
             
         }
+
+        console
 
         await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
             .then(() => {
@@ -68,7 +71,6 @@ const TextProblemModal = ({ open, onClose }: Props) => {
         await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
             .then(() => {
                 console.log("GRADER CREATED")
-                window.location.reload()
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message

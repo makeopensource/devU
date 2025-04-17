@@ -75,6 +75,10 @@
     .key{
         margin-right: auto;
     }
+    .download{
+        float: right;
+        text-decoration: none;
+    }
     .name{ //couldn't find a good way for these to stick without magic numbers that
         // position: sticky; don't translate accross devices.
         // left: 0;
@@ -120,5 +124,6 @@
 
     td{
         background-color: $background;
+        transition: background-color .2s ease;
     }
 }

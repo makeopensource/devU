@@ -23,9 +23,7 @@
     text-align: center;
   }
 
-  span {
-    color: var(--text-color)
-  }
+  
 
   hr {
     border: 1px solid #ddd;
@@ -45,6 +43,7 @@
     font-weight: 700;
     font-size: 16px;
     transition: all 0.2s ease;
+    font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;
 
     &:disabled {
       opacity: 60%;
@@ -58,7 +57,7 @@
     margin-bottom: 20px;
   }
 
-  button.btnPrimary {
+  .btnPrimary {
     @extend .btn;
     background-color: var(--primary);
     border: 3px solid var(--primary);
@@ -70,7 +69,7 @@
     }
   }
 
-  button.btnSecondary {
+  .btnSecondary {
     @extend .btn;
 
     background-color: var(--btn-secondary-background);
@@ -82,7 +81,7 @@
     }
   }
 
-  button.btnDelete {
+  .btnDelete {
     @extend .btn;
     background-color: var(--btn-delete-background);
     color: var(--btn-delete-text);
@@ -327,6 +326,11 @@
   .error-description {
     font-size: 1.2rem;
     color: var(--text-color);
+  }
+
+  .textField{
+    border: 2px solid #ccc;
+    margin-bottom: 5px;
   }
 
   // Global Input Field Styles
