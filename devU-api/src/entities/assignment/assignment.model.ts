@@ -11,6 +11,8 @@ import {
 
 import CourseModel from '../course/course.model'
 
+import { ScoringType } from 'devu-shared-modules'
+
 @Entity('assignments')
 export default class AssignmentModel {
   /**
@@ -58,6 +60,11 @@ export default class AssignmentModel {
    *          type: string
    *          array: true
    *          description: filenames of stored attachments, matches the index of the fileHashes, i.e. filename[i] is the name of hash[i]
+ *        scoringType:
+ *          type: string
+ *          enum: [highest-score, latest-submission, no-score]
+ *          default: highest-score
+ *          description: Determines how the final score is chosen for the assignment
    */
 
   @PrimaryGeneratedColumn()
@@ -109,4 +116,12 @@ export default class AssignmentModel {
 
   @Column({ name: 'attachmentsFilenames', array: true, default: [], type: 'text', nullable: false })
   attachmentsFilenames: string[]
+
+  @Column({
+    type: 'enum',
+    enum: ScoringType,
+    default: ScoringType.HIGHEST_SCORE,
+    name: 'scoring_type'
+  })
+  scoringType: ScoringType
 }
