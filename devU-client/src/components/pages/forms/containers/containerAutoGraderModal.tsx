@@ -21,13 +21,14 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
     const [setAlert] = useActionless(SET_ALERT)
     const { assignmentId, courseId } = useParams<{ assignmentId: string; courseId: string }>();
     // const history = useHistory()
-    const [graderFile, setGraderFile] = useState<File | null>()
-    const [makefile, setMakefile] = useState<File | null>()
+    const [dockerfile, setDockerfile] = useState<File | null>()
+    const [jobFiles, setJobFiles] = useState<File[]>()
+
     const [formData, setFormData] = useState({
         assignmentId: assignmentId,
-        autogradingImage: '',
         timeout: '',
     })
+    formData
     // const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
 
     // const handleChange = (value: String, e : React.ChangeEvent<HTMLInputElement>) => {
@@ -39,11 +40,15 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
 
     //This is janky but it works and I'm too tired to come up with a better solution
     //this is done because the files need to be uniquely identified for multer to parse them from the multipart
-    const handleGraderfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setGraderFile(e.target.files?.item(0))
+    const handleDockerfile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDockerfile(e.target.files?.item(0))
     }
-    const handleMakefileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMakefile(e.target.files?.item(0))
+    const handleJobFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) {return}
+        console.log(e.target.files)
+        console.log(Array.from(e.target.files))
+
+        setJobFiles(Array.from(e.target.files))
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const key = e.target.id;
@@ -54,16 +59,23 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
 
 
     const handleSubmit = () => {
-        if (!graderFile || !makefile) return;
+        if (!dockerfile || !jobFiles) return;
 
-        const multipart = new FormData
-        multipart.append('assignmentId', formData.assignmentId)
-        multipart.append('autogradingImage', formData.autogradingImage)
-        multipart.append('timeout', String(formData.timeout))
-        if (graderFile) multipart.append('graderFile', graderFile)
-        if (makefile) multipart.append('makefileFile', makefile)
+        const body = new FormData
+        body.append('assignmentId', formData.assignmentId)
+        body.append('timeoutInSeconds', formData.timeout)
+        body.append('dockerfile', dockerfile)
 
-        RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders/`, multipart)
+        for (let i = 0; i < jobFiles.length; i ++){
+            const f = jobFiles.at(i)
+            if (f){
+                body.append('jobFiles', f)
+            }
+        }
+        
+
+
+        RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders/`, body)
             .then(() => {
                 setAlert({ autoDelete: true, type: 'success', message: 'Container Auto-Grader Added' })
             })
@@ -79,7 +91,6 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
 
         setFormData({
             assignmentId: assignmentId,
-            autogradingImage: '',
             timeout: '',
         })
 
@@ -89,23 +100,19 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
     return (
         <Modal title="Add Container Auto Grader" buttonAction={handleSubmit} open={open} onClose={onClose}>
             <div className="input-group">
-                <label htmlFor="autogradingImage">Autograding Image*:</label>
-                {/* <input type="text" id="autogradingImage" onChange={(e) => setFormData({ ...formData, autogradingImage: e.target.value })} placeholder="e.g. Assignment 1 Image" /> */}
-                <input type="text" id="autogradingImage" onChange={handleChange} placeholder="e.g. Assignment 1 Image" />
+                <label htmlFor="dockerfile">Dockerfile*:</label>
+                <input type="file" id="graderFile" onChange={handleDockerfile} />
             </div>
             <div className="input-group">
-                <label htmlFor="timeout">Timeout (ms):</label>
+                <label htmlFor="dockerfile">Job Files*:</label>
+                <input type="file" id="graderFile" multiple onChange={handleJobFiles} />
+            </div>
+            <div className="input-group">
+                <label htmlFor="timeout">Timeout (s):</label>
                 {/* <input type="number" id="timeout" placeholder="e.g. 3000" onChange={(e) => setFormData({ ...formData, timeout: e.target.value })} /> */}
-                <input type="number" id="timeout" placeholder="e.g. 3000" onChange={handleChange} />
+                <input type="number" id="timeout" placeholder="e.g. 1" onChange={handleChange} />
             </div>
-            <div className="input-group">
-                <label htmlFor="graderFile">Graderfile*:</label>
-                <input type="file" id="graderFile" onChange={handleGraderfileChange} />
-            </div>
-            <div className="input-group">
-                <label htmlFor="makefile">Makefile*:</label>
-                <input type="file" id="makefile" onChange={handleMakefileChange} />
-            </div>
+            
         </Modal>
     );
 };
