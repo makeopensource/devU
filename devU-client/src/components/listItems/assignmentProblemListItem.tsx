@@ -32,9 +32,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                 return undefined
             }
             return JSON.parse(ncag.metadata)
-        } else {
-            console.log("None")
-        }
+        } 
     }
     
     useEffect(() => {
