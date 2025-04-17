@@ -8,8 +8,9 @@ export function serialize(nonContainerAutoGrader: NonContainerAutoGraderModel): 
     assignmentId: nonContainerAutoGrader.assignmentId,
     question: nonContainerAutoGrader.question,
     score: nonContainerAutoGrader.score,
-    isRegex: nonContainerAutoGrader.isRegex,
+    metadata: JSON.stringify(nonContainerAutoGrader.metadata ?? ''),
     correctString: nonContainerAutoGrader.correctString,
+    isRegex: nonContainerAutoGrader.isRegex,
     createdAt: nonContainerAutoGrader.createdAt.toISOString(),
     updatedAt: nonContainerAutoGrader.updatedAt.toISOString(),
   }

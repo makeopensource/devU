@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { AssignmentProblem } from 'devu-shared-modules'
 
+
 import styles from './assignmentProblemListItem.scss'
 import FaIcon from 'components/shared/icons/faIcon'
 
@@ -15,6 +16,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
 
     const getMeta = () => {
         setMeta(problem.metadata)
+
     }
     
     useEffect(() => {
@@ -28,7 +30,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
         </div>)
     }
 
-    const type = meta.type // todo metadata moved
+    const type = meta.type 
     if (type == "Text") {
         return (
         <div key={problem.id} className={styles.problem}>

@@ -41,17 +41,18 @@ const EditUserForm = ({ user, onSubmit }: Props) => {
   }
 
   return (
-    <div>
+    <div style={{display:'flex', flexDirection: 'column', alignItems: 'center', gap: '10px'}}>
       <h1>User Information</h1>
       <TextField
         onChange={handleUpdatePreferredName}
-        label='Preferred Name'
+        placeholder='Preferred Name'
+        className='textField'
         id='preferredName'
         defaultValue={user.preferredName}
       />
-      <TextField type='email' label="Email" id='email' placeholder={user.email} disabled={true} />
-      <TextField label='Person Number' id='externalId' placeholder={user.externalId} disabled={true} />
-      <Button onClick={handleSubmit} loading={loading}>
+      <TextField type='email' placeholder='Email Address' id='email' defaultValue={user.email} className='textField' disabled={true} />
+      <TextField placeholder='Person Number' id='externalId' defaultValue={user.externalId} className='textField' disabled={true} />
+      <Button onClick={handleSubmit} loading={loading} className='btnPrimary'>
         Update
       </Button>
     </div>

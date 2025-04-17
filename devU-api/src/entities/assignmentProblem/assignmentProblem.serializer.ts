@@ -8,7 +8,6 @@ export function serialize(assignmentProblem: AssignmentProblemModel): Assignment
     assignmentId: assignmentProblem.assignmentId,
     problemName: assignmentProblem.problemName,
     maxScore: assignmentProblem.maxScore,
-    metadata: assignmentProblem.metadata,
     createdAt: assignmentProblem.createdAt.toISOString(),
     updatedAt: assignmentProblem.updatedAt.toISOString(),
   }

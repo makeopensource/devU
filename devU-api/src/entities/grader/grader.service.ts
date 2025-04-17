@@ -11,6 +11,7 @@ import {
   AssignmentProblem,
   AssignmentScore,
   NonContainerAutoGrader,
+  ScoringType,
   Submission,
   SubmissionProblemScore,
   SubmissionScore,
@@ -25,6 +26,7 @@ import { downloadFile, initializeMinio } from '../../fileStorage'
 import { createNewLab, sendSubmission, waitForJob } from '../../autograders/leviathan.service'
 import { DockerFile, LabData, LabFile, SubmissionFile } from 'leviathan-node-sdk'
 import path from 'path'
+import assignmentService from '../assignment/assignment.service'
 
 async function grade(submissionId: number) {
   const submissionModel = await submissionService.retrieve(submissionId)
@@ -271,11 +273,27 @@ export async function callbackFailure(assignmentId: number, submissionId: number
 //Currently just sets assignmentscore to the latest submission. Pulled this function out for easy future modification.
 async function updateAssignmentScore(submission: Submission, score: number) {
   const assignmentScoreModel = await assignmentScoreService.retrieveByUser(submission.assignmentId, submission.userId)
+  const assignment = await assignmentService.retrieve(submission.assignmentId, submission.courseId)
+
   if (assignmentScoreModel) {
     //If assignmentScore already exists, update existing entity
     const assignmentScore = serializeAssignmentScore(assignmentScoreModel)
     assignmentScore.score = score
-    assignmentScoreService.update(assignmentScore)
+
+    // todo use scoring type in assignment entity, leaving this alone for now,
+    //  grader endpoint needs to be refactored
+    switch (assignment!.scoringType) {
+      case ScoringType.HIGHEST_SCORE:
+        break
+      case ScoringType.LATEST_SUBMISSION:
+        break
+      case ScoringType.NO_SCORE:
+        break
+      default:
+        break
+    }
+
+    await assignmentScoreService.update(assignmentScore)
   } else {
     //Otherwise create a new one
     const assignmentScore: AssignmentScore = {
