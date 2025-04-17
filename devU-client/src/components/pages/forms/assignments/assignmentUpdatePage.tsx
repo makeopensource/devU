@@ -343,7 +343,7 @@ const AssignmentUpdatePage = () => {
                         helpText={invalidFields.get('maxFileSize')}
                         value={formData.maxFileSize ? formData.maxFileSize.toString() : ''} 
                         sx={{width: '100%', marginLeft : 1/10}}/>
-
+                        </div>
             </div>
             <div className={styles.datepickerContainer}>
               <label htmlFor="start_date">Start Date *</label>
