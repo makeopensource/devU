@@ -45,9 +45,6 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
     }
     const handleJobFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) {return}
-        console.log(e.target.files)
-        console.log(Array.from(e.target.files))
-
         setJobFiles(Array.from(e.target.files))
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,11 +52,14 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
         const value = e.target.value;
         setFormData(prevState => ({ ...prevState, [key]: value }));
     };
-
-
-
+    const isSubmittable = () => {
+        if (dockerfile && jobFiles && formData.timeout.length > 0){
+            return true;
+        }
+        return false;
+    }
     const handleSubmit = () => {
-        if (!dockerfile || !jobFiles) return;
+        if (!dockerfile || !jobFiles) {return}
 
         const body = new FormData
         body.append('assignmentId', formData.assignmentId)
@@ -98,7 +98,11 @@ const ContainerAutoGraderForm = ({ open, onClose }: Props) => {
     }
 
     return (
-        <Modal title="Add Container Auto Grader" buttonAction={handleSubmit} open={open} onClose={onClose}>
+        <Modal title="Add Container Auto Grader" 
+        buttonAction={handleSubmit} 
+        open={open} 
+        onClose={onClose} 
+        isSubmittable={isSubmittable}>
             <div className="input-group">
                 <label htmlFor="dockerfile">Dockerfile*:</label>
                 <input type="file" id="graderFile" onChange={handleDockerfile} />

@@ -34,8 +34,6 @@ const AssignmentUpdatePage = () => {
   const currentAssignmentId = parseInt(assignmentId)
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
-  const [containerAutoGraderModal, setContainerAutoGraderModal] = useState(false);
-  const handleCloseContainerAutoGraderModal = () => setContainerAutoGraderModal(false);
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
 
 
@@ -111,11 +109,18 @@ const AssignmentUpdatePage = () => {
   }
 
   const fetchAssignmentProblems = async () => {
-    await RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
-      .then((res) => { setNonContainerAutograders(res) })
     await RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
       .then((res) => { setAssignmentProblems(res) })
   }
+  const fetchNcags = async () => {
+    await RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
+      .then((res) => { setNonContainerAutograders(res) })
+  }
+  const fetchCags = async () => {
+    await RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)
+    .then((res) => { setContainerAutograders(res) })
+  }
+  
 
 
 
@@ -210,17 +215,28 @@ const AssignmentUpdatePage = () => {
   const handleCloseTextModal = () => {
     setTextModal(false)
     fetchAssignmentProblems()
+    fetchNcags()
   }
+
   const [codeModal, setCodeModal] = useState(false);
   const handleCloseCodeModal = () => {
     setCodeModal(false)
     fetchAssignmentProblems()
   }
+
   const [mcqModal, setMcqModal] = useState(false);
   const handleCloseMcqModal = () => {
     setMcqModal(false)
     fetchAssignmentProblems()
+    fetchNcags()
   }
+
+  const [containerAutoGraderModal, setContainerAutoGraderModal] = useState(false);
+  const handleCloseContainerAutoGraderModal = () => {
+    setContainerAutoGraderModal(false);
+    fetchCags();
+  }
+
 
 
 
