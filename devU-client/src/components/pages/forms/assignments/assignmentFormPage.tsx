@@ -119,7 +119,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             })
     }
 
-    useEffect(() => { RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) }) }, [formData])
+    useEffect(() => { RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) }) }, [])
 
 
     useEffect(() => {
