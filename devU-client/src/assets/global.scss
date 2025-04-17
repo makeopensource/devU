@@ -23,9 +23,7 @@
     text-align: center;
   }
 
-  span {
-    color: var(--text-color)
-  }
+  
 
   hr {
     border: 1px solid #ddd;
@@ -45,6 +43,7 @@
     font-weight: 700;
     font-size: 16px;
     transition: all 0.2s ease;
+    font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;
 
     &:disabled {
       opacity: 60%;
