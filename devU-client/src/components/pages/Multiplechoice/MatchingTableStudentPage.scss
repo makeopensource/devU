@@ -1,10 +1,10 @@
 @import 'variables';
 
 .matching-table-student-wrapper {
-  max-width: 900px;
+  max-width: 960px;
   margin: 2rem auto;
   padding: 2rem;
-  background: var(--background);
+  background-color: var(--background);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
 }
@@ -17,38 +17,95 @@
   color: var(--text-primary);
 }
 
-.button-container {
+.matching-columns {
   display: flex;
-  justify-content: center;
-  margin-top: 2rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
-.submit-btn {
-  @extend .btn;
-  background-color: var(--primary);
-  color: white;
-  border: none;
+.prompts-column,
+.options-column {
+  flex: 1;
+  min-width: 300px;
+}
+
+.column-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.prompt-item,
+.option-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  margin-bottom: 1rem;
   border-radius: var(--border-radius);
+  border: 2px solid var(--list-item-background);
+  background-color: var(--surface);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-size: 1.1rem;
+
+  &.active {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+    color: white;
+    font-weight: bold;
+  }
+
+  &.matched {
+    border-color: var(--success);
+    background-color: #eaffea;
+  }
+}
+
+.item-number {
+  font-weight: bold;
+  margin-right: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.remove-answer-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--error);
+  cursor: pointer;
+
+  &:hover {
+    color: darkred;
+  }
+}
+
+.submit-btn,
+.try-again-btn button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.75rem 2rem;
   font-size: 1rem;
   font-weight: 600;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  background-color: var(--primary);
+  color: white;
+  transition: --background 0.2s ease;
 
   &:hover {
     background-color: var(--primary-dark);
   }
-}
 
-.score-feedback {
-  margin-top: 1.5rem;
-  text-align: center;
-  font-size: 1.2rem;
-  color: var(--success);
-
-  .score {
-    font-weight: 700;
-  }
-
-  .total {
-    color: var(--text-secondary);
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 }

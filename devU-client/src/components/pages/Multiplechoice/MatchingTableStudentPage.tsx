@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import MatchingTable from './matchingTable';
 import { MatchItem } from './matchingTable.types';
 import PageWrapper from 'components/shared/layouts/pageWrapper';
-import './MatchingTableStudentPage.scss';
+import MatchingTableStudent from './MatchStudent';
+import styles from './StudentPage.scss';
+
 
 interface LocationState {
   items: MatchItem[];
@@ -52,8 +53,6 @@ const MatchingTableStudentPage: React.FC = () => {
     });
     
     setSubmitted(true);
-    
-    // Show confetti for perfect score
   };
 
   const handleTryAgain = () => {
@@ -65,36 +64,33 @@ const MatchingTableStudentPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      <div className="matching-table-student-wrapper">
-        <h2 className="section-title">Matching Exercise</h2>
+      <div className={styles['matching-table-student-wrapper']}>
+        <h2 className={styles['section-title']}>Match Pairs</h2>
         
-        <div className="instructions">
+        <div className={styles['"instructions']}>
           <p>Match each item on the left with the correct option on the right.</p>
           <p>You can select by pressing the number keys or clicking directly on the items.</p>
         </div>
         
-        <div className="matching-table-wrapper">
-          <MatchingTable 
-            items={matchItems}
-            onAnswerChange={handleAnswerChange}
-            readOnly={submitted}
-            isInstructorView={submitted}
-          />
-        </div>
+        <MatchingTableStudent 
+          items={matchItems}
+          onAnswerChange={handleAnswerChange}
+          readOnly={submitted}
+        />
 
         {!submitted ? (
-          <button className="submit-btn" onClick={handleSubmit}>
+          <button className={styles['submit-btn']} onClick={handleSubmit}>
             Submit Answers
           </button>
         ) : (
           <>
-            <div className="score-feedback">
-              You scored <span className="score">{score.correct}</span> out of <span className="total">{score.total}</span>
+            <div className={styles['score-feedback']}>
+              You scored <span className={styles['score']}>{score.correct}</span> out of <span className={styles['total']}>{score.total}</span>
               {score.correct === score.total && (
                 <div>Perfect score! 🎉</div>
               )}
             </div>
-            <div className="try-again-btn">
+            <div className={styles['try-again-btn']}>
               <button onClick={handleTryAgain}>Try Again</button>
             </div>
           </>
@@ -105,4 +101,3 @@ const MatchingTableStudentPage: React.FC = () => {
 };
 
 export default MatchingTableStudentPage;
-
