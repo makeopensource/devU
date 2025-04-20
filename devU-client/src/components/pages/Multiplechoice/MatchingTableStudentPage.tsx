@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import MatchingTable from './matchingTable';
 import { MatchItem } from './matchingTable.types';
 import PageWrapper from 'components/shared/layouts/pageWrapper';
-import './matchingTable.scss';
+import './MatchingTableStudentPage.scss';
 
 interface LocationState {
   items: MatchItem[];
@@ -14,15 +15,11 @@ const MatchingTableStudentPage: React.FC = () => {
   const [matchItems, setMatchItems] = useState<MatchItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState({ correct: 0, total: 0 });
-  const [availableOptions, setAvailableOptions] = useState<string[]>([]);
   
   useEffect(() => {
     // Check if items exist in location state
     if (location.state && location.state.items) {
       setMatchItems(location.state.items);
-      // Extract and shuffle options
-      const options = [...new Set(location.state.items.map(item => item.correctAnswer))];
-      setAvailableOptions(options.sort(() => 0.5 - Math.random()));
       setScore({ correct: 0, total: location.state.items.length });
     } else {
       // Redirect if no items were provided
@@ -30,7 +27,7 @@ const MatchingTableStudentPage: React.FC = () => {
     }
   }, [location, history]);
 
-  const handleSelectChange = (id: string, answer: string) => {
+  const handleAnswerChange = (id: string, answer: string) => {
     if (submitted) return;
     
     const updatedItems = matchItems.map(item => 
@@ -55,6 +52,8 @@ const MatchingTableStudentPage: React.FC = () => {
     });
     
     setSubmitted(true);
+    
+    // Show confetti for perfect score
   };
 
   const handleTryAgain = () => {
@@ -64,66 +63,23 @@ const MatchingTableStudentPage: React.FC = () => {
     setSubmitted(false);
   };
 
-  const getStatusClass = (item: MatchItem): string => {
-    if (!submitted || !item.studentAnswer) return '';
-    return item.studentAnswer === item.correctAnswer ? 'correct' : 'incorrect';
-  };
-
   return (
     <PageWrapper>
       <div className="matching-table-student-wrapper">
-        <h2>Matching Exercise</h2>
+        <h2 className="section-title">Matching Exercise</h2>
         
         <div className="instructions">
-          Match each item from the left column with the correct option from the dropdown menu.
+          <p>Match each item on the left with the correct option on the right.</p>
+          <p>You can select by pressing the number keys or clicking directly on the items.</p>
         </div>
         
-        <div className="matching-table-container">
-          <table className="matching-table">
-            <thead>
-              <tr>
-                <th className="prompt-column">Question</th>
-                <th className="response-column">Your Answer</th>
-                {submitted && <th className="status-column">Result</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {matchItems.map((item) => (
-                <tr key={item.id} className={getStatusClass(item)}>
-                  <td className="prompt-cell">{item.prompt}</td>
-                  <td className="response-cell">
-                    <select
-                      value={item.studentAnswer}
-                      onChange={(e) => handleSelectChange(item.id, e.target.value)}
-                      disabled={submitted}
-                      className="answer-select"
-                    >
-                      <option value="">Select an answer</option>
-                      {availableOptions.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  {submitted && (
-                    <td className="status-cell">
-                      {item.studentAnswer === item.correctAnswer ? (
-                        <span className="status-icon correct">✓ Correct</span>
-                      ) : (
-                        <>
-                          <span className="status-icon incorrect">✗ Incorrect</span>
-                          <div className="correct-answer">
-                            Correct answer: {item.correctAnswer}
-                          </div>
-                        </>
-                      )}
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="matching-table-wrapper">
+          <MatchingTable 
+            items={matchItems}
+            onAnswerChange={handleAnswerChange}
+            readOnly={submitted}
+            isInstructorView={submitted}
+          />
         </div>
 
         {!submitted ? (
@@ -134,6 +90,9 @@ const MatchingTableStudentPage: React.FC = () => {
           <>
             <div className="score-feedback">
               You scored <span className="score">{score.correct}</span> out of <span className="total">{score.total}</span>
+              {score.correct === score.total && (
+                <div>Perfect score! 🎉</div>
+              )}
             </div>
             <div className="try-again-btn">
               <button onClick={handleTryAgain}>Try Again</button>
@@ -146,3 +105,4 @@ const MatchingTableStudentPage: React.FC = () => {
 };
 
 export default MatchingTableStudentPage;
+

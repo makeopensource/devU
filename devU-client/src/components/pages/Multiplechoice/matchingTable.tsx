@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './matchingTable.scss';
 
 interface MatchItem {
@@ -26,8 +25,9 @@ const MatchingTable: React.FC<MatchingTableProps> = ({
   const [matchItems, setMatchItems] = useState<MatchItem[]>(items);
   const [availableOptions, setAvailableOptions] = useState<string[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<{[key: string]: string}>({});
-  const [draggedOption, setDraggedOption] = useState<string | null>(null);
-
+  const [activePrompt, setActivePrompt] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     setMatchItems(items);
     
@@ -45,67 +45,85 @@ const MatchingTable: React.FC<MatchingTableProps> = ({
     setSelectedOptions(currentSelections);
   }, [items]);
 
+  // Add keyboard event listener
+  useEffect(() => {
+    if (readOnly) return;
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key;
+      // Check if key is a number
+      if (/^[0-9]$/.test(key)) {
+        const index = parseInt(key, 10);
+        
+        // If an active prompt is selected, match it with the option
+        if (activePrompt) {
+          const optionIndex = index;
+          if (optionIndex < availableOptions.length) {
+            const selectedOption = availableOptions[optionIndex];
+            handleMatchSelection(activePrompt, selectedOption);
+            setActivePrompt(null);
+          }
+        } else {
+          // Otherwise, select the prompt
+          const promptIndex = index;
+          if (promptIndex < matchItems.length) {
+            setActivePrompt(matchItems[promptIndex].id);
+          }
+        }
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activePrompt, availableOptions, matchItems, readOnly]);
+
   const isCorrect = (item: MatchItem): boolean => {
     return item.studentAnswer === item.correctAnswer;
   };
 
-  const getStatusClass = (item: MatchItem): string => {
-    if (!isInstructorView || !item.studentAnswer) return '';
-    return isCorrect(item) ? 'correct' : 'incorrect';
-  };
-
-  // Handle drag start from options
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, option: string) => {
-    setDraggedOption(option);
-    e.dataTransfer.setData('text/plain', option);
-    e.currentTarget.classList.add('dragging');
-  };
-
-  // Handle drag end
-  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-    e.currentTarget.classList.remove('dragging');
-  };
-
-  // Handle drag over for drop zones
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.currentTarget.classList.add('dragover');
-  };
-
-  // Handle drag leave for drop zones
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.currentTarget.classList.remove('dragover');
-  };
-
-  // Handle drop on answer cells
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, itemId: string) => {
-    e.preventDefault();
-    e.currentTarget.classList.remove('dragover');
+  const handlePromptClick = (itemId: string) => {
+    if (readOnly) return;
     
-    if (draggedOption && !readOnly) {
-      // Update the selected options
-      const newSelectedOptions = { ...selectedOptions };
-      
-      // If this option was already assigned to another item, remove that assignment
-      Object.keys(newSelectedOptions).forEach(key => {
-        if (newSelectedOptions[key] === draggedOption && key !== itemId) {
-          delete newSelectedOptions[key];
-        }
-      });
-      
-      // Assign this option to the target item
-      newSelectedOptions[itemId] = draggedOption;
-      setSelectedOptions(newSelectedOptions);
-      
-      // Update the match items and call the change handler
-      const updatedItems = matchItems.map(item => 
-        item.id === itemId ? { ...item, studentAnswer: draggedOption } : item
-      );
-      setMatchItems(updatedItems);
-      
-      if (onAnswerChange) {
-        onAnswerChange(itemId, draggedOption);
+    if (activePrompt === itemId) {
+      // Deselect if clicking the same prompt
+      setActivePrompt(null);
+    } else {
+      setActivePrompt(itemId);
+    }
+  };
+
+  const handleOptionClick = (option: string) => {
+    if (readOnly || !activePrompt) return;
+    
+    handleMatchSelection(activePrompt, option);
+    setActivePrompt(null);
+  };
+
+  const handleMatchSelection = (itemId: string, option: string) => {
+    // Update the selected options
+    const newSelectedOptions = { ...selectedOptions };
+    
+    // If this option was already assigned to another item, remove that assignment
+    Object.keys(newSelectedOptions).forEach(key => {
+      if (newSelectedOptions[key] === option && key !== itemId) {
+        delete newSelectedOptions[key];
       }
+    });
+    
+    // Assign this option to the target item
+    newSelectedOptions[itemId] = option;
+    setSelectedOptions(newSelectedOptions);
+    
+    // Update the match items and call the change handler
+    const updatedItems = matchItems.map(item => 
+      item.id === itemId ? { ...item, studentAnswer: option } : item
+    );
+    setMatchItems(updatedItems);
+    
+    if (onAnswerChange) {
+      onAnswerChange(itemId, option);
     }
   };
 
@@ -128,88 +146,86 @@ const MatchingTable: React.FC<MatchingTableProps> = ({
   };
 
   return (
-    <div className="matching-table-container">
+    <div className="matching-table-container" ref={containerRef}>
       <div className="matching-table-wrapper">
-        <table className="matching-table">
-          <thead>
-            <tr>
-              <th className="prompt-column">Prompt</th>
-              <th className="response-column">Response</th>
-              {isInstructorView && <th className="status-column">Status</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {matchItems.map((item) => (
-              <tr key={item.id} className={getStatusClass(item)}>
-                <td className="prompt-cell">{item.prompt}</td>
-                <td className="response-cell">
-                  {readOnly ? (
-                    <div className="selected-answer">
-                      {item.studentAnswer || 'Not answered'}
-                    </div>
-                  ) : (
-                    <div 
-                      className={`answer-dropzone ${selectedOptions[item.id] ? 'filled' : ''}`}
-                      onDragOver={handleDragOver}
-                      onDragLeave={handleDragLeave}
-                      onDrop={(e) => handleDrop(e, item.id)}
+        <div className="matching-columns">
+          <div className="prompts-column">
+            <div className="column-header">Prompt</div>
+            {matchItems.map((item, index) => {
+              const isMatched = !!selectedOptions[item.id];
+              const itemClass = `prompt-item ${activePrompt === item.id ? 'active' : ''} ${isMatched ? 'matched' : ''}`;
+              
+              return (
+                <div 
+                  key={item.id}
+                  className={itemClass}
+                  onClick={() => handlePromptClick(item.id)}
+                >
+                  <div className="item-number">{index}</div>
+                  <div className="item-content">{item.prompt}</div>
+                  {isMatched && !readOnly && (
+                    <button 
+                      className="remove-answer-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveAnswer(item.id);
+                      }}
                     >
-                      {selectedOptions[item.id] ? (
-                        <div className="selected-answer">
-                          {selectedOptions[item.id]}
-                          <button 
-                            className="remove-answer-btn"
-                            onClick={() => handleRemoveAnswer(item.id)}
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="empty-answer">Drag answer here</div>
-                      )}
-                    </div>
+                      ✕
+                    </button>
                   )}
-                </td>
-                {isInstructorView && (
-                  <td className="status-cell">
-                    {item.studentAnswer ? (
-                      isCorrect(item) ? (
-                        <span className="status-icon correct">✓</span>
-                      ) : (
-                        <>
-                          <span className="status-icon incorrect">✗</span>
-                          <span className="correct-answer">
-                            Correct: {item.correctAnswer}
-                          </span>
-                        </>
-                      )
-                    ) : (
-                      <span className="status-unanswered">Not answered</span>
-                    )}
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {!readOnly && (
-        <div className="options-container">
-          <h3>Available Answers</h3>
-          <div className="options-list">
-            {availableOptions.map((option) => (
-              <div 
-                key={option}
-                className={`option-item ${Object.values(selectedOptions).includes(option) ? 'used' : ''}`}
-                draggable={!Object.values(selectedOptions).includes(option) || true}
-                onDragStart={(e) => handleDragStart(e, option)}
-                onDragEnd={handleDragEnd}
-              >
-                {option}
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
+          
+          <div className="options-column">
+            <div className="column-header">Response</div>
+            {availableOptions.map((option, index) => {
+              const isUsed = Object.values(selectedOptions).includes(option);
+              
+              return (
+                <div 
+                  key={option}
+                  className={`option-item ${isUsed ? 'used' : ''}`}
+                  onClick={() => handleOptionClick(option)}
+                >
+                  <div className="item-number">{index}</div>
+                  <div className="item-content">{option}</div>
+                </div>
+              );
+            })}
+          </div>
+          
+          {isInstructorView && (
+            <div className="status-column">
+              <div className="column-header">Status</div>
+              {matchItems.map((item) => (
+                <div key={`status-${item.id}`} className="status-item">
+                  {item.studentAnswer ? (
+                    isCorrect(item) ? (
+                      <span className="status-icon correct">✓</span>
+                    ) : (
+                      <>
+                        <span className="status-icon incorrect">✗</span>
+                        <span className="correct-answer">
+                          Correct: {item.correctAnswer}
+                        </span>
+                      </>
+                    )
+                  ) : (
+                    <span className="status-unanswered">Not answered</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {!readOnly && (
+        <div className="matching-instructions">
+          <p>Select a number on the left, then select a number on the right to match them. You can also click items directly.</p>
         </div>
       )}
     </div>
