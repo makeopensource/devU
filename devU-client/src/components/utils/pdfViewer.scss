@@ -5,6 +5,12 @@
     gap: 20px;
 }
 
+.annotationOptions {
+    position: sticky;
+    height: fit-content;
+    top: 40px;
+}
+
 .highlightColors {
     min-width: 200px;
     display: flex;

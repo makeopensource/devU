@@ -148,13 +148,15 @@ const PDFViewer: React.FC<PDFWithHighlightProps> = ({ file }) => {
                             height: `${highlight.rect.height}px`,
                             backgroundColor: highlight.color,
                             pointerEvents: 'none',
+                            textAlign: 'center',
+                            padding: '2px',
                         }}
-                    ><span style={{ color: '#000', margin: 'auto' }}>{highlight.text}</span></div>
+                    ><span style={{ color: '#000', margin: 'auto', fontWeight: '700' }}>{highlight.text}</span></div>
                 ))}
             </div>
 
             {/* annotation options */}
-            {role.isInstructor() && (<div className="annotationOptions">
+            {role.isInstructor() && (<div className={styles.annotationOptions}>
                 <button
                     className="btnSecondary"
                     onClick={toggleAnnotate}
