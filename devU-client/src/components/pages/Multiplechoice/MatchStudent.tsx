@@ -121,21 +121,25 @@ const MatchingTableStudent: React.FC<MatchingTableProps> = ({
           {matchItems.map((item, index) => {
             const isMatched = !!selectedOptions[item.id];
             const isActive = activePrompt === item.id;
-            const itemClass = `prompt-item ${isActive ? 'active' : ''} ${isMatched ? 'matched' : ''}`;
-            
             return (
-              <div key={item.id} className={itemClass}onClick={() => handlePromptClick(item.id)}>
-                <div className={styles['item-number']}>{index}</div>
-                <div className={styles['item-content']}>{item.prompt}</div>
-                {isMatched && !readOnly && (
-                  <button 
+                <div
+                key={item.id}
+                className={`${styles['prompt-item']} ${isActive ? styles['active'] : ''} ${isMatched ? styles['matched'] : ''}`}
+                onClick={() => handlePromptClick(item.id)}
+                >
+                <div className={styles['prompt-box']}>
+                  <div className={styles['item-number']}>{index}</div>
+                  <div className={styles['item-content']}>{item.prompt}</div>
+                  {isMatched && !readOnly && (
+                  <button
                     className={styles['remove-answer-btn']}
                     onClick={(e) => handleRemoveAnswer(item.id, e)}
                     aria-label="Remove match"
                   >
                     ✕
                   </button>
-                )}
+                  )}
+                </div>
               </div>
             );
           })}
@@ -147,14 +151,16 @@ const MatchingTableStudent: React.FC<MatchingTableProps> = ({
             const isUsed = Object.values(selectedOptions).includes(option);
             
             return (
-              <div 
-                key={option} 
-                className={`option-item ${isUsed ? 'used' : ''}`} 
-                onClick={() => handleOptionClick(option)}
-              >
+            <div 
+            key={option}
+            className={`${styles['option-item']} ${isUsed ? styles['used'] : ''} ${activePrompt && selectedOptions[activePrompt] === option ? styles['active'] : ''}`}
+            onClick={() => handleOptionClick(option)}
+            >
+              <div className={styles['response-box']}>
                 <div className={styles['item-number']}>{index}</div>
                 <div className={styles['item-content']}>{option}</div>
-              </div>
+                </div>
+                </div>
             );
           })}
         </div>
