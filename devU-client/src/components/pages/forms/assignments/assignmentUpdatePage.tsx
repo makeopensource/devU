@@ -30,8 +30,6 @@ const AssignmentUpdatePage = () => {
   const currentAssignmentId = parseInt(assignmentId)
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
-  const [containerAutoGraderModal, setContainerAutoGraderModal] = useState(false);
-  const handleCloseContainerAutoGraderModal = () => setContainerAutoGraderModal(false);
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
 
   const [mcqProblemId, setMcqProblemId] = useState<number>()
@@ -81,17 +79,26 @@ const AssignmentUpdatePage = () => {
   }
 
   const fetchAssignmentProblems = async () => {
-    await RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
-    .then((res) => { setNonContainerAutograders(res) })
     await RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
       .then((res) => { setAssignmentProblems(res)})
   }
+  const fetchNcags = async () => {
+    await RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
+      .then((res) => { setNonContainerAutograders(res) })
+  }
+  const fetchCags = async () => {
+    await RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)
+    .then((res) => { setContainerAutograders(res) })
+  }
   
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
-  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
+
+
+
+  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) }) }, [])
+  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) }) }, [])
+  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) }) }, [])
+  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) }) }, [])
+  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) }) }, [formData])
   useEffect(() => {
     const categories = [...new Set(assignments.map(a => a.categoryName))];
     const options = categories.map((category) => ({
@@ -160,17 +167,21 @@ const AssignmentUpdatePage = () => {
   const handleCloseTextModal = () => {
     setTextModal(false)
     fetchAssignmentProblems()
+    fetchNcags()
   }
+
   const [codeModal, setCodeModal] = useState(false);
   const handleCloseCodeModal = async () => {
     setCodeModal(false)
-     fetchAssignmentProblems()
-  }  
+    fetchAssignmentProblems()
+  }
   const [mcqModal, setMcqModal] = useState(false);
   const handleCloseMcqModal = async () => {
     setMcqModal(false)
-     fetchAssignmentProblems()
-  }  
+    fetchAssignmentProblems()
+    fetchNcags()
+  }
+ 
   const [mcqEditModal, setMcqEditModal] = useState(false);
   const handleCloseEditMcqModal = async () => {
     setMcqEditModal(false)
@@ -181,6 +192,13 @@ const AssignmentUpdatePage = () => {
     setTextEditModal(false)
    fetchAssignmentProblems()
   }  
+
+  const [containerAutoGraderModal, setContainerAutoGraderModal] = useState(false);
+  const handleCloseContainerAutoGraderModal = () => {
+    setContainerAutoGraderModal(false);
+    fetchCags();
+  }
+
 
 
 
