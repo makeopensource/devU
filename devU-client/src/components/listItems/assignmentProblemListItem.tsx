@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { AssignmentProblem } from 'devu-shared-modules'
 
 
+
 import styles from './assignmentProblemListItem.scss'
 import FaIcon from 'components/shared/icons/faIcon'
 
@@ -16,13 +17,14 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
 
 
     const getMeta = () => {
-        setMeta(problem.metadata)
+        setMeta(JSON.parse(problem.metadata))
     }
     
     useEffect(() => {
         getMeta()
     }, [problem])
     
+
     if (!meta){
         return (
         <div className={styles.problem}>
@@ -31,6 +33,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
     }
 
     const type = meta.type 
+
     if (type == "Text") {
         return (
         <div key={problem.id} className={styles.problem}>

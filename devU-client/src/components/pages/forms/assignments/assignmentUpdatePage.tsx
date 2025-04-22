@@ -60,7 +60,7 @@ const AssignmentUpdatePage = () => {
     startDate: '',
   })
 
-  
+
 
   // taken out of the design for the moment, should get incorporated later
   /*const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}*/ 

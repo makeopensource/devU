@@ -42,7 +42,14 @@ export async function detail(req: Request, res: Response, next: NextFunction) {
 
 export async function post(req: Request, res: Response, next: NextFunction) {
   try {
-    const nonContainer = await NonContainerAutoGraderService.create(req.body)
+    req.body.assignmentId = parseInt(req.params.assignmentId)
+    const nonContainer = await NonContainerAutoGraderService.create(
+      req.body.assignmentId,
+      req.body.question,
+      req.body.score,
+      req.body.isRegex,
+      req.body.correctString
+    )
     const response = serialize(nonContainer)
 
     res.status(201).json(response)

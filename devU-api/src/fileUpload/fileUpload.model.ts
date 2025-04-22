@@ -27,19 +27,19 @@ export default class FileModel {
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date
 
-  @Column({ name: 'etag' })
+  @Column({ name: 'etag', default: "" })
   etag: string
 
-  @Column({ name: 'name' })
+  @Column({ name: 'name' , default: ""})
   name: string
 
-  @Column({ name: 'type' })
+  @Column({ name: 'type' , default: ""})
   type: string
 
-  @Column({ name: 'filename', length: 128 })
+  @Column({ name: 'filename', length: 128 , default: ""})
   filename: string
 
-  @Column({ name: 'bucket', length: 64 })
+  @Column({ name: 'bucket', length: 64 , default: ""})
   fieldName: string
 
   @Column({ name: 'course_id' })
