@@ -22,6 +22,7 @@ interface Props {
     onClose: () => void;
 }
 
+
 const AddAssignmentModal = ({ open, onClose }: Props) => {
     const { courseId } = useParams<{ courseId: string }>()
     const [setAlert] = useActionless(SET_ALERT)
@@ -32,6 +33,14 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
     const [currentCategory, setCurrentCategory] = useState<Option<String>>()
     const [assignments, setAssignments] = useState<Assignment[]>([])
     const history = useHistory()
+
+    const isSubmittable = () => {
+        if (!startDate|| !endDate || !dueDate){
+            return false;
+        }
+        return true;
+    }
+    
 
     const [formData, setFormData] = useState({
         courseId: courseId,
@@ -61,14 +70,24 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
         setCurrentCategory(newOption)
     };
 
-    const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setStartDate(e.target.value) }
-    const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setEndDate(e.target.value) }
+    const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+        const date = new Date(e.target.value)
+        date.setHours(24)
+        setStartDate(date.toISOString()) 
+    }
+    const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+        const date = new Date(e.target.value)
+        date.setHours(23, 59)
+        setEndDate(date.toISOString())  
+    }
     const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDueDate(e.target.value)
+        const date = new Date(e.target.value)
+        date.setHours(23, 59)
+        setDueDate(date.toISOString())  
 
         // automatically set end date
         if (!endDate) {
-            setEndDate(e.target.value)
+            setEndDate(date.toISOString())
         }
     }
 
@@ -133,7 +152,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
     }, [assignments])
 
     return (
-        <Modal title="Add Assignment" buttonAction={handleSubmit} open={open} onClose={onClose}>
+        <Modal title="Add Assignment" buttonAction={handleSubmit} open={open} onClose={onClose} isSubmittable={isSubmittable}>
             <div className="input-group">
                 <label htmlFor="categoryName" className="input-label">Assignment Category:</label>
                 <TextDropdown
@@ -186,7 +205,10 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 <div>
                     <label htmlFor="end_date">End Date:</label>
                     <br />
-                    <input type='date' id="end_date" value={endDate} onChange={handleEndDateChange} />
+                    <input type='date' 
+                    id="end_date" 
+                    value={endDate.split("T")[0]} // get rid of HH:MM info to display in date-only box :D
+                    onChange={handleEndDateChange} />
                 </div>
             </div>
             <span>Select submission for final score:</span>

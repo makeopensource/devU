@@ -64,9 +64,17 @@ const AssignmentUpdatePage = () => {
 
   // taken out of the design for the moment, should get incorporated later
   /*const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, disableHandins: e.target.checked }))}*/ 
-  const handleStartDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, startDate: e.target.value + "Z" }))}
-  const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, endDate: e.target.value + "Z"}))}
-  const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {setFormData(prevState => ({ ...prevState, dueDate: e.target.value + "Z"}))}
+  const handleStartDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = new Date(e.target.value)
+    setFormData(prevState => ({ ...prevState, startDate: isNaN(newDate.getTime()) ? "" : newDate.toISOString() }))
+  }
+  const handleEndDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = new Date(e.target.value)
+    setFormData(prevState => ({ ...prevState, endDate: isNaN(newDate.getTime()) ? "" : newDate.toISOString() } )) }
+
+  const handleDueDateChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = new Date(e.target.value)
+    setFormData(prevState => ({ ...prevState, dueDate: isNaN(newDate.getTime()) ? "" : newDate.toISOString() } ))}
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -202,6 +210,8 @@ const AssignmentUpdatePage = () => {
 
 
 
+
+
   const handleDeleteProblem = async (problem: AssignmentProblem) => {
   //  const idsToDelete = nonContainerAutograders.filter(ncag => ncag.)
   const ncag = nonContainerAutograders.find((n) => (n.question === problem.problemName && n.createdAt === problem.createdAt))
@@ -251,6 +261,13 @@ const AssignmentUpdatePage = () => {
       setTextProblemId(problem.id)
       setTextEditModal(true)
     }
+  }
+
+  const utcToLocal = (currDate: Date) => {
+    const diff = currDate.getTimezoneOffset() * 60000
+    const newDate = new Date(currDate.getTime() - diff)
+    return isNaN(newDate.getTime()) ? "" : newDate.toISOString().split("Z")[0]
+    //console.log(newDate.toISOString())
   }
 
   
@@ -330,13 +347,17 @@ const AssignmentUpdatePage = () => {
             </div>
           </div>
           <div className={styles.datepickerContainer}>
-              <label htmlFor="start_date">Start Date *</label>
-              <label htmlFor="due_date">Due Date *</label>
-              <label htmlFor="end_date">End Date *</label>
+              <label htmlFor="start_date">Start Date (EDT)*</label>
+              <label htmlFor="due_date">Due Date (EDT)*</label>
+              <label htmlFor="end_date">End Date (EDT)*</label>
 
-              <input type='datetime-local' id="start_date" value={formData.startDate.slice(0,-1)} onChange={handleStartDateChange}/>
-              <input type='datetime-local' id="due_date" value={formData.dueDate.slice(0,-1)} onChange={handleDueDateChange}/>
-              <input type='datetime-local' id="end_date" value={formData.endDate.slice(0,-1)} onChange={handleEndDateChange}/>
+              <input type='datetime-local' id="start_date" value={utcToLocal(new Date(formData.startDate))} onChange={handleStartDateChange}/>
+              <input type='datetime-local' id="due_date" value={utcToLocal(new Date(formData.dueDate))} onChange={handleDueDateChange}/>
+              <input type='datetime-local' id="end_date" value={utcToLocal(new Date(formData.endDate))} onChange={handleEndDateChange}/>
+              <div>{formData.startDate}</div>
+              <div>{formData.dueDate}</div>
+              <div>{formData.endDate}</div>
+
           </div>
           <h2 className={styles.header}>Attachments</h2>
             {(files.length != 0) ? (
