@@ -14,9 +14,9 @@ type Props = {
 const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => {
     const [meta, setMeta] = useState<{options: {[key:string]: string}, type: string}>()
 
+
     const getMeta = () => {
         setMeta(problem.metadata)
-
     }
     
     useEffect(() => {
@@ -44,7 +44,9 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                 id={problem.problemName}
                 />
         </div>
-    )} else if(type == "MCQ-mult") {
+    )} 
+    
+    else if(type == "MCQ-mult") {
         const options = meta.options
         if (!options){
             return <div></div>
@@ -66,7 +68,9 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                         </span>{/* custom checkbox */}
                     </label>))}
             </div>)
-    } else if(type == "MCQ-single") {
+    } 
+    
+    else if(type == "MCQ-single") {
         const options = meta.options
         if (!options){
             return <div></div>
@@ -85,7 +89,9 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                         <span className={styles.radio}></span>{/* custom radio button */}
                     </label>))}
             </div>)
-    } else {
+    } 
+    
+    else {
         return(
             <div>{console.log(meta)}Unknown type, something is wrong on the backend!</div>)
         }
