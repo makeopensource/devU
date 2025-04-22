@@ -19,6 +19,7 @@ import nonContainerAutoGraderRouter from '../entities/nonContainerAutoGrader/non
 
 import { asInt } from '../middleware/validator/generic.validator'
 import webhooksRouter from '../entities/webhooks/webhooks.router'
+import attendanceRouter from '../entities/attendence/attendance.router'
 
 const submissionRouter = express.Router({ mergeParams: true })
 submissionRouter.use('/sticky-notes', stickyNotes)
@@ -45,6 +46,7 @@ Router.use('/course-scores', courseScores)
 Router.use('/file-upload', fileUpload)
 Router.use('/roles', role)
 Router.use('/user-courses', userCourse)
+Router.use('/attendance', attendanceRouter)
 
 // redundant endpoint, assignment already encodes the categories
 // here if we need it in the future
