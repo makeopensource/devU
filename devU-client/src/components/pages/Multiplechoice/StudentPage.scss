@@ -56,9 +56,10 @@
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  left: 125px;
 }
 
-.prompt-item,
 .prompt-item,
 .option-item {
   display: flex;
@@ -68,7 +69,7 @@
   margin-bottom: 1rem;
   border-radius: 0.75rem;
   border: 2px solid rgba(0, 0, 0, 0.1);
-  background-color: #ede9fe;
+  background-color: #f4e9ff;
   cursor: pointer;
   transition: all 0.2s ease;
 
@@ -91,7 +92,7 @@
   }
 
   &.used {
-    opacity: 0.6;
+    opacity: 1;
   }
 }
 
@@ -116,26 +117,12 @@
     font-size: 1.1rem;
     align-content: center;
     position: relative;
-    left: 54px;
-    bottom: 27px;
+    position: relative;
+    left: 3px;
+    bottom: 3px;
 }
   
 
-.remove-answer-btn {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.25rem;
-  margin-left: 0.5rem;
-  border-radius: 50%;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-  }
-}
 
 .matching-instructions {
   margin-top: 2rem;
@@ -200,3 +187,62 @@
     }
   }
 }
+
+.prompt-item, .option-item {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.prompt-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  word-break: break-word;
+}
+
+.prompt-item.active, .option-item.active {
+  background-color: #3787d2;
+  border: 2px solid #0077cc;
+}
+
+.prompt-item.matched {
+  background-color: #02cc02;
+}
+
+.option-item.used {
+  opacity: 0.6;
+}
+
+.option-item {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.option-item.active {
+  background-color: #62a5e4; 
+  border: 2px solid #0077cc;
+}
+
+.option-item.used {
+  opacity: 0.6;
+}
+
+.response-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  word-break: break-word;
+}
+
