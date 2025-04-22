@@ -5,10 +5,27 @@ import './attendancePage.scss';
 interface Props {
   open: boolean;
   onClose: () => void;
+  onSubmit: (data: {
+    courseInfo: {
+      id: string;
+      number: string;
+      name: string;
+      semester: string;
+    };
+    date: string;
+    code: string;
+    duration: string;
+    description?: string;
+  }) => void;
+  courseInfo: {
+    id: string;
+    number: string;
+    name: string;
+    semester: string;
+  };
 }
 
-const InstructorAttendanceModal: React.FC<Props> = ({ open, onClose }) => {
-  const [course, setCourse] = useState('');
+const InstructorAttendanceModal: React.FC<Props> = ({ open, onClose, onSubmit, courseInfo }) => {
   const [date, setDate] = useState('');
   const [code, setCode] = useState('');
   const [duration, setDuration] = useState('15');
@@ -20,9 +37,16 @@ const InstructorAttendanceModal: React.FC<Props> = ({ open, onClose }) => {
   };
 
   const handleSubmit = () => {
-    const attendanceData = { course, date, code, duration, description };
+    const attendanceData = {
+      courseInfo,
+      date,
+      code,
+      duration,
+      description
+    };
+
     console.log('Submitting attendance:', attendanceData);
-    onClose();
+    onSubmit(attendanceData);
   };
 
   return (
@@ -32,44 +56,50 @@ const InstructorAttendanceModal: React.FC<Props> = ({ open, onClose }) => {
       onClose={onClose}
       buttonAction={handleSubmit}
     >
-      <div className="assignment-form">
-        <div className="formRow">
-          <label>Course:</label>
-          <select value={course} onChange={(e) => setCourse(e.target.value)} required>
-            <option value="" disabled>Select course</option>
-            <option value="CSE 312">CSE 312: Web Applications</option>
-            <option value="CSE 443">CSE 443: Software Engineering</option>
-            <option value="CSE 331">CSE 331: Algorithms and Complexity</option>
-          </select>
+      <div className="assignment-form"style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="formRow" style={{ display: 'flex', flexDirection: 'column' }}>
+          <label>
+            <strong>Course:</strong>
+          </label>
+          <span>
+            {courseInfo.number}: {courseInfo.name}
+          </span>
         </div>
-
-        <div className="formRow">
+        
+        <div className="formRow" style={{ display: 'flex', flexDirection: 'column' }}>
           <label>Session Date:</label>
           <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
           />
         </div>
-
-        <div className="formRow">
+        
+        <div className="formRow" style={{ display: 'flex', flexDirection: 'column' }}>
           <label>Attendance Code:</label>
-          <div className="code-input-row">
+          <div
+          className="code-input-row"
+          style={{ display: 'flex', gap: '0.5rem' }}
+          >
             <input
-              type="text"
-              value={code}
-              onChange={(e) => setCode(e.target.value.toUpperCase())}
-              placeholder="Enter or generate a code"
-              required
+            type="text"
+            value={code}
+            onChange={(e) => setCode(e.target.value.toUpperCase())}
+            placeholder="Enter or generate a code"
+            required
+            style={{ flexGrow: 1 }}
             />
-            <button type="button" className="btnPrimary" onClick={handleGenerateCode}>
+            <button
+            type="button"
+            className="btnPrimary"
+            onClick={handleGenerateCode}>
               Generate
-            </button>
+              </button>
           </div>
         </div>
 
-        <div className="formRow">
+        <div className="formRow" style={{ display: 'flex', flexDirection: 'column' }}>
           <label>Duration (minutes):</label>
           <input
             type="number"
@@ -80,7 +110,7 @@ const InstructorAttendanceModal: React.FC<Props> = ({ open, onClose }) => {
           />
         </div>
 
-        <div className="formRow">
+        <div className="formRow" style={{ display: 'flex', flexDirection: 'column' }}>
           <label>Description (optional):</label>
           <textarea
             value={description}

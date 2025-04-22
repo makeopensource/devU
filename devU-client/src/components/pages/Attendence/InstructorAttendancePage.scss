@@ -1,0 +1,99 @@
+@import 'variables';
+
+.instructor-attendance-page {
+  padding: 2rem $pagePadding;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: $text-color;
+  }
+
+  .modal-launcher {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .attendance-table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    overflow: hidden;
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: $grey-lightest;
+      color: $text-color;
+      font-weight: bold;
+      border-bottom: 1px solid $grey;
+    }
+
+    td {
+      background-color: $background;
+      color: $text-color;
+      border-bottom: 1px solid $grey-lighter;
+    }
+
+    tr:nth-child(even) td {
+      background-color: $table-row-even;
+    }
+
+    tr:nth-child(odd) td {
+      background-color: $table-row-odd;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  .empty-message {
+    text-align: center;
+    font-style: italic;
+    margin-top: 3rem;
+    font-size: 1.05rem;
+    color: $text-color-secondary;
+  }
+}
+
+@media (max-width: $medium) {
+  .instructor-attendance-page {
+    padding: 2rem 50px;
+
+    .attendance-table {
+      font-size: 0.92rem;
+
+      th, td {
+        padding: 10px 12px;
+      }
+    }
+  }
+}
+
+@media (max-width: $small) {
+  .instructor-attendance-page {
+    padding: 1.5rem $phonePadding;
+
+    h2 {
+      font-size: 1.4rem;
+    }
+
+    .attendance-table {
+      font-size: 0.88rem;
+      th, td {
+        padding: 8px;
+      }
+    }
+  }
+}

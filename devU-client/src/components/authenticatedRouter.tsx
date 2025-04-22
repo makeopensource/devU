@@ -23,8 +23,9 @@ import SubmissionFileView from './pages/submissions/submissionFileView'
 import UserCoursesListPage from "./pages/listPages/courses/coursesListPage";
 import JoinCoursePage from "./pages/listPages/joinwithcodepage";
 import InstructorAttendancePage from './pages/Attendence/InstructorAttendancePage';
-import matchingTable from './pages/Multiplechoice/matchingTable';
+import MatchingTableStudentPage from './pages/Multiplechoice/MatchingTableStudentPage'
 import WebhookURLForm from './pages/webhookURLForm'
+import MatchingTableInstructorPage from './pages/Multiplechoice/MatchingTableInstructorPage'
 
 const AuthenticatedRouter = () => (
     <Switch>
@@ -49,8 +50,9 @@ const AuthenticatedRouter = () => (
         <Route exact path='/course/:courseId/assignment/:assignmentId/createProblem' component={AssignmentProblemFormPage} />
         <Route exact path='/course/:courseId/webhooks' component={WebhookURLForm} />
         <Route exact path="/course/:courseId/attendance/instructor" component={InstructorAttendancePage} />
+        <Route exact path="/matching/instructor" component={MatchingTableInstructorPage} />
+        <Route exact path="/matching-table/student" component={MatchingTableStudentPage} />
 
-        <Route path="/matchingTable" component={matchingTable} />
 
 
         <Route exact path='/course/:courseId/assignment/:assignmentId/submission/:submissionId'
