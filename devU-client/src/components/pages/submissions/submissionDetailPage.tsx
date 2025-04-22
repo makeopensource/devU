@@ -7,6 +7,7 @@ import RequestService from 'services/request.service'
 import { Assignment, AssignmentProblem, Submission, SubmissionProblemScore, SubmissionScore } from 'devu-shared-modules'
 import { useParams, useHistory, Link } from 'react-router-dom'
 import styles from './submissionDetailPage.scss'
+import {createSubmissionCsv} from "utils/download.utils"
 import ManualGradeModal from './manualGradeModal'
 
 const SubmissionDetailPage = () => {
@@ -111,6 +112,11 @@ const SubmissionDetailPage = () => {
                         history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submissionId}/fileView`)
                     }}>View Source</button>
                     <button className="btnSecondary">Download Submission</button>
+                    {submissionScore && <a 
+                    className="btnSecondary"
+                    style={{textDecoration: 'none', textAlign: 'center'}}
+                    download={`${assignment?.name.toLowerCase().replace(" ","")}_submission.csv`}
+                    href={createSubmissionCsv(submissionScore,submissionProblemScores,assignmentProblems)}>Download as CSV</a>}
                     {role.isInstructor() && (
                         <button className="btnPrimary" onClick={handleClick}>Manually Grade</button>
                     )}
