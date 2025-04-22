@@ -17,7 +17,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
 
 
     const getMeta = () => {
-        setMeta(JSON.parse(problem.metadata))
+        setMeta(problem.metadata)
     }
     
     useEffect(() => {

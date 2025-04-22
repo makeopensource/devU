@@ -36,8 +36,8 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
         const assignmentProblemData = await RequestService.get<AssignmentProblem>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/${problemId}`);
         const ncagData = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`);
         const ncag = ncagData.find((as) => (as.id === problemId))
-        if (ncag?.metadata){ // UPDATE for AssignmentProblem metadata
-            const meta = JSON.parse(ncag.metadata)
+        if (assignmentProblemData.metadata){ // UPDATE for AssignmentProblem metadata
+            const meta = JSON.parse(assignmentProblemData.metadata)
             const type = meta.type
             if (type === "MCQ-mult"){
                 setBoxType("checkbox")
@@ -47,8 +47,8 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
             setFormData(({type: type, 
                 title: assignmentProblemData.problemName,
                 maxScore: '' + assignmentProblemData.maxScore,
-                correctAnswer: ncag.correctString,
-                regex: ncag.isRegex
+                correctAnswer: ncag?.correctString ?? "",
+                regex: ncag?.isRegex ?? false
                 }))
             const options = meta.options
             setOptions(new Map(Object.entries(options)))

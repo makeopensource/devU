@@ -240,12 +240,7 @@ const AssignmentUpdatePage = () => {
     };
 
   const openEditModal = (problem: AssignmentProblem) => {
-    const ncag = nonContainerAutograders.find((n) => (n.question === problem.problemName && n.createdAt === problem.createdAt))
-    if (!ncag) {
-      fetchAssignmentProblems()
-      return
-    }
-    const type = JSON.parse(ncag?.metadata ?? "").type
+    const type = JSON.parse(problem.metadata).type ?? ""
     if (type === "MCQ-mult" || type === "MCQ-single"){
       setMcqProblemId(problem.id)
       setMcqEditModal(true)
@@ -256,7 +251,6 @@ const AssignmentUpdatePage = () => {
       setTextProblemId(problem.id)
       setTextEditModal(true)
     }
-    console.log(type)
   }
 
   

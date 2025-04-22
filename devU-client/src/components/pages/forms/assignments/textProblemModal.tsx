@@ -65,7 +65,7 @@ const TextProblemModal = ({ open, onClose, edit, problemId }: Props) => {
             maxScore: parseInt(formData.maxScore),
             metadata: {
                 type: 'Text'
-            } 
+            }
         };
 
         const graderFormData = {
@@ -76,9 +76,7 @@ const TextProblemModal = ({ open, onClose, edit, problemId }: Props) => {
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
-            metadata: {
-                type: 'Text'
-            } 
+            
         }
         
         if (edit){ // If updating, we'll make a put request
