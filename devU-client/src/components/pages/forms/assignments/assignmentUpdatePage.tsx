@@ -265,8 +265,7 @@ const AssignmentUpdatePage = () => {
               <TextDropdown onChange={handleCategoryChange}
                       onCreate={handleCategoryCreate}
                       options={categoryOptions}
-                      value={currentCategory}
-                      defaultOption={currentCategory}
+                      value={{value: formData.categoryName, label: formData.categoryName}}
                       />
             </div>
             <div>

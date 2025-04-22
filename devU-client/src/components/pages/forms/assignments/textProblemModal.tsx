@@ -30,9 +30,8 @@ const TextProblemModal = ({ open, onClose, edit, problemId }: Props) => {
         }
         
         const assignmentProblemData = await RequestService.get<AssignmentProblem>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/${problemId}`);
-        console.log(assignmentProblemData)
         const ncagData = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`);
-        const ncag = ncagData.find((ncag) => (ncag.id === problemId))
+        const ncag = ncagData.find((ncag) => (ncag.createdAt === assignmentProblemData.createdAt))
         console.log(ncag)
         setFormData(({
                 title: assignmentProblemData.problemName,
