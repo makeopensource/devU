@@ -41,7 +41,6 @@ const AssignmentUpdatePage = () => {
 
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
-  const [currentCategory, setCurrentCategory] = useState<Option<String>>()
 
 
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
@@ -77,6 +76,7 @@ const AssignmentUpdatePage = () => {
     assignmentId: currentAssignmentId,
     problemName: '',
     maxScore: -1,
+    metadata: {}
   })
 
 
@@ -116,15 +116,13 @@ const AssignmentUpdatePage = () => {
     await RequestService.get(`/api/course/${courseId}/assignment/${currentAssignmentId}/assignment-problems`)
       .then((res) => { setAssignmentProblems(res) })
   }
+  
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) })}, [])
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) })}, [])
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
+  useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
 
-
-
-  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignments/${assignmentId}`).then((res) => { setFormData(res) }) }, [])
-  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`).then((res) => { setAssignmentProblems(res) }) }, [])
-  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) }) }, [])
-
-  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) }) }, [])
-  useEffect(() => { RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) }) }, [formData])
 
   useEffect(() => {
     const categories = [...new Set(assignments.map(a => a.categoryName))];
@@ -134,8 +132,7 @@ const AssignmentUpdatePage = () => {
     }));
 
     setAllCategoryOptions(options);
-    setCurrentCategory(categoryOptions.find((category) => (category.value === formData.categoryName)))
-  }, [assignments])
+    }, [assignments])
 
 
 
@@ -248,7 +245,6 @@ const AssignmentUpdatePage = () => {
 
   const handleCategoryChange = (value: Option<String>) => {
     setFormData(prevState => ({ ...prevState, categoryName: value.label }))
-    setCurrentCategory(value)
   };
 
   const handleCategoryCreate = (value: string) => {
@@ -259,8 +255,7 @@ const AssignmentUpdatePage = () => {
       return newArr;
     })
     setFormData(prevState => ({ ...prevState, categoryName: value }))
-    setCurrentCategory(newOption)
-  };
+    };
 
 
   return (
@@ -282,34 +277,29 @@ const AssignmentUpdatePage = () => {
         </Dialog>
 
         <TextProblemModal open={textModal} onClose={handleCloseTextModal} />
-        <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal} />
-        <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
+        <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal}/>
+      <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
 
 
-        <div className={styles.pageHeader}>
-          <h1 style={{ gridColumnStart: 2 }}>Edit Assignment</h1>
-          <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => { history.goBack() }}>Back to Course</Button>
-        </div>
-        <div className={styles.grid}>
-          <div className={styles.form}>
-            <h2 className={styles.header}>Edit Info</h2>
-            <span>Select submission for final score:</span>
-            <label htmlFor="subRecent" style={{display: 'block', paddingTop: '5px', cursor: 'pointer'}}><input type="radio" id="subRecent" name="submissionChoice" defaultChecked />Most Recent</label>
-            <label htmlFor="subHighest" style={{display: 'block', paddingTop: '5px', cursor: 'pointer'}}><input type="radio" id="subHighest" name="submissionChoice" />Highest Score</label>
-            <label htmlFor="subNone" style={{display: 'block', paddingTop: '5px', cursor: 'pointer'}}><input type="radio" id="subNone" name="submissionChoice" />No Default</label>
+      <div className={styles.pageHeader}>
+        <h1 style={{gridColumnStart:2}}>Edit Assignment</h1>
+        <Button className={`btnPrimary ${styles.backToCourse}`} onClick={() => {history.goBack()}}>Back to Course</Button>
+      </div>
+      <div className={styles.grid}>
+        <div className={styles.form}>
+          <h2 className={styles.header}>Edit Info</h2>
+          <div className={styles.textFieldContainer}>
+            <div>
+              <div className={styles.textFieldHeader}>Assignment Category: </div>
+              <TextDropdown onChange={handleCategoryChange}
+                      onCreate={handleCategoryCreate}
+                      options={categoryOptions}
+                      value={{value: formData.categoryName, label: formData.categoryName}}
+                      />
+            </div>
+            <div>
+              <div className={styles.textFieldHeader}>Assignment Name: </div>
 
-            <div className={styles.textFieldContainer}>
-              <div>
-                <div className={styles.textFieldHeader}>Assignment Category: </div>
-                <TextDropdown onChange={handleCategoryChange}
-                  onCreate={handleCategoryCreate}
-                  options={categoryOptions}
-                  value={currentCategory}
-                  defaultOption={currentCategory}
-                />
-              </div>
-              <div>
-                <div className={styles.textFieldHeader}>Assignment Name: </div>
 
                 <TextField id="name" onChange={handleChange}
                   invalidated={!!invalidFields.get('name')} helpText={invalidFields.get('name')}
@@ -336,25 +326,25 @@ const AssignmentUpdatePage = () => {
               </div>
             </div>
 
-            <div className={styles.submissionsContainer}>
-              <div>
-                <div className={styles.textFieldHeader}>Max Submissions: </div>
-                <TextField id="maxSubmissions" onChange={handleChange}
-                  invalidated={!!invalidFields.get('maxSubmission')}
-                  className={styles.textField}
-                  helpText={invalidFields.get('maxSubmission')}
-                  value={formData.maxSubmissions ? (formData.maxSubmissions).toString() : ''}
-                  sx={{ width: '100%', marginLeft: 1 / 10 }} />
-              </div>
-              <div>
-                <div className={styles.textFieldHeader}>Max File Size (kb): </div>
-                <TextField id="maxFileSize" onChange={handleChange}
-                  invalidated={!!invalidFields.get('maxFileSize')}
-                  className={styles.textField}
-                  helpText={invalidFields.get('maxFileSize')}
-                  value={formData.maxFileSize ? formData.maxFileSize.toString() : ''}
-                  sx={{ width: '100%', marginLeft: 1 / 10 }} />
-              </div>
+          <div className={styles.submissionsContainer}>
+            <div>
+              <div className={styles.textFieldHeader}>Max Submissions: </div>
+              <TextField id="maxSubmissions" onChange={handleChange} 
+                        invalidated={!!invalidFields.get('maxSubmission')}
+                        className='textField'
+                        helpText={invalidFields.get('maxSubmission')}
+                        value={formData.maxSubmissions ? (formData.maxSubmissions).toString() : ''} 
+                        sx={{width: '100%', marginLeft : 1/10}}/>
+            </div>
+            <div>
+              <div className={styles.textFieldHeader}>Max File Size (kb): </div>
+              <TextField id="maxFileSize" onChange={handleChange}
+                        invalidated={!!invalidFields.get('maxFileSize')}
+                        className='textField'
+                        helpText={invalidFields.get('maxFileSize')}
+                        value={formData.maxFileSize ? formData.maxFileSize.toString() : ''} 
+                        sx={{width: '100%', marginLeft : 1/10}}/>
+                        </div>
             </div>
             <div className={styles.datepickerContainer}>
               <label htmlFor="start_date">Start Date *</label>
