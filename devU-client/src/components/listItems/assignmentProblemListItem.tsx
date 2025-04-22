@@ -1,7 +1,6 @@
-import React, { useState, useEffect} from 'react'
-import { useParams } from 'react-router-dom'
-import RequestService from 'services/request.service'
-import {AssignmentProblem, NonContainerAutoGrader} from 'devu-shared-modules'
+import React, { useEffect, useState } from 'react'
+import { AssignmentProblem } from 'devu-shared-modules'
+
 
 import styles from './assignmentProblemListItem.scss'
 import FaIcon from 'components/shared/icons/faIcon'
@@ -13,44 +12,26 @@ type Props = {
 }
 
 const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => {
-    const { courseId } = useParams<{ courseId: string }>()
-    const [ncags, setNcags] = useState<NonContainerAutoGrader[]>([])
-    const [meta, setMeta] = useState<any>()
-
-
-    //const type = ncags.at(0)?.metadata
-
-    const fetchNcags = async() => {
-        await RequestService.get(`/api/course/${courseId}/assignment/${problem.assignmentId}/non-container-auto-graders`).then((res) => setNcags(res))
-    }
+    const [meta, setMeta] = useState<{options: {[key:string]: string}, type: string}>()
 
 
     const getMeta = () => {
-        if (ncags && ncags.length > 0){
-            const ncag = ncags.find(ncag => ((ncag.question == problem.problemName) && (ncag.createdAt === problem.createdAt))) // currently checking against createdAt since if two non-code questions have the same name they can be confused otherwise, can be removed once meta string added to assignemntproblem
-            if (!ncag || !ncag.metadata) {
-                return undefined
-            }
-            return JSON.parse(ncag.metadata)
-        } 
+        setMeta(problem.metadata)
+
     }
     
     useEffect(() => {
-        fetchNcags()
-    }, [])
-
-    useEffect(() => {
-        setMeta(getMeta)
-    }, [ncags])
-
-    if (!meta || !meta.type){
+        getMeta()
+    }, [problem])
+    
+    if (!meta){
         return (
         <div className={styles.problem}>
             <div>File Input Problems are not done yet pending backend changes! :D</div>
         </div>)
     }
 
-    const type = meta.type
+    const type = meta.type 
     if (type == "Text") {
         return (
         <div key={problem.id} className={styles.problem}>
@@ -74,6 +55,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
         return (
             <div key={problem.id} className={styles.problem}>
                 <h4 className={styles.problem_header}>{problem.problemName}</h4>
+                {console.log(options)}
                 {Object.keys(options).map((key : string) => (
                     <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>
                         <input id={problem.problemName} 
@@ -112,7 +94,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
     
     else {
         return(
-            <div>Unknown type, something is wrong on the backend!</div>)
+            <div>{console.log(meta)}Unknown type, something is wrong on the backend!</div>)
         }
 }
 

@@ -39,7 +39,6 @@ const AssignmentUpdatePage = () => {
 
   const [assignments, setAssignments] = useState<Assignment[]>([])
   const [categoryOptions, setAllCategoryOptions] = useState<Option<String>[]>([])
-  const [currentCategory, setCurrentCategory] = useState<Option<String>>()
 
 
   const [invalidFields, setInvalidFields] = useState(new Map<string, string>())
@@ -62,8 +61,6 @@ const AssignmentUpdatePage = () => {
     endDate: '',
     startDate: '',
   })
-
-  
 
   
 
@@ -95,7 +92,6 @@ const AssignmentUpdatePage = () => {
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`).then((res) => { setNonContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`).then((res) => { setContainerAutograders(res) })}, [])
   useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
-
   useEffect(() => {
     const categories = [...new Set(assignments.map(a => a.categoryName))];
     const options = categories.map((category) => ({
@@ -104,8 +100,7 @@ const AssignmentUpdatePage = () => {
       }));
     
     setAllCategoryOptions(options);
-    setCurrentCategory(categoryOptions.find((category) => (category.value === formData.categoryName)))
-}, [assignments])
+    }, [assignments])
 
 
   
@@ -214,7 +209,6 @@ const AssignmentUpdatePage = () => {
 
   const handleCategoryChange = (value: Option<String>)  => {
     setFormData(prevState => ({ ...prevState, categoryName: value.label }))
-    setCurrentCategory(value)
   };
 
   const handleCategoryCreate = (value: string)  => {
@@ -225,7 +219,6 @@ const AssignmentUpdatePage = () => {
       return newArr;
     })
     setFormData(prevState => ({ ...prevState, categoryName: value }))
-    setCurrentCategory(newOption)
     };
 
   const openEditModal = (problem: AssignmentProblem) => {
@@ -313,6 +306,7 @@ const AssignmentUpdatePage = () => {
                         helpText={invalidFields.get('maxSubmission')}
                         value={formData.maxSubmissions ? (formData.maxSubmissions).toString() : ''} 
                         sx={{width: '100%', marginLeft : 1/10}}/>
+
             </div>
             <div>
               <div className={styles.textFieldHeader}>Max File Size (kb): </div>

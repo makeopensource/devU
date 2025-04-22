@@ -77,6 +77,7 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
             assignmentId: parseInt(assignmentId),
             problemName: formData.title,
             maxScore: parseInt(formData.maxScore),
+            metadata: {type: formData.type, options: Object.fromEntries(options)},
             createdAt: createdAt
         };
 
@@ -87,9 +88,6 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
             correctString: formData.correctAnswer,
             score: Number(formData.maxScore),
             isRegex: formData.regex,
-            metadata: {
-                type: formData.type,
-                options: Object.fromEntries(options)},
             createdAt: createdAt
         }
 

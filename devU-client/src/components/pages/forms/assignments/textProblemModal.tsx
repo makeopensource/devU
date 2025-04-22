@@ -64,6 +64,9 @@ const TextProblemModal = ({ open, onClose, edit, problemId }: Props) => {
             problemName: formData.title,
             createdAt: createdAt,
             maxScore: parseInt(formData.maxScore),
+            metadata: {
+                type: 'Text'
+            } 
         };
 
         const graderFormData = {
@@ -101,7 +104,7 @@ const TextProblemModal = ({ open, onClose, edit, problemId }: Props) => {
         
         else { // If creating, we'll make a post request
             await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
-            .then(() => {
+              .then(() => {
                 console.log("PROBLEM CREATED");
                 setAlert({ autoDelete: true, type: 'success', message: 'Problem Added' });
 
@@ -114,7 +117,6 @@ const TextProblemModal = ({ open, onClose, edit, problemId }: Props) => {
         await RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders/`, graderFormData)
             .then(() => {
                 console.log("GRADER CREATED")
-                window.location.reload()
             })
             .catch((err: ExpressValidationError[] | Error) => {
                 const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
