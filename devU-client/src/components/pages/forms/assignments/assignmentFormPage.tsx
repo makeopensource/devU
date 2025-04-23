@@ -35,7 +35,8 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
     const history = useHistory()
 
     const isSubmittable = () => {
-        if (!startDate|| !endDate || !dueDate){
+        if (!startDate || !endDate || !dueDate || 
+            !formData.name || !formData.categoryName){
             return false;
         }
         return true;

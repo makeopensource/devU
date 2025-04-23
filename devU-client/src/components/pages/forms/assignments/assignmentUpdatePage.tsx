@@ -354,10 +354,6 @@ const AssignmentUpdatePage = () => {
               <input type='datetime-local' id="start_date" value={utcToLocal(new Date(formData.startDate))} onChange={handleStartDateChange}/>
               <input type='datetime-local' id="due_date" value={utcToLocal(new Date(formData.dueDate))} onChange={handleDueDateChange}/>
               <input type='datetime-local' id="end_date" value={utcToLocal(new Date(formData.endDate))} onChange={handleEndDateChange}/>
-              <div>{formData.startDate}</div>
-              <div>{formData.dueDate}</div>
-              <div>{formData.endDate}</div>
-
           </div>
           <h2 className={styles.header}>Attachments</h2>
             {(files.length != 0) ? (
