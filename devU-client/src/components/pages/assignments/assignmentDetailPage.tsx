@@ -159,6 +159,7 @@ const AssignmentDetailPage = () => {
                 submission.append('courseId', courseId)
                 submission.append('content', JSON.stringify(contentField))
                 submission.append('files', file)
+                
 
                 response = await RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
             } else {

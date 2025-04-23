@@ -144,6 +144,7 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
             maxScore: '',
             correctAnswer: '', 
             regex: false})
+        setOptions(new Map<string,string>([['a',''],['b',''],['c','']]))
         setBoxType('checkbox') 
     }
 
