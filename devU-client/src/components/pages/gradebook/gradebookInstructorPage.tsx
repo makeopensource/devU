@@ -45,8 +45,8 @@ const TableRow = ({ user, assignments, assignmentScores, maxScores }: RowProps) 
             assignments.map(a => {
                 const assignmentScore = assignmentScores.find(as => as.assignmentId === a.id && as.userId === user.id)
                 if (a.id && assignmentScore){ // Submission defined, so...
-                    if (assignmentScore.createdAt){
-                        const late: boolean = new Date(assignmentScore.createdAt) > new Date(a.dueDate)
+                    if (assignmentScore.updatedAt){
+                        const late: boolean = new Date(assignmentScore.updatedAt) > new Date(a.dueDate) // UPDATE for grading opts
                         if (late){ // render in red if assignment submission was late.
                             return (<td className={styles.late} >{assignmentScore.score}/{maxScores.get(a.id)} <strong>!</strong></td>)
                         }
@@ -170,6 +170,7 @@ const GradebookInstructorPage = () => {
 
             const assignmentScores = await RequestService.get<AssignmentScore[]>(`/api/course/${courseId}/assignment-scores`)
             setAssignmentScores(assignmentScores)
+            console.log(assignmentScores)
 
 
         } catch (error: any) {

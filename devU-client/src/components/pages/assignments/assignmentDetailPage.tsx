@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import AssignmentProblemListItem from 'components/listItems/assignmentProblemListItem'
-import { Assignment, AssignmentProblem, Course, Submission, NonContainerAutoGrader /*SubmissionScore, /*ContainerAutoGrader*/ } from 'devu-shared-modules'
+import { Assignment, AssignmentProblem, Course, Submission /*SubmissionScore, /*ContainerAutoGrader*/ } from 'devu-shared-modules'
 import RequestService from 'services/request.service'
 import ErrorPage from '../errorPage/errorPage'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
@@ -37,13 +37,12 @@ const AssignmentDetailPage = () => {
     const [submissions, setSubmissions] = useState(new Array<Submission>())
     const [assignment, setAssignment] = useState<Assignment>()
     const [course, setCourse] = useState<Course>()
-    const [notClickable, setClickable] = useState(true);
+    const [notClickable, setNotClickable] = useState(true);
 
 
 
     // const [containerAutograder, setContainerAutograder] = useState<ContainerAutoGrader | null>()
     // const contaierAutograder = false; //TODO: Use the above commented out code to get the container autograder
-    const [nonContainerAutograders, setNonContainerAutograders] = useState(new Array<NonContainerAutoGrader>())
     const [showScoreboard, setShowScoreboard] = useState(false);
     setShowScoreboard;
     const location = useLocation();
@@ -83,9 +82,7 @@ const AssignmentDetailPage = () => {
             // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
             // setContainerAutograder(containerAutograder)
 
-            const nonContainers = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`)
-            setNonContainerAutograders(nonContainers)
-            nonContainerAutograders
+        
 
 
         } catch (err: any) {
@@ -127,7 +124,6 @@ const AssignmentDetailPage = () => {
                 ...prevState,
                 [key]: value
             }));
-            console.log(formData)
         }
     };
 
@@ -137,7 +133,7 @@ const AssignmentDetailPage = () => {
     }
 
     const handleCheckboxChange = () => {
-        setClickable(!notClickable);
+        setNotClickable(!notClickable);
     };
 
     const handleSubmit = async () => {
@@ -153,8 +149,6 @@ const AssignmentDetailPage = () => {
             content: JSON.stringify(contentField),
         }
 
-        console.log(contentField)
-
         setLoading(true)
 
         try {
@@ -165,6 +159,7 @@ const AssignmentDetailPage = () => {
                 submission.append('courseId', courseId)
                 submission.append('content', JSON.stringify(contentField))
                 submission.append('files', file)
+                
 
                 response = await RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
             } else {
@@ -182,6 +177,7 @@ const AssignmentDetailPage = () => {
             const message = Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
             setAlert({ autoDelete: false, type: 'error', message })
         } finally {
+            setNotClickable(true); // checkbox resets so this needs to too when submitted
             setLoading(false)
             await fetchData()
         }

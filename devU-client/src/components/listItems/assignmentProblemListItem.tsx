@@ -17,7 +17,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
 
 
     const getMeta = () => {
-        setMeta(JSON.parse(problem.metadata))
+        setMeta(problem.metadata)
     }
     
     useEffect(() => {
@@ -57,7 +57,6 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
         return (
             <div key={problem.id} className={styles.problem}>
                 <h4 className={styles.problem_header}>{problem.problemName}</h4>
-                {console.log(options)}
                 {Object.keys(options).map((key : string) => (
                     <label key={key} className={styles.mcqLabel} style={disabled ? {cursor: 'default'} : undefined}>
                         <input id={problem.problemName} 
@@ -96,7 +95,7 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
     
     else {
         return(
-            <div>{console.log(meta)}Unknown type, something is wrong on the backend!</div>)
+            <div>Unknown type, something is wrong on the backend!</div>)
         }
 }
 

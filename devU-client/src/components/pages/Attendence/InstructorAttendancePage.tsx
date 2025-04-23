@@ -76,7 +76,7 @@ const InstructorAttendancePage: React.FC<Props> = () => {
   };
 
   if (!courseInfo) {
-    return <PageWrapper><p style={{ padding: '2rem' }}>Loading course info...</p></PageWrapper>;
+    return <PageWrapper><p className='info'>Loading course info...</p></PageWrapper>;
   }
 
   return (
@@ -130,7 +130,7 @@ const InstructorAttendancePage: React.FC<Props> = () => {
 
         <div style={{ marginTop: '2rem' }}>
           {attendanceRecords.length === 0 ? (
-            <p className="empty-message">No attendance records yet.</p>
+            <p className="empty-message info">No attendance records yet.</p>
           ) : (
             <table className="attendance-table">
               <thead>
