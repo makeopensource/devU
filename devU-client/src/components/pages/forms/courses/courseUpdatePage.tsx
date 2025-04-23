@@ -239,31 +239,31 @@ const CourseUpdatePage = ({ }) => {
         }
     }
 
-    const addBulkStudent = async (emails: string[]) => {
-        try {
-            const reqBody = {
-                users: emails
-            }
-            const res = await RequestService.post(`/api/course/${courseId}/user-courses/students/add`, reqBody)
-            setAlert({ autoDelete: true, type: 'success', message: res.success })
-        } catch (error: any) { // Use any if the error type isn't strictly defined
-            const message = error.message || "An unknown error occurred"
-            setAlert({ autoDelete: false, type: 'error', message })
-        }
-    }
+    // const addBulkStudent = async (emails: string[]) => {
+    //     try {
+    //         const reqBody = {
+    //             users: emails
+    //         }
+    //         const res = await RequestService.post(`/api/course/${courseId}/user-courses/students/add`, reqBody)
+    //         setAlert({ autoDelete: true, type: 'success', message: res.success })
+    //     } catch (error: any) { // Use any if the error type isn't strictly defined
+    //         const message = error.message || "An unknown error occurred"
+    //         setAlert({ autoDelete: false, type: 'error', message })
+    //     }
+    // }
 
-    const dropBulkStudent = async (emails: string[]) => {
-        try {
-            const reqBody = {
-                users: emails
-            }
-            const res = await RequestService.post(`/api/course/${courseId}/user-courses/students/drop`, reqBody)
-            setAlert({ autoDelete: true, type: 'success', message: res.success })
-        } catch (error: any) { // Use any if the error type isn't strictly defined
-            const message = error.message || "An unknown error occurred"
-            setAlert({ autoDelete: false, type: 'error', message })
-        }
-    }
+    // const dropBulkStudent = async (emails: string[]) => {
+    //     try {
+    //         const reqBody = {
+    //             users: emails
+    //         }
+    //         const res = await RequestService.post(`/api/course/${courseId}/user-courses/students/drop`, reqBody)
+    //         setAlert({ autoDelete: true, type: 'success', message: res.success })
+    //     } catch (error: any) { // Use any if the error type isn't strictly defined
+    //         const message = error.message || "An unknown error occurred"
+    //         setAlert({ autoDelete: false, type: 'error', message })
+    //     }
+    // }
 
     const handleAddStudent = () => {
         console.log("emails: ", emails);
@@ -274,10 +274,10 @@ const CourseUpdatePage = ({ }) => {
         } else {
             // if file inputted then call
             console.log("adding multiple users")
-            // emails.forEach(email => {
-            //     addSingleStudent(email)
-            // })
-            addBulkStudent(emails)
+            emails.forEach(email => {
+                addSingleStudent(email)
+            })
+            // addBulkStudent(emails)
         }
     }
 
@@ -289,10 +289,10 @@ const CourseUpdatePage = ({ }) => {
         } else {
             // if file inputted then for each email parsed from csv dropSingleStudent
             console.log("dropping multiple users")
-            // emails.forEach(email => {
-            //     dropSingleStudent(email)
-            // })
-            dropBulkStudent(emails)
+            emails.forEach(email => {
+                dropSingleStudent(email)
+            })
+            // dropBulkStudent(emails)
         }
     }
 
@@ -300,7 +300,7 @@ const CourseUpdatePage = ({ }) => {
         <PageWrapper>
             <h1>Update Course Form</h1>
             <div className={styles.grid}>
-                <div className={styles.form} style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+                <div className={styles.form} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <h2>Course Details</h2>
                     <div className="input-group">
                         <label htmlFor="name" className="input-label">Course Title:</label>
@@ -317,7 +317,7 @@ const CourseUpdatePage = ({ }) => {
                         <button className='btnPrimary' onClick={handleCourseUpdate}>Update Course</button>
                     </div>
                 </div>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <h2>Manage Roster</h2>
                     {/* <TextField id='studentEmail' label={"Email"} onChange={handleChange}
                         placeholder='e.g. hartloff@buffalo.edu' invalidated={!!invalidFields.get("studentEmail")} helpText={invalidFields.get("studentEmail")} /> */}
@@ -328,6 +328,14 @@ const CourseUpdatePage = ({ }) => {
                     </div>
                     <label htmlFor="addDropFile">Add multiple students by uploading a CSV file below</label>
                     <input type="file" accept='.csv' id="addDropFile" onChange={handleFileChange} />
+                    <button className="btnSecondary" style={{ width: 'fit-content' }} onClick={() => {
+                        setEmails([]);
+                        const fileInput = document.getElementById("addDropFile") as HTMLInputElement | null;
+                        // remove file from fileInput
+                        if (fileInput) {
+                            fileInput.value = "";
+                        }
+                    }}>Remove file</button>
                     <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '30px', gap: '1rem' }}>
                         <button className='btnPrimary' onClick={handleAddStudent}>Add</button>
                         <button className='btnDelete' onClick={handleDropStudent}>Drop</button>
