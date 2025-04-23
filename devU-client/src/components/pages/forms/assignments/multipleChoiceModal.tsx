@@ -36,7 +36,7 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
         const assignmentProblemData = await RequestService.get<AssignmentProblem>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/${problemId}`);
         const ncagData = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`);
         const ncag = ncagData.find((as) => (as.id === problemId))
-        if (assignmentProblemData.metadata){ // UPDATE for AssignmentProblem metadata
+        if (assignmentProblemData.metadata){
             const meta = JSON.parse(assignmentProblemData.metadata)
             const type = meta.type
             if (type === "MCQ-mult"){

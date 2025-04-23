@@ -267,7 +267,6 @@ const AssignmentUpdatePage = () => {
     const diff = currDate.getTimezoneOffset() * 60000
     const newDate = new Date(currDate.getTime() - diff)
     return isNaN(newDate.getTime()) ? "" : newDate.toISOString().split("Z")[0]
-    //console.log(newDate.toISOString())
   }
 
   
