@@ -375,7 +375,6 @@ const AssignmentUpdatePage = () => {
             </MuiButton>
           </StyledEngineProvider>
           </label> 
-
         </div>
         <div className={styles.problemsList}>
         <h2 className={styles.header}>Add Problems</h2>

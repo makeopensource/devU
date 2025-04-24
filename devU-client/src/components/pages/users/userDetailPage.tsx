@@ -12,6 +12,8 @@ import ErrorPage from 'components/pages/errorPage/errorPage'
 import PageWrapper from 'components/shared/layouts/pageWrapper'
 import LoadingOverlay from 'components/shared/loaders/loadingOverlay'
 import EditUserForm from 'components/forms/editUserForm'
+import FaIcon from 'components/shared/icons/faIcon'
+
 
 import styles from './userDetailPage.scss'
 
@@ -110,12 +112,12 @@ const UserDetailPage = ({}) => {
                     onClick={() => handleDropCourse(course.id!)}
                     title="Drop Course"
                   >
-                    🗑️
-                  </span>
+                    <FaIcon regularIcon='trash'/>
+               </span>
                 </li>
               ))
             ) : (
-              <p>No enrolled courses.</p>
+              <p style={{textAlign: 'center'}}>No enrolled courses.</p>
             )}
           </ul>
         </div>

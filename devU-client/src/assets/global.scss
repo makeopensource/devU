@@ -201,6 +201,8 @@
 
     --hover-darker: var(--purple-darker);
     --hover-lighter: var(--purple-lightest);
+    --hover-delete: var(--purple-lightest);
+
 
 
     --btn-delete-border: var(--red);
@@ -275,7 +277,8 @@
     --hover-darker: var(--purple-lighterer);
     --hover-lighter: var(--purple);
 
-    --btn-text-color: var(--purple-lighter) --btn-delete-border: var(--red-lighter);
+    --btn-text-color: var(--purple-lighter) 
+    --btn-delete-border: var(--red-lighter);
     --btn-delete-background: var(--red);
     --btn-delete-text: #FFF;
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { ExpressValidationError, Assignment } from 'devu-shared-modules'
+import { ExpressValidationError, Assignment, ScoringType } from 'devu-shared-modules'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import RequestService from 'services/request.service'
@@ -51,6 +51,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
         maxFileSize: 100,
         maxSubmissions: 1,
         disableHandins: false,
+        scoringType: "latest-submission"
     })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -91,6 +92,9 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             setEndDate(date.toISOString())
         }
     }
+    const handleGradingChange = (e: React.ChangeEvent<HTMLInputElement> ) => {
+        setFormData(prevstate => ({...prevstate, scoringType: e.target.id}))
+    }
 
     const handleSubmit = () => {
         const finalFormData = {
@@ -104,6 +108,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             maxFileSize: formData.maxFileSize,
             maxSubmissions: formData.maxSubmissions,
             disableHandins: formData.disableHandins,
+            scoringType: formData.scoringType
         }
 
         setCurrentCategory(undefined)
@@ -119,6 +124,8 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
         multipart.append('maxFileSize', finalFormData.maxFileSize.toString())
         if (finalFormData.maxSubmissions !== null) { multipart.append('maxSubmissions', finalFormData.maxSubmissions.toString()) }
         multipart.append('disableHandins', finalFormData.disableHandins.toString())
+        multipart.append('scoringType', finalFormData.scoringType)
+
         // for (const file of files.values()) {
         //     multipart.append('files', file)
         // }
@@ -212,11 +219,31 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                     onChange={handleEndDateChange} />
                 </div>
             </div>
-            <span>Select submission for final score:</span>
+            <span style={{color: "var(--text-color)"}}>Select submission for final score:</span>
             <div className="input-subgroup-2col" style={{justifyContent: 'flex-start'}}>
-                <label htmlFor="subRecent" style={{cursor: 'pointer'}}><input type="radio" id="subRecent" name="submissionChoice" defaultChecked/>Most Recent</label>
-                <label htmlFor="subHighest" style={{cursor: 'pointer'}}><input type="radio" id="subHighest" name="submissionChoice"/>Highest Score</label>
-                <label htmlFor="subNone" style={{cursor: 'pointer'}}><input type="radio" id="subNone" name="submissionChoice" />No Default</label>
+                <label htmlFor={ScoringType.HIGHEST_SCORE} style={{cursor: 'pointer'}}>
+                    <input type="radio" 
+                    id={ScoringType.HIGHEST_SCORE}
+                    name="submissionChoice" 
+                    onChange={handleGradingChange}
+                    defaultChecked 
+                    />
+                    Most Recent
+                </label>
+                <label htmlFor={ScoringType.LATEST_SUBMISSION} style={{cursor: 'pointer'}}>
+                    <input type="radio" 
+                    id={ScoringType.LATEST_SUBMISSION}
+                    name="submissionChoice"
+                    onChange={handleGradingChange}/>
+                    Highest Score
+                </label>
+                <label htmlFor={ScoringType.NO_SCORE} style={{cursor: 'pointer'}}>
+                    <input type="radio" 
+                    id={ScoringType.NO_SCORE}
+                    name="submissionChoice" 
+                    onChange={handleGradingChange}/>
+                    No Default
+                </label>
             </div>
             <label htmlFor="disableHandins">Disable Submissions?<input type="checkbox" id="disableHandins" /></label>
         </Modal>
