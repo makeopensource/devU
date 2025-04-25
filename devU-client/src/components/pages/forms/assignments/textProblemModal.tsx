@@ -134,7 +134,7 @@ const TextProblemModal = ({ open, onClose, edit, problemId }: Props) => {
     }
     const closeModal = () => {
         if (!edit){ // We have a useEffect watching when problemId changes, so closing the modal and reopening for the same ID would not re-fill info
-            resetData
+            resetData()
         }
         onClose();
     }
@@ -147,7 +147,7 @@ const TextProblemModal = ({ open, onClose, edit, problemId }: Props) => {
     }
 
     return (
-        <Modal title={edit ? "Edit Text Problem" : "Add Text Problem"} buttonAction={handleSubmit} open={open} onClose={onClose} isSubmittable={submittable}>
+        <Modal title={edit ? "Edit Text Problem" : "Add Text Problem"} buttonAction={handleSubmit} open={open} onClose={closeModal} isSubmittable={submittable}>
             <div className="input-group">
                 <label htmlFor="title" className="input-label">Problem Title:</label>
                 <input type="text" id="title" onChange={handleChange} value={formData.title}
