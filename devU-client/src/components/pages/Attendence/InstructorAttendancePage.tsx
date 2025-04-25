@@ -205,7 +205,7 @@ const InstructorAttendancePage: React.FC<Props> = () => {
 
         <div style={{ marginTop: '2rem' }}>
           {attendanceRecords.length === 0 ? (
-            <p className="empty-message">No attendance records yet.</p>
+            <p className="empty-message info">No attendance records yet.</p>
           ) : (
             <table className="attendance-table">
               <thead>

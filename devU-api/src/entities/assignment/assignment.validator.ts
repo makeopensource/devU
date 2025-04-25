@@ -2,6 +2,7 @@ import { check } from 'express-validator'
 
 import validate from '../../middleware/validator/generic.validator'
 import { isBeforeParam, isAfterParam } from '../../middleware/validator/date.validator'
+import { ScoringType } from 'devu-shared-modules'
 
 const courseId = check('courseId').isNumeric()
 const name = check('name').isString().trim().isLength({ max: 128 })
@@ -10,6 +11,10 @@ const description = check('description').isString().trim()
 const maxFileSize = check('maxFileSize').isNumeric()
 const maxSubmissions = check('maxSubmissions').isNumeric().optional({ nullable: true })
 const disableHandins = check('disableHandins').isBoolean()
+const scoringType = check('scoringType')
+  .optional()
+  .isIn(Object.values(ScoringType))
+  .withMessage(`scoringType must be one of: ${Object.values(ScoringType).join(', ')}`)
 
 const startDate = check('startDate')
   .trim()
@@ -43,6 +48,7 @@ const validator = [
   maxFileSize,
   maxSubmissions,
   disableHandins,
+  scoringType,
   validate,
 ]
 

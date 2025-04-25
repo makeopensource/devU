@@ -149,8 +149,8 @@ input[type='datetime-local'] {
 
 .fileUpload{
     text-transform: none;
-    border: 3px solid var(--primary);
-    background-color: var(--primary);
+    border: 3px solid $primary;
+    background-color: $primary;
     border-radius: 100px;
     font-weight: 700;
     font-size: 14px;
@@ -161,8 +161,8 @@ input[type='datetime-local'] {
     transition: all 0.2s ease;
 }
 .fileUpload:hover{
-    border: 3px solid var(--hover-darker);
-    background-color: var(--hover-darker)
+    border: 3px solid $hover-darker;
+    background-color: $hover-darker;
 }
 
 

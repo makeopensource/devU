@@ -1,0 +1,248 @@
+@import 'variables';
+
+.matching-table-student-wrapper {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.instructions {
+  text-align: center;
+  margin-bottom: 2rem;
+  
+  p {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+  }
+}
+
+.matching-table-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--background); // Fix this line!
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.matching-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.prompts-column,
+.options-column {
+  flex: 1;
+  min-width: 280px;
+}
+
+.column-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: --purple;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  left: 125px;
+}
+
+.prompt-item,
+.option-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  background-color: #f4e9ff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #a855f7;
+    background-color: #f3e8ff;
+  }
+
+  &.active {
+    background-color: #3b82f6;
+    border-color: #2563eb;
+    color: white;
+    font-weight: 600;
+  }
+
+  &.matched {
+    background-color: #10b981;
+    border-color: #059669;
+    color: white;
+  }
+
+  &.used {
+    opacity: 1;
+  }
+}
+
+
+
+.item-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background-color: hsl(257.38deg 100% 50% / 26%);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+  
+  
+.item-content {
+    flex: 1;
+    font-size: 1.1rem;
+    align-content: center;
+    position: relative;
+    position: relative;
+    left: 3px;
+    bottom: 3px;
+}
+  
+
+
+.matching-instructions {
+  margin-top: 2rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+.submit-btn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 2rem auto;
+  padding: 0.75rem 1.5rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: #2563eb;
+  }
+}
+
+.score-feedback {
+  text-align: center;
+  margin: 2rem 0;
+  font-size: 1.2rem;
+  
+  .score {
+    font-weight: 700;
+    color: #3b82f6;
+    font-size: 1.5rem;
+  }
+  
+  .total {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+}
+
+.try-again-btn {
+  text-align: center;
+  
+  button {
+    padding: 0.75rem 1.5rem;
+    background-color: #4b5563;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: #6b7280;
+    }
+  }
+}
+
+.prompt-item, .option-item {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.prompt-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  word-break: break-word;
+}
+
+.prompt-item.active, .option-item.active {
+  background-color: #3787d2;
+  border: 2px solid #0077cc;
+}
+
+.prompt-item.matched {
+  background-color: #02cc02;
+}
+
+.option-item.used {
+  opacity: 0.6;
+}
+
+.option-item {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.option-item.active {
+  background-color: #62a5e4; 
+  border: 2px solid #0077cc;
+}
+
+.option-item.used {
+  opacity: 0.6;
+}
+
+.response-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  word-break: break-word;
+}
+
