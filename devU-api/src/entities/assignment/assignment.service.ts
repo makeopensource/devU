@@ -28,6 +28,7 @@ export async function update(assignment: Assignment) {
     disableHandins,
     attachmentsHashes,
     attachmentsFilenames,
+    scoringType,
   } = assignment
 
   if (!id) throw new Error('Missing Id')
@@ -44,6 +45,7 @@ export async function update(assignment: Assignment) {
     disableHandins,
     attachmentsHashes,
     attachmentsFilenames,
+    scoringType,
   })
 }
 
@@ -112,8 +114,6 @@ async function processFiles(req: Request) {
     } else {
       console.warn(`Files where not in array format ${req.files}`)
     }
-  } else {
-    console.warn(`No files where processed`)
   }
 
   return { fileHashes, fileNames }

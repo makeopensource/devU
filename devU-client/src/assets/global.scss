@@ -23,7 +23,9 @@
     text-align: center;
   }
 
-  hr{
+  
+
+  hr {
     border: 1px solid #ddd;
     margin: 0;
   }
@@ -41,7 +43,9 @@
     font-weight: 700;
     font-size: 16px;
     transition: all 0.2s ease;
-    &:disabled{
+    font-family: 'Source Sans Pro', 'Helvetica', 'Arial', sans-serif;
+
+    &:disabled {
       opacity: 60%;
       cursor: not-allowed;
     }
@@ -53,7 +57,7 @@
     margin-bottom: 20px;
   }
 
-  button.btnPrimary {
+  .btnPrimary {
     @extend .btn;
     background-color: var(--primary);
     border: 3px solid var(--primary);
@@ -65,7 +69,7 @@
     }
   }
 
-  button.btnSecondary {
+  .btnSecondary {
     @extend .btn;
 
     background-color: var(--btn-secondary-background);
@@ -77,7 +81,7 @@
     }
   }
 
-  button.btnDelete {
+  .btnDelete {
     @extend .btn;
     background-color: var(--btn-delete-background);
     color: var(--btn-delete-text);
@@ -148,7 +152,7 @@
     align-items: center;
   }
 
-  .pageHeader > h1 {
+  .pageHeader>h1 {
     grid-column-start: 2;
   }
 
@@ -165,7 +169,7 @@
 
     background-color: var(--background);
     color: var(--text-color);
-    
+
     --background: white;
     --text-color: black;
     --text-color-secondary: #363636;
@@ -322,6 +326,11 @@
   .error-description {
     font-size: 1.2rem;
     color: var(--text-color);
+  }
+
+  .textField{
+    border: 2px solid #ccc;
+    margin-bottom: 5px;
   }
 
   // Global Input Field Styles
