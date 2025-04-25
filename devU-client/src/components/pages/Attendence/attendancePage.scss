@@ -2,15 +2,11 @@
 
 
 
-
 h2 {
   text-align: center;
 }
 
-p {
-  text-align: center;
-  margin-left: 0;
-}
+
 
 .pageWrapper {
   padding: 0 100px;
@@ -27,6 +23,11 @@ p {
 
 .form>h2 {
   margin-top: 0;
+}
+
+.info {
+  text-align: center;
+  margin-left: 0;
 }
 
 .datepickerContainer {
