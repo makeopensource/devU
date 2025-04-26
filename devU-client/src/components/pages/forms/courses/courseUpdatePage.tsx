@@ -64,9 +64,9 @@ const CourseUpdatePage = ({ }) => {
                     semester: res.semester,
                     isPublic: res.isPublic
                 });
-                setStartDate(new Date(res.startDate).toISOString().split("T")[0]);
-                setEndDate(new Date(res.endDate).toISOString().split("T")[0]);
-                setPrivateDate(new Date(res.privateDate).toISOString().split("T")[0]);
+                setStartDate(new Date(res.startDate).toISOString());
+                setEndDate(new Date(res.endDate).toISOString());
+                setPrivateDate(new Date(res.privateDate).toISOString());
                 isMounted = true;
             });
         }
@@ -109,10 +109,15 @@ const CourseUpdatePage = ({ }) => {
             name: formData.name,
             number: formData.number,
             semester: formData.semester,
-            startDate: startDate + "T16:02:41.849Z",
-            endDate: endDate + "T16:02:41.849Z",
+            startDate: startDate,
+            endDate: endDate,
             isPublic: formData.isPublic,
-            privateDate: privateDate + "T16:02:41.849Z",
+            privateDate: privateDate,
+        }
+
+        if (!startDate) {
+            setAlert({ autoDelete: true, type: 'error', message: 'Please select semester and session' })
+            return
         }
 
         RequestService.put(`/api/courses/${courseId}`, finalFormData)
