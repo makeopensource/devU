@@ -20,7 +20,7 @@ export function fullWordPrintDate(date:string){
 }
 
 export function prettyPrintDateTime(date: string) {
-  return new Date(date).toLocaleString(undefined, {
+  return new Date(date).toLocaleString('en-us', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',

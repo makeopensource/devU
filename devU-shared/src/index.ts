@@ -23,6 +23,7 @@ export * from './types/grader.types'
 export * from './types/role.types'
 export * from './types/webhooks.types'
 export * from './types/stickyNote.types'
+export * from './types/attendance.types'
 
 export * from './utils/object.utils'
 export * from './utils/string.utils'

@@ -22,6 +22,7 @@ interface Props {
     onClose: () => void;
 }
 
+
 const AddAssignmentModal = ({ open, onClose }: Props) => {
     const { courseId } = useParams<{ courseId: string }>()
     const [setAlert] = useActionless(SET_ALERT)
@@ -32,6 +33,15 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
     const [currentCategory, setCurrentCategory] = useState<Option<String>>()
     const [assignments, setAssignments] = useState<Assignment[]>([])
     const history = useHistory()
+
+    const isSubmittable = () => {
+        if (!startDate || !endDate || !dueDate || 
+            !formData.name || !formData.categoryName){
+            return false;
+        }
+        return true;
+    }
+    
 
     const [formData, setFormData] = useState({
         courseId: courseId,
@@ -50,25 +60,35 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
         setFormData(prevState => ({ ...prevState, [key]: value }))
     }
 
-    const handleCategoryChange = (value: Option<String>)  => {
+    const handleCategoryChange = (value: Option<String>) => {
         setFormData(prevState => ({ ...prevState, categoryName: value.label }))
         setCurrentCategory(value)
-      };
+    };
 
-    const handleCategoryCreate = (value: string)  => {
-        const newOption : Option = {value: value, label: value}
+    const handleCategoryCreate = (value: string) => {
+        const newOption: Option = { value: value, label: value }
         setFormData(prevState => ({ ...prevState, categoryName: value }))
         setCurrentCategory(newOption)
-     };
+    };
 
-    const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setStartDate(e.target.value) }
-    const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { setEndDate(e.target.value) }
-    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
-        setDueDate(e.target.value) 
-        
+    const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+        const date = new Date(e.target.value)
+        date.setHours(24)
+        setStartDate(date.toISOString()) 
+    }
+    const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+        const date = new Date(e.target.value)
+        date.setHours(23, 59)
+        setEndDate(date.toISOString())  
+    }
+    const handleDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const date = new Date(e.target.value)
+        date.setHours(23, 59)
+        setDueDate(date.toISOString())  
+
         // automatically set end date
         if (!endDate) {
-            setEndDate(e.target.value)
+            setEndDate(date.toISOString())
         }
     }
 
@@ -119,7 +139,7 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
             })
     }
 
-    useEffect(() => {RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) })}, [formData])
+    useEffect(() => { RequestService.get(`/api/course/${courseId}/assignments`).then((res) => { setAssignments(res) }) }, [])
 
 
     useEffect(() => {
@@ -127,47 +147,49 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
         const options = categories.map((category) => ({
             value: category,
             label: category
-          }));
-        
+        }));
+
         setAllCategoryOptions(options);
     }, [assignments])
 
     return (
-        <Modal title="Add Assignment" buttonAction={handleSubmit} open={open} onClose={onClose}>
+        <Modal title="Add Assignment" buttonAction={handleSubmit} open={open} onClose={onClose} isSubmittable={isSubmittable}>
             <div className="input-group">
                 <label htmlFor="categoryName" className="input-label">Assignment Category:</label>
                 <TextDropdown
-                onChange={handleCategoryChange}
-                onCreate={handleCategoryCreate}
-                options={categoryOptions}
-                custom={{control: () => ({border:'none', padding:'3px 0', backgroundColor: 'var(--input-field-background)'}),
-                        placeholder: () => ({color: 'var(--input-field-label)'}),
-                        input: () => ({fontSize: '14px', backgroundColor: 'var(--input-field-background)'}),
-                        option: (_, state) => ({ backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : 'var(--input-field-background)',}),
-                        menu: () => ({ backgroundColor: 'var(--input-field-background)', overflow:'hidden'}),
-                        singleValue: () => ({fontSize: '14px'})}}
-                value={currentCategory ?? undefined}/>
+                    onChange={handleCategoryChange}
+                    onCreate={handleCategoryCreate}
+                    options={categoryOptions}
+                    custom={{
+                        control: () => ({ border: 'none', padding: '3px 0', backgroundColor: 'var(--input-field-background)' }),
+                        placeholder: () => ({ color: 'var(--input-field-label)' }),
+                        input: () => ({ fontSize: '14px', backgroundColor: 'var(--input-field-background)' }),
+                        option: (_, state) => ({ backgroundColor: state.isFocused ? 'var(--list-item-background-hover)' : 'var(--input-field-background)', }),
+                        menu: () => ({ backgroundColor: 'var(--input-field-background)', overflow: 'hidden' }),
+                        singleValue: () => ({ fontSize: '14px' })
+                    }}
+                    value={currentCategory ?? undefined} />
             </div>
             <div className="input-group">
                 <label htmlFor="name" className="input-label">Assignment Name:</label>
                 <input type="text" id="name" onChange={handleChange} className={formStyles.input}
-                placeholder='e.g. PA3'/>
+                    placeholder='e.g. PA3' />
             </div>
             <div className="input-group">
                 <label htmlFor="description" className="input-label">Description: <span>(optional)</span></label>
                 <textarea rows={4} id="description" onChange={handleChange} className={formStyles.input}
-                placeholder='Provide an optional assignment description'/>
+                    placeholder='Provide an optional assignment description' />
             </div>
             <div className='input-subgroup-2col'>
                 <div className="input-group">
                     <label htmlFor="maxSubmissions" className="input-label">Maximum Submissions:</label>
-                    <input type="number"  id="maxSubmissions" onChange={handleChange} className={formStyles.input}
-                    placeholder='e.g. 1' value={formData.maxSubmissions} min="0"/>
+                    <input type="number" id="maxSubmissions" onChange={handleChange} className={formStyles.input}
+                        placeholder='e.g. 1' value={formData.maxSubmissions} min="0" />
                 </div>
                 <div className="input-group">
                     <label htmlFor="maxFileSize" className="input-label">Maximum File Size (KB):</label>
                     <input type="number" id="maxFileSize" onChange={handleChange} className={formStyles.input}
-                    placeholder='e.g. 100' value={formData.maxFileSize} min="0"/>
+                        placeholder='e.g. 100' value={formData.maxFileSize} min="0" />
                 </div>
             </div>
             <div className={formStyles.datepickerContainer}>
@@ -184,8 +206,17 @@ const AddAssignmentModal = ({ open, onClose }: Props) => {
                 <div>
                     <label htmlFor="end_date">End Date:</label>
                     <br />
-                    <input type='date' id="end_date" value={endDate} onChange={handleEndDateChange} />
+                    <input type='date' 
+                    id="end_date" 
+                    value={endDate.split("T")[0]} // get rid of HH:MM info to display in date-only box :D
+                    onChange={handleEndDateChange} />
                 </div>
+            </div>
+            <span>Select submission for final score:</span>
+            <div className="input-subgroup-2col" style={{justifyContent: 'flex-start'}}>
+                <label htmlFor="subRecent" style={{cursor: 'pointer'}}><input type="radio" id="subRecent" name="submissionChoice" defaultChecked/>Most Recent</label>
+                <label htmlFor="subHighest" style={{cursor: 'pointer'}}><input type="radio" id="subHighest" name="submissionChoice"/>Highest Score</label>
+                <label htmlFor="subNone" style={{cursor: 'pointer'}}><input type="radio" id="subNone" name="submissionChoice" />No Default</label>
             </div>
             <label htmlFor="disableHandins">Disable Submissions?<input type="checkbox" id="disableHandins" /></label>
         </Modal>

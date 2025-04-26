@@ -21,6 +21,24 @@ const Router = express.Router({ mergeParams: true })
  *     responses:
  *       '200':
  *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   assignmentId:
+ *                     type: integer
+ *                   problemName:
+ *                     type: string
+ *                   metadata:
+ *                     type: string
+ *                     description: A json string containing additional problem metadata
+ *                   maxScore:
+ *                     type: integer
  *     parameters:
  *       - name: assignmentId
  *         description: Enter Assignment Id
@@ -43,6 +61,22 @@ Router.get('/', isAuthorized('enrolled'), AssignmentProblemController.get)
  *     responses:
  *       '200':
  *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 assignmentId:
+ *                   type: integer
+ *                 problemName:
+ *                   type: string
+ *                 metadata:
+ *                   type: string
+ *                   description: A json string containing additional problem metadata
+ *                 maxScore:
+ *                   type: integer
  *     parameters:
  *       - name: id
  *         description: Enter AssignmentProblem Id
@@ -63,8 +97,33 @@ Router.get('/:id', isAuthorized('assignmentEditAll'), asInt(), AssignmentProblem
  *     tags:
  *       - AssignmentProblems
  *     responses:
- *       '200':
- *         description: OK
+ *       '201':
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 assignmentId:
+ *                   type: integer
+ *                 problemName:
+ *                   type: string
+ *                 metadata:
+ *                   type: string
+ *                   description: A json string containing additional problem metadata
+ *                 maxScore:
+ *                   type: integer
+ *       '400':
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  *     requestBody:
  *       content:
  *         application/x-www-form-urlencoded:
@@ -75,7 +134,7 @@ Router.post('/', isAuthorized('assignmentEditAll'), validator, AssignmentProblem
 
 /**
  * @swagger
- * /course/:courseId/assignment/:assignmentId/assignment-problems:
+ * /course/:courseId/assignment/:assignmentId/assignment-problems/{id}:
  *   put:
  *     summary: Update an assignment problem
  *     tags:
@@ -83,6 +142,29 @@ Router.post('/', isAuthorized('assignmentEditAll'), validator, AssignmentProblem
  *     responses:
  *       '200':
  *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '404':
+ *         description: Not Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *     parameters:
+ *       - name: id
+ *         description: Enter AssignmentProblem Id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       content:
  *         application/x-www-form-urlencoded:

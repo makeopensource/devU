@@ -4,38 +4,17 @@ import FaIcon from 'components/shared/icons/faIcon';
 import { useAppSelector } from 'redux/hooks';
 import RequestService from 'services/request.service';
 import styles from './userOptionsDropdown.scss';
-import { useParams, useHistory } from 'react-router-dom'
-import { SET_ALERT } from 'redux/types/active.types';
-import { useActionless } from 'redux/hooks';
 import { Link } from 'react-router-dom';
 
 
 const UserOptionsDropdown = () => {
     const name = useAppSelector((state) => state.user.preferredName || state.user.email);
     const userId = useAppSelector((state) => state.user.id);
-    const { courseId } = useParams<{courseId: string}>()
-    const [setAlert] = useActionless(SET_ALERT);
-    const history = useHistory();
     
     const handleLogout = async () => {
         RequestService.get(`/api/logout`, { credentials: 'include' }, true).finally(() => window.location.reload());
     };
 
-    const handleDropCourse = () => {
-      //confirmation to drop course or not
-      var confirm = window.confirm("Are you sure you want to drop?");
-      if (confirm)
-      {
-          RequestService.delete(`/api/course/${courseId}/user-courses`).then(() => {
-         
-              setAlert({autoDelete: true, type: 'success', message: 'Course Dropped'})
-              history.push('/')
-
-      }).catch((error: Error) => {
-          const message = error.message
-          setAlert({autoDelete: false, type: 'error', message})  })
-      }
-  }
 
     return (
         <div className={styles.dropdown} tabIndex={1}>
@@ -49,11 +28,6 @@ const UserOptionsDropdown = () => {
                 <Link className={styles.option} to={`/user/${userId}/update`}>
                     Account
                 </Link>
-                {/* In the first place this probably shouldn't just be hanging out in the dropdown and should be next in a menu page or something, but:
-                    For now, this courseId && check makes sure courses can only be dropped when you're actually in a course, not on the homepage */}
-                {courseId && <button className={styles.option} onClick={handleDropCourse}> 
-                   Drop Course
-                </button>}
                 <button onClick={handleLogout} className={styles.option} style={{borderBottom: 'none',
                     borderBottomRightRadius: '7px',
                     borderBottomLeftRadius: '7px'

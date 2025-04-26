@@ -1,42 +1,77 @@
-import { IsNull } from 'typeorm'
+import { DeleteResult, IsNull, UpdateResult } from 'typeorm'
 import { dataSource } from '../../database'
 
 import CategoryScoreModel from './categoryScore.model'
 
-import { CategoryScore } from 'devu-shared-modules'
+// Import DTOs and Enum
+import { CategoryScorePatch, CategoryScorePost } from 'devu-shared-modules'
 
-const connect = () => dataSource.getRepository(CategoryScoreModel)
+// Helper function to get the repository
+const getRepository = () => dataSource.getRepository(CategoryScoreModel)
 
-export async function create(categoryScore: CategoryScore) {
-  return await connect().save(categoryScore)
+/**
+ * Creates a new category score record using data from the DTO.
+ *
+ * @param {CategoryScorePost} categoryScoreDto - The DTO containing data for the new category score.
+ * @returns {Promise<CategoryScoreModel>} The created CategoryScore entity from the database.
+ */
+export async function create(categoryScoreDto: CategoryScorePost): Promise<CategoryScoreModel> {
+  const newScore = getRepository().create(categoryScoreDto)
+  return await getRepository().save(newScore)
 }
 
-export async function update(categoryScore: CategoryScore) {
-  const { id, courseId, userId, categoryId, score } = categoryScore
-
-  if (!id) throw new Error('Missing Id')
-
-  return await connect().update(id, { courseId, userId, categoryId, score })
+/**
+ * Updates an existing category score record.
+ *
+ * @param {number} id - The ID of the category score to update.
+ * @param {CategoryScorePatch} categoryScoreDto - A DTO containing the fields to update.
+ * @returns {Promise<UpdateResult>} The result of the update operation from TypeORM.
+ * @throws {Error} Throws an error if the id is missing.
+ */
+export async function update(id: number, categoryScoreDto: CategoryScorePatch): Promise<UpdateResult> {
+  return await getRepository().update(id, categoryScoreDto)
 }
 
-export async function _delete(id: number) {
-  return await connect().softDelete({ id, deletedAt: IsNull() })
+/**
+ * Soft deletes a category score record by setting the deletedAt timestamp.
+ *
+ * @param {number} id - The ID of the category score to soft delete.
+ * @returns {Promise<DeleteResult>} The result of the soft delete operation from TypeORM.
+ */
+export async function _delete(id: number): Promise<DeleteResult> {
+  return await getRepository().softDelete(id)
 }
 
-export async function retrieve(id: number) {
-  return await connect().findOneBy({ id, deletedAt: IsNull() })
+/**
+ * Retrieves a single category score record by its ID, excluding soft-deleted records.
+ *
+ * @param {number} id - The ID of the category score to retrieve.
+ * @returns {Promise<CategoryScoreModel | null>} The found CategoryScore entity or null if not found.
+ */
+export async function retrieve(id: number): Promise<CategoryScoreModel | null> {
+  return await getRepository().findOneBy({ id, deletedAt: IsNull() })
 }
 
-// Retrieve all the categoryScores linked to a particular category (TODO: This endpoint doesn't have a path)
-// export async function listByCategory(categoryId: number) {
-//   return await connect().findBy({ categoryId: categoryId, deletedAt: IsNull() })
 
-export async function list() {
-  return await connect().findBy({ deletedAt: IsNull() })
+/**
+ * Retrieves a single category score record by its name, excluding soft-deleted records.
+ *
+ * @returns {Promise<CategoryScoreModel | null>} The found CategoryScore entity or null if not found.
+ * @param category - name of the category
+ */
+export async function retrieveByName(category: string): Promise<CategoryScoreModel | null> {
+  return await getRepository().findOneBy({ category, deletedAt: IsNull() })
 }
 
-export async function listByCourse(courseId: number) {
-  return await connect().findBy({ courseId, deletedAt: IsNull() })
+
+/**
+ * Retrieves all non-soft-deleted category score records for a specific course.
+ *
+ * @param {number} courseId - The ID of the course.
+ * @returns {Promise<CategoryScoreModel[]>} A list of active CategoryScore entities for the specified course.
+ */
+export async function listByCourse(courseId: number): Promise<CategoryScoreModel[]> {
+  return await getRepository().findBy({ courseId, deletedAt: IsNull() })
 }
 
 export default {
@@ -45,5 +80,5 @@ export default {
   update,
   _delete,
   listByCourse,
-  list,
+  retrieveByName,
 }
