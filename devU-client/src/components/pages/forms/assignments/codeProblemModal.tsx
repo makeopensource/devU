@@ -102,6 +102,7 @@ const CodeProblemModal = ({ open, onClose, edit, problemId }: Props) => {
                     id="title"
                     placeholder="e.g. Application Objective 3"
                     onChange={handleChange}
+                    value={formData.title}
                 />
             </div>
 
@@ -113,6 +114,7 @@ const CodeProblemModal = ({ open, onClose, edit, problemId }: Props) => {
                     placeholder="e.g. 10"
                     min="0"
                     onChange={handleChange}
+                    value={formData.maxScore}
                 />
             </div>
         </Modal>
