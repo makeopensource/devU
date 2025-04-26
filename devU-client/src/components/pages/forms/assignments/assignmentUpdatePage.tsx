@@ -250,7 +250,8 @@ const AssignmentUpdatePage = () => {
     };
 
   const openEditModal = (problem: AssignmentProblem) => {
-    const type = JSON.parse(problem.metadata).type ?? ""
+    console.log("metadata:", problem.metadata);
+    const type = problem.metadata.type ?? ""
     if (type === "MCQ-mult" || type === "MCQ-single"){
       setMcqProblemId(problem.id)
       setMcqEditModal(true)

@@ -37,7 +37,7 @@ const MultipleChoiceModal = ({ open, onClose, edit, problemId}: Props) => {
         const ncagData = await RequestService.get<NonContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/non-container-auto-graders`);
         const ncag = ncagData.find((as) => (as.id === problemId))
         if (assignmentProblemData.metadata){
-            const meta = JSON.parse(assignmentProblemData.metadata)
+            const meta = assignmentProblemData.metadata
             const type = meta.type
             if (type === "MCQ-mult"){
                 setBoxType("checkbox")
