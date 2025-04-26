@@ -114,6 +114,12 @@ const CourseDetailPage = () => {
                                         history.push(`/course/${courseId}/attendance`)
                                     }}> Attendance
                                     </button>
+
+                                    <button className='btnSecondary' onClick={() => {
+                                        role.isInstructor() ? history.push(`/course/${courseId}/update`) : 
+                                        history.push(`/course/${courseId}/update`)
+                                    }}> Manage Roster
+                                    </button>
                                 </div>
                                 <AddAssignmentModal open={openModal} onClose={handleCloseModal} />
                             </div>

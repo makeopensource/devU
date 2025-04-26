@@ -18,6 +18,7 @@ import TextProblemModal from './textProblemModal'
 import CodeProblemModal from './codeProblemModal'
 import MultipleChoiceModal from './multipleChoiceModal'
 import AssignmentProblemListItem from 'components/listItems/assignmentProblemListItem'
+// import MatchingTableInstructorPage from 'components/pages/Multiplechoice/MatchingTableInstructorPage'
 
 
 
@@ -31,6 +32,7 @@ const AssignmentUpdatePage = () => {
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
+  
 
   const [mcqProblemId, setMcqProblemId] = useState<number>()
   const [textProblemId, setTextProblemId] = useState<number>()
@@ -383,6 +385,9 @@ const AssignmentUpdatePage = () => {
           <Button onClick={() => setCodeModal(true)} className='btnSecondary'>Code/File Input</Button>
             <Button onClick={() => setTextModal(true)} className='btnSecondary'>Text Input</Button>
             <Button onClick={() => setMcqModal(true)} className='btnSecondary'>Multiple Choice</Button>
+            <Button onClick={() => {
+                        history.push(`/matching/instructor`)
+                    }} className='btnSecondary'>Matching Table</Button>
           </div>
           <h2 className={styles.header}>Add Graders</h2>
           <div className={styles.buttonContainer}>
