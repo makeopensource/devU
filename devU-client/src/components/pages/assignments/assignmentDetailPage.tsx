@@ -20,7 +20,7 @@ import { prettyPrintDateTime, fullWordPrintDate } from "../../../utils/date.util
 
 import { useLocation } from 'react-router-dom';
 import Scoreboard from '../assignments/scoreboard';
-// import DragDropFile from 'components/utils/dragDropFile'
+import DragDropFile from 'components/utils/dragDropFile'
 
 const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -242,10 +242,10 @@ const AssignmentDetailPage = () => {
 
             <div className={styles.problems_section}>
 
-                {/* <div className={styles.file_upload}>
+                <div className={styles.file_upload}>
                     <h4 className={styles.problem_header}>File Upload:</h4>
                     <DragDropFile handleFile={(e) => {console.log(e)}} />
-                </div> */}
+                </div>
 
                 <div className={styles.problems_list}>
                     <h2>Problems</h2>

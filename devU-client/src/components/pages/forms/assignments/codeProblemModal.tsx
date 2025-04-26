@@ -36,6 +36,9 @@ const CodeProblemModal = ({ open, onClose }: Props) => {
             assignmentId: parseInt(assignmentId),
             problemName: formData.title,
             maxScore: parseInt(formData.maxScore),
+            metadata: {
+                type: 'File'
+            }
         };
 
         RequestService.post(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems`, problemFormData)
