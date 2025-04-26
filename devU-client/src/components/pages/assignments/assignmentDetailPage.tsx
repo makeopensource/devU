@@ -61,14 +61,13 @@ const AssignmentDetailPage = () => {
             const courses = await RequestService.get<Course>(`/api/courses/${courseId}`)
             setCourse(courses)
 
-            const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
-            setAssignmentProblems(assignmentProblemsReq)
+            let assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
 
-            for (const problem of assignmentProblemsReq) {
-                if (problem.metadata.type === "File") {
-                    setHasFileProblem(true)
-                }
-            }
+            const hasFile = assignmentProblemsReq.some(problem => problem.metadata.type === "File")
+            setHasFileProblem(hasFile)
+
+            const filteredProblems = assignmentProblemsReq.filter(problem => problem.metadata.type !== "File")
+            setAssignmentProblems(filteredProblems)
 
             const submissionsReq = await RequestService.get<Submission[]>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/`)
             submissionsReq.sort((a, b) => (Date.parse(b.createdAt ?? '') - Date.parse(a.createdAt ?? '')))
