@@ -82,7 +82,6 @@ const AssignmentUpdatePage = () => {
       if (files.length < 5) {
         setFiles([...files, file])
       }
-      console.log(files)
     }
   }
 
