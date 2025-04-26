@@ -125,5 +125,4 @@ const InstructorAttendanceModal: React.FC<Props> = ({ open, onClose, onSubmit, c
 };
 
 
-
 export default InstructorAttendanceModal;
