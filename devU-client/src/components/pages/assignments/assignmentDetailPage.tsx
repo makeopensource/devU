@@ -20,7 +20,7 @@ import { prettyPrintDateTime, fullWordPrintDate } from "../../../utils/date.util
 
 import { useLocation } from 'react-router-dom';
 import Scoreboard from '../assignments/scoreboard';
-import DragDropFile from 'components/utils/dragDropFile'
+// import DragDropFile from 'components/utils/dragDropFile'
 
 const AssignmentDetailPage = () => {
     const [setAlert] = useActionless(SET_ALERT)
@@ -38,7 +38,6 @@ const AssignmentDetailPage = () => {
     const [assignment, setAssignment] = useState<Assignment>()
     const [course, setCourse] = useState<Course>()
     const [notClickable, setNotClickable] = useState(true);
-    const [hasFileProblem, setHasFileProblem] = useState(false);
 
 
 
@@ -61,13 +60,8 @@ const AssignmentDetailPage = () => {
             const courses = await RequestService.get<Course>(`/api/courses/${courseId}`)
             setCourse(courses)
 
-            let assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
-
-            const hasFile = assignmentProblemsReq.some(problem => problem.metadata.type === "File")
-            setHasFileProblem(hasFile)
-
-            const filteredProblems = assignmentProblemsReq.filter(problem => problem.metadata.type !== "File")
-            setAssignmentProblems(filteredProblems)
+            const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
+            setAssignmentProblems(assignmentProblemsReq)
 
             const submissionsReq = await RequestService.get<Submission[]>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/`)
             submissionsReq.sort((a, b) => (Date.parse(b.createdAt ?? '') - Date.parse(a.createdAt ?? '')))
@@ -87,6 +81,10 @@ const AssignmentDetailPage = () => {
 
             // const containerAutograder = (await RequestService.get<ContainerAutoGrader[]>(`/api/course/${courseId}/assignment/${assignmentId}/container-auto-graders`)).pop() ?? null
             // setContainerAutograder(containerAutograder)
+
+        
+
+
         } catch (err: any) {
             setError(err)
             const message = "Submission past due date"//Array.isArray(err) ? err.map((e) => `${e.param} ${e.msg}`).join(', ') : err.message
@@ -120,7 +118,7 @@ const AssignmentDetailPage = () => {
                     [key]: res
                 };
             });
-        }
+        } 
         else {
             setFormData(prevState => ({
                 ...prevState,
@@ -130,8 +128,8 @@ const AssignmentDetailPage = () => {
     };
 
 
-    const handleFileChange = (file: File) => {
-        setFile(file)
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFile(e.target.files?.item(0))
     }
 
     const handleCheckboxChange = () => {
@@ -161,7 +159,7 @@ const AssignmentDetailPage = () => {
                 submission.append('courseId', courseId)
                 submission.append('content', JSON.stringify(contentField))
                 submission.append('files', file)
-
+                
 
                 response = await RequestService.postMultipart(`/api/course/${courseId}/assignment/${assignmentId}/submissions`, submission);
             } else {
@@ -193,14 +191,14 @@ const AssignmentDetailPage = () => {
         return false;
     };
 
-    // handleFileChange;
+    handleFileChange;
 
 
     return (
         <PageWrapper>
             <div className={styles.header}>
-                <h1 style={{ gridColumnStart: 2 }}>Submit Assignment</h1>
-                <button style={{ marginLeft: 'auto' }} className='btnPrimary' onClick={() => { history.push(`/course/${courseId}`) }}>Back to Course</button>
+                <h1 style={{gridColumnStart:2}}>Submit Assignment</h1> 
+                <button style={{marginLeft:'auto'}} className='btnPrimary' onClick={() => {history.push(`/course/${courseId}`)}}>Back to Course</button>
             </div>
 
             <div className={styles.details}>
@@ -243,15 +241,11 @@ const AssignmentDetailPage = () => {
             </div>
 
             <div className={styles.problems_section}>
-                {/* conditionally render file upload */}
-                {hasFileProblem && (
-                    <div className={styles.file_upload}>
-                        <h4 className={styles.problem_header}>File Upload:</h4>
-                        <DragDropFile handleFile={handleFileChange} />
-                        <span style={{margin: '15px 0', marginRight: '10px'}}>{file?.name}</span>
-                        {file && (<button className="btnDelete" onClick={() => setFile(null)}>Remove Files</button>)}
-                    </div>
-                )}
+
+                {/* <div className={styles.file_upload}>
+                    <h4 className={styles.problem_header}>File Upload:</h4>
+                    <DragDropFile handleFile={(e) => {console.log(e)}} />
+                </div> */}
 
                 <div className={styles.problems_list}>
                     <h2>Problems</h2>
@@ -277,29 +271,29 @@ const AssignmentDetailPage = () => {
                 </div>
             </div>
 
-
-            {submissions.length !== 0 &&
-                <div>
-                    <div className={styles.submissionsContainer}>
-                        {submissions.map((submission, index) => (
-                            <div className={styles.submissionCard} key={index} onClick={() => {
-                                history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
-                            }}>
+            
+            {submissions.length !== 0 && 
+            <div>
+                <div className={styles.submissionsContainer}>
+                    {submissions.map((submission, index) => (
+                        <div className={styles.submissionCard} key={index} onClick={() => {
+                            history.push(`/course/${courseId}/assignment/${assignmentId}/submission/${submission.id}`)
+                        }}>
                                 <div>
                                     <div className={styles.submissionHeading}>{`Submission ${submissions.length - index}`}</div>
                                     <div className={styles.submissionTime}>{`Submitted at: ${submission.createdAt && prettyPrintDateTime(submission.createdAt)}`}</div>
                                 </div>
-                            </div>
-                        ))}
+                        </div>
+                    ))}
 
-                        {showScoreboard && (
-                            <div className={styles.scoreboardContainer}>
-                                <Scoreboard courseId={courseId} assignmentId={assignmentId} />
+                    {showScoreboard && (
+                        <div className={styles.scoreboardContainer}>
+                            <Scoreboard courseId={courseId} assignmentId={assignmentId} />
 
-                            </div>
-                        )}
-                    </div>
-                </div>}
+                        </div>
+                    )}
+                </div>
+            </div>}
 
         </PageWrapper>
     )
