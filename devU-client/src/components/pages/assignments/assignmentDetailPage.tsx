@@ -248,6 +248,8 @@ const AssignmentDetailPage = () => {
                     <div className={styles.file_upload}>
                         <h4 className={styles.problem_header}>File Upload:</h4>
                         <DragDropFile handleFile={handleFileChange} />
+                        <span style={{margin: '15px 0', marginRight: '10px'}}>{file?.name}</span>
+                        {file && (<button className="btnDelete" onClick={() => setFile(null)}>Remove Files</button>)}
                     </div>
                 )}
 
