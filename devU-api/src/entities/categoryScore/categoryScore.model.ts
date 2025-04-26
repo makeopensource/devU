@@ -1,40 +1,19 @@
 import {
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
   JoinColumn,
   ManyToOne,
-  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm'
 
-import CategoryModel from '../category/category.model'
 import CourseModel from '../course/course.model'
-import UserModel from '../user/user.model'
+import { CategoryScoreGradeType } from 'devu-shared-modules'
 
 @Entity('category_score')
 export default class CategoryScoreModel {
-  /**
-   * @swagger
-   * tags:
-   *   - name: CategoryScores
-   *     description: Route is currently non-functional, TS2305 error (Issue #34)
-   * components:
-   *  schemas:
-   *    CategoryScore:
-   *      type: object
-   *      required: [category, courseId, userId, score]
-   *      properties:
-   *        category:
-   *          type: string
-   *        courseId:
-   *          type: integer
-   *        userId:
-   *          type: integer
-   *        score:
-   *          type: number
-   */
   @PrimaryGeneratedColumn()
   id: number
 
@@ -52,16 +31,14 @@ export default class CategoryScoreModel {
   @ManyToOne(() => CourseModel)
   courseId: number
 
-  @Column({ name: 'user_id' })
-  @JoinColumn({ name: 'user_id' })
-  @ManyToOne(() => UserModel)
-  userId: number
+  @Column({ name: 'category_name' })
+  category: string
 
-  @Column({ name: 'category_id' })
-  @JoinColumn({ name: 'category_id' })
-  @ManyToOne(() => CategoryModel)
-  categoryId: number
-
-  @Column({ name: 'score', type: 'float', nullable: true })
-  score: number
+  @Column({
+    type: 'enum',
+    enum: CategoryScoreGradeType,
+    default: CategoryScoreGradeType.AVERAGE,
+    name: 'category_scoring_type',
+  })
+  categoryScoringType: CategoryScoreGradeType
 }
