@@ -158,7 +158,7 @@ const CourseUpdatePage = ({ }) => {
 
         // Find the index of the email-related fields
         const emailIndex = headers.findIndex(header =>
-            ['email', 'e-mail', 'email address', 'e-mail address'].includes(header.trim())
+            ['email', 'e-mail', 'email address', 'e-mail address'].includes(header.trim().toLowerCase())
         );
 
         if (emailIndex === -1) {
@@ -336,6 +336,7 @@ const CourseUpdatePage = ({ }) => {
                             fileInput.value = "";
                         }
                     }}>Remove file</button>
+                    <span>The CSV file must have student emails in an "Email"/"E-mail"/"Email Addresses" column</span>
                     <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', marginTop: '30px', gap: '1rem' }}>
                         <button className='btnPrimary' onClick={handleAddStudent}>Add</button>
                         <button className='btnDelete' onClick={handleDropStudent}>Drop</button>
