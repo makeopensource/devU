@@ -130,8 +130,8 @@ const AssignmentDetailPage = () => {
     };
 
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFile(e.target.files?.item(0))
+    const handleFileChange = (file: File) => {
+        setFile(file)
     }
 
     const handleCheckboxChange = () => {
@@ -193,7 +193,7 @@ const AssignmentDetailPage = () => {
         return false;
     };
 
-    handleFileChange;
+    // handleFileChange;
 
 
     return (
@@ -247,7 +247,7 @@ const AssignmentDetailPage = () => {
                 {hasFileProblem && (
                     <div className={styles.file_upload}>
                         <h4 className={styles.problem_header}>File Upload:</h4>
-                        <DragDropFile handleFile={(e) => { console.log(e) }} />
+                        <DragDropFile handleFile={handleFileChange} />
                     </div>
                 )}
 
