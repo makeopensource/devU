@@ -1,0 +1,49 @@
+@import 'variables';
+
+.viewPdfWrapper {
+    display: flex;
+    gap: 20px;
+}
+
+.annotationOptions {
+    position: sticky;
+    height: fit-content;
+    top: 40px;
+}
+
+.highlightColors {
+    min-width: 200px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+    // background-color: #555;
+}
+
+.colorBtn {
+    width: min-content;
+    padding: 5px 10px;
+    font-weight: 700;
+    color: $text-color;
+    border-radius: 5px;
+}
+
+.blue {
+    border: 2px solid rgba(0, 225, 255, 0.75);
+    background-color:rgba(0, 225, 255, 0.25);
+}
+
+.red {
+    border: 2px solid rgba(255, 60, 0, 0.75);
+    background-color: rgba(255, 60, 0, 0.25);
+}
+
+.green {
+    border: 2px solid rgba(80, 255, 0, 0.75);
+    background-color:rgba(80, 255, 0, 0.25);
+}
+
+.yellow {
+    border: 2px solid rgba(255, 247, 0, 0.75);
+    background-color:rgba(255, 247, 0, 0.25);
+}
