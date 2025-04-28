@@ -32,6 +32,7 @@ const AssignmentUpdatePage = () => {
   const [assignmentProblems, setAssignmentProblems] = useState<AssignmentProblem[]>([])
   const [nonContainerAutograders, setNonContainerAutograders] = useState<NonContainerAutoGrader[]>([])
   const [containerAutograders, setContainerAutograders] = useState<ContainerAutoGrader[]>([])
+  const [fileProblemId, setFileProblemId] = useState<number>()
   
 
   const [mcqProblemId, setMcqProblemId] = useState<number>()
@@ -210,8 +211,11 @@ const AssignmentUpdatePage = () => {
   }
 
 
-
-
+  const [fileEditModal, setFileEditModal] = useState(false);
+  const handleCloseFileEditModal = async () => {
+    setFileEditModal(false)
+    fetchAssignmentProblems()
+  }
 
 
   const handleDeleteProblem = async (problem: AssignmentProblem) => {
@@ -252,14 +256,16 @@ const AssignmentUpdatePage = () => {
     };
 
   const openEditModal = (problem: AssignmentProblem) => {
-    const type = JSON.parse(problem.metadata).type ?? ""
+    const type = problem.metadata.type ?? ""
     if (type === "MCQ-mult" || type === "MCQ-single"){
       setMcqProblemId(problem.id)
       setMcqEditModal(true)
     } else if (type === "Match"){
       console.log("Implement Match MCQ")
-    }
-    else {
+    } else if (type === "File") {
+      setFileProblemId(problem.id)
+      setFileEditModal(true)
+    } else {
       setTextProblemId(problem.id)
       setTextEditModal(true)
     }
@@ -277,7 +283,8 @@ const AssignmentUpdatePage = () => {
         <ContainerAutoGraderModal open={containerAutoGraderModal} onClose={handleCloseContainerAutoGraderModal} />
         <TextProblemModal open={textModal} onClose={handleCloseTextModal} />
         <TextProblemModal open={textEditModal} onClose={handleCloseTextEditModal} edit problemId={textProblemId}/>
-        <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal}/>
+        <CodeProblemModal open={codeModal} onClose={handleCloseCodeModal} />
+        <CodeProblemModal open={fileEditModal} onClose={handleCloseFileEditModal} edit problemId={fileProblemId} />
         <MultipleChoiceModal open={mcqModal} onClose={handleCloseMcqModal} />
         <MultipleChoiceModal open={mcqEditModal} onClose={handleCloseEditMcqModal} edit problemId={mcqProblemId}/>
 

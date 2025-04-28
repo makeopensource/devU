@@ -92,6 +92,14 @@ const AssignmentProblemListItem = ({problem, handleChange, disabled}: Props) => 
                     </label>))}
             </div>)
     } 
+
+    else if (type == "File") {
+        return (
+            <div key={problem.id} className={styles.problem}>
+                <h4 className={styles.problem_header}>{problem.problemName}</h4>
+            </div>
+        )
+    }
     
     else {
         return(

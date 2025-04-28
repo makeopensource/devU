@@ -156,6 +156,7 @@ const PDFViewer: React.FC<PDFWithHighlightProps> = ({ file }) => {
             </div>
 
             {/* annotation options */}
+            {console.log("IS INSTRUCTOR:", role.isInstructor())}
             {role.isInstructor() && (<div className={styles.annotationOptions}>
                 <button
                     className="btnSecondary"
