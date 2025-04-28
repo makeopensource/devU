@@ -11,6 +11,7 @@ import { SET_ALERT } from 'redux/types/active.types'
 //import Card from '@mui/material/Card'
 //import CardContent from '@mui/material/CardContent'
 //import {Accordion, AccordionDetails, TextField, Typography} from '@mui/material'
+import DragDropFile from 'components/utils/dragDropFile'
 
 
 //import Grid from '@mui/material/Unstable_Grid2'
@@ -38,6 +39,8 @@ const AssignmentDetailPage = () => {
     const [assignment, setAssignment] = useState<Assignment>()
     const [course, setCourse] = useState<Course>()
     const [notClickable, setNotClickable] = useState(true);
+    const [hasFileProblem, setHasFileProblem] = useState(false);
+
 
 
 
@@ -61,7 +64,11 @@ const AssignmentDetailPage = () => {
             setCourse(courses)
 
             const assignmentProblemsReq = await RequestService.get<AssignmentProblem[]>(`/api/course/${courseId}/assignment/${assignmentId}/assignment-problems/`)
-            setAssignmentProblems(assignmentProblemsReq)
+            const hasFile = assignmentProblemsReq.some(problem => problem.metadata.type === "File")
+            setHasFileProblem(hasFile)
+
+            const filteredProblems = assignmentProblemsReq.filter(problem => problem.metadata.type !== "File")
+            setAssignmentProblems(filteredProblems)
 
             const submissionsReq = await RequestService.get<Submission[]>(`/api/course/${courseId}/assignment/${assignmentId}/submissions/`)
             submissionsReq.sort((a, b) => (Date.parse(b.createdAt ?? '') - Date.parse(a.createdAt ?? '')))
@@ -128,8 +135,8 @@ const AssignmentDetailPage = () => {
     };
 
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFile(e.target.files?.item(0))
+    const handleFileChange = (file: File) => {
+        setFile(file)
     }
 
     const handleCheckboxChange = () => {
@@ -242,10 +249,15 @@ const AssignmentDetailPage = () => {
 
             <div className={styles.problems_section}>
 
-                {/* <div className={styles.file_upload}>
-                    <h4 className={styles.problem_header}>File Upload:</h4>
-                    <DragDropFile handleFile={(e) => {console.log(e)}} />
-                </div> */}
+                {/* conditionally render file upload */}
+                {hasFileProblem && (
+                    <div className={styles.file_upload}>
+                        <h4 className={styles.problem_header}>File Upload:</h4>
+                        <DragDropFile handleFile={handleFileChange} />
+                        <span style={{margin: '15px 0', marginRight: '10px'}}>{file?.name}</span>
+                        {file && (<button className="btnDelete" onClick={() => setFile(null)}>Remove Files</button>)}
+                    </div>
+                )}
 
                 <div className={styles.problems_list}>
                     <h2>Problems</h2>
